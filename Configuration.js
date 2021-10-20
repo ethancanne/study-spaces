@@ -89,22 +89,14 @@ class Configuration {
   }
 
   /**
-  * Gets the filepath of the folder for the static resource build to serve. The folder to use
-  * depends on whether the application is configured to use the production or development build.
+  * Gets the filepath of the folder for the static resource build to serve.
   * @return {string} The filepath of the folder to serve the static resource build from.
   * @author Cameron Burkholder
   * @date   07/29/2021
   */
   static getStaticResourceFolder() {
     // GET THE STATIC RESOURCE FOLDER TO USE.
-    const applicationIsInProduction = Configuration.isSetToProduction();
-    let staticResourceFolder = "";
-    if (applicationIsInProduction) {
-      staticResourceFolder = "build";
-    } else {
-      staticResourceFolder = "public";
-    }
-    return staticResourceFolder;
+    return process.env.STATIC_RESOURCE_FOLDER;
   }
 
   /**

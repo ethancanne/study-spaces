@@ -1,4 +1,4 @@
-/*
+/**
 * This file is the main entry point for running the application. This file initiates the web server.
 * @author Cameron Burkholder
 * @date   07/29/2021
@@ -13,13 +13,13 @@ const Passport = require("passport");
 const Path = require("path");
 
 const Authenticator = require("./Authenticator.js");
-const Configuration = require("./Configuration.js");
+const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const NotificationsRouter = require("./Routers/NotificationsRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 
 // ASSIGN THE ROOT DIRECTORY TO A GLOBAL VARIABLE FOR REUSE THROUGHOUT THE APPLICATION.
-const rootDirectory = Path.resolve(__dirname);
+const rootDirectory = Path.resolve("./");
 global.rootDirectory = rootDirectory;
 
 // SETUP EXPRESS.

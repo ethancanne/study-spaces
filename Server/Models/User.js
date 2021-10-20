@@ -1,7 +1,7 @@
 const Mongoose = require("mongoose");
 const Schema = Mongoose.Schema;
 
-const Configuration = require("../Configuration.js");
+const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
 

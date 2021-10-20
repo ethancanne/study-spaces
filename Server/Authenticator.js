@@ -2,7 +2,7 @@ const ExtractJsonWebToken = require("passport-jwt").ExtractJwt;
 const JwtStrategy = require("passport-jwt").Strategy;
 const Mongoose = require("mongoose");
 
-const Configuration = require("./Configuration.js");
+const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const ResponseCodes = require("./Responses/ResponseCodes.js");
 const User = require("./Models/User.js");

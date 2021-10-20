@@ -1,6 +1,6 @@
 const Filesystem = require("fs");
 
-const Configuration = require("./Configuration.js");
+const Configuration = require("../Configuration.js");
 const Validator = require("./Validator.js");
 
 /**

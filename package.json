@@ -4,6 +4,8 @@
   "description": "Study with excellence.",
   "main": "./Server/Server.js",
   "scripts": {
+    "build": "webpack --mode production",
+    "dev": "concurrently --kill-others \"node Server/Server.js\" \"webpack server --mode development\"",
     "start": "node Server/Server.js"
   },
   "repository": {
@@ -21,6 +23,7 @@
   },
   "homepage": "https://github.com/LU-CS-Capstone/SS-21-22#readme",
   "dependencies": {
+    "axios": "^0.23.0",
     "body-parser": "^1.19.0",
     "crypto": "^1.0.1",
     "dotenv": "^10.0.0",
@@ -29,6 +32,23 @@
     "mongoose": "^6.0.11",
     "morgan": "^1.10.0",
     "passport": "^0.5.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "babel-loader": "^8.2.2",
+    "concurrently": "^6.3.0",
+    "css-loader": "^6.4.0",
+    "html-webpack-plugin": "^5.4.0",
+    "style-loader": "^3.3.0",
+    "webpack": "^5.59.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.3.1"
   }
 }
