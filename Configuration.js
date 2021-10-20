@@ -56,6 +56,16 @@ class Configuration {
   }
 
   /**
+  * Gets the node environment.
+  * @return {string} The node environment.
+  * @author Cameron Burkholder
+  * @date   10/20/2021
+  */
+  static getNodeEnvironment() {
+    return process.env.NODE_ENV;
+  }
+
+  /**
   * Gets the production database URI.
   * @return {string} The production database URI.
   * @author Cameron Burkholder

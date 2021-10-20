@@ -75,5 +75,5 @@ StaticResourceRouter(server, authenticator);
 // START SERVER.
 const serverPort = Configuration.getServerPort();
 server.listen(serverPort, () => {
-  Log.write(`Server deployed on port ${serverPort}.`);
+  Log.write(`Server deployed on port ${serverPort} in mode: ${Configuration.getNodeEnvironment()}.`);
 });
