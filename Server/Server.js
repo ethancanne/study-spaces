@@ -68,9 +68,9 @@ const authenticator = new Authenticator(server, Passport);
 server.use(Helmet());
 
 // IMPLEMENT THE SERVER ROUTES.
-NotificationsRouter(server, authenticator);
+NotificationsRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
-StaticResourceRouter(server, authenticator);
+StaticResourceRouter.serveRoutes(server, authenticator);
 
 // START SERVER.
 const serverPort = Configuration.getServerPort();

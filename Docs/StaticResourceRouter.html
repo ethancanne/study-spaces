@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Authenticator</title>
+    <title>JSDoc: Class: StaticResourceRouter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Authenticator</h1>
+    <h1 class="page-title">Class: StaticResourceRouter</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Authenticator<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>StaticResourceRouter<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">This is used for the purpose of authenticating users and protecting routes.</div>
+            <div class="class-description">The router used to serve static resources.</div>
         
     
 </header>
@@ -45,16 +45,12 @@
     
 
     
-    <h4 class="name" id="Authenticator"><span class="type-signature"></span>new Authenticator<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="StaticResourceRouter"><span class="type-signature"></span>new StaticResourceRouter<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
-
-<div class="description">
-    Handles creating the instance of the authentication tool.
-</div>
 
 
 
@@ -104,7 +100,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line24">line 24</a>
+        <a href="Server_Routers_StaticResourceRouter.js.html">Server/Routers/StaticResourceRouter.js</a>, <a href="Server_Routers_StaticResourceRouter.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -160,7 +156,7 @@
     
 
     
-    <h4 class="name" id=".verifyJsonWebToken"><span class="type-signature">(async, static) </span>verifyJsonWebToken<span class="signature">(jsonWebTokenPayload, nextMiddlewareFunction)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getIndexFile"><span class="type-signature">(static) </span>getIndexFile<span class="signature">(request, response)</span><span class="type-signature"></span></h4>
     
 
     
@@ -168,7 +164,7 @@
 
 
 <div class="description">
-    Used to verify that a JSON web token is associated with a valid user.
+    This serves the index file.
 </div>
 
 
@@ -204,7 +200,7 @@
 
         <tr>
             
-                <td class="name"><code>jsonWebTokenPayload</code></td>
+                <td class="name"><code>request</code></td>
             
 
             <td class="type">
@@ -220,20 +216,20 @@
 
             
 
-            <td class="description last">The JSON web token payload to check.</td>
+            <td class="description last">The request being served.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>nextMiddlewareFunction</code></td>
+                <td class="name"><code>response</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">object</span>
 
 
             
@@ -243,7 +239,7 @@
 
             
 
-            <td class="description last">The next function to execute after this one.</td>
+            <td class="description last">The response being generated.</td>
         </tr>
 
     
@@ -291,7 +287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line55">line 55</a>
+        <a href="Server_Routers_StaticResourceRouter.js.html">Server/Routers/StaticResourceRouter.js</a>, <a href="Server_Routers_StaticResourceRouter.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -327,7 +323,7 @@
     
 
     
-    <h4 class="name" id="protectRoute"><span class="type-signature"></span>protectRoute<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id=".serveRoutes"><span class="type-signature">(static) </span>serveRoutes<span class="signature">(server, authenticator)</span><span class="type-signature"></span></h4>
     
 
     
@@ -335,7 +331,7 @@
 
 
 <div class="description">
-    Used to prevent unauthorized users from accessing a route.
+    Initialize the router and serve the routes.
 </div>
 
 
@@ -344,6 +340,78 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>server</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Server</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server instance used to provide the routes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authenticator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Authenticator.html">Authenticator</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The authenticator used to protect the routes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -386,7 +454,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line89">line 89</a>
+        <a href="Server_Routers_StaticResourceRouter.js.html">Server/Routers/StaticResourceRouter.js</a>, <a href="Server_Routers_StaticResourceRouter.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -411,28 +479,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The middleware function to protect the route.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
