@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "concurrently --kill-others \"node Server/Server.js\" \"webpack server --mode development\"",
+    "doc": "./node_modules/.bin/jsdoc -c jsdoc.config.json",
     "start": "node Server/Server.js"
   },
   "repository": {
