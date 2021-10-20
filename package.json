@@ -1,0 +1,34 @@
+{
+  "name": "study-spaces",
+  "version": "1.0.0",
+  "description": "Study with excellence.",
+  "main": "./Server/Server.js",
+  "scripts": {
+    "start": "node Server/Server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LU-CS-Capstone/SS-21-22.git"
+  },
+  "keywords": [
+    "study",
+    "groups"
+  ],
+  "author": "LU Capstone SS-21-22",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LU-CS-Capstone/SS-21-22/issues"
+  },
+  "homepage": "https://github.com/LU-CS-Capstone/SS-21-22#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "mongoose": "^6.0.11",
+    "morgan": "^1.10.0",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0"
+  }
+}
