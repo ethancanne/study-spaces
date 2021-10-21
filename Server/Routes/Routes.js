@@ -4,6 +4,9 @@
 * @date   07/31/2021
 */
 const Routes = {
+  Account: {
+    UpdateAuthenticationToken: "/api/account/update-authentication-token"
+  },
   Notifications: {
     Subscribe: "/api/notifications/subscribe"
   },

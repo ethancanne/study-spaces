@@ -66,6 +66,17 @@ class Configuration {
   }
 
   /**
+  * Gets the private RSA key.
+  * @return {string} The private RSA key.
+  * @author Cameron Burkholder
+  * @date   10/20/2021
+  */
+  static getPrivateRsaKey() {
+    // EXPLICITLY WRITE NEWLINE CHARACTERS.
+    return process.env.RSA_PRIVATE_KEY.replace(/\\n/g, "\n")
+  }
+
+  /**
   * Gets the production database URI.
   * @return {string} The production database URI.
   * @author Cameron Burkholder

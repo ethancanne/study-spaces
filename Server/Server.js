@@ -15,6 +15,7 @@ const Path = require("path");
 const Authenticator = require("./Authenticator.js");
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
+const AccountRouter = require("./Routers/AccountRouter.js");
 const NotificationsRouter = require("./Routers/NotificationsRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 
@@ -68,6 +69,7 @@ const authenticator = new Authenticator(server, Passport);
 server.use(Helmet());
 
 // IMPLEMENT THE SERVER ROUTES.
+AccountRouter.serveRoutes(server, authenticator);
 NotificationsRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
 StaticResourceRouter.serveRoutes(server, authenticator);

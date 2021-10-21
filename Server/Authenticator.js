@@ -1,4 +1,5 @@
 const ExtractJsonWebToken = require("passport-jwt").ExtractJwt;
+const JsonWebToken = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
 const Mongoose = require("mongoose");
 
@@ -42,6 +43,36 @@ class Authenticator {
     // to be something other than the class instance, certain methods need to be bound
     // to this instance of the class.
     this.protectRoute = this.protectRoute.bind(this);
+  }
+
+  /**
+  * Generates an authentication token for a user.
+  * @param {User} user The user to generate a token for.
+  * @returns {JsonWebToken} The authentication token.
+  * @author Cameron Burkholder
+  * @date   10/20/2021
+  */
+  static issueAuthenticationToken(user) {
+    // GENERATE THE AUTHENTICATION TOKEN.
+    const userId = user.getId();
+    // The authentication token is valid for a week.
+    const authenticationDurationInMilliseconds = 1000 * 60 * 60 * 24 * 7;
+    const authenticationTokenPayload = {
+      sub: userId,
+      iat: Date.now()
+    };
+    const authenticationTokenBody = JsonWebToken.sign(authenticationTokenPayload,
+      Configuration.getPrivateRsaKey(),
+      {
+        expiresIn: authenticationDurationInMilliseconds,
+        algorithm: "RS256"
+      }
+    );
+    const authenticationToken = {
+      token: `Bearer ${authenticationTokenBody}`,
+      expires: authenticationDurationInMilliseconds
+    };
+    return authenticationToken;
   }
 
   /**

@@ -3,6 +3,9 @@ import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Redirect } from "react-router";
 
+import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
+import Routes from "../../Server/Routes/Routes.js";
+
 // PAGE ELEMENTS.
 
 
@@ -19,8 +22,76 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {}
+    // BIND METHODS TO THIS COMPONENT INSTANCE.
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
+    this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
+    this.userIsLoggedIn = this.userIsLoggedIn.bind(this);
+
+    this.state = {
+      isLoggedIn: this.userIsLoggedIn(),
+      hasNotMounted: true
+    }
   }
+
+  /**
+  * Checks if the page has finished loaded and refreshes the authentication token
+  * if the user is already logged in.
+  * @author Cameron Burkholder
+  * @date   10/20/2021
+  */
+  componentDidMount() {
+    if (this.state.hasNotMounted) {
+      this.setState({
+        hasNotMounted: false
+      }, this.updateAuthenticationToken);
+    }
+  }
+
+  login(token, expirationDate, user) {
+    this.setLocalStorage(authenticationToken, authenticationTokenExpirationDate, user, this.updateState);
+  }
+
+  logout() {
+    this.clearLocalStorage();
+
+  }
+
+  updateAuthenticationToken() {
+    if (this.state.isLoggedIn) {
+      axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
+      axios.get(Routes.Account.UpdateAuthenticationToken)
+        .then((response) => {
+          const authenticationTokenWasUpdated = (response.data.message = ResponseMessages.Account.AuthenticationTokenWasUpdated);
+          if (authenticationTokenWasUpdated) {
+            this.login(response.data.authenticationToken, response.data.authenticationTokenExpirationDate, response.data.user);
+          } else {
+            this.logout();
+          }
+          this.setState({
+            hasNotMounted: false
+          });
+        }).catch((error) => {
+
+        });
+    }
+  }
+
+  /**
+  * Tests whether a user is logged in or not.j
+  * @return {boolean} True if the user is logged in, false otherwise.
+  * @author Cameron Burkholder
+  * @date   10/20/2021
+  */
+  userIsLoggedIn() {
+    // CHECK IF THE JWT TOKEN IS EXPIRED.
+    const currentDate = Date.now();
+    const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
+    const userIsLoggedIn = (currentDate < jwtExpirationDate);
+    return userIsLoggedIn;
+  }
+
+
   render() {
     return (
       <Router>
