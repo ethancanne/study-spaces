@@ -1,9 +1,3 @@
-/**
-* This file is the main entry point for running the application. This file initiates the web server.
-* @author Cameron Burkholder
-* @date   07/29/2021
-*/
-
 const BodyParser = require("body-parser");
 const Express = require("express");
 const Helmet = require("helmet");
