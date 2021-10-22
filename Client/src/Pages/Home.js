@@ -3,6 +3,11 @@ import React from "react";
 import Page from "./Page.js";
 import Views from "../Views/Views.js";
 
+// IMPORT VIEWS FOR THIS PAGE.
+import LoginForm from "../Views/Home/LoginForm.js";
+import RegisterForm from "../Views/Home/RegisterForm.js";
+import SplashScreen from "../Views/Home/SplashScreen.js";
+
 /**
 * The home page of the application.
 * @author Cameron Burkholder
@@ -12,39 +17,46 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
+    this.showLoginForm = this.showLoginForm.bind(this);
+    this.showRegisterForm = this.showRegisterForm.bind(this);
+    this.showSplashScreen = this.showSplashScreen.bind(this);
+
     this.state = {
-      view: Views.Home.LandingPage
+      view: Views.Home.SplashScreen
     }
+  }
+  showLoginForm() {
+    this.setState({
+      view: Views.Home.LoginForm
+    });
+  }
+  showRegisterForm() {
+    this.setState({
+      view: Views.Home.RegisterForm
+    });
+  }
+  showSplashScreen() {
+    this.setState({
+      view: Views.Home.SplashScreen
+    });
   }
   render() {
     let view;
     switch (this.state.view) {
-      case Views.Home.LandingPage:
-        view = (
-          <div>
-            <h1>This is the landing page</h1>
-            <button onClick={() => {
-              this.setState({
-                view: Views.Home.Login
-              })
-            }}>login</button>
-          </div>
-        );
+      case Views.Home.SplashScreen:
+        view = <SplashScreen showLoginForm={this.showLoginForm}/>;
         break;
-      case Views.Home.Login:
-        view = (
-          <h1>This is where you could login</h1>
-        );
+      case Views.Home.LoginForm:
+        view = <LoginForm showRegisterForm={this.showRegisterForm}/>;
         break;
-      case Views.Home.Register:
-        view = (
-          <h1>This is where you could register</h1>
-        );
+      case Views.Home.RegisterForm:
+        view = <RegisterForm showLoginForm={this.showLoginForm}/>;
         break;
     }
     return (
       <Page>
         { view }
+        <button onClick={this.showSplashScreen}>Splash screen</button>
       </Page>
     )
   }

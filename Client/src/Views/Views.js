@@ -5,9 +5,9 @@
 */
 const Views = {
   Home: {
-    LandingPage: "Landing Page",
-    Login: "Login",
-    Register: "Register"
+    SplashScreen: "Splash Screen",
+    LoginForm: "Login Form",
+    RegisterForm: "Register Form"
   }
 }
 
