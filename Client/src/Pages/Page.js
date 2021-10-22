@@ -11,7 +11,7 @@ class Page extends React.Component {
   }
   render() {
     return (
-      <div className="page">
+      <div className="page" {...this.props}>
         { this.props.children }
       </div>
     )

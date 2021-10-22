@@ -12,7 +12,11 @@ const TextInput = (props) => {
   const type = (typeIsDefined ? props.type : "text");
 
   return (
-    <input className="Input" type="text" value={props.value} onChange={props.onChange} type={type}/>
+    <input className="Input"
+      value={props.value}
+      onChange={props.onChange}
+      type={type}
+      {...props}/>
   )
 }
 

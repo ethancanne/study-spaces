@@ -33,6 +33,26 @@ class Log {
   }
 
   /**
+  * Log server requests and routing.
+  * @param {request} request The request to the server.
+  * @param {response} response The server's response.
+  * @param {function} nextMiddlewareFunction The next middleware function in the chain.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  static logger(request, response, nextMiddlewareFunction) {
+    // WRITE THE SERVER REQUEST TO THE LOG.
+    const sourceIp = request.ip;
+    const method = request.method;
+    const route = `${request.protocol}://${request.hostname}${request.originalUrl}`;
+    const responseStatus = response.statusCode;
+    const browser = request.headers["user-agent"];
+    const logLine = `${sourceIp} - "${method} ${route}" ${responseStatus} ${browser}`;
+    Log.write(logLine);
+    nextMiddlewareFunction();
+  }
+
+  /**
   * Clear the log.
   * @author Cameron Burkholder
   * @date   07/31/2021

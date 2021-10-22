@@ -11,7 +11,15 @@ const Validator = require("../Validator.js");
 * @date   07/29/2021
 */
 const UserSchema = new Schema({
+  email: {
+    type: String,
+    required: true
+  },
   name: {
+    type: String,
+    required: true
+  },
+  password: {
     type: String,
     required: true
   }
@@ -80,6 +88,36 @@ class User {
   }
 
   /**
+  * Gets the user record from the database.
+  * @param  {Mongoose.types.ObjectId} userEmail The user email to search for.
+  * @return {User} The user instance, if found; otherwise undefined.
+  * @async
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  static async getByEmail(userEmail) {
+    // GET THE USER BASED ON THE GIVEN EMAIL.
+    let userRecord = false;
+    try {
+      userRecord = await UserModel.findOne({ email: userEmail }).exec();
+    } catch(error) {
+      Log.write("An error occurred while attempting to get a user by email.");
+      Log.writeError(error);
+      // If an error occurs, it should be returned.
+      return error;
+    } finally {
+      // If the user wasn't able to be found in the database, this routine should return undefined.
+      let user = undefined;
+      let userWasFound = Validator.isDefined(userRecord);
+      if (userWasFound) {
+        // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+        user = new User(userRecord);
+      }
+      return user;
+    }
+  }
+
+  /**
   * Gets the document id of the user in the database as a string.
   * @return {String} The document id of the user.
   * @author Cameron Burkholder
@@ -88,6 +126,28 @@ class User {
   getId() {
     // GET THE DOCUMENT ID OF THE USER.
     return String(this._id);
+  }
+
+  /**
+  * Gets the hash of the user's password.
+  * @return {string} The user's password hash.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  getPasswordHash() {
+    // GET THE PASSWORD HASH.
+    return this.password;
+  }
+
+  /**
+  * Used to remove any sensitive attributes so the object can be sent to the client.
+  * @return {User} The user instance without any sensitive attributes.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  removeSensitiveAttributes() {
+    delete this.password;
+    return this;
   }
 
   /**

@@ -7,7 +7,7 @@ import React from "react";
 */
 const Label = (props) => {
   return (
-    <label className="Label">
+    <label className="Label" {...props}>
       { props.children }
     </label>
   )

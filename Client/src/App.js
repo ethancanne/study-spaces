@@ -24,8 +24,8 @@ class App extends React.Component {
     super(props);
 
     // BIND METHODS TO THIS COMPONENT INSTANCE.
-    this.login = this.login.bind(this);
-    this.logout = this.logout.bind(this);
+    this.clientSideLogin = this.clientSideLogin.bind(this);
+    this.clientSideLogout = this.clientSideLogout.bind(this);
     this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
     this.userIsLoggedIn = this.userIsLoggedIn.bind(this);
 
@@ -33,6 +33,28 @@ class App extends React.Component {
       isLoggedIn: this.userIsLoggedIn(),
       hasNotMounted: true
     }
+  }
+
+  /**
+  * Logs the user in from the client-side perspective. This ensures persistent logins.
+  * @param {JsonWebToken} token The authentication token to store.
+  * @param {Date} expirationDate The date the authentication token expires.
+  * @param {User} user The user being logged in.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  clientSideLogin(token, expirationDate, user) {
+    //this.setLocalStorage(authenticationToken, authenticationTokenExpirationDate, user, this.updateState);
+  }
+
+  /**
+  * Logs the user out from the clien-side perspective.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  clientSideLogout() {
+    //this.clearLocalStorage();
+
   }
 
   /**
@@ -49,15 +71,11 @@ class App extends React.Component {
     }
   }
 
-  login(token, expirationDate, user) {
-    this.setLocalStorage(authenticationToken, authenticationTokenExpirationDate, user, this.updateState);
-  }
-
-  logout() {
-    this.clearLocalStorage();
-
-  }
-
+  /**
+  * Updates the user's authenticaiton token for persistent logins.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
   async updateAuthenticationToken() {
     if (this.state.isLoggedIn) {
       axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
@@ -67,12 +85,12 @@ class App extends React.Component {
       } catch (error) {
         console.log(error);
       } finally {
-        const authenticationTokenWasUpdated = (ResponseMessages.Account.AuthenticationTokenWasUpdated === response.data.message);
+        const authenticationTokenWasUpdated = (ResponseMessages.Account.SuccessUpdateAuthenticationToken === response.data.message);
         if (authenticationTokenWasUpdated) {
           const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
-          this.login(authenticationToken, authenticationTokenExpirationDate, user);
+          this.clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
         } else {
-          this.logout();
+          this.clientSideLogout();
         }
         this.setState({
           hasNotMounted: false
@@ -82,7 +100,7 @@ class App extends React.Component {
   }
 
   /**
-  * Tests whether a user is logged in or not.j
+  * Tests whether a user is logged in or not.
   * @return {boolean} True if the user is logged in, false otherwise.
   * @author Cameron Burkholder
   * @date   10/20/2021
@@ -102,7 +120,7 @@ class App extends React.Component {
         <div className="container">
           <Switch>
             <Route exact path="/">
-              <Home/>
+              <Home clientSideLogin={this.clientSideLogin} clientSideLogout={this.clientSideLogout}/>
             </Route>
           </Switch>
         </div>

@@ -1,3 +1,4 @@
+const Bcrypt = require("bcryptjs");
 const ExtractJsonWebToken = require("passport-jwt").ExtractJwt;
 const JsonWebToken = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -109,6 +110,21 @@ class Authenticator {
       // no errors have occured, but no user was found with the given ID.
       return nextMiddlewareFunction(error, userExists);
     }
+  }
+
+  /**
+  * Checks if the provided password is correct.
+  * @param {string} password The password to check.
+  * @param {User} user The user to check the password for.
+  * @return {boolean} True if the password is correct, false otherwise.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  static verifyPassword(password, user) {
+    // CHECK IF THE PASSWORD IS CORRECT.
+    const passwordHash = user.getPasswordHash();
+    const passwordIsCorrect = Bcrypt.compareSync(password, passwordHash);
+    return passwordIsCorrect;
   }
 
   /**

@@ -7,7 +7,7 @@ import React from "react";
 */
 const InputField = (props) => {
   return (
-    <fieldset className="InputField">
+    <fieldset className="InputField" {...props}>
       { props.children }
     </fieldset>
   )

@@ -5,7 +5,10 @@
 */
 const ResponseMessages = {
   Account: {
-    AuthenticationTokenWasUpdated: "The authentication token has been updated."
+    IncorrectPassword: "The password provided is incorrect",
+    SuccessLogin: "The login was successful",
+    SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",
+    UserNotFound: "The user was not found"
   },
   Notifications: {
     SuccessSubscribeToPushNotifications: "Push notifications have successfully been subscribed.",

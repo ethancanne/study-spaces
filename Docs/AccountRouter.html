@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: App</title>
+    <title>JSDoc: Class: AccountRouter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: App</h1>
+    <h1 class="page-title">Class: AccountRouter</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>App<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>AccountRouter<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">This is the root presentational component that processes user authenticationand manages the display of the application's pages.</div>
+            <div class="class-description">The router used to serve account-related requests.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="App"><span class="type-signature"></span>new App<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AccountRouter"><span class="type-signature"></span>new AccountRouter<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -100,7 +100,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Client_src_App.js.html">Client/src/App.js</a>, <a href="Client_src_App.js.html#line22">line 22</a>
+        <a href="Server_Routers_AccountRouter.js.html">Server/Routers/AccountRouter.js</a>, <a href="Server_Routers_AccountRouter.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -156,7 +156,7 @@
     
 
     
-    <h4 class="name" id="clientSideLogin"><span class="type-signature"></span>clientSideLogin<span class="signature">(token, expirationDate, user)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".login"><span class="type-signature">(async, static) </span>login<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -164,7 +164,7 @@
 
 
 <div class="description">
-    Logs the user in from the client-side perspective. This ensures persistent logins.
+    This allows the user to log in.
 </div>
 
 
@@ -200,13 +200,13 @@
 
         <tr>
             
-                <td class="name"><code>token</code></td>
+                <td class="name"><code>request.body.email</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">JsonWebToken</span>
+<span class="param-type">string</span>
 
 
             
@@ -216,20 +216,20 @@
 
             
 
-            <td class="description last">The authentication token to store.</td>
+            <td class="description last">The email address of the user.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>expirationDate</code></td>
+                <td class="name"><code>request.body.password</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Date</span>
+<span class="param-type">string</span>
 
 
             
@@ -239,30 +239,7 @@
 
             
 
-            <td class="description last">The date the authentication token expires.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="User.html">User</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user being logged in.</td>
+            <td class="description last">The password of the user.</td>
         </tr>
 
     
@@ -310,7 +287,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Client_src_App.js.html">Client/src/App.js</a>, <a href="Client_src_App.js.html#line46">line 46</a>
+        <a href="Server_Routers_AccountRouter.js.html">Server/Routers/AccountRouter.js</a>, <a href="Server_Routers_AccountRouter.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -346,7 +323,7 @@
     
 
     
-    <h4 class="name" id="clientSideLogout"><span class="type-signature"></span>clientSideLogout<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".serveRoutes"><span class="type-signature">(static) </span>serveRoutes<span class="signature">(server, authenticator)</span><span class="type-signature"></span></h4>
     
 
     
@@ -354,7 +331,7 @@
 
 
 <div class="description">
-    Logs the user out from the clien-side perspective.
+    Initialize the router and serve the routes.
 </div>
 
 
@@ -363,6 +340,78 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>server</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Server</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server instance used to provide the routes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authenticator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Authenticator.html">Authenticator</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The authenticator used to protect the routes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -405,7 +454,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Client_src_App.js.html">Client/src/App.js</a>, <a href="Client_src_App.js.html#line55">line 55</a>
+        <a href="Server_Routers_AccountRouter.js.html">Server/Routers/AccountRouter.js</a>, <a href="Server_Routers_AccountRouter.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -441,7 +490,7 @@
     
 
     
-    <h4 class="name" id="componentDidMount"><span class="type-signature"></span>componentDidMount<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".updateAuthenticationToken"><span class="type-signature">(static) </span>updateAuthenticationToken<span class="signature">(request, response)</span><span class="type-signature"></span></h4>
     
 
     
@@ -449,7 +498,7 @@
 
 
 <div class="description">
-    Checks if the page has finished loaded and refreshes the authentication tokenif the user is already logged in.
+    This serves the index file.
 </div>
 
 
@@ -458,6 +507,78 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>request</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The request being served.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>response</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The response being generated.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -500,7 +621,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Client_src_App.js.html">Client/src/App.js</a>, <a href="Client_src_App.js.html#line66">line 66</a>
+        <a href="Server_Routers_AccountRouter.js.html">Server/Routers/AccountRouter.js</a>, <a href="Server_Routers_AccountRouter.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -525,218 +646,6 @@
 
 
 
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="updateAuthenticationToken"><span class="type-signature">(async) </span>updateAuthenticationToken<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Updates the user's authenticaiton token for persistent logins.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Client_src_App.js.html">Client/src/App.js</a>, <a href="Client_src_App.js.html#line79">line 79</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="userIsLoggedIn"><span class="type-signature"></span>userIsLoggedIn<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Tests whether a user is logged in or not.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Client_src_App.js.html">Client/src/App.js</a>, <a href="Client_src_App.js.html#line108">line 108</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the user is logged in, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

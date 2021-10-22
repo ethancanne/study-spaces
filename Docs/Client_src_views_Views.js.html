@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/pages/Home.js</title>
+    <title>JSDoc: Source: Client/src/views/Views.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/pages/Home.js</h1>
+    <h1 class="page-title">Source: Client/src/views/Views.js</h1>
 
     
 
@@ -26,41 +26,25 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-
-import Page from "./Page.js";
-import Views from "../views/Views.js";
-
-// IMPORT VIEWS FOR THIS PAGE.
-import LoginView from "../views/Home/LoginView.js";
+            <pre class="prettyprint source linenums"><code>// HOME VIEWS.
+import LoginView from "./Home/LoginView.js";
 
 /**
-* The home page of the application. This is shown when the user has not logged in.
-* @param {function} clientSideLogin The function used to log in a user from the client-side perspective.
-* @param {function} clientSideLogout The function used to log out a user from the client-side perspective.
+* The various possible views that each page can present.
 * @author Cameron Burkholder
 * @date   10/20/2021
 */
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      view: Views.Home.Login
-    }
-  }
-  render() {
-    const HomeView = this.state.view;
-
-    return (
-      &lt;Page>
-        &lt;HomeView clientSideLogin={this.props.clientSideLogin} clientSideLogout={this.props.clientSideLogout}/>
-      &lt;/Page>
-    )
+const Views = {
+  Home: {
+    Login: LoginView,
+    ForgotPassword: "Forgot password",
+    CreateAccount: "Create account",
+    VerificationEmailConfirmation: "Verification email confirmation",
+    AccountSetup: "Account setup"
   }
 }
 
-export default Home;
+export default Views;
 </code></pre>
         </article>
     </section>

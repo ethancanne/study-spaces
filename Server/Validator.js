@@ -41,6 +41,16 @@ class Validator {
     const undefinedType = "undefined";
     return (undefinedType === typeof variable);
   }
+
+  /**
+  * Validates the login information submitted by a user.
+  * @todo This needs done.
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  static validateLoginInput(request, response, nextMiddlewareFunction) {
+    nextMiddlewareFunction();
+  }
 }
 
 module.exports = Validator;

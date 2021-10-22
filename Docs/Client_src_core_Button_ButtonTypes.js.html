@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/pages/Home.js</title>
+    <title>JSDoc: Source: Client/src/core/Button/ButtonTypes.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/pages/Home.js</h1>
+    <h1 class="page-title">Source: Client/src/core/Button/ButtonTypes.js</h1>
 
     
 
@@ -26,41 +26,17 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
-
-import Page from "./Page.js";
-import Views from "../views/Views.js";
-
-// IMPORT VIEWS FOR THIS PAGE.
-import LoginView from "../views/Home/LoginView.js";
-
-/**
-* The home page of the application. This is shown when the user has not logged in.
-* @param {function} clientSideLogin The function used to log in a user from the client-side perspective.
-* @param {function} clientSideLogout The function used to log out a user from the client-side perspective.
+            <pre class="prettyprint source linenums"><code>/**
+* Defines the types of buttons that can be used.
 * @author Cameron Burkholder
-* @date   10/20/2021
+* @date   10/21/2021
 */
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      view: Views.Home.Login
-    }
-  }
-  render() {
-    const HomeView = this.state.view;
-
-    return (
-      &lt;Page>
-        &lt;HomeView clientSideLogin={this.props.clientSideLogin} clientSideLogout={this.props.clientSideLogout}/>
-      &lt;/Page>
-    )
-  }
+const ButtonTypes = {
+  Primary: "Primary",
+  Secondary: "Secondary"
 }
 
-export default Home;
+export default ButtonTypes;
 </code></pre>
         </article>
     </section>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/pages/Home.js</title>
+    <title>JSDoc: Source: Client/src/components/LoginForm/LoginForm.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/pages/Home.js</h1>
+    <h1 class="page-title">Source: Client/src/components/LoginForm/LoginForm.js</h1>
 
     
 
@@ -28,39 +28,41 @@
         <article>
             <pre class="prettyprint source linenums"><code>import React from "react";
 
-import Page from "./Page.js";
-import Views from "../views/Views.js";
-
-// IMPORT VIEWS FOR THIS PAGE.
-import LoginView from "../views/Home/LoginView.js";
+import Button from "../../core/Button/Button.js";
+import ButtonTypes from "../../core/Button/ButtonTypes.js";
+import Form from "../../core/Form/Form.js";
+import InputField from "../../core/InputField/InputField.js";
+import Label from "../../core/Label/Label.js";
+import Routes from "../../../../Server/Routes/Routes.js";
+import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
-* The home page of the application. This is shown when the user has not logged in.
-* @param {function} clientSideLogin The function used to log in a user from the client-side perspective.
-* @param {function} clientSideLogout The function used to log out a user from the client-side perspective.
+* Renders a login form.
+* @param {string} props.email The email address in the form.
+* @param {string} props.password The password in the form.
+* @param {function} props.submitLogin Used to submit the login form.
+* @param {function} props.updateEmailField The function used to update the email address.
+* @param {function} props.updatePasswordField The function used to update the password.
 * @author Cameron Burkholder
-* @date   10/20/2021
+* @date   10/21/2021
 */
-class Home extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      view: Views.Home.Login
-    }
-  }
-  render() {
-    const HomeView = this.state.view;
-
-    return (
-      &lt;Page>
-        &lt;HomeView clientSideLogin={this.props.clientSideLogin} clientSideLogout={this.props.clientSideLogout}/>
-      &lt;/Page>
-    )
-  }
+const LoginForm = (props) => {
+  return (
+    &lt;Form onSubmit={props.submitLogin}>
+      &lt;InputField>
+        &lt;Label>Email&lt;/Label>
+        &lt;TextInput value={props.email} onChange={props.updateEmailField} type="email"/>
+      &lt;/InputField>
+      &lt;InputField>
+        &lt;Label>Password&lt;/Label>
+        &lt;TextInput value={props.password} onChange={props.updatePasswordField} type="password"/>
+      &lt;/InputField>
+      &lt;Button type={ButtonTypes.Primary}>Sign in&lt;/Button>
+    &lt;/Form>
+  )
 }
 
-export default Home;
+export default LoginForm;
 </code></pre>
         </article>
     </section>

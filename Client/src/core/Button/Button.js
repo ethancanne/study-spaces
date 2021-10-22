@@ -21,7 +21,7 @@ const Button = (props) => {
   }
 
   return (
-    <button>
+    <button {...props}>
       { props.children }
     </button>
   )

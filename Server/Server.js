@@ -8,7 +8,6 @@ const BodyParser = require("body-parser");
 const Express = require("express");
 const Helmet = require("helmet");
 const Mongoose = require("mongoose");
-const Morgan = require("morgan");
 const Passport = require("passport");
 const Path = require("path");
 
@@ -31,10 +30,6 @@ server.use(Express.static(staticResourceFilepath));
 server.use(BodyParser.urlencoded({ extended: false }));
 server.use(BodyParser.json());
 const configurationIsSetToProduction = Configuration.isSetToProduction();
-// If the application is in production mode, use Morgan logging.
-if (configurationIsSetToProduction) {
-  server.use(Morgan("combined"));
-}
 
 // RESET LOGGING.
 Log.resetLog();
@@ -44,6 +39,7 @@ if (fileLoggingIsEnabled) {
 } else {
   Log.write("Logging started.");
 }
+server.use(Log.logger);
 
 // SETUP DATABASE CONNECTION.
 const databaseUri = Configuration.getDatabaseUri();
