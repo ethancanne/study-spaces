@@ -1,5 +1,6 @@
 import axios from "axios";
 import React from "react";
+import "regenerator-runtime/runtime.js";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Redirect } from "react-router";
 
@@ -57,23 +58,26 @@ class App extends React.Component {
 
   }
 
-  updateAuthenticationToken() {
+  async updateAuthenticationToken() {
     if (this.state.isLoggedIn) {
       axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
-      axios.get(Routes.Account.UpdateAuthenticationToken)
-        .then((response) => {
-          const authenticationTokenWasUpdated = (response.data.message = ResponseMessages.Account.AuthenticationTokenWasUpdated);
-          if (authenticationTokenWasUpdated) {
-            this.login(response.data.authenticationToken, response.data.authenticationTokenExpirationDate, response.data.user);
-          } else {
-            this.logout();
-          }
-          this.setState({
-            hasNotMounted: false
-          });
-        }).catch((error) => {
-
+      let response = undefined;
+      try {
+        response = await axios.get(Routes.Account.UpdateAuthenticationToken);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        const authenticationTokenWasUpdated = (ResponseMessages.Account.AuthenticationTokenWasUpdated === response.data.message);
+        if (authenticationTokenWasUpdated) {
+          const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
+          this.login(authenticationToken, authenticationTokenExpirationDate, user);
+        } else {
+          this.logout();
+        }
+        this.setState({
+          hasNotMounted: false
         });
+      }
     }
   }
 

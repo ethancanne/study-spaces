@@ -4,12 +4,10 @@ import Page from "./Page.js";
 import Views from "../views/Views.js";
 
 // IMPORT VIEWS FOR THIS PAGE.
-import LoginForm from "../views/Home/LoginForm.js";
-import RegisterForm from "../views/Home/RegisterForm.js";
-import SplashScreen from "../views/Home/SplashScreen.js";
+import LoginView from "../views/Home/LoginView.js";
 
 /**
-* The home page of the application.
+* The home page of the application. This is shown when the user has not logged in.
 * @author Cameron Burkholder
 * @date   10/20/2021
 */
@@ -17,46 +15,16 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
-    this.showLoginForm = this.showLoginForm.bind(this);
-    this.showRegisterForm = this.showRegisterForm.bind(this);
-    this.showSplashScreen = this.showSplashScreen.bind(this);
-
     this.state = {
-      view: Views.Home.SplashScreen
+      view: Views.Home.Login
     }
-  }
-  showLoginForm() {
-    this.setState({
-      view: Views.Home.LoginForm
-    });
-  }
-  showRegisterForm() {
-    this.setState({
-      view: Views.Home.RegisterForm
-    });
-  }
-  showSplashScreen() {
-    this.setState({
-      view: Views.Home.SplashScreen
-    });
   }
   render() {
-    let view;
-    switch (this.state.view) {
-      case Views.Home.SplashScreen:
-        view = <SplashScreen showLoginForm={this.showLoginForm}/>;
-        break;
-      case Views.Home.LoginForm:
-        view = <LoginForm showRegisterForm={this.showRegisterForm}/>;
-        break;
-      case Views.Home.RegisterForm:
-        view = <RegisterForm showLoginForm={this.showLoginForm}/>;
-        break;
-    }
+    const HomeView = this.state.view;
+
     return (
       <Page>
-        { view }
-        <button onClick={this.showSplashScreen}>Splash screen</button>
+        <HomeView/>
       </Page>
     )
   }
