@@ -10,7 +10,7 @@ import Routes from "../../Server/Routes/Routes.js";
 
 
 // PAGES.
-import Home from "./Pages/Home.js";
+import Home from "./pages/Home.js";
 
 /**
 * This is the root presentational component that processes user authentication

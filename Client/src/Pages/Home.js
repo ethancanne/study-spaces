@@ -1,12 +1,12 @@
 import React from "react";
 
 import Page from "./Page.js";
-import Views from "../Views/Views.js";
+import Views from "../views/Views.js";
 
 // IMPORT VIEWS FOR THIS PAGE.
-import LoginForm from "../Views/Home/LoginForm.js";
-import RegisterForm from "../Views/Home/RegisterForm.js";
-import SplashScreen from "../Views/Home/SplashScreen.js";
+import LoginForm from "../views/Home/LoginForm.js";
+import RegisterForm from "../views/Home/RegisterForm.js";
+import SplashScreen from "../views/Home/SplashScreen.js";
 
 /**
 * The home page of the application.
