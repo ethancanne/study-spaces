@@ -54,7 +54,6 @@ class LoginView extends React.Component {
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
       const responseIsDefined = (Validator.isDefined(response));
-      console.log(response);
       if (responseIsDefined) {
         // IF THE USER HAS LOGGED IN, CONFIGURE THE CLIENT TO REFLECT THIS.
         const loginWasValid = (ResponseMessages.Account.SuccessLogin === response.data.message);

@@ -1,5 +1,5 @@
 /**
-* Used to validate and verify data throughout the application.
+* This is used to validate and verify data throughout the application.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
@@ -44,7 +44,7 @@ class Validator {
 
   /**
   * Validates the login information submitted by a user.
-  * @todo This needs done.
+  * @todo This needs done. For now this function does nothing.
   * @author Cameron Burkholder
   * @date   10/22/2021
   */

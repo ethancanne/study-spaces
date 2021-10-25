@@ -32,7 +32,8 @@ class AccountRouter {
 
   // GET ROUTES.
   /**
-  * This serves the index file.
+  * This updates a user's authentication token. This is done
+  * for the purpose of persistent logins.
   * @param  {object} request The request being served.
   * @param  {object} response The response being generated.
   * @author Cameron Burkholder
@@ -49,7 +50,7 @@ class AccountRouter {
       authenticationTokenExpirationDate: authenticationToken.expires,
       user: request.user
     };
-    response.json(packet);
+    response.json(responseMessage);
   }
 
   // POST ROUTES.

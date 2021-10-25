@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
-* Used to render forms.
+* Renders a form.
 * @author Cameron Burkholder
 * @date   10/21/2021
 */

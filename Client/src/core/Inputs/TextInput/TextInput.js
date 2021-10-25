@@ -3,7 +3,7 @@ import React from "react";
 import Validator from "../../../../../Server/Validator.js";
 
 /**
-* Used to allow users to input text.
+* Renders a text input.
 * @author Cameron Burkholder
 * @date   10/21/2021
 */

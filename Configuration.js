@@ -3,7 +3,8 @@ const Path = require("path");
 require("dotenv").config();
 
 /**
-* This class provides a wrapper to interface with the environment variables.
+* This class provides an interface for configuration settings set
+* through environment variables.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
@@ -19,7 +20,9 @@ class Configuration {
   }
 
   /**
-  * Gets the database URI to use.
+  * Gets the database URI to use. The URI to use might differ depending
+  * on if the application is in development or production, so there are
+  * possibly two correct URIs depending on the context.
   * @return {string} The database URI to use.
   * @author Cameron Burkholder
   * @date   07/29/2021
@@ -46,7 +49,7 @@ class Configuration {
   }
 
   /**
-  * Gets the log file filepath.
+  * Gets the log file filepath for the server logs.
   * @return {string} The log file filepath.
   * @author Cameron Burkholder
   * @date   07/29/2021
@@ -56,7 +59,8 @@ class Configuration {
   }
 
   /**
-  * Gets the node environment.
+  * Gets the node environment. This determines whether the application
+  * is in production mode or development mode.
   * @return {string} The node environment.
   * @author Cameron Burkholder
   * @date   10/20/2021
@@ -66,7 +70,7 @@ class Configuration {
   }
 
   /**
-  * Gets the private RSA key.
+  * Gets the private RSA key. This is used for authentiction token encryption.
   * @return {string} The private RSA key.
   * @author Cameron Burkholder
   * @date   10/20/2021
@@ -87,7 +91,7 @@ class Configuration {
   }
 
   /**
-  * Gets the public RSA key.
+  * Gets the public RSA key. This is used for authentication token encryption.
   * @return {string} The public RSA key.
   * @author Cameron Burkholder
   * @date   07/29/2021
@@ -132,6 +136,7 @@ class Configuration {
   }
 
   /**
+  * Determines whether the application is in development or production mode.
   * @return {bool} True if the application is in production mode; false otherwise.
   * @author Cameron Burkholder
   * @date   07/29/2021

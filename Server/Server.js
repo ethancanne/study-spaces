@@ -17,6 +17,7 @@ const rootDirectory = Path.resolve("./");
 global.rootDirectory = rootDirectory;
 
 // SETUP EXPRESS.
+// Express is used to implement middleware.
 const server = Express();
 const staticResourceFolder = Configuration.getStaticResourceFolder();
 const staticResourceFilepath = Path.join(global.rootDirectory, "Client", staticResourceFolder);
@@ -25,7 +26,8 @@ server.use(BodyParser.urlencoded({ extended: false }));
 server.use(BodyParser.json());
 const configurationIsSetToProduction = Configuration.isSetToProduction();
 
-// RESET LOGGING.
+// ENABLE LOGGING.
+// Before logging is enabled, the log file is reset to ensure a clean log.
 Log.resetLog();
 const fileLoggingIsEnabled = Configuration.fileLoggingIsEnabled();
 if (fileLoggingIsEnabled) {
@@ -52,15 +54,17 @@ Mongoose.connection.on("error", (error) => {
 });
 
 // SETUP AUTHENTICATION.
+// The authenticator object is used to protect routes
+// and manage authentication tokens.
 server.use(Passport.initialize());
 const authenticator = new Authenticator(server, Passport);
 
 // ADD SECURITY MIDDLEWARE.
+// Helmet is used to help with basic security.
 server.use(Helmet());
 
 // IMPLEMENT THE SERVER ROUTES.
 AccountRouter.serveRoutes(server, authenticator);
-NotificationsRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
 StaticResourceRouter.serveRoutes(server, authenticator);
 

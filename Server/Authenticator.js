@@ -10,7 +10,17 @@ const ResponseCodes = require("./Responses/ResponseCodes.js");
 const User = require("./Models/User.js");
 const Validator = require("./Validator.js");
 
+/**
+* Used to model the options a JSON web token-based authentication strategy can have.
+* @author Cameron Burkholder
+* @date   07/29/2021
+*/
 class JsonWebTokenStrategyOptions {
+  /**
+  * Initializes a set of default JSON web token options.
+  * @author Cameron Burkholder
+  * @date   07/29/2021
+  */
   constructor() {
     this.jwtFromRequest = ExtractJsonWebToken.fromAuthHeaderAsBearerToken();
     this.secretOrKey = Configuration.getPublicRsaKey();
@@ -19,7 +29,7 @@ class JsonWebTokenStrategyOptions {
 }
 
 /**
-* This is used for the purpose of authenticating users and protecting routes.
+* Used to protect routes and manage authentication tokens.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */

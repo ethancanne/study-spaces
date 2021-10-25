@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
-* A parent class for other pages to inherit from.
+* Renders a page.
 * @author Cameron Burkholder
 * @date   10/20/2021
 */

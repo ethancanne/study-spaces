@@ -35,7 +35,7 @@ const userCollectionName = Configuration.getUserCollectionName();
 const UserModel = Mongoose.model(userCollectionName, UserSchema);
 
 /**
-* Provides an interface to access and update the database record for a user.
+* Provides an interface for working with users in the database.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
@@ -55,7 +55,7 @@ class User {
   }
 
   /**
-  * Gets the user record from the database.
+  * Gets the user record from the database using the document ID.
   * @param  {Mongoose.types.ObjectId} userId The user ID to search for.
   * @return {User} The user instance, if found; otherwise undefined.
   * @async
@@ -88,7 +88,7 @@ class User {
   }
 
   /**
-  * Gets the user record from the database.
+  * Gets the user record from the database using the user's email.
   * @param  {Mongoose.types.ObjectId} userEmail The user email to search for.
   * @return {User} The user instance, if found; otherwise undefined.
   * @async

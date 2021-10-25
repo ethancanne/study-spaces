@@ -4,7 +4,7 @@ const Configuration = require("../Configuration.js");
 const Validator = require("./Validator.js");
 
 /**
-* This class provides an interface for working with log files and the command line.
+* This class provides a unified interface for working with log files and console logs.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
@@ -20,7 +20,7 @@ class Log {
   }
 
   /**
-  * Handle the event where an error occurs while writing a log.
+  * Handle the event where an error occurs while writing to a log file.
   * @param {error} error The error to handle.
   * @author Cameron Burkholder
   * @date 07/29/2021
@@ -33,7 +33,8 @@ class Log {
   }
 
   /**
-  * Log server requests and routing.
+  * Used to log server requests and routing. This is a middleware function
+  * meant to be configured as an Express middleware.
   * @param {request} request The request to the server.
   * @param {response} response The server's response.
   * @param {function} nextMiddlewareFunction The next middleware function in the chain.
@@ -84,7 +85,7 @@ class Log {
   }
 
   /**
-  * Writes an error to the command line.
+  * Writes an error to the logs.
   * @param  {error} error The error to write.
   * @author Cameron Burkholder
   * @date   07/29/2021

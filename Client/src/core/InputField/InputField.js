@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
-* Used to render an input field.
+* Renders an input field.
 * @author Cameron Burkholder
 * @date   10/21/2021
 */
