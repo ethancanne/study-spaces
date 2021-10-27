@@ -8,12 +8,7 @@ const Routes = {
     Login: "/api/account/login",
     UpdateAuthenticationToken: "/api/account/update-authentication-token"
   },
-  Notifications: {
-    Subscribe: "/api/notifications/subscribe"
-  },
   StaticResources: {
-    CustomServiceWorker: "/custom-service-worker.js",
-    DefaultServiceWorker: "/service-worker.js",
     Index: "/*"
   }
 };

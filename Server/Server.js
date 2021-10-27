@@ -9,7 +9,6 @@ const Authenticator = require("./Authenticator.js");
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const AccountRouter = require("./Routers/AccountRouter.js");
-const NotificationsRouter = require("./Routers/NotificationsRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 
 // ASSIGN THE ROOT DIRECTORY TO A GLOBAL VARIABLE FOR REUSE THROUGHOUT THE APPLICATION.
