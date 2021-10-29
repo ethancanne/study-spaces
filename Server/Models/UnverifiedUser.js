@@ -7,9 +7,6 @@ const Validator = require("../Validator.js");
 
 /**
 * Used to define the database schema for storing unverified users.
-* @property {String} email The user's email.
-* @property {String} passwordHash The user's hashed password.
-* @property {String} verificationToken The token used to verify a user's account.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */
@@ -39,6 +36,9 @@ const UnverifiedUserModel = Mongoose.model(unverifiedUserCollectionName, Unverif
 
 /**
 * Provides an interface for working with unverified users in the database.
+* @property {String} email The user's email.
+* @property {String} passwordHash The user's hashed password.
+* @property {String} verificationToken The token used to verify a user's account.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */

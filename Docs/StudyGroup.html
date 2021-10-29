@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>StudyGroup<span class="signature">(studyGroupSchema)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>StudyGroup<span class="signature">(areaCode, calendar, class<span class="signature-attributes">opt</span>, feed, isOnlineGroup, isTutorGroup, members, name, owner, school<span class="signature-attributes">opt</span>, subject)</span><span class="type-signature"></span></h2>
         
             <div class="class-description">Provides an interface for working with study groups in the database.</div>
         
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="StudyGroup"><span class="type-signature"></span>new StudyGroup<span class="signature">(studyGroupSchema)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="StudyGroup"><span class="type-signature"></span>new StudyGroup<span class="signature">(areaCode, calendar, class<span class="signature-attributes">opt</span>, feed, isOnlineGroup, isTutorGroup, members, name, owner, school<span class="signature-attributes">opt</span>, subject)</span><span class="type-signature"></span></h4>
     
 
     
@@ -77,6 +77,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -89,23 +91,345 @@
 
         <tr>
             
-                <td class="name"><code>studyGroupSchema</code></td>
+                <td class="name"><code>areaCode</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Mongoose.Schema</span>
+<span class="param-type">String</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">The database record for a given study group.</td>
+            <td class="description last">The area code for the study group.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>calendar</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The study group's calendar.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>class</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The class the study group is associated with.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>feed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The document ID for the study group's feed.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isOnlineGroup</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Indicates whether or not the study group is an online group.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isTutorGroup</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Indicates whether or not the study group is a tutor group.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>members</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The list of document IDs for members in the study group.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The name of the study group.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>owner</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The study group owner's documnet ID.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>school</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The school the study group is associated with.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>subject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The subject the study group supports.</td>
         </tr>
 
     
@@ -3841,7 +4165,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Oct 29 2021 14:13:51 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Oct 29 2021 14:18:35 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

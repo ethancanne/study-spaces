@@ -7,8 +7,6 @@ const Validator = require("../Validator.js");
 
 /**
 * Used to define the database schema for storing conversations.
-* @property {String} messages The messages in the conversation.
-* @property {String} participants The two user's that the conversation is between.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */
@@ -34,6 +32,8 @@ const ConversationModel = Mongoose.model(conversationCollectionName, Conversatio
 
 /**
 * Provides an interface for working with conversations in the database.
+* @property {String} messages The messages in the conversation.
+* @property {String} participants The two user's that the conversation is between.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */

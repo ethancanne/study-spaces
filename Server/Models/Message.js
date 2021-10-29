@@ -6,10 +6,6 @@ const Log = require("../Log.js");
 const Validator = require("../Validator.js");
 
 /**
-* Used to define the database schema for storing messages.
-* @property {String} senderName The name of the participant that sent the message.
-* @property {String} timeSent The time the message was sent.
-* @property {String} value The message value that was sent.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */
@@ -39,6 +35,10 @@ const MessageModel = Mongoose.model(messageCollectionName, MessageSchema);
 
 /**
 * Provides an interface for working with messages in the database.
+* Used to define the database schema for storing messages.
+* @property {String} senderName The name of the participant that sent the message.
+* @property {String} timeSent The time the message was sent.
+* @property {String} value The message value that was sent.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */

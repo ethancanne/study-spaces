@@ -7,17 +7,6 @@ const Validator = require("../Validator.js");
 
 /**
 * Used to define the database schema for storing study groups.
-* @param {String} areaCode The area code for the study group.
-* @param {String} calendar The study group's calendar.
-* @param {String=} class The class the study group is associated with.
-* @param {String} feed The document ID for the study group's feed.
-* @param {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
-* @param {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
-* @param {String[]} members The list of document IDs for members in the study group.
-* @param {String} name The name of the study group.
-* @param {String} owner The study group owner's documnet ID.
-* @param {String=} school The school the study group is associated with.
-* @param {String} subject The subject the study group supports.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */
@@ -79,6 +68,17 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
 
 /**
 * Provides an interface for working with study groups in the database.
+* @param {String} areaCode The area code for the study group.
+* @param {String} calendar The study group's calendar.
+* @param {String=} class The class the study group is associated with.
+* @param {String} feed The document ID for the study group's feed.
+* @param {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
+* @param {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
+* @param {String[]} members The list of document IDs for members in the study group.
+* @param {String} name The name of the study group.
+* @param {String} owner The study group owner's documnet ID.
+* @param {String=} school The school the study group is associated with.
+* @param {String} subject The subject the study group supports.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */

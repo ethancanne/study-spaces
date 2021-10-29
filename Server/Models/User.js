@@ -7,15 +7,6 @@ const Validator = require("../Validator.js");
 
 /**
 * Used to define the database schema for storing users.
-* @property {string} areaCode - The user's area code.
-* @property {String[]} conversations - The user's conversations/chats. This is stored as a list of
-*   MongoDB document IDs so that the conversations can be accessed directly from the user.
-* @property {string} email - The user's email address.
-* @property {string} name - The user's name.
-* @property {string} passwordHash - The user's hashed password.
-* @property {binData} profilePicture - The user's profile picture. This must be less than 16MB.
-* @property {String[]} studyGroups - The study groups the user is a part of. This is stored as a list
-*   of MongoDB document IDs so that the study groups can be accessed directly from the user.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
@@ -61,6 +52,15 @@ const UserModel = Mongoose.model(userCollectionName, UserSchema);
 
 /**
 * Provides an interface for working with users in the database.
+* @property {string} areaCode - The user's area code.
+* @property {String[]} conversations - The user's conversations/chats. This is stored as a list of
+*   MongoDB document IDs so that the conversations can be accessed directly from the user.
+* @property {string} email - The user's email address.
+* @property {string} name - The user's name.
+* @property {string} passwordHash - The user's hashed password.
+* @property {binData} profilePicture - The user's profile picture. This must be less than 16MB.
+* @property {String[]} studyGroups - The study groups the user is a part of. This is stored as a list
+*   of MongoDB document IDs so that the study groups can be accessed directly from the user.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
