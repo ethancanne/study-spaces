@@ -78,7 +78,7 @@ class UnverifiedUser {
 
   /**
   * Gets the user record from the database using the user's email.
-  * @param  {String} userEmail The user email to search for.
+  * @param  {String} verificationToken The verification token used to search for an unverified user.
   * @return {UnverifiedUser} The user instance, if found; otherwise undefined.
   * @async
   * @author Cameron Burkholder

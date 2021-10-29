@@ -33,7 +33,7 @@ const ConversationModel = Mongoose.model(conversationCollectionName, Conversatio
 /**
 * Provides an interface for working with conversations in the database.
 * @property {String} messages The messages in the conversation.
-* @property {String} participants The two user's that the conversation is between.
+* @property {String} participants The two users that the conversation is between.
 * @author Cameron Burkholder
 * @date   10/29/2021
 */
