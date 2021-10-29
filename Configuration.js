@@ -20,6 +20,17 @@ class Configuration {
   }
 
   /**
+  * Gets the name of the collection used to store conversations.
+  * @return {String} The name of the collection used to store conversations.
+  * @author Cameron Burkholder
+  * @date   10/29/2021
+  */
+  static getConversationCollectionName() {
+    // GET THE CONVERSATION COLLECTION NAME.
+    return process.env.COLLECTION_FOR_CONVERSATIONS;
+  }
+
+  /**
   * Gets the database URI to use. The URI to use might differ depending
   * on if the application is in development or production, so there are
   * possibly two correct URIs depending on the context.
@@ -56,6 +67,17 @@ class Configuration {
   */
   static getLogFilepath() {
     return process.env.LOG_FILEPATH;
+  }
+
+  /**
+  * Gets the name of the collection used to store messages.
+  * @return {String} The name of the collection used to store messages.
+  * @author Cameron Burkholder
+  * @date   10/29/2021
+  */
+  static getMessageCollectionName() {
+    // GET THE CONVERSATION COLLECTION NAME.
+    return process.env.COLLECTION_FOR_MESSAGES;
   }
 
   /**
@@ -122,6 +144,28 @@ class Configuration {
   static getStaticResourceFolder() {
     // GET THE STATIC RESOURCE FOLDER TO USE.
     return process.env.STATIC_RESOURCE_FOLDER;
+  }
+
+  /**
+  * Gets the name of the collection used to store study groups.
+  * @return {String} The name of the collection used to storestudy groups.
+  * @author Cameron Burkholder
+  * @date   10/29/2021
+  */
+  static getStudyGroupCollectionName() {
+    // GET THE STUDY GROUP COLLECTION NAME.
+    return process.env.COLLECTION_FOR_STUDY_GROUPS;
+  }
+
+  /**
+  * Gets the name of the collection used to store users.
+  * @return {String} The name of the collection used to store unverified users.
+  * @author Cameron Burkholder
+  * @date   10/29/2021
+  */
+  static getUnverifiedUserCollectionName() {
+    // GET THE UNVERIFIED USER COLLECTION NAME.
+    return process.env.COLLECTION_FOR_UNVERIFIED_USERS;
   }
 
   /**

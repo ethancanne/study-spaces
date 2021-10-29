@@ -7,10 +7,27 @@ const Validator = require("../Validator.js");
 
 /**
 * Used to define the database schema for storing users.
+* @property {string} areaCode - The user's area code.
+* @property {String[]} conversations - The user's conversations/chats. This is stored as a list of
+*   MongoDB document IDs so that the conversations can be accessed directly from the user.
+* @property {string} email - The user's email address.
+* @property {string} name - The user's name.
+* @property {string} passwordHash - The user's hashed password.
+* @property {binData} profilePicture - The user's profile picture. This must be less than 16MB.
+* @property {String[]} studyGroups - The study groups the user is a part of. This is stored as a list
+*   of MongoDB document IDs so that the study groups can be accessed directly from the user.
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
 const UserSchema = new Schema({
+  areaCode: {
+    type: String,
+    required: true
+  },
+  conversations: {
+    type: [String],
+    required: true
+  },
   email: {
     type: String,
     required: true
@@ -19,8 +36,16 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  password: {
+  passwordHash: {
     type: String,
+    required: true
+  },
+  profilePicture: {
+    type: Buffer,
+    required: false
+  },
+  studyGroups: {
+    type: [String],
     required: true
   }
 });
@@ -55,8 +80,39 @@ class User {
   }
 
   /**
+  * Creates a user.
+  * @param {String} email The user's email.
+  * @param {String} passwordHash The user's hashed password.
+  * @param {String} name The user's name.
+  * @param {String} areaCode The user's area code.
+  * @param {String=} profilePicture The user's profile picture.
+  * @return {User} The created user.
+  *
+  */
+  static async create(email, passwordHash, name, areaCode, profilePicture) {
+
+  }
+
+  /**
+  * Deletes a user.
+  * @return {Boolean} True if the user was deleted, false otherwise.
+  */
+  async delete() {
+
+  }
+
+  /**
+  * Gets the user's area code.
+  * @return {String} The user's area code.
+  *
+  */
+  getAreaCode() {
+
+  }
+
+  /**
   * Gets the user record from the database using the document ID.
-  * @param  {Mongoose.types.ObjectId} userId The user ID to search for.
+  * @param  {String} userId The user ID to search for.
   * @return {User} The user instance, if found; otherwise undefined.
   * @async
   * @author Cameron Burkholder
@@ -89,7 +145,7 @@ class User {
 
   /**
   * Gets the user record from the database using the user's email.
-  * @param  {Mongoose.types.ObjectId} userEmail The user email to search for.
+  * @param  {String} userEmail The user email to search for.
   * @return {User} The user instance, if found; otherwise undefined.
   * @async
   * @author Cameron Burkholder
@@ -118,6 +174,24 @@ class User {
   }
 
   /**
+  * Gets the user's conversations.
+  * @return {Conversation[]} The user's conversations.
+  *
+  */
+  getConversations() {
+
+  }
+
+  /**
+  * Gets the user's email.
+  * @return {String} The user's email.
+  *
+  */
+  getEmail() {
+
+  }
+
+  /**
   * Gets the document id of the user in the database as a string.
   * @return {String} The document id of the user.
   * @author Cameron Burkholder
@@ -129,14 +203,32 @@ class User {
   }
 
   /**
+  * Gets the user's name.
+  * @return {String} The user's name.
+  *
+  */
+  getName() {
+
+  }
+
+  /**
   * Gets the hash of the user's password.
-  * @return {string} The user's password hash.
+  * @return {String} The user's password hash.
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
   getPasswordHash() {
     // GET THE PASSWORD HASH.
-    return this.password;
+    return this.passwordHash;
+  }
+
+  /**
+  * Gets the user's profile picture.
+  * @return {String} The user's profile picture.
+  *
+  */
+  getProfilePicture() {
+
   }
 
   /**
@@ -146,7 +238,7 @@ class User {
   * @date   10/22/2021
   */
   removeSensitiveAttributes() {
-    delete this.password;
+    delete this.passwordHash;
     return this;
   }
 
@@ -176,6 +268,56 @@ class User {
     } finally {
       return userWasSaved;
     }
+  }
+
+  /**
+  * Sets the user's area code.
+  * @param {String} areaCode The area code to set.
+  * @return {Boolean} True if the area code was set, false otherwise.
+  *
+  */
+  async setAreaCode(areaCode) {
+
+  }
+
+  /**
+  * Sets the user's email.
+  * @param {String} email The email to set.
+  * @return {Boolean} True if the email was set, false otherwise.
+  *
+  */
+  async setEmail(email) {
+
+  }
+
+  /**
+  * Sets the user's name.
+  * @param {String} name The name to set.
+  * @return {Boolean} True if the name was set, false otherwise.
+  *
+  */
+  async setName(name) {
+
+  }
+
+  /**
+  * Sets the user's profile picture.
+  * @param {String} newProfilePicture The profile picture to set.
+  * @return {Boolean} True if the profile picture was set, false otherwise.
+  *
+  */
+  async setProfilePicture(newProfilePicture) {
+
+  }
+
+  /**
+  * Update's the user's password.
+  * @param {String} newPassword The new password to set.
+  * @return {Boolean} True if the password was updated, false otherwise.
+  *
+  */
+  async updatePassword(newPassword) {
+
   }
 }
 
