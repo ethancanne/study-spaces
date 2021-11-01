@@ -147,8 +147,19 @@ class Configuration {
   }
 
   /**
+  * Gets the name of the collection used to store study group calendars.
+  * @return {String} The name of the collection used to store study group calendars.
+  * @author Cameron Burkholder
+  * @date   11/01/2021
+  */
+  static getStudyGroupCalendarCollectionName() {
+    // GET THE STUDY GROUP CALENDAR COLLECTION NAME.
+    return process.env.COLLECTION_FOR_STUDY_GROUP_CALENDARS;
+  }
+
+  /**
   * Gets the name of the collection used to store study groups.
-  * @return {String} The name of the collection used to storestudy groups.
+  * @return {String} The name of the collection used to store study groups.
   * @author Cameron Burkholder
   * @date   10/29/2021
   */

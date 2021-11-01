@@ -122,4 +122,4 @@ class Conversation {
 
 }
 
-module.exports = User;
+module.exports = Conversation;

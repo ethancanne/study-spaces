@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Server/Models/Conversation.js</title>
+    <title>JSDoc: Source: Server/Models/StudyGroupCalendar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Server/Models/Conversation.js</h1>
+    <h1 class="page-title">Source: Server/Models/StudyGroupCalendar.js</h1>
 
     
 
@@ -34,123 +34,90 @@ const Log = require("../Log.js");
 const Validator = require("../Validator.js");
 
 /**
-* Used to define the database schema for storing conversations.
+* Used to define the database schema for storing study group calendars.
 * @author Cameron Burkholder
-* @date   10/29/2021
+* @date   11/01/2021
 */
-const ConversationSchema = new Schema({
-  messages: {
+const StudyGroupCalendarSchema = new Schema({
+  areaCode: {
+    type: String,
+    required: true
+  },
+  calendar: {
+    type: String,
+    required: true
+  },
+  class: {
+    type: String,
+    required: false
+  },
+  feed: {
+    type: String,
+    required: true
+  },
+  isOnlineGroup: {
+    type: Boolean,
+    required: true
+  },
+  isTutorGroup: {
+    type: Boolean,
+    required: true
+  },
+  members: {
     type: [String],
     required: true
   },
-  participants: {
-    type: [String],
+  name: {
+    type: String,
+    required: true
+  },
+  owner: {
+    type: String,
+    required: true
+  },
+  school: {
+    type: String,
+    required: false
+  },
+  subject: {
+    type: String,
     required: true
   }
 });
-ConversationSchema.set("toObject", {
+StudyGroupCalendarSchema.set("toObject", {
   versionKey: false,
   transform: (document, object) => {
     delete object.__v;
     return object;
   }
 });
-const conversationCollectionName = Configuration.getConversationCollectionName();
-const ConversationModel = Mongoose.model(conversationCollectionName, ConversationSchema);
+const studyGroupCalendarCollectionName = Configuration.getStudyGroupCalendarCollectionName();
+const StudyGroupCalendarModel = Mongoose.model(studyGroupCalendarCollectionName, StudyGroupCalendarSchema);
 
 /**
-* Provides an interface for working with conversations in the database.
-* @property {String} messages The messages in the conversation.
-* @property {String} participants The two users that the conversation is between.
+* Provides an interface for working with study group calendars in the database.
+*
 * @author Cameron Burkholder
-* @date   10/29/2021
+* @date   11/01/2021
 */
-class Conversation {
+class StudyGroupCalendar {
   /**
-  * Initializes the conversation passed in from the database.
-  * @param  {Mongoose.Schema} conversationSchema The database record for a given conversation.
+  * Initializes the calendar to the one passed in from the database.
+  * @param  {Mongoose.Schema} studyGroupCalendarSchema The database record for a given study group calendar.
   * @author Cameron Burkholder
-  * @date   10/29/2021
+  * @date   11/01/2021
   */
-  constructor(conversationSchema) {
+  constructor(studyGroupCalendarSchema) {
     // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
     // In order to maximize the usability of this class, the attributes stored in the database
     // record are copied to the instance of this class so they can be properly editied.
-    // The conversation schema is converted to a regular object to sanitize it of wrapper methods and properties.
-    Object.assign(this, conversationSchema.toObject());
-  }
-
-  /**
-  * Creates a conversation between two participants.
-  * @param {User} sender The user sending the first message in the conversation.
-  * @param {User} receiver The user receiving the first message in the conversation.
-  * @return {Conversation} The conversation created.
-  *
-  */
-  static async create() {
-
-  }
-
-  /**
-  * Deletes the conversation.
-  * @return {Boolean} True if the conversation was deleted, false otherwise.
-  *
-  */
-  async delete() {
-
-  }
-
-  /**
-  * Gets a conversation based on the participants that it includes.
-  * @param {String[]} participants The list of participants for the conversation.
-  * @return {Conversation} The conversation between the participants.
-  *
-  */
-  static async getByParticipants(participants) {
-
-  }
-
-  /**
-  * Gets the other participant in the conversation.
-  * @param {User} participant The first participant in the conversation.
-  * @return {User} The other participant in the conversation.
-  *
-  */
-  getOtherParticipant(participant) {
-
-  }
-
-  /**
-  * Gets the messages of a conversation.
-  * @return {Message[]} A list of messages between the two participants.
-  *
-  */
-  async getMessages() {
-
-  }
-
-  /**
-  * Updates the conversation in the database.
-  * @return {Boolean} True if the conversation was saved, false otherwise.
-  *
-  */
-  async save() {
-
-  }
-
-  /**
-  * Sends a message.
-  * @param {Message} message The message to send.
-  * @return {Boolean} True if the message was sent, false otherwise.
-  *
-  */
-  async sendMessage(message) {
-
+    // The study group calendar schema is converted to a regular object to sanitize it of wrapper methods and properties.
+    Object.assign(this, studyGroupCalendarSchema.toObject());
   }
 
 }
 
-module.exports = Conversation;
+module.exports = StudyGroupCalendar;
 </code></pre>
         </article>
     </section>

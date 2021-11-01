@@ -116,4 +116,4 @@ class Message {
 
 }
 
-module.exports = User;
+module.exports = Message;

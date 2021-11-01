@@ -84,7 +84,7 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
 */
 class StudyGroup {
   /**
-  * Initializes the user to the account passed in from the database.
+  * Initializes the study group to the group passed in from the database.
   * @param  {Mongoose.Schema} studyGroupSchema The database record for a given study group.
   * @author Cameron Burkholder
   * @date   10/29/2021
@@ -363,4 +363,4 @@ class StudyGroup {
 
 }
 
-module.exports = User;
+module.exports = StudyGroup;
