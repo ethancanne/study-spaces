@@ -99,7 +99,7 @@ class Configuration {
   */
   static getPrivateRsaKey() {
     // EXPLICITLY WRITE NEWLINE CHARACTERS.
-    return process.env.RSA_PRIVATE_KEY.replace(/\\n/g, "\n")
+    return process.env.RSA_PRIVATE_KEY.replace(/\\n/g, "\n");
   }
 
   /**

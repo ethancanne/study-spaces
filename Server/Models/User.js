@@ -239,6 +239,7 @@ class User {
   */
   removeSensitiveAttributes() {
     delete this.passwordHash;
+    delete this._id;
     return this;
   }
 

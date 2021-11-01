@@ -80,7 +80,7 @@ class AccountRouter {
       const authentication = Authenticator.issueAuthenticationToken(user);
       const authenticationToken = authentication.token;
       const authenticationTokenExpirationDate = authentication.expires;
-      user = user.removeSensitiveAttributes();
+      user.removeSensitiveAttributes();
       return response.json({
         authenticationToken: authenticationToken,
         authenticationTokenExpirationDate: authenticationTokenExpirationDate,

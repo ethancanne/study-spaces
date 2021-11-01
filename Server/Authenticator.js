@@ -72,8 +72,9 @@ class Authenticator {
       sub: userId,
       iat: Date.now()
     };
+    const privateRsaKey = Configuration.getPrivateRsaKey();
     const authenticationTokenBody = JsonWebToken.sign(authenticationTokenPayload,
-      Configuration.getPrivateRsaKey(),
+      privateRsaKey,
       {
         expiresIn: authenticationDurationInMilliseconds,
         algorithm: "RS256"
@@ -133,7 +134,7 @@ class Authenticator {
   static verifyPassword(password, user) {
     // CHECK IF THE PASSWORD IS CORRECT.
     const passwordHash = user.getPasswordHash();
-    const passwordIsCorrect = Bcrypt.compareSync(password, passwordHash);
+    const passwordIsCorrect = (passwordHash === password); //Bcrypt.compareSync(password, passwordHash);
     return passwordIsCorrect;
   }
 
