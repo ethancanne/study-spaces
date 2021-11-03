@@ -15,10 +15,6 @@ const StudyGroupSchema = new Schema({
     type: String,
     required: true
   },
-  calendar: {
-    type: String,
-    required: true
-  },
   class: {
     type: String,
     required: false
@@ -35,6 +31,10 @@ const StudyGroupSchema = new Schema({
     type: Boolean,
     required: true
   },
+  meetings: {
+    type: [String],
+    required: true
+  },
   members: {
     type: [String],
     required: true
@@ -45,6 +45,10 @@ const StudyGroupSchema = new Schema({
   },
   owner: {
     type: String,
+    required: true
+  },
+  recurringMeeting: {
+    type: StudyGroupMeeting,
     required: true
   },
   school: {
@@ -69,14 +73,15 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
 /**
 * Provides an interface for working with study groups in the database.
 * @property {String} areaCode The area code for the study group.
-* @property {String} calendar The study group's calendar.
 * @property {String=} class The class the study group is associated with.
 * @property {String} feed The document ID for the study group's feed.
 * @property {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
 * @property {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
+* @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
 * @property {String[]} members The list of document IDs for members in the study group.
 * @property {String} name The name of the study group.
 * @property {String} owner The study group owner's document ID.
+* @property {StudyGroupMeeting} recurringMeeting The study group's recurring meeting schedule.
 * @property {String=} school The school the study group is associated with.
 * @property {String} subject The subject the study group supports.
 * @author Cameron Burkholder
@@ -98,22 +103,21 @@ class StudyGroup {
   }
 
   /**
+  * Adds a one-time meeting.
+  * @param {StudyGroupMeeting} newMeeting The meeting to add.
+  * @return {Boolean} True if the meeting was added, false otherwise.
+  */
+  async addMeeting(newMeeting) {
+
+  }
+
+  /**
   * Adds a member to the study group.
   * @param {User} newMember The member to add to the group.
   * @return {Boolean} True if the member was added, false otherwise.
   *
   */
   async addMember(newMember) {
-
-  }
-
-  /**
-  * Checks if the user is a member of the study group.
-  * @param {User} user The user to check for study group membership.
-  * @return {Boolean} True if the user is a member of the study group, false otherwise.
-  *
-  */
-  async userIsAMember(user) {
 
   }
 
@@ -143,15 +147,6 @@ class StudyGroup {
   *
   */
   getAreaCode() {
-
-  }
-
-  /**
-  * Gets the study group calendar.
-  * @return {StudyGroupCalendar} The study group's calendar.
-  *
-  */
-  async getCalendar() {
 
   }
 
@@ -194,6 +189,14 @@ class StudyGroup {
   }
 
   /**
+  * Gets the study group's meetings.
+  * @return {StudyGroupMeeting[]} The study group's meetings.
+  */
+  async getMeetings() {
+
+  }
+
+  /**
   * Gets the study group's members.
   * @return {User[]} The study group's members.
   *
@@ -212,11 +215,37 @@ class StudyGroup {
   }
 
   /**
+  * Gets the study group's upcoming meeting.
+  * @return {StudyGroupMeeting} The very next study group meeting.
+  */
+  async getNextMeeting() {
+
+  }
+
+  /**
+  * Gets the study group's one-time meetings.
+  * @return {StudyGroupMeeting[]} The study group's one-time meetings.
+  *
+  */
+  async getOneTimeMeetings() {
+
+  }
+
+  /**
   * Gets the study group's owner.
   * @return {User} The study group's owner.
   *
   */
   async getOwner() {
+
+  }
+
+  /**
+  * Gets the study group's recurring meeting schedule.
+  * @return {StudyGroupMeeting} The recurring meeting schedule.
+  *
+  */
+  async getRecurringMeeting() {
 
   }
 
@@ -292,6 +321,15 @@ class StudyGroup {
   }
 
   /**
+  * Removes a meeting from the study group's one-time meeting schedule.
+  * @param {StudyGroupMeeting} meeting The meeting to remove.
+  * @return {Booleam} True if the meeting was removed, false otherwise.
+  */
+  async removeMeeting(meeting) {
+
+  }
+
+  /**
   * Removes a member from the study group.
   * @param {User} member The member to remove from the group.
   * @return {Boolean} True if the member was removed, false otherwise.
@@ -358,6 +396,26 @@ class StudyGroup {
   *
   */
   async setSubject(subject) {
+
+  }
+
+  /**
+  * Updates the study group's meeting.
+  * @param {StudyGroupMeeting} updatedMeeting The meeting to update.
+  * @return {Boolean} True if the meeting was updated, false otherwise.
+  *
+  */
+  async updateMeeting(updatedMeeting) {
+
+  }
+
+  /**
+  * Checks if the user is a member of the study group.
+  * @param {User} user The user to check for study group membership.
+  * @return {Boolean} True if the user is a member of the study group, false otherwise.
+  *
+  */
+  async userIsAMember(user) {
 
   }
 

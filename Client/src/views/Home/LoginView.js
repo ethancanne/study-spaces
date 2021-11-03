@@ -1,10 +1,10 @@
-import axios from 'axios'
-import React, {useState} from 'react'
+import axios from "axios"
+import React, { useState } from "react"
 
-import LoginForm from '../../components/LoginForm/LoginForm.js'
-import ResponseMessages from '../../../../Server/Responses/ResponseMessages.js'
-import Routes from '../../../../Server/Routes/Routes.js'
-import Validator from '../../../../Server/Validator.js'
+import LoginForm from "../../components/LoginForm/LoginForm.js"
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js"
+import Routes from "../../../../Server/Routes/Routes.js"
+import Validator from "../../../../Server/Validator.js"
 
 /**
  * Used to display the login form and log the user in.
@@ -13,15 +13,10 @@ import Validator from '../../../../Server/Validator.js'
  * @author Cameron Burkholder
  * @date   10/21/2021
  */
-const LoginView = props => {
-  // this.submitLogin = this.submitLogin.bind(this);
-  // this.updateEmailField = this.updateEmailField.bind(this);
-  // this.updatePasswordField = this.updatePasswordField.bind(this);
-
-  const BLANK = ''
-
-  const [email, setEmail] = useState(BLANK)
-  const [password, setPassword] = useState(BLANK)
+const LoginView = (props) => {
+  const BLANK = "";
+  const [email, setEmail] = useState(BLANK);
+  const [password, setPassword] = useState(BLANK);
 
   /**
    * Submits the login request to the server for verification.
@@ -29,38 +24,34 @@ const LoginView = props => {
    * @author Cameron Burkholder
    * @date   10/21/2021
    */
-  const submitLogin = async event => {
+  const submitLogin = async (event) => {
     // PREVENT THE DEFAULT FORM SUBMISSION BEHAVIOR.
-    event.preventDefault()
-    event.stopPropagation()
+    event.preventDefault();
+    event.stopPropagation();
 
     // SUBMIT THE LOGIN REQUEST.
-    let response
+    let response;
     try {
       response = await axios.post(Routes.Account.Login, {
         email,
         password,
-      })
+      });
     } catch (error) {
       console.log(error)
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
-      const responseIsDefined = Validator.isDefined(response)
+      const responseIsDefined = Validator.isDefined(response);
       if (responseIsDefined) {
         // IF THE USER HAS LOGGED IN, CONFIGURE THE CLIENT TO REFLECT THIS.
-        const loginWasValid =
-          ResponseMessages.Account.SuccessLogin === response.data.message
-          
+        const loginWasValid = (ResponseMessages.Account.SuccessLogin === response.data.message);
         if (loginWasValid) {
-          const {authenticationToken, authenticationTokenExpirationDate, user} =
-            response.data
+          const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
           props.clientSideLogin(
             authenticationToken,
             authenticationTokenExpirationDate,
-            user
-          )
+            user);
         } else {
-          props.clientSideLogout()
+          props.clientSideLogout();
         }
       }
     }
@@ -72,8 +63,8 @@ const LoginView = props => {
    * @author Cameron Burkholder
    * @date   10/21/2021
    */
-  const updateEmailField = event => {
-    setEmail(event.target.value)
+  const updateEmailField = (event) => {
+    setEmail(event.target.value);
   }
 
   /**
@@ -82,8 +73,8 @@ const LoginView = props => {
    * @author Cameron Burkholder
    * @date   10/21/2021
    */
-  const updatePasswordField = event => {
-    setPassword(event.target.value)
+  const updatePasswordField = (event) => {
+    setPassword(event.target.value);
   }
 
   return (
@@ -92,9 +83,8 @@ const LoginView = props => {
       password={password}
       submitLogin={submitLogin}
       updateEmailField={updateEmailField}
-      updatePasswordField={updatePasswordField}
-    />
+      updatePasswordField={updatePasswordField}/>
   )
 }
 
-export default LoginView
+export default LoginView;

@@ -27,7 +27,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>import axios from "axios";
-import React from "react";
+import React, { useState, useEffect } from "react"
 import "regenerator-runtime/runtime.js";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Redirect } from "react-router";
@@ -35,33 +35,18 @@ import { Redirect } from "react-router";
 import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
 import Routes from "../../Server/Routes/Routes.js";
 
-// PAGE ELEMENTS.
-
-
 // PAGES.
 import Home from "./pages/Home.js";
 
 /**
 * This is the root presentational component that processes user authentication
-* and manages the display of the application's pages.
+* and manages the display of the application"s pages.
 * @author Cameron Burkholder
 * @date   10/20/2021
 */
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    // BIND METHODS TO THIS COMPONENT INSTANCE.
-    this.clientSideLogin = this.clientSideLogin.bind(this);
-    this.clientSideLogout = this.clientSideLogout.bind(this);
-    this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
-    this.userIsLoggedIn = this.userIsLoggedIn.bind(this);
-
-    this.state = {
-      isLoggedIn: this.userIsLoggedIn(),
-      hasNotMounted: true
-    }
-  }
+const App = (props) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(userIsLoggedIn());
+  const [hasNotMounted, setHasNotMounted] = useState(false);
 
   /**
   * Logs the user in from the client-side perspective. This ensures persistent logins.
@@ -71,8 +56,9 @@ class App extends React.Component {
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  clientSideLogin(token, expirationDate, user) {
-    //this.setLocalStorage(authenticationToken, authenticationTokenExpirationDate, user, this.updateState);
+  const clientSideLogin = (token, expirationDate, user) => {
+    setLocalStorage(token, expirationDate, user);
+    setIsLoggedIn(true);
   }
 
   /**
@@ -80,32 +66,71 @@ class App extends React.Component {
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  clientSideLogout() {
-    //this.clearLocalStorage();
+  const clientSideLogout = () => {
+    clearLocalStorage();
+    setIsLoggedIn(false);
+  }
 
+  /**
+  * Clears the data managed by the application.
+  * @author Cameron Burkholder
+  * @date   11/03/2021
+  */
+  function clearLocalStorage() {
+    localStorage.clear();
   }
 
   /**
   * Checks if the page has finished loaded and refreshes the authentication token
-  * if the user is already logged in.
+  * if the user is already logged in. Using an empty dependency array ensures
+  * that this only runs on unmount.
   * @author Cameron Burkholder
   * @date   10/20/2021
   */
-  componentDidMount() {
-    if (this.state.hasNotMounted) {
-      this.setState({
-        hasNotMounted: false
-      }, this.updateAuthenticationToken);
+  useEffect(() => {
+    return () => {
+      setHasNotMounted(true);
+      updateAuthenticationToken();
     }
+  }, []);
+
+  /**
+  * Sets the local storage managed by the application.
+  * @param {String} token The JSON web token used for user authentication.
+  * @param {Date} expirationDate The date the token expires.
+  * @param {User} user The user being logged in.
+  * @author Cameron Burkholder
+  * @date   11/03/2021
+  */
+  function setLocalStorage(token, expirationDate, user) {
+    // STORE THE AUTHENTICATION INFORMATION.
+    localStorage.setItem("token", token);
+    localStorage.setItem("authenticationTokenExpirationDate", expirationDate);
+    localStorage.setItem("user", user);
   }
 
   /**
-  * Updates the user's authenticaiton token for persistent logins.
+  * Tests whether a user is logged in or not.
+  * @return {Boolean} True if the user is logged in, false otherwise.
+  * @author Cameron Burkholder
+  * @date   10/20/2021
+  */
+  function userIsLoggedIn () {
+    // CHECK IF THE JWT TOKEN IS EXPIRED.
+    const currentDate = Date.now();
+    const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
+    const userIsLoggedIn = (currentDate &lt; jwtExpirationDate);
+    console.log(currentDate);
+    return userIsLoggedIn;
+  }
+
+  /**
+  * Updates the user"s authentication token for persistent logins.
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  async updateAuthenticationToken() {
-    if (this.state.isLoggedIn) {
+  const updateAuthenticationToken = async () => {
+    if (isLoggedIn) {
       axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
       let response = undefined;
       try {
@@ -116,45 +141,30 @@ class App extends React.Component {
         const authenticationTokenWasUpdated = (ResponseMessages.Account.SuccessUpdateAuthenticationToken === response.data.message);
         if (authenticationTokenWasUpdated) {
           const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
-          this.clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
+          clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
         } else {
-          this.clientSideLogout();
+          clientSideLogout();
         }
-        this.setState({
-          hasNotMounted: false
-        });
+        setHasNotMounted(false);
       }
     }
   }
 
-  /**
-  * Tests whether a user is logged in or not.
-  * @return {boolean} True if the user is logged in, false otherwise.
-  * @author Cameron Burkholder
-  * @date   10/20/2021
-  */
-  userIsLoggedIn() {
-    // CHECK IF THE JWT TOKEN IS EXPIRED.
-    const currentDate = Date.now();
-    const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
-    const userIsLoggedIn = (currentDate &lt; jwtExpirationDate);
-    return userIsLoggedIn;
-  }
-
-
-  render() {
-    return (
-      &lt;Router>
-        &lt;div className="container">
-          &lt;Switch>
-            &lt;Route exact path="/">
-              &lt;Home clientSideLogin={this.clientSideLogin} clientSideLogout={this.clientSideLogout}/>
-            &lt;/Route>
-          &lt;/Switch>
-        &lt;/div>
-      &lt;/Router>
-    )
-  }
+  return (
+    &lt;Router>
+      &lt;div className="container">
+        &lt;Switch>
+          &lt;Route exact path="/">
+            { isLoggedIn ? (
+              &lt;p>You are logged in&lt;/p>
+            ) : (
+              &lt;Home clientSideLogin={clientSideLogin} clientSideLogout={clientSideLogout}/>
+            )}
+          &lt;/Route>
+        &lt;/Switch>
+      &lt;/div>
+    &lt;/Router>
+  )
 }
 
 export default App;
@@ -168,13 +178,13 @@ export default App;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="App.html">App</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Home.html">Home</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="LoginView.html">LoginView</a></li><li><a href="Message.html">Message</a></li><li><a href="Page.html">Page</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupCalendar.html">StudyGroupCalendar</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupCalendarSchema">StudyGroupCalendarSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupFeed.html">StudyGroupFeed</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupFeedSchema">StudyGroupFeedSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 14:23:58 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 19:32:08 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

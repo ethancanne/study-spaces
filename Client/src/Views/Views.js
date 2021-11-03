@@ -1,6 +1,3 @@
-// HOME VIEWS.
-import LoginView from "./Home/LoginView.js";
-
 /**
 * The various possible views that each page can present.
 * @author Cameron Burkholder
@@ -8,7 +5,7 @@ import LoginView from "./Home/LoginView.js";
 */
 const Views = {
   Home: {
-    Login: LoginView,
+    Login: "Login",
     ForgotPassword: "Forgot password",
     CreateAccount: "Create account",
     VerificationEmailConfirmation: "Verification email confirmation",

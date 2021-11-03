@@ -38,5 +38,5 @@ module.exports = {
     proxy: {
       "/api": `http://localhost:${Configuration.getServerPort()}`
     }
-  },
+  }
 };

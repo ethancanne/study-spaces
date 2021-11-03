@@ -60,6 +60,28 @@ class Configuration {
   }
 
   /**
+  * Gets the name of the collection used to store study group feeds.
+  * @return {String} The name of the collection used to store study group feeds.
+  * @author Cameron Burkholder
+  * @date   11/03/2021
+  */
+  static getFeedCollectionName() {
+    // GET THE STUDY GROUP FEED COLLECTION NAME.
+    return process.env.COLLECTION_FOR_FEEDS;
+  }
+
+  /**
+  * Gets the name of the collection used to store locations.
+  * @return {String} The name of the collection used to store locations.
+  * @author Cameron Burkholder
+  * @date   11/03/2021
+  */
+  static getLocationCollectionName() {
+    // GET THE LOCATION COLLECTION NAME.
+    return process.env.COLLECTION_FOR_LOCATION;
+  }
+
+  /**
   * Gets the log file filepath for the server logs.
   * @return {string} The log file filepath.
   * @author Cameron Burkholder
@@ -70,13 +92,24 @@ class Configuration {
   }
 
   /**
+  * Gets the name of the collection used to store study group meetings.
+  * @return {String} The name of the collection used to store study group meetings.
+  * @author Cameron Burkholder
+  * @date   11/03/2021
+  */
+  static getMeetingCollectionName() {
+    // GET THE MEETING COLLECTION NAME.
+    return process.env.COLLECTION_FOR_MEETINGS;
+  }
+
+  /**
   * Gets the name of the collection used to store messages.
   * @return {String} The name of the collection used to store messages.
   * @author Cameron Burkholder
   * @date   10/29/2021
   */
   static getMessageCollectionName() {
-    // GET THE CONVERSATION COLLECTION NAME.
+    // GET THE MESSAGE COLLECTION NAME.
     return process.env.COLLECTION_FOR_MESSAGES;
   }
 
@@ -89,6 +122,17 @@ class Configuration {
   */
   static getNodeEnvironment() {
     return process.env.NODE_ENV;
+  }
+
+  /**
+  * Gets the name of the collection used to store posts.
+  * @return {String} The name of the collection used to store posts.
+  * @author Cameron Burkholder
+  * @date   11/03/2021
+  */
+  static getPostCollectionName() {
+    // GET THE POSTS COLLECTION NAME.
+    return process.env.COLLECTION_FOR_POSTS;
   }
 
   /**
@@ -144,17 +188,6 @@ class Configuration {
   static getStaticResourceFolder() {
     // GET THE STATIC RESOURCE FOLDER TO USE.
     return process.env.STATIC_RESOURCE_FOLDER;
-  }
-
-  /**
-  * Gets the name of the collection used to store study group calendars.
-  * @return {String} The name of the collection used to store study group calendars.
-  * @author Cameron Burkholder
-  * @date   11/01/2021
-  */
-  static getStudyGroupCalendarCollectionName() {
-    // GET THE STUDY GROUP CALENDAR COLLECTION NAME.
-    return process.env.COLLECTION_FOR_STUDY_GROUP_CALENDARS;
   }
 
   /**

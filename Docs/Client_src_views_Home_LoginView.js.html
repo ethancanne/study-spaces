@@ -26,44 +26,33 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import axios from "axios";
-import React from "react";
+            <pre class="prettyprint source linenums"><code>import axios from "axios"
+import React, { useState } from "react"
 
-import LoginForm from "../../components/LoginForm/LoginForm.js";
-import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
-import Routes from "../../../../Server/Routes/Routes.js";
-import Validator from "../../../../Server/Validator.js";
+import LoginForm from "../../components/LoginForm/LoginForm.js"
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js"
+import Routes from "../../../../Server/Routes/Routes.js"
+import Validator from "../../../../Server/Validator.js"
 
 /**
-* Used to display the login form and log the user in.
-* @param {function} clientSideLogin Used to log the user in from the client-side perspective.
-* @param {function} clientSideLogout Used to log the user out from the client-side perspective.
-* @author Cameron Burkholder
-* @date   10/21/2021
-*/
-class LoginView extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.submitLogin = this.submitLogin.bind(this);
-    this.updateEmailField = this.updateEmailField.bind(this);
-    this.updatePasswordField = this.updatePasswordField.bind(this);
-
-    const BLANK = "";
-
-    this.state = {
-      email: BLANK,
-      password: BLANK
-    }
-  }
+ * Used to display the login form and log the user in.
+ * @param {function} clientSideLogin Used to log the user in from the client-side perspective.
+ * @param {function} clientSideLogout Used to log the user out from the client-side perspective.
+ * @author Cameron Burkholder
+ * @date   10/21/2021
+ */
+const LoginView = (props) => {
+  const BLANK = "";
+  const [email, setEmail] = useState(BLANK);
+  const [password, setPassword] = useState(BLANK);
 
   /**
-  * Submits the login request to the server for verification.
-  * @param {Event} event The form submission event that triggers the login.
-  * @author Cameron Burkholder
-  * @date   10/21/2021
-  */
-  async submitLogin(event) {
+   * Submits the login request to the server for verification.
+   * @param {Event} event The form submission event that triggers the login.
+   * @author Cameron Burkholder
+   * @date   10/21/2021
+   */
+  const submitLogin = async (event) => {
     // PREVENT THE DEFAULT FORM SUBMISSION BEHAVIOR.
     event.preventDefault();
     event.stopPropagation();
@@ -71,64 +60,59 @@ class LoginView extends React.Component {
     // SUBMIT THE LOGIN REQUEST.
     let response;
     try {
-      response = await axios.post(
-        Routes.Account.Login,
-        {
-          email: this.state.email,
-          password: this.state.password
-        });
+      response = await axios.post(Routes.Account.Login, {
+        email,
+        password,
+      });
     } catch (error) {
-      console.log(error);
+      console.log(error)
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
-      const responseIsDefined = (Validator.isDefined(response));
+      const responseIsDefined = Validator.isDefined(response);
       if (responseIsDefined) {
         // IF THE USER HAS LOGGED IN, CONFIGURE THE CLIENT TO REFLECT THIS.
         const loginWasValid = (ResponseMessages.Account.SuccessLogin === response.data.message);
         if (loginWasValid) {
           const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
-          this.props.clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
+          props.clientSideLogin(
+            authenticationToken,
+            authenticationTokenExpirationDate,
+            user);
         } else {
-          this.props.clientSideLogout();
+          props.clientSideLogout();
         }
       }
     }
   }
 
   /**
-  * Used to update the email field in the login form.
-  * @param {Event} event The change event to update the field with.
-  * @author Cameron Burkholder
-  * @date   10/21/2021
-  */
-  updateEmailField(event) {
-    this.setState({
-      email: event.target.value
-    });
+   * Used to update the email field in the login form.
+   * @param {Event} event The change event to update the field with.
+   * @author Cameron Burkholder
+   * @date   10/21/2021
+   */
+  const updateEmailField = (event) => {
+    setEmail(event.target.value);
   }
 
   /**
-  * Used to update the password field in the login form.
-  * @param {Event} event The change event to update the field with.
-  * @author Cameron Burkholder
-  * @date   10/21/2021
-  */
-  updatePasswordField(event) {
-    this.setState({
-      password: event.target.value
-    });
+   * Used to update the password field in the login form.
+   * @param {Event} event The change event to update the field with.
+   * @author Cameron Burkholder
+   * @date   10/21/2021
+   */
+  const updatePasswordField = (event) => {
+    setPassword(event.target.value);
   }
 
-  render() {
-    return (
-      &lt;LoginForm
-        email={this.state.email}
-        password={this.state.password}
-        submitLogin={this.submitLogin}
-        updateEmailField={this.updateEmailField}
-        updatePasswordField={this.updatePasswordField}/>
-    )
-  }
+  return (
+    &lt;LoginForm
+      email={email}
+      password={password}
+      submitLogin={submitLogin}
+      updateEmailField={updateEmailField}
+      updatePasswordField={updatePasswordField}/>
+  )
 }
 
 export default LoginView;
@@ -142,13 +126,13 @@ export default LoginView;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="App.html">App</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Home.html">Home</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="LoginView.html">LoginView</a></li><li><a href="Message.html">Message</a></li><li><a href="Page.html">Page</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupCalendar.html">StudyGroupCalendar</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupCalendarSchema">StudyGroupCalendarSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupFeed.html">StudyGroupFeed</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupFeedSchema">StudyGroupFeedSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 14:23:58 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 19:32:08 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

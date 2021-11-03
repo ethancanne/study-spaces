@@ -3,6 +3,9 @@
 *
 */
 const PostTypes = {
-
+  Announcement: "Announcement",
+  Discussion: "Discussion",
+  Question: "Question",
+  Problem: "Problem"
 };
 module.exports = PostTypes;

@@ -43,10 +43,6 @@ const StudyGroupSchema = new Schema({
     type: String,
     required: true
   },
-  calendar: {
-    type: String,
-    required: true
-  },
   class: {
     type: String,
     required: false
@@ -63,6 +59,10 @@ const StudyGroupSchema = new Schema({
     type: Boolean,
     required: true
   },
+  meetings: {
+    type: [String],
+    required: true
+  },
   members: {
     type: [String],
     required: true
@@ -73,6 +73,10 @@ const StudyGroupSchema = new Schema({
   },
   owner: {
     type: String,
+    required: true
+  },
+  recurringMeeting: {
+    type: StudyGroupMeeting,
     required: true
   },
   school: {
@@ -97,14 +101,15 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
 /**
 * Provides an interface for working with study groups in the database.
 * @property {String} areaCode The area code for the study group.
-* @property {String} calendar The study group's calendar.
 * @property {String=} class The class the study group is associated with.
 * @property {String} feed The document ID for the study group's feed.
 * @property {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
 * @property {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
+* @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
 * @property {String[]} members The list of document IDs for members in the study group.
 * @property {String} name The name of the study group.
 * @property {String} owner The study group owner's document ID.
+* @property {StudyGroupMeeting} recurringMeeting The study group's recurring meeting schedule.
 * @property {String=} school The school the study group is associated with.
 * @property {String} subject The subject the study group supports.
 * @author Cameron Burkholder
@@ -126,22 +131,21 @@ class StudyGroup {
   }
 
   /**
+  * Adds a one-time meeting.
+  * @param {StudyGroupMeeting} newMeeting The meeting to add.
+  * @return {Boolean} True if the meeting was added, false otherwise.
+  */
+  async addMeeting(newMeeting) {
+
+  }
+
+  /**
   * Adds a member to the study group.
   * @param {User} newMember The member to add to the group.
   * @return {Boolean} True if the member was added, false otherwise.
   *
   */
   async addMember(newMember) {
-
-  }
-
-  /**
-  * Checks if the user is a member of the study group.
-  * @param {User} user The user to check for study group membership.
-  * @return {Boolean} True if the user is a member of the study group, false otherwise.
-  *
-  */
-  async userIsAMember(user) {
 
   }
 
@@ -171,15 +175,6 @@ class StudyGroup {
   *
   */
   getAreaCode() {
-
-  }
-
-  /**
-  * Gets the study group calendar.
-  * @return {StudyGroupCalendar} The study group's calendar.
-  *
-  */
-  async getCalendar() {
 
   }
 
@@ -222,6 +217,14 @@ class StudyGroup {
   }
 
   /**
+  * Gets the study group's meetings.
+  * @return {StudyGroupMeeting[]} The study group's meetings.
+  */
+  async getMeetings() {
+
+  }
+
+  /**
   * Gets the study group's members.
   * @return {User[]} The study group's members.
   *
@@ -240,11 +243,37 @@ class StudyGroup {
   }
 
   /**
+  * Gets the study group's upcoming meeting.
+  * @return {StudyGroupMeeting} The very next study group meeting.
+  */
+  async getNextMeeting() {
+
+  }
+
+  /**
+  * Gets the study group's one-time meetings.
+  * @return {StudyGroupMeeting[]} The study group's one-time meetings.
+  *
+  */
+  async getOneTimeMeetings() {
+
+  }
+
+  /**
   * Gets the study group's owner.
   * @return {User} The study group's owner.
   *
   */
   async getOwner() {
+
+  }
+
+  /**
+  * Gets the study group's recurring meeting schedule.
+  * @return {StudyGroupMeeting} The recurring meeting schedule.
+  *
+  */
+  async getRecurringMeeting() {
 
   }
 
@@ -320,6 +349,15 @@ class StudyGroup {
   }
 
   /**
+  * Removes a meeting from the study group's one-time meeting schedule.
+  * @param {StudyGroupMeeting} meeting The meeting to remove.
+  * @return {Booleam} True if the meeting was removed, false otherwise.
+  */
+  async removeMeeting(meeting) {
+
+  }
+
+  /**
   * Removes a member from the study group.
   * @param {User} member The member to remove from the group.
   * @return {Boolean} True if the member was removed, false otherwise.
@@ -389,6 +427,26 @@ class StudyGroup {
 
   }
 
+  /**
+  * Updates the study group's meeting.
+  * @param {StudyGroupMeeting} updatedMeeting The meeting to update.
+  * @return {Boolean} True if the meeting was updated, false otherwise.
+  *
+  */
+  async updateMeeting(updatedMeeting) {
+
+  }
+
+  /**
+  * Checks if the user is a member of the study group.
+  * @param {User} user The user to check for study group membership.
+  * @return {Boolean} True if the user is a member of the study group, false otherwise.
+  *
+  */
+  async userIsAMember(user) {
+
+  }
+
 }
 
 module.exports = StudyGroup;
@@ -402,13 +460,13 @@ module.exports = StudyGroup;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="App.html">App</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Home.html">Home</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="LoginView.html">LoginView</a></li><li><a href="Message.html">Message</a></li><li><a href="Page.html">Page</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupCalendar.html">StudyGroupCalendar</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupCalendarSchema">StudyGroupCalendarSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupFeed.html">StudyGroupFeed</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupFeedSchema">StudyGroupFeedSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 14:23:58 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 19:32:08 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

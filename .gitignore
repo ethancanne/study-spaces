@@ -2,6 +2,9 @@
 *.log
 npm-debug.log*
 
+# Ignore DS_Store.
+.DS_Store
+
 # Dependency directories
 node_modules/
 

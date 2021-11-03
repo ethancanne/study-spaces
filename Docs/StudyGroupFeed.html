@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Authenticator</title>
+    <title>JSDoc: Class: StudyGroupFeed</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Authenticator</h1>
+    <h1 class="page-title">Class: StudyGroupFeed</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Authenticator<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>StudyGroupFeed<span class="signature">(userSchema)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Used to protect routes and manage authentication tokens.</div>
+            <div class="class-description">Provides an interface for working with users in the database.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="Authenticator"><span class="type-signature"></span>new Authenticator<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="StudyGroupFeed"><span class="type-signature"></span>new StudyGroupFeed<span class="signature">(userSchema)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +53,7 @@
 
 
 <div class="description">
-    Handles creating the instance of the authentication tool.
+    Initializes the user to the account passed in from the database.
 </div>
 
 
@@ -64,6 +64,245 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>userSchema</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Mongoose.Schema</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The database record for a given user.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>areaCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's area code.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>conversations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's conversations/chats. This is stored as a list of  MongoDB document IDs so that the conversations can be accessed directly from the user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's email address.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passwordHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's hashed password.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profilePicture</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's profile picture. This must be less than 16MB.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>studyGroups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The study groups the user is a part of. This is stored as a list  of MongoDB document IDs so that the study groups can be accessed directly from the user.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -104,7 +343,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line36">line 36</a>
+        <a href="Server_Models_Feed.js.html">Server/Models/Feed.js</a>, <a href="Server_Models_Feed.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -160,7 +399,7 @@
     
 
     
-    <h4 class="name" id=".issueAuthenticationToken"><span class="type-signature">(static) </span>issueAuthenticationToken<span class="signature">(user)</span><span class="type-signature"> &rarr; {JsonWebToken}</span></h4>
+    <h4 class="name" id="save"><span class="type-signature">(async) </span>save<span class="signature">()</span><span class="type-signature"> &rarr; {bool}</span></h4>
     
 
     
@@ -168,7 +407,7 @@
 
 
 <div class="description">
-    Generates an authentication token for a user.
+    This saves the associated user document in the database with the current propertiesstored in this object.
 </div>
 
 
@@ -177,55 +416,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="User.html">User</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user to generate a token for.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -268,7 +458,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line66">line 66</a>
+        <a href="Server_Models_Feed.js.html">Server/Models/Feed.js</a>, <a href="Server_Models_Feed.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -297,7 +487,7 @@
 
         
 <div class="param-desc">
-    The authentication token.
+    True if the user was saved, false if the user wasn't saved.
 </div>
 
 
@@ -308,480 +498,7 @@
     </dt>
     <dd>
         
-<span class="param-type">JsonWebToken</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".verifyJsonWebToken"><span class="type-signature">(async, static) </span>verifyJsonWebToken<span class="signature">(jsonWebTokenPayload, nextMiddlewareFunction)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Used to verify that a JSON web token is associated with a valid user.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>jsonWebTokenPayload</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The JSON web token payload to check.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>nextMiddlewareFunction</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The next function to execute after this one.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line98">line 98</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".verifyPassword"><span class="type-signature">(static) </span>verifyPassword<span class="signature">(password, user)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Checks if the provided password is correct.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>password</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The password to check.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>user</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="User.html">User</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user to check the password for.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line134">line 134</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the password is correct, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="protectRoute"><span class="type-signature"></span>protectRoute<span class="signature">()</span><span class="type-signature"> &rarr; {function}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Used to prevent unauthorized users from accessing a route.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line147">line 147</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The middleware function to protect the route.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
+<span class="param-type">bool</span>
 
 
     </dd>

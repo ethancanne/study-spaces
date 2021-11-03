@@ -47,7 +47,7 @@ class AccountRouter {
     const responseMessage = {
       message: ResponseMessages.Account.AuthenticationTokenWasUpdated,
       authenticationToken: authenticationToken.token,
-      authenticationTokenExpirationDate: authenticationToken.expires,
+      authenticationTokenExpirationDate: new Date(Date.now() + authentication.expires).toDateString(),
       user: request.user
     };
     response.json(responseMessage);
@@ -79,7 +79,7 @@ class AccountRouter {
       // the account object has to have any sensitive attributes removed before it gets sent.
       const authentication = Authenticator.issueAuthenticationToken(user);
       const authenticationToken = authentication.token;
-      const authenticationTokenExpirationDate = authentication.expires;
+      const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
       user.removeSensitiveAttributes();
       return response.json({
         authenticationToken: authenticationToken,

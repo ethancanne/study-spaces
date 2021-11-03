@@ -1,10 +1,10 @@
-import React, {useState} from 'react'
+import React, { useState } from "react"
 
-import Page from './Page.js'
-import Views from '../views/Views.js'
+import Page from "./Page.js"
+import Views from "../views/Views.js"
 
 // IMPORT VIEWS FOR THIS PAGE.
-import LoginView from '../views/Home/LoginView.js'
+import LoginView from "../views/Home/LoginView.js"
 
 /**
  * The home page of the application. This is shown when the user has not logged in.
@@ -13,19 +13,23 @@ import LoginView from '../views/Home/LoginView.js'
  * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/20/2021
  */
-const Home = props => {
-  const [view, setView] = useState(Views.Home.Login)
+const Home = (props) => {
+  const [view, setHomeView] = useState(Views.Home.Login);
 
-  const HomeView = view
+  let homeView = <></>;
+  switch (view) {
+    case Views.Home.Login:
+      homeView = <LoginView
+        clientSideLogin={props.clientSideLogin}
+        clientSideLogout={props.clientSideLogout}/>;
+      break;
+  }
 
   return (
     <Page>
-      <HomeView
-        clientSideLogin={props.clientSideLogin}
-        clientSideLogout={props.clientSideLogout}
-      />
+      { homeView }
     </Page>
-  )
+  );
 }
 
-export default Home
+export default Home;

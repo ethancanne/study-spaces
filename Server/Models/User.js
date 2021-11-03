@@ -238,8 +238,8 @@ class User {
   * @date   10/22/2021
   */
   removeSensitiveAttributes() {
+    // DELETE SENSITIVE ATTRIBUTES FROM THE USER.
     delete this.passwordHash;
-    delete this._id;
     return this;
   }
 
