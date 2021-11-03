@@ -122,7 +122,7 @@ class StudyGroup {
   * @param {String} name The study group name.
   * @param {User} owner The owner of the study group.
   * @param {String} subject The study group's subject.
-  * @return {StudyGroup} The created user.
+  * @return {StudyGroup} The created study group.
   *
   */
   static async create(name, owner, subject) {
