@@ -68,7 +68,7 @@ class AccountRouter {
     // CHECK IF A USER WITH THE EMAIL ADDRESS EXISTS.
     const userWasNotFound = Validator.isUndefined(user);
     if (userWasNotFound) {
-      return response.json(ResponseMessages.Account.UserNotFound );
+      return response.json({ message: ResponseMessages.Account.UserNotFound });
     }
 
     // CHECK IF THE PASSWORD IS CORRECT.
