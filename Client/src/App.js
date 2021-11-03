@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, {useState} from 'react'
 import "regenerator-runtime/runtime.js";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Redirect } from "react-router";
@@ -19,21 +19,16 @@ import Home from "./pages/Home.js";
 * @author Cameron Burkholder
 * @date   10/20/2021
 */
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
+const App = (props) => {
     // BIND METHODS TO THIS COMPONENT INSTANCE.
-    this.clientSideLogin = this.clientSideLogin.bind(this);
-    this.clientSideLogout = this.clientSideLogout.bind(this);
-    this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
-    this.userIsLoggedIn = this.userIsLoggedIn.bind(this);
+    // this.clientSideLogin = this.clientSideLogin.bind(this);
+    // this.clientSideLogout = this.clientSideLogout.bind(this);
+    // this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
+    // this.userIsLoggedIn = this.userIsLoggedIn.bind(this);
 
-    this.state = {
-      isLoggedIn: this.userIsLoggedIn(),
-      hasNotMounted: true
-    }
-  }
+    const [isLoggedIn, setIsLoggedIn] = useState(userIsLoggedIn())
+    const [hasNotMounted, setHasNotMounted] = useState(false)
+
 
   /**
   * Logs the user in from the client-side perspective. This ensures persistent logins.
@@ -43,7 +38,7 @@ class App extends React.Component {
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  clientSideLogin(token, expirationDate, user) {
+  const clientSideLogin = (token, expirationDate, user) =>{
     //this.setLocalStorage(authenticationToken, authenticationTokenExpirationDate, user, this.updateState);
   }
 
@@ -52,7 +47,7 @@ class App extends React.Component {
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  clientSideLogout() {
+  const clientSideLogout = ()=> {
     //this.clearLocalStorage();
 
   }
@@ -63,21 +58,29 @@ class App extends React.Component {
   * @author Cameron Burkholder
   * @date   10/20/2021
   */
-  componentDidMount() {
-    if (this.state.hasNotMounted) {
-      this.setState({
-        hasNotMounted: false
-      }, this.updateAuthenticationToken);
-    }
-  }
+
+   useEffect(() => {
+       return () => {
+          setHasNotMounted(true)
+          updateAuthenticationToken()
+       }
+   }, []) // Using an empty dependency array ensures this only runs on unmount
+
+  // componentDidMount() {
+  //   if (this.state.hasNotMounted) {
+  //     this.setState({
+  //       hasNotMounted: false
+  //     }, this.updateAuthenticationToken);
+  //   }
+  // }
 
   /**
   * Updates the user's authenticaiton token for persistent logins.
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  async updateAuthenticationToken() {
-    if (this.state.isLoggedIn) {
+  const updateAuthenticationToken = async () => {
+    if (isLoggedIn) {
       axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
       let response = undefined;
       try {
@@ -88,13 +91,11 @@ class App extends React.Component {
         const authenticationTokenWasUpdated = (ResponseMessages.Account.SuccessUpdateAuthenticationToken === response.data.message);
         if (authenticationTokenWasUpdated) {
           const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
-          this.clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
+          clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
         } else {
-          this.clientSideLogout();
+          clientSideLogout();
         }
-        this.setState({
-          hasNotMounted: false
-        });
+        setHasNotMounted(false)
       }
     }
   }
@@ -105,7 +106,7 @@ class App extends React.Component {
   * @author Cameron Burkholder
   * @date   10/20/2021
   */
-  userIsLoggedIn() {
+  const userIsLoggedIn = ()=>{
     // CHECK IF THE JWT TOKEN IS EXPIRED.
     const currentDate = Date.now();
     const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
@@ -114,19 +115,17 @@ class App extends React.Component {
   }
 
 
-  render() {
     return (
       <Router>
         <div className="container">
           <Switch>
             <Route exact path="/">
-              <Home clientSideLogin={this.clientSideLogin} clientSideLogout={this.clientSideLogout}/>
+              <Home clientSideLogin={clientSideLogin} clientSideLogout={clientSideLogout}/>
             </Route>
           </Switch>
         </div>
       </Router>
     )
-  }
 }
 
 export default App;
