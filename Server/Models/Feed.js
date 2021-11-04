@@ -10,7 +10,7 @@ const Validator = require("../Validator.js");
 * @author Cameron Burkholder
 * @date   11/03/2021
 */
-const StudyGroupFeedSchema = new Schema({
+const FeedSchema = new Schema({
   areaCode: {
     type: String,
     required: true
@@ -40,15 +40,15 @@ const StudyGroupFeedSchema = new Schema({
     required: true
   }
 });
-StudyGroupFeedSchema.set("toObject", {
+FeedSchema.set("toObject", {
   versionKey: false,
   transform: (document, object) => {
     delete object.__v;
     return object;
   }
 });
-const studyGroupFeedCollectionName = Configuration.getStudyGroupFeedCollectionName();
-const StudyGroupFeedModel = Mongoose.model(studyGroupFeedCollectionName, StudyGroupFeedSchema);
+const feedCollectionName = Configuration.getFeedCollectionName();
+const FeedModel = Mongoose.model(feedCollectionName, FeedSchema);
 
 /**
 * Provides an interface for working with users in the database.
@@ -64,48 +64,8 @@ const StudyGroupFeedModel = Mongoose.model(studyGroupFeedCollectionName, StudyGr
 * @author Cameron Burkholder
 * @date   07/29/2021
 */
-class StudyGroupFeed {
-  /**
-  * Initializes the user to the account passed in from the database.
-  * @param  {Mongoose.Schema} userSchema The database record for a given user.
-  * @author Cameron Burkholder
-  * @date   07/29/2021
-  */
-  constructor(userSchema) {
-    // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
-    // In order to maximize the usability of this class, the attributes stored in the database
-    // record are copied to the instance of this class so they can be properly editied.
-    // The user schema is converted to a regular object to sanitize it of wrapper methods and properties.
-    Object.assign(this, userSchema.toObject());
-  }
+class Feed {
 
-  /**
-  * This saves the associated user document in the database with the current properties
-  * stored in this object.
-  * @return {bool} True if the user was saved, false if the user wasn't saved.
-  * @async
-  * @author Cameron Burkholder
-  * @date   08/02/2021
-  */
-  async save() {
-    let userWasSaved = false;
-    try {
-      // GET THE DATABASE INSTANCE OF THE USER.
-      let userModel = await UserModel.findOne({ _id: this._id }).exec();
-
-      // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
-      Object.assign(userModel, this);
-
-      // SAVE THE UPDATED DATABASE INSTANCE.
-      await userModel.save();
-      userWasSaved = true;
-    } catch(error) {
-      Log.write("An error occurred while attempting to retrieve the user to save.");
-      Log.writeError(error);
-    } finally {
-      return userWasSaved;
-    }
-  }
 }
 
-module.exports = StudyGroupFeed;
+module.exports = Feed;

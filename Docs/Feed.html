@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: StaticResourceRouter</title>
+    <title>JSDoc: Class: Feed</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: StaticResourceRouter</h1>
+    <h1 class="page-title">Class: Feed</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>StaticResourceRouter<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Feed<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">The router used to serve static resources.</div>
+            <div class="class-description">Provides an interface for working with users in the database.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="StaticResourceRouter"><span class="type-signature"></span>new StaticResourceRouter<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Feed"><span class="type-signature"></span>new Feed<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -60,6 +60,196 @@
 
 
 
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>areaCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's area code.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>conversations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's conversations/chats. This is stored as a list of  MongoDB document IDs so that the conversations can be accessed directly from the user.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's email address.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>passwordHash</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's hashed password.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>profilePicture</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Buffer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user's profile picture. This must be less than 16MB.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>studyGroups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;String></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The study groups the user is a part of. This is stored as a list  of MongoDB document IDs so that the study groups can be accessed directly from the user.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -100,7 +290,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Routers_StaticResourceRouter.js.html">Server/Routers/StaticResourceRouter.js</a>, <a href="Server_Routers_StaticResourceRouter.js.html#line12">line 12</a>
+        <a href="Server_Models_Feed.js.html">Server/Models/Feed.js</a>, <a href="Server_Models_Feed.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -147,344 +337,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".getIndexFile"><span class="type-signature">(static) </span>getIndexFile<span class="signature">(request, response)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    This serves the index file.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>request</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The request being served.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The response being generated.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Routers_StaticResourceRouter.js.html">Server/Routers/StaticResourceRouter.js</a>, <a href="Server_Routers_StaticResourceRouter.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".serveRoutes"><span class="type-signature">(static) </span>serveRoutes<span class="signature">(server, authenticator)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Initialize the router and serve the routes.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>server</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Server</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The server instance used to provide the routes.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>authenticator</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Authenticator.html">Authenticator</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The authenticator used to protect the routes.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Routers_StaticResourceRouter.js.html">Server/Routers/StaticResourceRouter.js</a>, <a href="Server_Routers_StaticResourceRouter.js.html#line20">line 20</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     
 
     

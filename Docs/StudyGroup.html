@@ -292,35 +292,6 @@
 
         <tr>
             
-                <td class="name"><code>oneTimeMeetings</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The list of one-off meetings associated with the study group.</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>members</code></td>
             
 
@@ -379,6 +350,35 @@
 
         <tr>
             
+                <td class="name"><code>oneTimeMeetings</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The list of one-off meetings associated with the study group.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>owner</code></td>
             
 
@@ -414,7 +414,7 @@
             <td class="type">
             
                 
-<span class="param-type">StudyGroupMeeting</span>
+<span class="param-type">Meeting</span>
 
 
             
@@ -1006,7 +1006,7 @@
             <td class="type">
             
                 
-<span class="param-type">StudyGroupMeeting</span>
+<span class="param-type">Meeting</span>
 
 
             
@@ -1604,7 +1604,7 @@
     
 
     
-    <h4 class="name" id="getFeed"><span class="type-signature">(async) </span>getFeed<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="StudyGroupFeed.html">StudyGroupFeed</a>}</span></h4>
+    <h4 class="name" id="getFeed"><span class="type-signature">(async) </span>getFeed<span class="signature">()</span><span class="type-signature"> &rarr; {StudyGroupFeed}</span></h4>
     
 
     
@@ -1696,7 +1696,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="StudyGroupFeed.html">StudyGroupFeed</a></span>
+<span class="param-type">StudyGroupFeed</span>
 
 
     </dd>
@@ -1824,7 +1824,7 @@
     
 
     
-    <h4 class="name" id="getMeetings"><span class="type-signature">(async) </span>getMeetings<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;StudyGroupMeeting>}</span></h4>
+    <h4 class="name" id="getMeetings"><span class="type-signature">(async) </span>getMeetings<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;Meeting>}</span></h4>
     
 
     
@@ -1916,7 +1916,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;StudyGroupMeeting></span>
+<span class="param-type">Array.&lt;Meeting></span>
 
 
     </dd>
@@ -2154,7 +2154,7 @@
     
 
     
-    <h4 class="name" id="getNextMeeting"><span class="type-signature">(async) </span>getNextMeeting<span class="signature">()</span><span class="type-signature"> &rarr; {StudyGroupMeeting}</span></h4>
+    <h4 class="name" id="getNextMeeting"><span class="type-signature">(async) </span>getNextMeeting<span class="signature">()</span><span class="type-signature"> &rarr; {Meeting}</span></h4>
     
 
     
@@ -2246,7 +2246,7 @@
     </dt>
     <dd>
         
-<span class="param-type">StudyGroupMeeting</span>
+<span class="param-type">Meeting</span>
 
 
     </dd>
@@ -2264,7 +2264,7 @@
     
 
     
-    <h4 class="name" id="getOneTimeMeetings"><span class="type-signature">(async) </span>getOneTimeMeetings<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;StudyGroupMeeting>}</span></h4>
+    <h4 class="name" id="getOneTimeMeetings"><span class="type-signature">(async) </span>getOneTimeMeetings<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;Meeting>}</span></h4>
     
 
     
@@ -2356,7 +2356,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array.&lt;StudyGroupMeeting></span>
+<span class="param-type">Array.&lt;Meeting></span>
 
 
     </dd>
@@ -2484,7 +2484,7 @@
     
 
     
-    <h4 class="name" id="getRecurringMeeting"><span class="type-signature">(async) </span>getRecurringMeeting<span class="signature">()</span><span class="type-signature"> &rarr; {StudyGroupMeeting}</span></h4>
+    <h4 class="name" id="getRecurringMeeting"><span class="type-signature">(async) </span>getRecurringMeeting<span class="signature">()</span><span class="type-signature"> &rarr; {Meeting}</span></h4>
     
 
     
@@ -2576,7 +2576,7 @@
     </dt>
     <dd>
         
-<span class="param-type">StudyGroupMeeting</span>
+<span class="param-type">Meeting</span>
 
 
     </dd>
@@ -3524,7 +3524,7 @@
             <td class="type">
             
                 
-<span class="param-type">StudyGroupMeeting</span>
+<span class="param-type">Meeting</span>
 
 
             
@@ -4747,7 +4747,7 @@
             <td class="type">
             
                 
-<span class="param-type">StudyGroupMeeting</span>
+<span class="param-type">Meeting</span>
 
 
             
@@ -5025,13 +5025,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupFeed.html">StudyGroupFeed</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupFeedSchema">StudyGroupFeedSchema</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 03 2021 19:32:08 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Nov 04 2021 14:10:31 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
