@@ -1,16 +1,15 @@
-import axios from 'axios'
-import React, {useState, useEffect} from 'react'
-import 'regenerator-runtime/runtime.js'
-import {Route, BrowserRouter as Router, Switch} from 'react-router-dom'
-import {Redirect} from 'react-router'
+import axios from "axios";
+import React, {useState, useEffect} from "react";
+import "regenerator-runtime/runtime.js";
+import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import {Redirect} from "react-router";
 
-import ResponseMessages from '../../Server/Responses/ResponseMessages.js'
-import Routes from '../../Server/Routes/Routes.js'
+import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
+import Routes from "../../Server/Routes/Routes.js";
 
 // PAGES.
-import Home from './pages/Home.js'
-;('')
-import Study from './Pages/Study.js'
+import Home from "./pages/Home.js";
+import Study from "./Pages/Study.js";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -19,8 +18,8 @@ import Study from './Pages/Study.js'
  * @date   10/20/2021
  */
 const App = props => {
-  const [isLoggedIn, setIsLoggedIn] = useState(userIsLoggedIn())
-  const [hasNotMounted, setHasNotMounted] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(userIsLoggedIn());
+  const [hasNotMounted, setHasNotMounted] = useState(false);
 
   /**
    * Logs the user in from the client-side perspective. This ensures persistent logins.
@@ -31,8 +30,8 @@ const App = props => {
    * @date   10/22/2021
    */
   const clientSideLogin = (token, expirationDate, user) => {
-    setLocalStorage(token, expirationDate, user)
-    setIsLoggedIn(true)
+    setLocalStorage(token, expirationDate, user);
+    setIsLoggedIn(true);
   }
 
   /**
@@ -41,8 +40,8 @@ const App = props => {
    * @date   10/22/2021
    */
   const clientSideLogout = () => {
-    clearLocalStorage()
-    setIsLoggedIn(false)
+    clearLocalStorage();
+    setIsLoggedIn(false);
   }
 
   /**
@@ -51,7 +50,7 @@ const App = props => {
    * @date   11/03/2021
    */
   function clearLocalStorage() {
-    localStorage.clear()
+    localStorage.clear();
   }
 
   /**
@@ -63,8 +62,8 @@ const App = props => {
    */
   useEffect(() => {
     return () => {
-      setHasNotMounted(true)
-      updateAuthenticationToken()
+      setHasNotMounted(true);
+      updateAuthenticationToken();
     }
   }, [])
 
@@ -78,9 +77,9 @@ const App = props => {
    */
   function setLocalStorage(token, expirationDate, user) {
     // STORE THE AUTHENTICATION INFORMATION.
-    localStorage.setItem('token', token)
-    localStorage.setItem('authenticationTokenExpirationDate', expirationDate)
-    localStorage.setItem('user', JSON.stringify(user))
+    localStorage.setItem("token", token);
+    localStorage.setItem("authenticationTokenExpirationDate", expirationDate);
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   /**
@@ -91,13 +90,12 @@ const App = props => {
    */
   function userIsLoggedIn() {
     // CHECK IF THE JWT TOKEN IS EXPIRED.
-    const currentDate = Date.now()
+    const currentDate = Date.now();
     const jwtExpirationDate = new Date(
-      localStorage.getItem('authenticationTokenExpirationDate')
+      localStorage.getItem("authenticationTokenExpirationDate")
     )
-    const userIsLoggedIn = currentDate < jwtExpirationDate
-    console.log(currentDate)
-    return userIsLoggedIn
+    const userIsLoggedIn = currentDate < jwtExpirationDate;
+    return userIsLoggedIn;
   }
 
   /**
@@ -107,49 +105,44 @@ const App = props => {
    */
   const updateAuthenticationToken = async () => {
     if (isLoggedIn) {
-      axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-        'authenticationToken'
-      )
-      let response = undefined
+      axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
+      let response = undefined;
       try {
-        response = await axios.get(Routes.Account.UpdateAuthenticationToken)
+        response = await axios.get(Routes.Account.UpdateAuthenticationToken);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
         const authenticationTokenWasUpdated =
           ResponseMessages.Account.SuccessUpdateAuthenticationToken ===
-          response.data.message
+          response.data.message;
         if (authenticationTokenWasUpdated) {
-          const {authenticationToken, authenticationTokenExpirationDate, user} =
-            response.data
+          const {authenticationToken, authenticationTokenExpirationDate, user} = response.data;
           clientSideLogin(
             authenticationToken,
             authenticationTokenExpirationDate,
             user
-          )
+          );
         } else {
-          clientSideLogout()
+          clientSideLogout();
         }
-        setHasNotMounted(false)
+        setHasNotMounted(false);
       }
     }
   }
 
   return (
     <Router>
-      <div className='container'>
+      <div className="container">
         <Switch>
-          <Route exact path='/'>
-            {isLoggedIn ? (
+          <Route exact path="/">
+            { isLoggedIn ? (
               <Study
+                clientSideLogout={clientSideLogout}
                 isLoggedIn={true}
-                user={JSON.parse(localStorage.getItem('user'))}
-              />
+                user={JSON.parse(localStorage.getItem("user"))}/>
             ) : (
               <Home
-                clientSideLogin={clientSideLogin}
-                clientSideLogout={clientSideLogout}
-              />
+                clientSideLogin={clientSideLogin}/>
             )}
           </Route>
         </Switch>
@@ -158,4 +151,4 @@ const App = props => {
   )
 }
 
-export default App
+export default App;

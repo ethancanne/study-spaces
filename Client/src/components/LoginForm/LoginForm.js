@@ -1,4 +1,4 @@
-import '../../style/login.scss'
+import './LoginForm.scss'
 import React from 'react'
 
 import Button from '../../core/Button/Button.js'
