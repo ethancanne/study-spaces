@@ -10,102 +10,91 @@ const Validator = require("../Validator.js");
 * @author Cameron Burkholder
 * @date   11/03/2021
 */
-const StudyGroupFeedSchema = new Schema({
-  areaCode: {
-    type: String,
+const FeedSchema = new Schema({
+  lastUpdated: {
+    type: Date,
     required: true
   },
-  conversations: {
+  posts: {
     type: [String],
     required: true
   },
-  email: {
-    type: String,
-    required: true
-  },
-  name: {
-    type: String,
-    required: true
-  },
-  passwordHash: {
-    type: String,
-    required: true
-  },
-  profilePicture: {
-    type: Buffer,
-    required: false
-  },
-  studyGroups: {
-    type: [String],
-    required: true
-  }
 });
-StudyGroupFeedSchema.set("toObject", {
+FeedSchema.set("toObject", {
   versionKey: false,
   transform: (document, object) => {
     delete object.__v;
     return object;
   }
 });
-const studyGroupFeedCollectionName = Configuration.getStudyGroupFeedCollectionName();
-const StudyGroupFeedModel = Mongoose.model(studyGroupFeedCollectionName, StudyGroupFeedSchema);
+const feedCollectionName = Configuration.getFeedCollectionName();
+const FeedModel = Mongoose.model(feedCollectionName, FeedSchema);
 
 /**
-* Provides an interface for working with users in the database.
-* @property {String} areaCode - The user's area code.
-* @property {String[]} conversations - The user's conversations/chats. This is stored as a list of
-*   MongoDB document IDs so that the conversations can be accessed directly from the user.
-* @property {String} email - The user's email address.
-* @property {String} name - The user's name.
-* @property {String} passwordHash - The user's hashed password.
-* @property {Buffer} profilePicture - The user's profile picture. This must be less than 16MB.
-* @property {String[]} studyGroups - The study groups the user is a part of. This is stored as a list
-*   of MongoDB document IDs so that the study groups can be accessed directly from the user.
+* Provides an interface for working with a study group's feeds in the database.
+* @property {Date} lastUpdated The time when the feed was last updated. This is used to
+*   track updates to the feed.
+* @property {String[]} posts A list of posts associated with the study group's feed.
 * @author Cameron Burkholder
-* @date   07/29/2021
+* @date   11/04/2021
 */
-class StudyGroupFeed {
+class Feed {
   /**
-  * Initializes the user to the account passed in from the database.
-  * @param  {Mongoose.Schema} userSchema The database record for a given user.
-  * @author Cameron Burkholder
-  * @date   07/29/2021
+  * Adds a post to the feed.
+  * @param {Post} post The post to add to the feed.
   */
-  constructor(userSchema) {
-    // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
-    // In order to maximize the usability of this class, the attributes stored in the database
-    // record are copied to the instance of this class so they can be properly editied.
-    // The user schema is converted to a regular object to sanitize it of wrapper methods and properties.
-    Object.assign(this, userSchema.toObject());
+  async addPost(post) {
+
   }
 
   /**
-  * This saves the associated user document in the database with the current properties
-  * stored in this object.
-  * @return {bool} True if the user was saved, false if the user wasn't saved.
-  * @async
-  * @author Cameron Burkholder
-  * @date   08/02/2021
+  * Creates a feed.
+  * @return {Feed} The feed created.
   */
-  async save() {
-    let userWasSaved = false;
-    try {
-      // GET THE DATABASE INSTANCE OF THE USER.
-      let userModel = await UserModel.findOne({ _id: this._id }).exec();
+  static async create() {
 
-      // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
-      Object.assign(userModel, this);
+  }
 
-      // SAVE THE UPDATED DATABASE INSTANCE.
-      await userModel.save();
-      userWasSaved = true;
-    } catch(error) {
-      Log.write("An error occurred while attempting to retrieve the user to save.");
-      Log.writeError(error);
-    } finally {
-      return userWasSaved;
-    }
+  /**
+  * Deletes a feed.
+  * @return {Boolean} True if the feed was deleted, false otherwise.
+  */
+  async delete() {
+
+  }
+
+  /**
+  * Deletes a post from the feed.
+  * @param {Post} post The post to delete.
+  * @return {Boolean} True if the post gets deleted, fales otherwise.
+  */
+  async deletePost(post) {
+
+  }
+
+  /**
+  * Gets the last three posts in the feed.
+  * @return {Post[]} The last three posts from the feed.
+  */
+  async getLastThreePosts() {
+    
+  }
+
+  /**
+  * Gets the most recent post in the feed.
+  * @return {Post} The most recent post in the feed.
+  */
+  async getMostRecentPost() {
+
+  }
+
+  /**
+  * Gets the posts housed in a feed.
+  * @return {Post[]} The posts in the feed.
+  */
+  async getPosts() {
+
   }
 }
 
-module.exports = StudyGroupFeed;
+module.exports = Feed;

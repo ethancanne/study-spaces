@@ -48,7 +48,7 @@ const StudyGroupSchema = new Schema({
     required: true
   },
   recurringMeeting: {
-    type: StudyGroupMeeting,
+    type: Meeting,
     required: true
   },
   school: {
@@ -77,11 +77,11 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
 * @property {String} feed The document ID for the study group's feed.
 * @property {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
 * @property {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
-* @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
 * @property {String[]} members The list of document IDs for members in the study group.
 * @property {String} name The name of the study group.
+* @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
 * @property {String} owner The study group owner's document ID.
-* @property {StudyGroupMeeting} recurringMeeting The study group's recurring meeting schedule.
+* @property {Meeting} recurringMeeting The study group's recurring meeting schedule.
 * @property {String=} school The school the study group is associated with.
 * @property {String} subject The subject the study group supports.
 * @author Cameron Burkholder
@@ -104,7 +104,7 @@ class StudyGroup {
 
   /**
   * Adds a one-time meeting.
-  * @param {StudyGroupMeeting} newMeeting The meeting to add.
+  * @param {Meeting} newMeeting The meeting to add.
   * @return {Boolean} True if the meeting was added, false otherwise.
   */
   async addMeeting(newMeeting) {
@@ -190,7 +190,7 @@ class StudyGroup {
 
   /**
   * Gets the study group's meetings.
-  * @return {StudyGroupMeeting[]} The study group's meetings.
+  * @return {Meeting[]} The study group's meetings.
   */
   async getMeetings() {
 
@@ -216,7 +216,7 @@ class StudyGroup {
 
   /**
   * Gets the study group's upcoming meeting.
-  * @return {StudyGroupMeeting} The very next study group meeting.
+  * @return {Meeting} The very next study group meeting.
   */
   async getNextMeeting() {
 
@@ -224,7 +224,7 @@ class StudyGroup {
 
   /**
   * Gets the study group's one-time meetings.
-  * @return {StudyGroupMeeting[]} The study group's one-time meetings.
+  * @return {Meeting[]} The study group's one-time meetings.
   *
   */
   async getOneTimeMeetings() {
@@ -242,7 +242,7 @@ class StudyGroup {
 
   /**
   * Gets the study group's recurring meeting schedule.
-  * @return {StudyGroupMeeting} The recurring meeting schedule.
+  * @return {Meeting} The recurring meeting schedule.
   *
   */
   async getRecurringMeeting() {
@@ -322,7 +322,7 @@ class StudyGroup {
 
   /**
   * Removes a meeting from the study group's one-time meeting schedule.
-  * @param {StudyGroupMeeting} meeting The meeting to remove.
+  * @param {Meeting} meeting The meeting to remove.
   * @return {Booleam} True if the meeting was removed, false otherwise.
   */
   async removeMeeting(meeting) {
@@ -401,7 +401,7 @@ class StudyGroup {
 
   /**
   * Updates the study group's meeting.
-  * @param {StudyGroupMeeting} updatedMeeting The meeting to update.
+  * @param {Meeting} updatedMeeting The meeting to update.
   * @return {Boolean} True if the meeting was updated, false otherwise.
   *
   */
