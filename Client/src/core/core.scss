@@ -1,0 +1,47 @@
+//Input Field
+@import '../globals.scss';
+
+.InputField {
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  overflow-x: visible;
+
+  .Label {
+    color: rgb(172, 172, 172);
+    font-size: 11px;
+    padding-bottom: 10px;
+    font-weight: 600;
+    text-align: left;
+  }
+
+  .Input {
+    box-shadow: 0px 10px 10px rgba(128, 128, 128, 0.13);
+    padding: 10px;
+    border: none;
+    border-bottom: lightgray 8px solid;
+    transition-property: border-bottom;
+    transition-duration: 0.2s;
+  }
+  .Input:focus {
+    border: none;
+    border-bottom: rgba(139, 79, 11, 0.616) 8px solid;
+    outline-width: 0;
+  }
+}
+
+.Button {
+  box-shadow: 0px 2px 10px rgba(109, 109, 109, 0.096);
+  border: none;
+  background-color: $primary-button-color;
+
+  font-weight: 900;
+  text-align: center;
+
+  width: 60%;
+  height: 2.5em;
+
+  cursor: pointer;
+}
