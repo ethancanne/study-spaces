@@ -1,20 +1,20 @@
-import React from "react";
+import React from 'react';
 
-import Button from "../core/Button/Button.js";
+import Button from '../core/Button/Button.js';
 
-const Study = ({ clientSideLogout, isLoggedIn, user }) => {
+const Study = ({clientSideLogout, isLoggedIn, user}) => {
   return (
     <>
-      { isLoggedIn ? (
-          <div>
-            <p>Welcome {user.name}, you are logged in!</p>
-            <Button onClick={clientSideLogout}>Log out</Button>
-          </div>
+      {isLoggedIn ? (
+        <div>
+          <p>Welcome {user.name}, you are logged in!</p>
+          <Button onClick={clientSideLogout}>Log out</Button>
+        </div>
       ) : (
-          <p>You are currently a guest!</p>
+        <p>You are currently a guest!</p>
       )}
     </>
-  )
-}
+  );
+};
 
 export default Study;
