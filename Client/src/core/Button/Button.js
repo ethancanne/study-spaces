@@ -1,7 +1,7 @@
-import React from 'react';
-import '../core.scss';
+import React from "react";
+import "../core.scss";
 
-import ButtonTypes from './ButtonTypes.js';
+import ButtonTypes from "./ButtonTypes.js";
 
 /**
  * Used to render buttons. Depending on the type of button requested,
@@ -10,23 +10,23 @@ import ButtonTypes from './ButtonTypes.js';
  * @author Cameron Burkholder
  * @date   10/21/2021
  */
-const Button = props => {
+const Button = (props) => {
   let buttonClassName;
   switch (props.type) {
     case ButtonTypes.Primary:
-      buttonClassName = 'ButtonPrimary';
+      buttonClassName = "ButtonPrimary";
       break;
     case ButtonTypes.Creation:
-      buttonClassName = 'ButtonCreation';
+      buttonClassName = "ButtonCreation";
     case ButtonTypes.Destructive:
-      buttonClassName = 'ButtonDestructive';
+      buttonClassName = "ButtonDestructive";
     default:
-      buttonClassName = 'ButtonPrimary';
+      buttonClassName = "ButtonPrimary";
       break;
   }
 
   return (
-    <button className={buttonClassName + ' Button'} {...props}>
+    <button className={buttonClassName + " Button"} {...props}>
       {props.children}
     </button>
   );

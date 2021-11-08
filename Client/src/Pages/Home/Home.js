@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import './Home.scss';
+import React, { useState } from "react";
+import "./Home.scss";
 
-import Page from '../Page.js';
-import Views from '../../views/Views.js';
+import Page from "../Page.js";
+import Views from "../../views/Views.js";
 
 // IMPORT VIEWS FOR THIS PAGE.
-import LoginView from '../../views/Home/LoginView.js';
+import LoginView from "../../views/Home/LoginView.js";
 
 /**
  * The home page of the application. This is shown when the user has not logged in.
@@ -14,24 +14,19 @@ import LoginView from '../../views/Home/LoginView.js';
  * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/20/2021
  */
-const Home = props => {
+const Home = (props) => {
   const [view, setHomeView] = useState(Views.Home.Login);
 
   let homeView = <></>;
   switch (view) {
     case Views.Home.Login:
-      homeView = (
-        <LoginView
-          clientSideLogin={props.clientSideLogin}
-          clientSideLogout={props.clientSideLogout}
-        />
-      );
+      homeView = <LoginView clientSideLogin={props.clientSideLogin} clientSideLogout={props.clientSideLogout} />;
       break;
   }
 
   return (
-    <div className='HomePage'>
-      <h1 className='subtitle'>
+    <div className="HomePage">
+      <h1 className="subtitle">
         Study <br /> with <br /> excellence.
       </h1>
       <Page>{homeView}</Page>
