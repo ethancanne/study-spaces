@@ -1,13 +1,13 @@
-import React from 'react';
-import '../core.scss';
+import React from "react";
+import "../core.scss";
 /**
  * Renders an input field.
  * @author Cameron Burkholder
  * @date   10/21/2021
  */
-const InputField = props => {
+const InputField = (props) => {
   return (
-    <fieldset className='InputField' {...props}>
+    <fieldset className="InputField" {...props}>
       {props.children}
     </fieldset>
   );

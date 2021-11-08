@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 /**
  * Renders a page.
@@ -8,9 +8,9 @@ import React from 'react'
 const Page = (props) => {
   return (
     <div className="page" {...props}>
-      { props.children }
+      {props.children}
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

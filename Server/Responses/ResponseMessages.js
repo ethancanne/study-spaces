@@ -1,8 +1,8 @@
 /**
-* Defines the response messages the server can send.
-* @author Cameron Burkholder
-* @date   10/05/2021
-*/
+ * Defines the response messages the server can send.
+ * @author Cameron Burkholder
+ * @date   10/05/2021
+ */
 const ResponseMessages = {
   Account: {
     IncorrectPassword: "The password provided is incorrect",

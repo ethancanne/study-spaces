@@ -1,8 +1,8 @@
 /**
-* This defines the routes the server will serve.
-* @author Cameron Burkholder
-* @date   07/31/2021
-*/
+ * This defines the routes the server will serve.
+ * @author Cameron Burkholder
+ * @date   07/31/2021
+ */
 const Routes = {
   Account: {
     Login: "/api/account/login",

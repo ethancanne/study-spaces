@@ -1,16 +1,16 @@
-import './App.scss';
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import 'regenerator-runtime/runtime.js';
-import {Route, BrowserRouter as Router, Switch} from 'react-router-dom';
-import {Redirect} from 'react-router';
+import "./App.scss";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import "regenerator-runtime/runtime.js";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { Redirect } from "react-router";
 
-import ResponseMessages from '../../Server/Responses/ResponseMessages.js';
-import Routes from '../../Server/Routes/Routes.js';
+import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
+import Routes from "../../Server/Routes/Routes.js";
 
 // PAGES.
-import Home from './Pages/Home/Home.js';
-import Study from './Pages/Study.js';
+import Home from "./Pages/Home/Home.js";
+import Study from "./Pages/Study.js";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -18,7 +18,7 @@ import Study from './Pages/Study.js';
  * @author Cameron Burkholder
  * @date   10/20/2021
  */
-const App = props => {
+const App = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(userIsLoggedIn());
   const [hasNotMounted, setHasNotMounted] = useState(false);
   /**
@@ -77,9 +77,9 @@ const App = props => {
    */
   function setLocalStorage(token, expirationDate, user) {
     // STORE THE AUTHENTICATION INFORMATION.
-    localStorage.setItem('token', token);
-    localStorage.setItem('authenticationTokenExpirationDate', expirationDate);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem("token", token);
+    localStorage.setItem("authenticationTokenExpirationDate", expirationDate);
+    localStorage.setItem("user", JSON.stringify(user));
   }
 
   /**
@@ -91,9 +91,7 @@ const App = props => {
   function userIsLoggedIn() {
     // CHECK IF THE JWT TOKEN IS EXPIRED.
     const currentDate = Date.now();
-    const jwtExpirationDate = new Date(
-      localStorage.getItem('authenticationTokenExpirationDate')
-    );
+    const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
     const userIsLoggedIn = currentDate < jwtExpirationDate;
     return userIsLoggedIn;
   }
@@ -105,9 +103,7 @@ const App = props => {
    */
   const updateAuthenticationToken = async () => {
     if (isLoggedIn) {
-      axios.defaults.headers.common['Authorization'] = localStorage.getItem(
-        'authenticationToken'
-      );
+      axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
       let response = undefined;
       try {
         response = await axios.get(Routes.Account.UpdateAuthenticationToken);
@@ -115,16 +111,10 @@ const App = props => {
         console.log(error);
       } finally {
         const authenticationTokenWasUpdated =
-          ResponseMessages.Account.SuccessUpdateAuthenticationToken ===
-          response.data.message;
+          ResponseMessages.Account.SuccessUpdateAuthenticationToken === response.data.message;
         if (authenticationTokenWasUpdated) {
-          const {authenticationToken, authenticationTokenExpirationDate, user} =
-            response.data;
-          clientSideLogin(
-            authenticationToken,
-            authenticationTokenExpirationDate,
-            user
-          );
+          const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
+          clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
         } else {
           clientSideLogout();
         }
@@ -135,14 +125,14 @@ const App = props => {
 
   return (
     <Router>
-      <div className='container'>
+      <div className="container">
         <Switch>
-          <Route exact path='/'>
+          <Route exact path="/">
             {isLoggedIn ? (
               <Study
                 clientSideLogout={clientSideLogout}
                 isLoggedIn={true}
-                user={JSON.parse(localStorage.getItem('user'))}
+                user={JSON.parse(localStorage.getItem("user"))}
               />
             ) : (
               <Home clientSideLogin={clientSideLogin} />
