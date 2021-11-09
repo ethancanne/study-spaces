@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { signIn, signOut } from "../../state/actions";
 
 import LoginForm from "../../components/LoginForm/LoginForm.js";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
@@ -18,6 +20,8 @@ const LoginView = (props) => {
   const [email, setEmail] = useState(BLANK);
   const [password, setPassword] = useState(BLANK);
   const [loginErrorMsg, setLoginErrorMsg] = useState(BLANK);
+
+  const dispatch = useDispatch();
 
   /**
    * Submits the login request to the server for verification.
@@ -47,10 +51,10 @@ const LoginView = (props) => {
         const loginWasValid = ResponseMessages.Account.SuccessLogin === response.data.message;
         if (loginWasValid) {
           const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
-          props.clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
+          dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
         } else {
           setLoginErrorMsg(response.data.message);
-          props.clientSideLogout();
+          dispatch(signOut);
         }
       }
     }

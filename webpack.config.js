@@ -40,6 +40,7 @@ let webpackConfiguration = {
     static: {
       directory: Path.join(__dirname, "Client", "public"),
     },
+    historyApiFallback: true,
     port: 3000,
     proxy: {
       "/api": `http://localhost:${ Configuration.getServerPort() }`,

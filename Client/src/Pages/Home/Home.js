@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import "./Home.scss";
 
 import Page from "../Page.js";
@@ -20,7 +21,7 @@ const Home = (props) => {
   let homeView = <></>;
   switch (view) {
     case Views.Home.Login:
-      homeView = <LoginView clientSideLogin={props.clientSideLogin} clientSideLogout={props.clientSideLogout} />;
+      homeView = <LoginView />;
       break;
   }
 
