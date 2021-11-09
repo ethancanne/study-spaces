@@ -186,7 +186,7 @@ class Configuration {
   static getServerPort() {
     // GET THE SERVER PORT.
     const DEFAULT_PORT = 5000;
-    return (process.env.PORT | DEFAULT_PORT);
+    return (process.env.PORT || DEFAULT_PORT);
   }
 
   /**
