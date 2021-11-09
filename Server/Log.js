@@ -1,4 +1,5 @@
 const Filesystem = require("fs");
+const Path = require("path");
 
 const Configuration = require("../Configuration.js");
 const Validator = require("./Validator.js");
@@ -60,10 +61,19 @@ class Log {
   */
   static resetLog() {
     // IF FILE LOGGING IS ENABLED, RESET IT.
+    // Resetting consists of clearing the log and checking that the log folder
+    // and file both exist.
     const fileLoggingIsEnabled = Log.fileLoggingIsEnabled();
     if (fileLoggingIsEnabled) {
       const EMPTY_LOG_FILE = "";
-      Filesystem.writeFile(Configuration.getLogFilepath(), EMPTY_LOG_FILE, Log.handleLogError);
+      const logName = Configuration.getLogFileName();
+      const logFolder = Configuration.getLogFolderName();
+      const logFilepath = Path.join(logFolder, logName);
+      const logFolderDoesNotExist = (!Filesystem.existsSync(logFolder));
+      if (logFolderDoesNotExist) {
+        Filesystem.mkdirSync(logFolder);
+      }
+      Filesystem.writeFile(logFilepath, EMPTY_LOG_FILE, Log.handleLogError);
     }
   }
 
@@ -108,7 +118,9 @@ class Log {
   */
   static writeToFile(message) {
     // WRITE THE MESSAGE AND ENSURE THE NEW MESSAGE WILL BE ON A NEW LINE.
-    const logFilepath = Configuration.getLogFilepath();
+    const logName = Configuration.getLogFileName();
+    const logFolder = Configuration.getLogFolderName();
+    const logFilepath = Path.join(logFolder, logName);
     const NEWLINE_MESSAGE = "\r\n";
     const timestamp = new Date().toString();
     Filesystem.appendFile(logFilepath, `${NEWLINE_MESSAGE}${timestamp}\t --- \t${message}`, Log.handleLogError);

@@ -82,13 +82,23 @@ class Configuration {
   }
 
   /**
-  * Gets the log file filepath for the server logs.
-  * @return {string} The log file filepath.
+  * Gets the log file file name for the server logs.
+  * @return {string} The log file name.
   * @author Cameron Burkholder
   * @date   07/29/2021
   */
-  static getLogFilepath() {
-    return process.env.LOG_FILEPATH;
+  static getLogFileName() {
+    return process.env.LOG_FILE_NAME;
+  }
+
+  /**
+  * Gets the log folder name for server logs.
+  * @return {String} The log folder name.
+  * @author Cameron Burkholder
+  * @date   11/09/2021
+  */
+  static getLogFolderName() {
+    return process.env.LOG_FOLDER_NAME;
   }
 
   /**
