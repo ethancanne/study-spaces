@@ -6,6 +6,7 @@ const ResponseCodes = require("../Responses/ResponseCodes.js");
 const ResponseMessages = require("../Responses/ResponseMessages.js");
 const Routes = require("../Routes/Routes.js");
 const StaticResources = require("../Routes/StaticResources.js");
+const UnverifiedUser = require("../Models/UnverifiedUser.js");
 const User = require("../Models/User.js");
 const Validator = require("../Validator.js");
 
@@ -23,6 +24,8 @@ class AccountRouter {
   * @date   10/20/2021
   */
   static serveRoutes(server, authenticator) {
+    // This is used to create accounts.
+    server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
     // This is used to log users in.
     server.post(Routes.Account.Login, AccountRouter.login);
     // This is used to check if an authentication token is valid. If it is valid, a new token is generated
@@ -54,6 +57,31 @@ class AccountRouter {
   }
 
   // POST ROUTES.
+  /**
+  * Creates an unverified account.
+  * @param {String} request.body.email The email address of the user to be created.
+  * @param {String} request.body.password The password of the user to be created.
+  * @param {String} request.body.confirmPassword The password confirmation of the user to be created.
+  */
+  static async createAccount(request, response) {
+    // CREATE THE UNVERIFIED ACCOUNT.
+    const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
+    const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
+    if (accountWasNotCreated) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    // EMAIL THE VERIFICATION LINK TO THE USER.
+    // Write to log file for now.
+
+    // SEND THE RESPONSE.
+    const responseMessage = {
+      message: ResponseMessages.Account.SuccessAccountCreated
+    };
+    response.json(responseMessage);
+  }
+
+
   /**
   * This allows the user to log in.
   * @param {string} request.body.email The email address of the user.

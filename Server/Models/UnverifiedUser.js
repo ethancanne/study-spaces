@@ -45,16 +45,16 @@ const UnverifiedUserModel = Mongoose.model(unverifiedUserCollectionName, Unverif
 class UnverifiedUser {
   /**
   * Initializes the unverified user to the account passed in from the database.
-  * @param  {Mongoose.Schema} userSchema The database record for a given user.
+  * @param  {Mongoose.Schema} unverifiedUserSchema The database record for a given user.
   * @author Cameron Burkholder
   * @date   07/29/2021
   */
-  constructor(userSchema) {
+  constructor(unverifiedUserSchema) {
     // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
     // In order to maximize the usability of this class, the attributes stored in the database
     // record are copied to the instance of this class so they can be properly editied.
-    // The user schema is converted to a regular object to sanitize it of wrapper methods and properties.
-    Object.assign(this, userSchema.toObject());
+    // The unverified user schema is converted to a regular object to sanitize it of wrapper methods and properties.
+    Object.assign(this, unverifiedUserSchema.toObject());
   }
 
   /**
@@ -65,7 +65,31 @@ class UnverifiedUser {
   *
   */
   static async create(email, password) {
+    // GENERATE THE USER'S HASHED PASSWORD.
+    const hashedPassword = authenticator.hashPassword(password);
 
+    // GENERATE THE VERIFICATION TOKEN.
+    // Generate a random token.
+    // Check the list unverified users for tokens in use and ensure uniqueness.
+    // Use the unique token.
+    const token = "1234567865432";
+
+    // CREATE THE UNVERIFIED USER ACCOUNT.
+    const newUnverifiedUser = new UnverifiedUserModel({
+      email: email,
+      passwordHash: hashPassword,
+      verificationToken: token
+    });
+
+    // SAVE THE USER ACCOUNT.
+    try {
+      newUnverifiedUser.save();
+    } catch(error) {
+      Log.writeError(error);
+    }
+
+    // INSTANTIATE THE MODEL.
+    const unverifiedUser = new UnverifiedUser(newUnverifiedUser);
   }
 
   /**

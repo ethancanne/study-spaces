@@ -5,6 +5,7 @@
  */
 const Routes = {
   Account: {
+    CreateAccount: "/api/account/create",
     Login: "/api/account/login",
     UpdateAuthenticationToken: "/api/account/update-authentication-token"
   },
