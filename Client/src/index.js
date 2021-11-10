@@ -8,11 +8,7 @@ import allReducers from "./state/reducers";
 // import { loadState, saveState } from "./state/localStorage.js";
 
 const persistientState = {};
-const store = createStore(
-  allReducers,
-  persistientState,
-  compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-);
+const store = createStore(allReducers, persistientState, compose(applyMiddleware(thunk)));
 
 // store.subscribe(()=>{
 //   saveState(store.getState())

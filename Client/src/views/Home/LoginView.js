@@ -42,6 +42,7 @@ const LoginView = (props) => {
         password
       });
     } catch (error) {
+      console.log(error);
       setLoginErrorMsg(loginErrorMsg);
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.

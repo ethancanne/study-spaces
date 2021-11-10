@@ -21,7 +21,6 @@ import Study from "./Pages/Study.js";
  * @date   10/20/2021
  */
 const App = (props) => {
-  // const [isLoggedIn, setIsLoggedIn] = useState(userIsLoggedIn());
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
   const [hasNotMounted, setHasNotMounted] = useState(false);
   const dispatch = useDispatch();
@@ -59,7 +58,6 @@ const App = (props) => {
         if (authenticationTokenWasUpdated) {
           const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
           dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
-          // clientSideLogin(authenticationToken, authenticationTokenExpirationDate, user);
         } else {
           dispatch(signOut());
         }

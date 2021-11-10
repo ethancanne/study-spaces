@@ -1,6 +1,6 @@
 import authConstants from "../constants/authConstants";
 
-//Load the user into the state if it is already logged in
+// Load the user into the state if it is already logged in
 let user = JSON.parse(localStorage.getItem("user"));
 const currentDate = Date.now();
 const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
@@ -11,7 +11,7 @@ const initialState = user ? { isLoggedIn: userIsLoggedIn, user } : {};
  * This is the reducer for all actions relating to authentication
  * A reducer is how actions transform the state into the next state
  * @author Ethan Cannelongo
- * @date   11/29/2021
+ * @date   11/09/2021
  */
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
