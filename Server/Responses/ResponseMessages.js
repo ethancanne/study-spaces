@@ -7,6 +7,7 @@ const ResponseMessages = {
   Account: {
     IncorrectPassword: "The password provided is incorrect",
     SuccessLogin: "The login was successful",
+    SuccessfulAccountCreation: "The registration was successful",
     SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",
     UserNotFound: "The user was not found"
   }

@@ -6,7 +6,8 @@ import Page from "../Page.js";
 import Views from "../../views/Views.js";
 
 // IMPORT VIEWS FOR THIS PAGE.
-import LoginView from "../../views/Home/LoginView.js";
+import LoginView from "../../Views/Home/LoginView/LoginView";
+import CreateAccountView from "../../Views/Home/CreateAccountView/CreateAccountView";
 
 /**
  * The home page of the application. This is shown when the user has not logged in.
@@ -21,7 +22,11 @@ const Home = (props) => {
   let homeView = <></>;
   switch (view) {
     case Views.Home.Login:
-      homeView = <LoginView />;
+      homeView = <LoginView setHomeView={setHomeView} />;
+      break;
+
+    case Views.Home.CreateAccount:
+      homeView = <CreateAccountView setHomeView={setHomeView} />;
       break;
   }
 

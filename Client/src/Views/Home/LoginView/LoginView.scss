@@ -1,0 +1,5 @@
+@import "../AuthView.scss";
+
+.login-view {
+  @include auth-view;
+}

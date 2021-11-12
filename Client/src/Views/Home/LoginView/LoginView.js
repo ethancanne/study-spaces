@@ -1,12 +1,17 @@
+import "./LoginView.scss";
+
 import axios from "axios";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signIn, signOut } from "../../state/actions";
+import { signIn, signOut } from "../../../state/actions";
 
-import LoginForm from "../../components/LoginForm/LoginForm.js";
-import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
-import Routes from "../../../../Server/Routes/Routes.js";
-import Validator from "../../../../Server/Validator.js";
+import ButtonTypes from "../../../core/Button/ButtonTypes.js";
+import Button from "../../../core/Button/Button.js";
+import LoginForm from "../../../components/LoginForm/LoginForm.js";
+import ResponseMessages from "../../../../../Server/Responses/ResponseMessages.js";
+import Routes from "../../../../../Server/Routes/Routes.js";
+import Validator from "../../../../../Server/Validator.js";
+import Views from "../../Views.js";
 
 /**
  * Used to display the login form and log the user in.
@@ -83,15 +88,34 @@ const LoginView = (props) => {
     setLoginErrorMsg(BLANK);
   };
 
+  /**
+   * Sets the home view to the sign up form.
+   * @param {Event} event The change event to update the field with.
+   * @author Ethan Cannelongo
+   * @date   10/21/2021
+   */
+  const signUpClicked = (event) => {
+    props.setHomeView(Views.Home.CreateAccount);
+  };
+
   return (
-    <LoginForm
-      email={email}
-      password={password}
-      submitLogin={submitLogin}
-      updateEmailField={updateEmailField}
-      updatePasswordField={updatePasswordField}
-      loginErrorMsg={loginErrorMsg}
-    />
+    <div className="login-view">
+      <h1>Study Spaces</h1>
+      <LoginForm
+        email={email}
+        password={password}
+        submitLogin={submitLogin}
+        updateEmailField={updateEmailField}
+        updatePasswordField={updatePasswordField}
+      />
+      <p className="error-message">{loginErrorMsg}</p>
+
+      <div className="other-options">
+        <Button type={ButtonTypes.Creation} onClick={signUpClicked}>
+          Sign Up
+        </Button>
+      </div>
+    </div>
   );
 };
 

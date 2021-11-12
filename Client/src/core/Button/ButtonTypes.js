@@ -5,7 +5,8 @@
  */
 const ButtonTypes = {
   Primary: "Primary",
-  Secondary: "Secondary"
+  Creation: "Creation",
+  Destrucive: "Destructive"
 };
 
 export default ButtonTypes;

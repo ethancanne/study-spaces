@@ -18,8 +18,10 @@ const Button = (props) => {
       break;
     case ButtonTypes.Creation:
       buttonClassName = "ButtonCreation";
+      break;
     case ButtonTypes.Destructive:
       buttonClassName = "ButtonDestructive";
+      break;
     default:
       buttonClassName = "ButtonPrimary";
       break;

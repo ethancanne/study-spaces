@@ -6,7 +6,8 @@
 const Routes = {
   Account: {
     Login: "/api/account/login",
-    UpdateAuthenticationToken: "/api/account/update-authentication-token"
+    UpdateAuthenticationToken: "/api/account/update-authentication-token",
+    CreateAccount: "/api/account/create"
   },
   StaticResources: {
     Index: "/*"

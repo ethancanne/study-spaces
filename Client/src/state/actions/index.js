@@ -9,3 +9,10 @@ export const signOut = () => {
     type: "SIGN_OUT"
   };
 };
+
+export const createAccount = (unverifiedUser) => {
+  return {
+    type: "CREATE_ACCOUNT",
+    unverifiedUser: unverifiedUser
+  };
+};
