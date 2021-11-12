@@ -203,6 +203,17 @@ class UnverifiedUser {
   }
 
   /**
+  * Removes any sensitive attributes from the user.
+  * @return {UnverifiedUser} The unverified user with sensitive attributes removed.
+  * @author Cameron Burkholder
+  * @date   11/12/2021
+  */
+  removeSensitiveAttributes() {
+    delete this.passwordHash;
+    return this;
+  }
+
+  /**
   * Saves the unverified user to the database.
   * @return {Boolean} True if the unverified user was saved, false otherwise.
   * @author Cameron Burkholder

@@ -80,7 +80,7 @@ class AccountRouter {
   */
   static async createAccount(request, response) {
     // CHECK FOR AN EXISTING ACCOUNT.
-    const existingUser = UnverifiedUser.getByEmail(request.body.email);
+    const existingUser = await UnverifiedUser.getByEmail(request.body.email);
     const userAlreadyExists = Validator.isDefined(existingUser);
     if (userAlreadyExists) {
       return response.json({ message: ResponseMessages.Account.userAlreadyExists });
@@ -95,12 +95,16 @@ class AccountRouter {
 
     // EMAIL THE VERIFICATION LINK TO THE USER.
     const verificationToken = unverifiedUser.verificationToken;
-    let newVerificationLink = "http://" + request.hostname + "/api/account/verify?verificationToken="+ verificationToken;
+    let newVerificationLink = `http://${request.hostname}${Routes.Account.Verify}?verificationToken=${verificationToken}`;
     // Write to log file for now.
     Log.write(newVerificationLink);
 
     // SEND THE RESPONSE.
-    response.json({ message: ResponseMessages.Account.SuccessAccountCreated });
+    unverifiedUser.removeSensitiveAttributes();
+    response.json({
+      message: ResponseMessages.Account.SuccessAccountCreated,
+      unverifiedUser: unverifiedUser
+    });
   }
 
 
