@@ -5,9 +5,10 @@
  */
 const Routes = {
   Account: {
+    CreateAccount: "/api/account/create",
     Login: "/api/account/login",
     UpdateAuthenticationToken: "/api/account/update-authentication-token",
-    CreateAccount: "/api/account/create"
+    Verify: "/api/account/verify"
   },
   StaticResources: {
     Index: "/*"

@@ -56,6 +56,14 @@ class Authenticator {
     this.protectRoute = this.protectRoute.bind(this);
   }
 
+
+  static hashPassword(password) {
+    const saltRounds = 10;
+    const salt = Bcrypt.genSaltSync(saltRounds);
+    const hash = Bcrypt.hashSync(password, salt);
+    return hash;
+  }
+
   /**
   * Generates an authentication token for a user.
   * @param {User} user The user to generate a token for.
