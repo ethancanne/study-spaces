@@ -1,4 +1,5 @@
 const Mongoose = require("mongoose");
+const RandomWords = require("random-words");
 const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
@@ -70,20 +71,32 @@ class UnverifiedUser {
 
     // GENERATE THE VERIFICATION TOKEN.
     // Generate a random token.
-    // Check the list unverified users for tokens in use and ensure uniqueness.
-    // Use the unique token.
-    const token = "1234567865432";
+    const tokenIsNotUnique = true;
+    let verificationToken = undefined;
+    while (tokenIsNotUnique) {
+      // GENERATE A RANDOM TOKEN.
+      verificationToken = RandomWords({ exactly: 3, join: "-" });
+
+      // CHECK THE UNVERIFIED USERS LIST TO SEE IF THE TOKEN IS ALREADY IN USE.
+      let existingUnverifiedUser = undefined;
+      try {
+        existingUnverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
+      } catch (error) {
+        Log.writeError(error);
+      }
+      tokenIsNotUnique = Validator.isDefined(existingUnverifiedUser);
+    }
 
     // CREATE THE UNVERIFIED USER ACCOUNT.
     const newUnverifiedUser = new UnverifiedUserModel({
       email: email,
       passwordHash: hashPassword,
-      verificationToken: token
+      verificationToken: verificationToken
     });
 
     // SAVE THE USER ACCOUNT.
     try {
-      newUnverifiedUser.save();
+      await newUnverifiedUser.save();
     } catch(error) {
       Log.writeError(error);
     }
@@ -158,12 +171,38 @@ class UnverifiedUser {
   }
 
   /**
+  * Saves the unverified user to the database.
+  * @return {Boolean} True if the unverified user was saved, false otherwise.
+  * @author Cameron Burkholder
+  * @date   11/12/2021
+  */
+  async save() {
+    let unverifiedUserWasSaved = false;
+    try {
+      // GET THE DATABASE INSTANCE OF THE USER.
+      let unverifiedUserModel = await UnverifiedUserModel.findOne({ _id: this._id }).exec();
+
+      // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
+      Object.assign(unverifiedUserModel, this);
+
+      // SAVE THE UPDATED DATABASE INSTANCE.
+      await unverifiedUserModel.save();
+      unverifiedUserWasSaved = true;
+    } catch(error) {
+      Log.write("An error occurred while attempting to retrieve the unverified user to save.");
+      Log.writeError(error);
+    } finally {
+      return unverifiedUserWasSaved;
+    }
+  }
+
+  /**
   * Verifies a user's account. This process involves creating a normal user document and deleting
   * the unverified user document.
   * @return {User} The verified user.
   */
   async verify() {
-
+    //
   }
 
 }

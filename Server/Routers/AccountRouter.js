@@ -75,10 +75,7 @@ class AccountRouter {
     // Write to log file for now.
 
     // SEND THE RESPONSE.
-    const responseMessage = {
-      message: ResponseMessages.Account.SuccessAccountCreated
-    };
-    response.json(responseMessage);
+    response.json({ message: ResponseMessages.Account.SuccessAccountCreated });
   }
 
 
