@@ -59,8 +59,8 @@ class Authenticator {
 
   static hashPassword(password) {
     const saltRounds = 10;
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync(password, salt);
+    const salt = Bcrypt.genSaltSync(saltRounds);
+    const hash = Bcrypt.hashSync(password, salt);
     return hash;
   }
 

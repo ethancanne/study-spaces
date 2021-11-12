@@ -10,6 +10,7 @@ const ResponseMessages = {
     SuccessAccountCreated: "The account was created successfully",
     SuccessLogin: "The login was successful",
     SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",
+    userAlreadyExists: "A user with that email address already exists.",
     UserNotFound: "The user was not found"
   }
 };

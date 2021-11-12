@@ -2,6 +2,7 @@ const Mongoose = require("mongoose");
 const RandomWords = require("random-words");
 const Schema = Mongoose.Schema;
 
+const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
@@ -67,11 +68,11 @@ class UnverifiedUser {
   */
   static async create(email, password) {
     // GENERATE THE USER'S HASHED PASSWORD.
-    const hashedPassword = authenticator.hashPassword(password);
+    const hashedPassword = Authenticator.hashPassword(password);
 
     // GENERATE THE VERIFICATION TOKEN.
     // Generate a random token.
-    const tokenIsNotUnique = true;
+    let tokenIsNotUnique = true;
     let verificationToken = undefined;
     while (tokenIsNotUnique) {
       // GENERATE A RANDOM TOKEN.
@@ -90,7 +91,7 @@ class UnverifiedUser {
     // CREATE THE UNVERIFIED USER ACCOUNT.
     const newUnverifiedUser = new UnverifiedUserModel({
       email: email,
-      passwordHash: hashPassword,
+      passwordHash: hashedPassword,
       verificationToken: verificationToken
     });
 
@@ -103,6 +104,7 @@ class UnverifiedUser {
 
     // INSTANTIATE THE MODEL.
     const unverifiedUser = new UnverifiedUser(newUnverifiedUser);
+    return unverifiedUser;
   }
 
   /**
@@ -121,8 +123,38 @@ class UnverifiedUser {
   * @author Cameron Burkholder
   * @date   10/22/2021
   */
-  static async getByVerificationToken(verificationToken) {
+  static async getByEmail(email) {
     // GET THE USER BASED ON THE GIVEN EMAIL.
+    let unverifiedUserRecord = false;
+    try {
+      unverifiedUserRecord = await UnverifiedUserModel.findOne({ email: email }).exec();
+    } catch(error) {
+      Log.write("An error occurred while attempting to get an unverified user by email.");
+      Log.writeError(error);
+      // If an error occurs, it should be returned.
+      return error;
+    } finally {
+      // If the user wasn't able to be found in the database, this routine should return undefined.
+      let unverifiedUser = undefined;
+      let unverifiedUserWasFound = Validator.isDefined(unverifiedUserRecord);
+      if (unverifiedUserWasFound) {
+        // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+        unverifiedUser = new UnverifiedUser(unverifiedUserRecord);
+      }
+      return unverifiedUser;
+    }
+  }
+
+  /**
+  * Gets the user record from the database using the user's email.
+  * @param  {String} verificationToken The verification token used to search for an unverified user.
+  * @return {UnverifiedUser} The user instance, if found; otherwise undefined.
+  * @async
+  * @author Cameron Burkholder
+  * @date   10/22/2021
+  */
+  static async getByVerificationToken(verificationToken) {
+    // GET THE USER BASED ON THE GIVEN VERIFICATION TOKEN.
     let unverifiedUserRecord = false;
     try {
       unverifiedUserRecord = await UnverifiedUserModel.findOne({ verificationToken: verificationToken }).exec();
@@ -137,7 +169,7 @@ class UnverifiedUser {
       let userWasFound = Validator.isDefined(unverifiedUserRecord);
       if (userWasFound) {
         // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
-        user = new User(unverifiedUserRecord);
+        user = new UnverifiedUser(unverifiedUserRecord);
       }
       return user;
     }
@@ -199,9 +231,10 @@ class UnverifiedUser {
   /**
   * Verifies a user's account. This process involves creating a normal user document and deleting
   * the unverified user document.
+  * @param {String} verificationToken The verification token to identify the user being verified.
   * @return {User} The verified user.
   */
-  async verify() {
+  async verify(verificationToken) {
     //
   }
 
