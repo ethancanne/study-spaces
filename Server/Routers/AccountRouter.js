@@ -67,8 +67,10 @@ class AccountRouter {
   */
   static verify(request, response) {
     // PARSE THE VERIFICATION TOKEN.
+    const verificationToken = request.param.verificationToken;
 
     // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
+    const userWasVerified;
   }
 
   // POST ROUTES.
@@ -80,7 +82,7 @@ class AccountRouter {
   */
   static async createAccount(request, response) {
     // CHECK FOR AN EXISTING ACCOUNT.
-    const existingUser = await UnverifiedUser.getByEmail(request.body.email);
+    const existingUser = await UnverifierUser.getByEmail(request.body.email);
     const userAlreadyExists = Validator.isDefined(existingUser);
     if (userAlreadyExists) {
       return response.json({ message: ResponseMessages.Account.userAlreadyExists });
@@ -95,15 +97,16 @@ class AccountRouter {
 
     // EMAIL THE VERIFICATION LINK TO THE USER.
     const verificationToken = unverifiedUser.verificationToken;
-    let newVerificationLink = `http://${request.hostname}${Routes.Account.Verify}?verificationToken=${verificationToken}`;
+    let verificationLink = `http://${request.hostname}${Routes.Account.Verify}?verificationToken=${verificationToken}`;
     // Write to log file for now.
-    Log.write(newVerificationLink);
+    Log.write(verificationLink);
 
     // SEND THE RESPONSE.
     unverifiedUser.removeSensitiveAttributes();
     response.json({
       message: ResponseMessages.Account.SuccessAccountCreated,
-      unverifiedUser: unverifiedUser
+      unverifiedUser: unverifiedUser,
+      verificationLink: verificationLink
     });
   }
 
