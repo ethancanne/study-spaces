@@ -13,6 +13,7 @@ import Routes from "../../Server/Routes/Routes.js";
 // PAGES.
 import Home from "./Pages/Home/Home.js";
 import Study from "./Pages/Study.js";
+import AccountSetupView from "./Views/Home/AccountSetupView/AccountSetupView";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -22,6 +23,7 @@ import Study from "./Pages/Study.js";
  */
 const App = (props) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+  const isUnverifiedUser = useSelector((state) => state.authReducer.isUnverifiedUser);
   const [hasNotMounted, setHasNotMounted] = useState(false);
   const dispatch = useDispatch();
 
@@ -65,6 +67,8 @@ const App = (props) => {
       }
     }
   };
+
+  const verifyUser = (verificationToken) => {};
   return (
     <Router>
       <div className="container">
@@ -75,6 +79,11 @@ const App = (props) => {
           <Route exact path="/study">
             <Study />
           </Route>
+          <Route
+            exact
+            path="/verify:verificationToken"
+            component={(props) => <AccountSetupView verificationToken={props.match.params.verificationToken} />}
+          />
         </Switch>
       </div>
     </Router>

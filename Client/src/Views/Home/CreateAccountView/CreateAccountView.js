@@ -1,6 +1,8 @@
 import "./CreateAccountView.scss";
 
 import React from "react";
+import axios from "axios";
+import Validator from "../../../../../Server/Validator";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import CreateAccountForm from "../../../components/CreateAccountForm/CreateAccountForm";
@@ -11,8 +13,7 @@ import Button from "../../../core/Button/Button.js";
 import Label from "../../../core/Label/Label.js";
 import Views from "../../Views.js";
 
-import { useDispatch } from "react-redux";
-import {createAccount} from "./state/actions";
+import { createAccount } from "../../../state/actions";
 
 const CreateAccountView = (props) => {
   const BLANK = "";
@@ -44,38 +45,31 @@ const CreateAccountView = (props) => {
     let response;
     try {
       response = await axios.post(Routes.Account.CreateAccount, {
-        user:{
-          email,
-          password,
-          password_confirmation: confirmPassword
-        }
+        email,
+        password,
+        password_confirmation: confirmPassword
       });
     } catch (error) {
       console.log(error);
-      setLoginErrorMsg(loginErrorMsg);
+      setAccountCreationErrorMsg("error");
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
       const responseIsDefined = Validator.isDefined(response);
+      console.log("ResponseIsDefined" + responseIsDefined);
+
       if (responseIsDefined) {
-
         // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-           const accountCreationWasValid = ResponseMessages.Account.SuccessAccountCreation === response.data.message;
+        const accountCreationWasValid = ResponseMessages.Account.SuccessAccountCreated === response.data.message;
 
+        if (accountCreationWasValid) {
+          // save the unverified user in state (using dispatch)
+          // set the home view to the check email screen
 
-          if (accountCreationWasValid) {
-              // save the unverified user in state (using dispatch)
-              // set the home view to the check email screen
-              const unverifiedUser = JSON.parse(response.data.unverifiedUser);
-              dispatch(createAccount(unverifiedUser));
-              
-          }
-        
-        //       const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
-        //       dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
-        //     } else {
-        //       setLoginErrorMsg(response.data.message);
-        //       dispatch(signOut);
-        //     }
+          const unverifiedUser = response.data.unverifiedUser;
+
+          dispatch(createAccount(unverifiedUser));
+          props.setHomeView(Views.Home.VerificationEmailConfirmation);
+        }
       }
     }
   };
@@ -88,7 +82,7 @@ const CreateAccountView = (props) => {
    */
   const updateEmailField = (event) => {
     setEmail(event.target.value);
-    setLoginErrorMsg(BLANK);
+    setAccountCreationErrorMsg(BLANK);
   };
 
   /**
@@ -99,7 +93,7 @@ const CreateAccountView = (props) => {
    */
   const updatePasswordField = (event) => {
     setPassword(event.target.value);
-    setLoginErrorMsg(BLANK);
+    setAccountCreationErrorMsg(BLANK);
   };
 
   /**
@@ -125,6 +119,7 @@ const CreateAccountView = (props) => {
 
   return (
     <div className="create-account-view">
+      <h1>Study Spaces</h1>
       <CreateAccountForm
         email={email}
         password={password}

@@ -70,7 +70,7 @@ class AccountRouter {
     const verificationToken = request.param.verificationToken;
 
     // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
-    const userWasVerified;
+    const userWasVerified = false;
   }
 
   // POST ROUTES.
@@ -82,7 +82,7 @@ class AccountRouter {
   */
   static async createAccount(request, response) {
     // CHECK FOR AN EXISTING ACCOUNT.
-    const existingUser = await UnverifierUser.getByEmail(request.body.email);
+    const existingUser = await UnverifiedUser.getByEmail(request.body.email);
     const userAlreadyExists = Validator.isDefined(existingUser);
     if (userAlreadyExists) {
       return response.json({ message: ResponseMessages.Account.userAlreadyExists });

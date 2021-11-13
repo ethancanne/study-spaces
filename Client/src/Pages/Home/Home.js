@@ -8,6 +8,7 @@ import Views from "../../views/Views.js";
 // IMPORT VIEWS FOR THIS PAGE.
 import LoginView from "../../Views/Home/LoginView/LoginView";
 import CreateAccountView from "../../Views/Home/CreateAccountView/CreateAccountView";
+import VerificationEmailConfirmationView from "../../Views/Home/VerificationEmailConfirmationView/VerificationEmailConfirmationView";
 
 /**
  * The home page of the application. This is shown when the user has not logged in.
@@ -27,6 +28,10 @@ const Home = (props) => {
 
     case Views.Home.CreateAccount:
       homeView = <CreateAccountView setHomeView={setHomeView} />;
+      break;
+
+    case Views.Home.VerificationEmailConfirmation:
+      homeView = <VerificationEmailConfirmationView setHomeView={setHomeView} />;
       break;
   }
 

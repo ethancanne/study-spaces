@@ -27,8 +27,8 @@ const authReducer = (state = initialState, action) => {
       return { ...state, user: {}, isLoggedIn: false };
 
     case authConstants.CREATE_ACCOUNT:
-      localStorage.setItem("unverifiedUser", JSON.stringify(action.payload.unverifiedUser));
-      return { ...state, unverifiedUser: action.payload.unverifiedUser, isLoggedIn: true};
+      // localStorage.setItem("unverifiedUser", JSON.stringify(action.payload.unverifiedUser));
+      return { ...state, unverifiedUser: action.payload.unverifiedUser };
 
     default:
       return state;

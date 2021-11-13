@@ -9,10 +9,11 @@ const ResponseMessages = {
     IncorrectPassword: "The password provided is incorrect",
     SuccessAccountCreated: "The account was created successfully",
     SuccessLogin: "The login was successful",
-    SuccessfulAccountCreation: "The registration was successful",
     SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",
-    userAlreadyExists: "A user with that email address already exists.",
-    UserNotFound: "The user was not found"
+    UserAlreadyExists: "A user with that email address already exists.",
+    UserNotFound: "The user was not found",
+    UserWasVerified: "The user was verified",
+    SuccessAccountSetup: "The account was setup successfully"
   }
 };
 module.exports = ResponseMessages;

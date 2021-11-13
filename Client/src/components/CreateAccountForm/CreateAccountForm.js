@@ -25,7 +25,6 @@ import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 const CreateAccountForm = (props) => {
   return (
     <div className="create-account-form">
-      <h1>Study Spaces</h1>
       <Form onSubmit={props.submitAccountCreation}>
         <InputField>
           <Label>Email</Label>
@@ -39,8 +38,6 @@ const CreateAccountForm = (props) => {
           <Label>Confirm Password</Label>
           <TextInput value={props.confirmPassword} onChange={props.updateConfirmPasswordField} type="password" />
         </InputField>
-
-        <h1>{props.accountCreationErrorMsg}</h1>
 
         {props.loginDidFail}
         <Button type={ButtonTypes.Primary}>Next</Button>
