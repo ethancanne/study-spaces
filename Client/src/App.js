@@ -14,6 +14,7 @@ import Routes from "../../Server/Routes/Routes.js";
 import Home from "./Pages/Home/Home.js";
 import Study from "./Pages/Study.js";
 import AccountSetupView from "./Views/Home/AccountSetupView/AccountSetupView";
+import Views from "./views/Views";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -79,11 +80,9 @@ const App = (props) => {
           <Route exact path="/study">
             <Study />
           </Route>
-          <Route
-            exact
-            path="/verify:verificationToken"
-            component={(props) => <AccountSetupView verificationToken={props.match.params.verificationToken} />}
-          />
+          <Route path="/verify:verificationToken">
+            <Home homeView={Views.Home.AccountSetup} />
+          </Route>
         </Switch>
       </div>
     </Router>

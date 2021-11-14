@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AccountSetupForm from "../../../components/AccountSetupForm/AccountSetupForm";
 import Label from "../../../core/Label/Label";
 import "./AccountSetupView.scss";
@@ -8,8 +8,12 @@ import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../../state/actions";
+import Button from "../../../core/Button/Button";
+import ButtonTypes from "../../../core/Button/ButtonTypes";
+import Validator from "../../../../../Server/Validator";
+import Views from "../../Views";
 
-const AccountSetupView = ({ verificationToken }) => {
+const AccountSetupView = (props) => {
   const BLANK = "";
   const [userIsVerified, setUserIsVerified] = useState(false);
   const [fullName, setFullName] = useState(BLANK);
@@ -17,12 +21,13 @@ const AccountSetupView = ({ verificationToken }) => {
   const [dateOfBirth, setDateOfBirth] = useState(BLANK);
   const [profilePicture, setProfilePicture] = useState(BLANK);
   const [accountSetupErrorMsg, setAccountSetupErrorMsg] = useState(BLANK);
+  const { verificationToken } = useParams();
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const { verificationToken } = useParams();
-    verifyUser(verificationToken);
+  useEffect(async () => {
+    console.log(verificationToken);
+    await verifyUser(verificationToken);
   }, []);
 
   /**
@@ -42,7 +47,6 @@ const AccountSetupView = ({ verificationToken }) => {
       console.log(error);
     } finally {
       const responseIsDefined = Validator.isDefined(response);
-
       if (responseIsDefined) {
         // IF THE USER VERIFICATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
         const verificationWasValid = ResponseMessages.Account.UserWasVerified === response.data.message;

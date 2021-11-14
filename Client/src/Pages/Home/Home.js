@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./Home.scss";
 
@@ -9,6 +9,7 @@ import Views from "../../views/Views.js";
 import LoginView from "../../Views/Home/LoginView/LoginView";
 import CreateAccountView from "../../Views/Home/CreateAccountView/CreateAccountView";
 import VerificationEmailConfirmationView from "../../Views/Home/VerificationEmailConfirmationView/VerificationEmailConfirmationView";
+import AccountSetupView from "../../Views/Home/AccountSetupView/AccountSetupView";
 
 /**
  * The home page of the application. This is shown when the user has not logged in.
@@ -18,9 +19,9 @@ import VerificationEmailConfirmationView from "../../Views/Home/VerificationEmai
  * @date   10/20/2021
  */
 const Home = (props) => {
-  const [view, setHomeView] = useState(Views.Home.Login);
-
+  const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
   let homeView = <></>;
+
   switch (view) {
     case Views.Home.Login:
       homeView = <LoginView setHomeView={setHomeView} />;
@@ -33,6 +34,10 @@ const Home = (props) => {
     case Views.Home.VerificationEmailConfirmation:
       homeView = <VerificationEmailConfirmationView setHomeView={setHomeView} />;
       break;
+
+    case Views.Home.AccountSetup:
+      homeView = <AccountSetupView setHomeView={setHomeView} />;
+      break;
   }
 
   return (
@@ -40,7 +45,7 @@ const Home = (props) => {
       <h1 className="subtitle">
         Study <br /> with <br /> excellence.
       </h1>
-      <Page>{homeView}</Page>
+      <Page>{!props.children ? homeView : props.children}</Page>
     </div>
   );
 };
