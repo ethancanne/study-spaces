@@ -5,6 +5,7 @@ const Schema = Mongoose.Schema;
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
+const User = require("./User.js");
 const Validator = require("../Validator.js");
 
 /**
@@ -165,23 +166,25 @@ class UnverifiedUser {
       return error;
     } finally {
       // If the user wasn't able to be found in the database, this routine should return undefined.
-      let user = undefined;
+      let unverifiedUser = undefined;
       let userWasFound = Validator.isDefined(unverifiedUserRecord);
       if (userWasFound) {
         // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
-        user = new UnverifiedUser(unverifiedUserRecord);
+        unverifiedUser = new UnverifiedUser(unverifiedUserRecord);
       }
-      return user;
+      return unverifiedUser;
     }
   }
 
   /**
   * Gets the unverified user's email.
   * @return {String} The unverified user's email.
-  *
+  * @author Cameron Burkholder
+  * @date 11/15/2021
   */
   getEmail() {
-
+    // GET THE EMAIL.
+    return this.email;
   }
 
   /**
@@ -190,7 +193,8 @@ class UnverifiedUser {
   *
   */
   getPasswordHash() {
-
+    // GET THE PASSWORD HASH.
+    return this.passwordHash;
   }
 
   /**
@@ -245,8 +249,22 @@ class UnverifiedUser {
   * @param {String} verificationToken The verification token to identify the user being verified.
   * @return {User} The verified user.
   */
-  async verify(verificationToken) {
-    //
+  static async verify(verificationToken) {
+    // GET THE UNVERIFIED USER ASSOCIATED WITH THE VERIFICATION TOKEN.
+    let unverifiedUser = undefined;
+    try {
+      unverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
+    } catch (error) {
+      Log.writeError(error);
+    } finally {
+      const unverifiedUserExists = Validator.isDefined(unverifiedUser);
+      if (unverifiedUserExists) {
+        const user = await User.create(unverifiedUser);
+        return user;
+      } else {
+        return unverifiedUser;
+      }
+    }
   }
 
 }

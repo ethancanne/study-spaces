@@ -1,5 +1,13 @@
 import React from "react";
 import "./AccountSetupForm.scss";
+import Button from "../../core/Button/Button.js";
+import ButtonTypes from "../../core/Button/ButtonTypes";
+
+import Form from "../../core/Form/Form.js";
+import InputField from "../../core/InputField/InputField.js";
+import Label from "../../core/Label/Label.js";
+import Routes from "../../../../Server/Routes/Routes.js";
+import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 const AccountSetupForm = (props) => {
   return (
@@ -13,16 +21,16 @@ const AccountSetupForm = (props) => {
         </InputField>
 
         <div className="inline">
-          <InputField className="left">
+          <InputField id="left">
             <Label>Area Code</Label>
             <TextInput value={props.areaCode} onChange={props.updateAreaCodeField} />
           </InputField>
-          <InputField className="right">
+          <InputField id="right">
             <Label>Date of Birth</Label>
             <TextInput value={props.dateOfBirth} onChange={props.updateDateOfBirthField} />
           </InputField>
         </div>
-        <InputField className="right">
+        <InputField>
           <Label>Profile Picture</Label>
           <TextInput value={props.profilePicture} onChange={props.updateProfilePictureField} />
         </InputField>

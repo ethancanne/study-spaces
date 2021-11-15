@@ -28,12 +28,12 @@ class AccountRouter {
     // This is used to check if an authentication token is valid. If it is valid, a new token is generated
     // so that the user can have persistent logins.
     server.get(Routes.Account.UpdateAuthenticationToken, authenticator.protectRoute(), AccountRouter.updateAuthenticationToken);
-    // Verifies a user.
-    server.get(Routes.Account.Verify, AccountRouter.verify);
     // This is used to create accounts.
     server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
     // This is used to log users in.
     server.post(Routes.Account.Login, AccountRouter.login);
+    // Verifies a user.
+    server.post(Routes.Account.Verify, AccountRouter.verify);
   }
 
   // GET ROUTES.
@@ -57,20 +57,6 @@ class AccountRouter {
       user: request.user
     };
     response.json(responseMessage);
-  }
-
-  /**
-  * Verifies an unverified user.
-  * @param {String} verificationToken The verification token used to verify the account.
-  * @author Cameron Burkholder
-  * @date   11/12/2021
-  */
-  static verify(request, response) {
-    // PARSE THE VERIFICATION TOKEN.
-    const verificationToken = request.param.verificationToken;
-
-    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
-    const userWasVerified = false;
   }
 
   // POST ROUTES.
@@ -97,7 +83,7 @@ class AccountRouter {
 
     // EMAIL THE VERIFICATION LINK TO THE USER.
     const verificationToken = unverifiedUser.verificationToken;
-    let verificationLink = `http://${request.hostname}${Routes.Account.Verify}?verificationToken=${verificationToken}`;
+    let verificationLink = `http://${request.hostname}/verify/${verificationToken}`;
     // Write to log file for now.
     Log.write(verificationLink);
 
@@ -147,6 +133,36 @@ class AccountRouter {
     } else {
       // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
       return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+    }
+  }
+
+  /**
+  * Verifies an unverified user.
+  * @param {String} verificationToken The verification token used to verify the account.
+  * @author Cameron Burkholder
+  * @date   11/12/2021
+  */
+  static async verify(request, response) {
+    // PARSE THE VERIFICATION TOKEN.
+    const verificationToken = request.body.verificationToken;
+
+    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
+    let userWasVerified = false;
+    let user = undefined;
+    try {
+      user = await UnverifiedUser.verify(verificationToken);
+    } catch (error) {
+      Log.writeError(error);
+    } finally {
+      userWasVerified = Validator.isDefined(user);
+      if (userWasVerified) {
+        response.json({
+          message: ResponseMessages.Account.UserWasVerified,
+          user: user
+        });
+      } else {
+        response.json({ message: ResponseMessages.Account.UserNotFound });
+      }
     }
   }
 }

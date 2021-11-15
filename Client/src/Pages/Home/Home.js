@@ -10,6 +10,7 @@ import LoginView from "../../Views/Home/LoginView/LoginView";
 import CreateAccountView from "../../Views/Home/CreateAccountView/CreateAccountView";
 import VerificationEmailConfirmationView from "../../Views/Home/VerificationEmailConfirmationView/VerificationEmailConfirmationView";
 import AccountSetupView from "../../Views/Home/AccountSetupView/AccountSetupView";
+import Validator from "../../../../Server/Validator.js";
 
 /**
  * The home page of the application. This is shown when the user has not logged in.
@@ -21,6 +22,11 @@ import AccountSetupView from "../../Views/Home/AccountSetupView/AccountSetupView
 const Home = (props) => {
   const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
   let homeView = <></>;
+  // let verificationToken = undefined;
+  // const verificationTokenExists = Validator.isDefined(props.match.params);
+  // if (verificationTokenExists) {
+  //   verificationToken = props.match.params.verificationToken;
+  // }
 
   switch (view) {
     case Views.Home.Login:
@@ -36,7 +42,9 @@ const Home = (props) => {
       break;
 
     case Views.Home.AccountSetup:
-      homeView = <AccountSetupView setHomeView={setHomeView} />;
+      homeView = (
+        <AccountSetupView setHomeView={setHomeView} verificationToken={props.match.params.verificationToken} />
+      );
       break;
   }
 

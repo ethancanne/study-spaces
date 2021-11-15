@@ -21,12 +21,12 @@ const AccountSetupView = (props) => {
   const [dateOfBirth, setDateOfBirth] = useState(BLANK);
   const [profilePicture, setProfilePicture] = useState(BLANK);
   const [accountSetupErrorMsg, setAccountSetupErrorMsg] = useState(BLANK);
-  const { verificationToken } = useParams();
+  const [user, setUser] = useState({});
+  const verificationToken = props.verificationToken;
 
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    console.log(verificationToken);
     await verifyUser(verificationToken);
   }, []);
 
@@ -41,7 +41,7 @@ const AccountSetupView = (props) => {
     let response;
     try {
       response = await axios.post(Routes.Account.Verify, {
-        verificationToken
+        verificationToken: verificationToken
       });
     } catch (error) {
       console.log(error);

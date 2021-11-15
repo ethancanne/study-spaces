@@ -1,6 +1,10 @@
 .inline {
-  .left {
+  display: flex;
+  flex-direction: row;
+  #left {
+    flex: 60%;
   }
-  .right {
+  #right {
+    flex: 40%;
   }
 }

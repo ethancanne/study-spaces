@@ -81,16 +81,31 @@ class User {
 
   /**
   * Creates a user.
-  * @param {String} email The user's email.
-  * @param {String} passwordHash The user's hashed password.
-  * @param {String} name The user's name.
-  * @param {String} areaCode The user's area code.
-  * @param {String=} profilePicture The user's profile picture.
+  * @param {UnverifiedUser} unverifiedUser The unverified user to create from.
   * @return {User} The created user.
   *
   */
-  static async create(email, passwordHash, name, areaCode, profilePicture) {
+  static async create(unverifiedUser) {
+    // CREATE THE USER IN THE DATABASE.
+    const BLANK = "BLANK";
+    const EMPTY = [];
+    const userModel = new UserModel({
+      areaCode: BLANK,
+      conversations: EMPTY,
+      email: unverifiedUser.getEmail(),
+      name: BLANK,
+      passwordHash: unverifiedUser.getPasswordHash(),
+      studyGroups: EMPTY,
+    });
+    try {
+      await userModel.save();
+    } catch (error) {
+      console.log(error);
+    }
 
+    // CREATE THE USER.
+    const user = new User(userModel);
+    return user;
   }
 
   /**
