@@ -52,7 +52,7 @@ const AccountSetupView = (props) => {
         const verificationWasValid = ResponseMessages.Account.UserWasVerified === response.data.message;
 
         if (verificationWasValid) {
-          setUser(response.data.unverifiedUser);
+          setUser(response.data.user);
           setUserIsVerified(true);
         }
       }
