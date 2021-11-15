@@ -81,12 +81,12 @@ const App = (props) => {
             <Study />
           </Route>
           <Route
-            path="/verify:verificationToken"
-            render={() => {
-              console.log(verificationToken);
-              return <p>hello</p>;
+            path="/verify/:verificationToken"
+            render={(props) => {
+              const accountSetupView = Views.Home.AccountSetup;
+              return <Home {...props} homeView={accountSetupView} />;
             }}
-          ></Route>
+          />
         </Switch>
       </div>
     </Router>

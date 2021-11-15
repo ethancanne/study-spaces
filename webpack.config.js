@@ -28,6 +28,7 @@ let webpackConfiguration = {
   },
   output: {
     path: Path.join(__dirname, "Client", "build"),
+    publicPath: "/",
     filename: "bundle.js",
   },
   plugins: [

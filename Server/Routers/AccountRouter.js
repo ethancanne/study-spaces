@@ -59,29 +59,6 @@ class AccountRouter {
     response.json(responseMessage);
   }
 
-  /**
-  * Verifies an unverified user.
-  * @param {String} verificationToken The verification token used to verify the account.
-  * @author Cameron Burkholder
-  * @date   11/12/2021
-  */
-  static async verify(request, response) {
-    // PARSE THE VERIFICATION TOKEN.
-    const verificationToken = request.body.verificationToken;
-
-    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
-    let userWasVerified = false;
-    try {
-      await UnverifiedUser.verify(verificationToken);
-    } catch (error) {
-      Log.writeError(error);
-    } finally {
-      if (userWasVerified) {
-        response.json(ResponseMessages.userWasVerified);
-      }
-    }
-  }
-
   // POST ROUTES.
   /**
   * Creates an unverified account.
@@ -106,7 +83,7 @@ class AccountRouter {
 
     // EMAIL THE VERIFICATION LINK TO THE USER.
     const verificationToken = unverifiedUser.verificationToken;
-    let verificationLink = `http://${request.hostname}/verify?verificationToken=${verificationToken}`;
+    let verificationLink = `http://${request.hostname}/verify/${verificationToken}`;
     // Write to log file for now.
     Log.write(verificationLink);
 
@@ -156,6 +133,36 @@ class AccountRouter {
     } else {
       // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
       return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+    }
+  }
+
+  /**
+  * Verifies an unverified user.
+  * @param {String} verificationToken The verification token used to verify the account.
+  * @author Cameron Burkholder
+  * @date   11/12/2021
+  */
+  static async verify(request, response) {
+    // PARSE THE VERIFICATION TOKEN.
+    const verificationToken = request.body.verificationToken;
+
+    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
+    let userWasVerified = false;
+    let user = undefined;
+    try {
+      user = await UnverifiedUser.verify(verificationToken);
+    } catch (error) {
+      Log.writeError(error);
+    } finally {
+      userWasVerified = Validator.isDefined(user);
+      if (userWasVerified) {
+        response.json({
+          message: ResponseMessages.Account.UserWasVerified,
+          user: user
+        });
+      } else {
+        response.json({ message: ResponseMessages.Account.UserNotFound });
+      }
     }
   }
 }
