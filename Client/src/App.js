@@ -80,9 +80,13 @@ const App = (props) => {
           <Route exact path="/study">
             <Study />
           </Route>
-          <Route path="/verify:verificationToken">
-            <Home homeView={Views.Home.AccountSetup} />
-          </Route>
+          <Route
+            path="/verify:verificationToken"
+            render={() => {
+              console.log(verificationToken);
+              return <p>hello</p>;
+            }}
+          ></Route>
         </Switch>
       </div>
     </Router>

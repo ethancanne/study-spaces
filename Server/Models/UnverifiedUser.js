@@ -246,7 +246,23 @@ class UnverifiedUser {
   * @return {User} The verified user.
   */
   async verify(verificationToken) {
-    //
+    // GET THE UNVERIFIED USER ASSOCIATED WITH THE VERIFICATION TOKEN.
+    let unverifiedUser = undefined;
+    try {
+      unverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
+    } catch (error) {
+      Log.writeError(error);
+    } finally {
+      const unverifiedUserWasFound = Validator.isDefined(unverifiedUser);
+      if (unverifiedUserWasFound) {
+        response.json({
+          message: ResponseMessages.Account.UserWasVerified,
+          unverifiedUser: unverifiedUser
+         });
+      } else {
+        response.json({ message: ResponseMessages.Account.UserNotFound });
+      }
+    }
   }
 
 }
