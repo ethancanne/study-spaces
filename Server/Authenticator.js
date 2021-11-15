@@ -147,7 +147,7 @@ class Authenticator {
   static verifyPassword(password, user) {
     // CHECK IF THE PASSWORD IS CORRECT.
     const passwordHash = user.getPasswordHash();
-    const passwordIsCorrect = (passwordHash === password); //Bcrypt.compareSync(password, passwordHash);
+    const passwordIsCorrect = Bcrypt.compareSync(password, passwordHash);
     return passwordIsCorrect;
   }
 
