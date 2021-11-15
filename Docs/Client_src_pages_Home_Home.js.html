@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Label/Label.js</title>
+    <title>JSDoc: Source: Client/src/pages/Home/Home.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Label/Label.js</h1>
+    <h1 class="page-title">Source: Client/src/pages/Home/Home.js</h1>
 
     
 
@@ -26,22 +26,65 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+
+import "./Home.scss";
+
+import Page from "../Page.js";
+import Views from "../../views/Views.js";
+
+// IMPORT VIEWS FOR THIS PAGE.
+import LoginView from "../../Views/Home/LoginView/LoginView";
+import CreateAccountView from "../../Views/Home/CreateAccountView/CreateAccountView";
+import VerificationEmailConfirmationView from "../../Views/Home/VerificationEmailConfirmationView/VerificationEmailConfirmationView";
+import AccountSetupView from "../../Views/Home/AccountSetupView/AccountSetupView";
+import Validator from "../../../../Server/Validator.js";
 
 /**
- * Renders a label.
- * @author Cameron Burkholder
- * @date   10/21/2021
+ * The home page of the application. This is shown when the user has not logged in.
+ * @param {function} clientSideLogin The function used to log in a user from the client-side perspective.
+ * @param {function} clientSideLogout The function used to log out a user from the client-side perspective.
+ * @author Cameron Burkholder and Ethan Cannelongo
+ * @date   10/20/2021
  */
-const Label = (props) => {
+const Home = (props) => {
+  const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
+  let homeView = &lt;>&lt;/>;
+  let verificationToken = undefined;
+  const verificationTokenExists = Validator.isDefined(props.match.params);
+  if (verificationTokenExists) {
+    verificationToken = props.match.params.verificationToken;
+  }
+
+  switch (view) {
+    case Views.Home.Login:
+      homeView = &lt;LoginView setHomeView={setHomeView} />;
+      break;
+
+    case Views.Home.CreateAccount:
+      homeView = &lt;CreateAccountView setHomeView={setHomeView} />;
+      break;
+
+    case Views.Home.VerificationEmailConfirmation:
+      homeView = &lt;VerificationEmailConfirmationView setHomeView={setHomeView} />;
+      break;
+
+    case Views.Home.AccountSetup:
+      homeView = &lt;AccountSetupView setHomeView={setHomeView} verificationToken={verificationToken} />;
+      break;
+  }
+
   return (
-    &lt;label className="Label" {...props}>
-      {props.children}
-    &lt;/label>
+    &lt;div className="HomePage">
+      &lt;h1 className="subtitle">
+        Study &lt;br /> with &lt;br /> excellence.
+      &lt;/h1>
+      &lt;Page>{!props.children ? homeView : props.children}&lt;/Page>
+    &lt;/div>
   );
 };
 
-export default Label;
+export default Home;
 </code></pre>
         </article>
     </section>

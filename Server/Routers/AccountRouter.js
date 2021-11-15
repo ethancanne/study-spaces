@@ -147,6 +147,7 @@ class AccountRouter {
     const verificationToken = request.body.verificationToken;
 
     // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
+    // Verifying the user creates a new user.
     let userWasVerified = false;
     let user = undefined;
     try {

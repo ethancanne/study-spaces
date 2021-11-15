@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Label/Label.js</title>
+    <title>JSDoc: Source: Client/src/components/CreateAccountForm/CreateAccountForm.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Label/Label.js</h1>
+    <h1 class="page-title">Source: Client/src/components/CreateAccountForm/CreateAccountForm.js</h1>
 
     
 
@@ -26,22 +26,55 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
+            <pre class="prettyprint source linenums"><code>import "./CreateAccountForm.scss";
+import React from "react";
+
+import Button from "../../core/Button/Button.js";
+import ButtonTypes from "../../core/Button/ButtonTypes";
+
+import Form from "../../core/Form/Form.js";
+import InputField from "../../core/InputField/InputField.js";
+import Label from "../../core/Label/Label.js";
+import Routes from "../../../../Server/Routes/Routes.js";
+import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
- * Renders a label.
- * @author Cameron Burkholder
- * @date   10/21/2021
+ * Renders a login form.
+ * @param {string} props.email The email address in the form.
+ * @param {string} props.password The password in the form.
+ * @param {string} props.confirmPassword The value of the confirm password field in the form.
+ * @param {function} props.submitAccountCreation Used to submit the AccountCreation form.
+ * @param {function} props.updateEmailField The function used to update the email address.
+ * @param {function} props.updatePasswordField The function used to update the password.
+ * @param {function} props.updateConfirmPasswordField The function used to update the confirm password.
+ * @author Ethan Cannelongo
+ * @date   11/10/2021
  */
-const Label = (props) => {
+const CreateAccountForm = (props) => {
   return (
-    &lt;label className="Label" {...props}>
-      {props.children}
-    &lt;/label>
+    &lt;div className="create-account-form">
+      &lt;Form onSubmit={props.submitAccountCreation}>
+        &lt;InputField>
+          &lt;Label>Email&lt;/Label>
+          &lt;TextInput value={props.email} onChange={props.updateEmailField} type="email" />
+        &lt;/InputField>
+        &lt;InputField>
+          &lt;Label>Password&lt;/Label>
+          &lt;TextInput value={props.password} onChange={props.updatePasswordField} type="password" />
+        &lt;/InputField>
+        &lt;InputField>
+          &lt;Label>Confirm Password&lt;/Label>
+          &lt;TextInput value={props.confirmPassword} onChange={props.updateConfirmPasswordField} type="password" />
+        &lt;/InputField>
+
+        {props.loginDidFail}
+        &lt;Button type={ButtonTypes.Primary}>Next&lt;/Button>
+      &lt;/Form>
+    &lt;/div>
   );
 };
 
-export default Label;
+export default CreateAccountForm;
 </code></pre>
         </article>
     </section>

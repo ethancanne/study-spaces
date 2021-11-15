@@ -190,7 +190,8 @@ class UnverifiedUser {
   /**
   * Gets the unverified user's hashed password.
   * @return {String} The unverified user's hashed password.
-  *
+  * @author Cameron Burkholder
+  * @date   11/15/2021
   */
   getPasswordHash() {
     // GET THE PASSWORD HASH.
@@ -248,6 +249,8 @@ class UnverifiedUser {
   * the unverified user document.
   * @param {String} verificationToken The verification token to identify the user being verified.
   * @return {User} The verified user.
+  * @author Cameron Burkholder
+  * @date   11/15/2021
   */
   static async verify(verificationToken) {
     // GET THE UNVERIFIED USER ASSOCIATED WITH THE VERIFICATION TOKEN.
@@ -259,6 +262,7 @@ class UnverifiedUser {
     } finally {
       const unverifiedUserExists = Validator.isDefined(unverifiedUser);
       if (unverifiedUserExists) {
+        // CREATE THE VERIFIED USER.
         const user = await User.create(unverifiedUser);
         return user;
       } else {

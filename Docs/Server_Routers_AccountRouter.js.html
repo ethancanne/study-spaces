@@ -30,10 +30,12 @@
 
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
+const Log = require("../Log.js");
 const ResponseCodes = require("../Responses/ResponseCodes.js");
 const ResponseMessages = require("../Responses/ResponseMessages.js");
 const Routes = require("../Routes/Routes.js");
 const StaticResources = require("../Routes/StaticResources.js");
+const UnverifiedUser = require("../Models/UnverifiedUser.js");
 const User = require("../Models/User.js");
 const Validator = require("../Validator.js");
 
@@ -51,11 +53,15 @@ class AccountRouter {
   * @date   10/20/2021
   */
   static serveRoutes(server, authenticator) {
-    // This is used to log users in.
-    server.post(Routes.Account.Login, AccountRouter.login);
     // This is used to check if an authentication token is valid. If it is valid, a new token is generated
     // so that the user can have persistent logins.
     server.get(Routes.Account.UpdateAuthenticationToken, authenticator.protectRoute(), AccountRouter.updateAuthenticationToken);
+    // This is used to create accounts.
+    server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
+    // This is used to log users in.
+    server.post(Routes.Account.Login, AccountRouter.login);
+    // Verifies a user.
+    server.post(Routes.Account.Verify, AccountRouter.verify);
   }
 
   // GET ROUTES.
@@ -82,6 +88,43 @@ class AccountRouter {
   }
 
   // POST ROUTES.
+  /**
+  * Creates an unverified account.
+  * @param {String} request.body.email The email address of the user to be created.
+  * @param {String} request.body.password The password of the user to be created.
+  * @param {String} request.body.confirmPassword The password confirmation of the user to be created.
+  */
+  static async createAccount(request, response) {
+    // CHECK FOR AN EXISTING ACCOUNT.
+    const existingUser = await UnverifiedUser.getByEmail(request.body.email);
+    const userAlreadyExists = Validator.isDefined(existingUser);
+    if (userAlreadyExists) {
+      return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+    }
+
+    // CREATE THE UNVERIFIED ACCOUNT.
+    const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
+    const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
+    if (accountWasNotCreated) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    // EMAIL THE VERIFICATION LINK TO THE USER.
+    const verificationToken = unverifiedUser.verificationToken;
+    let verificationLink = `http://${request.hostname}/verify/${verificationToken}`;
+    // Write to log file for now.
+    Log.write(verificationLink);
+
+    // SEND THE RESPONSE.
+    unverifiedUser.removeSensitiveAttributes();
+    response.json({
+      message: ResponseMessages.Account.SuccessAccountCreated,
+      unverifiedUser: unverifiedUser,
+      verificationLink: verificationLink
+    });
+  }
+
+
   /**
   * This allows the user to log in.
   * @param {string} request.body.email The email address of the user.
@@ -120,6 +163,37 @@ class AccountRouter {
       return response.json({ message: ResponseMessages.Account.IncorrectPassword });
     }
   }
+
+  /**
+  * Verifies an unverified user.
+  * @param {String} verificationToken The verification token used to verify the account.
+  * @author Cameron Burkholder
+  * @date   11/12/2021
+  */
+  static async verify(request, response) {
+    // PARSE THE VERIFICATION TOKEN.
+    const verificationToken = request.body.verificationToken;
+
+    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
+    // Verifying the user creates a new user.
+    let userWasVerified = false;
+    let user = undefined;
+    try {
+      user = await UnverifiedUser.verify(verificationToken);
+    } catch (error) {
+      Log.writeError(error);
+    } finally {
+      userWasVerified = Validator.isDefined(user);
+      if (userWasVerified) {
+        response.json({
+          message: ResponseMessages.Account.UserWasVerified,
+          user: user
+        });
+      } else {
+        response.json({ message: ResponseMessages.Account.UserNotFound });
+      }
+    }
+  }
 }
 
 module.exports = AccountRouter;
@@ -133,13 +207,13 @@ module.exports = AccountRouter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Nov 04 2021 17:48:21 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 15 2021 15:21:25 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

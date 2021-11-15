@@ -26,10 +26,11 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
+            <pre class="prettyprint source linenums"><code>import "./LoginForm.scss";
+import React from "react";
 
 import Button from "../../core/Button/Button.js";
-import ButtonTypes from "../../core/Button/ButtonTypes.js";
+import ButtonTypes from "../../core/Button/ButtonTypes";
 import Form from "../../core/Form/Form.js";
 import InputField from "../../core/InputField/InputField.js";
 import Label from "../../core/Label/Label.js";
@@ -37,30 +38,33 @@ import Routes from "../../../../Server/Routes/Routes.js";
 import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
-* Renders a login form.
-* @param {string} props.email The email address in the form.
-* @param {string} props.password The password in the form.
-* @param {function} props.submitLogin Used to submit the login form.
-* @param {function} props.updateEmailField The function used to update the email address.
-* @param {function} props.updatePasswordField The function used to update the password.
-* @author Cameron Burkholder
-* @date   10/21/2021
-*/
+ * Renders a login form.
+ * @param {string} props.email The email address in the form.
+ * @param {string} props.password The password in the form.
+ * @param {function} props.submitLogin Used to submit the login form.
+ * @param {function} props.updateEmailField The function used to update the email address.
+ * @param {function} props.updatePasswordField The function used to update the password.
+ * @author Cameron Burkholder
+ * @date   10/21/2021
+ */
 const LoginForm = (props) => {
   return (
-    &lt;Form onSubmit={props.submitLogin}>
-      &lt;InputField>
-        &lt;Label>Email&lt;/Label>
-        &lt;TextInput value={props.email} onChange={props.updateEmailField} type="email"/>
-      &lt;/InputField>
-      &lt;InputField>
-        &lt;Label>Password&lt;/Label>
-        &lt;TextInput value={props.password} onChange={props.updatePasswordField} type="password"/>
-      &lt;/InputField>
-      &lt;Button type={ButtonTypes.Primary}>Sign in&lt;/Button>
-    &lt;/Form>
-  )
-}
+    &lt;div className="login-form">
+      &lt;Form onSubmit={props.submitLogin}>
+        &lt;InputField>
+          &lt;Label>Email&lt;/Label>
+          &lt;TextInput value={props.email} onChange={props.updateEmailField} type="email" />
+        &lt;/InputField>
+        &lt;InputField>
+          &lt;Label>Password&lt;/Label>
+          &lt;TextInput value={props.password} onChange={props.updatePasswordField} type="password" />
+        &lt;/InputField>
+        {/* {props.loginDidFail} */}
+        &lt;Button type={ButtonTypes.Primary}>Sign in&lt;/Button>
+      &lt;/Form>
+    &lt;/div>
+  );
+};
 
 export default LoginForm;
 </code></pre>
@@ -73,13 +77,13 @@ export default LoginForm;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Nov 04 2021 17:48:21 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 15 2021 15:21:25 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
