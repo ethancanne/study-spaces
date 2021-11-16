@@ -1,4 +1,32 @@
-import React, { useEffect, useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Client/src/views/Home/AccountSetupView/AccountSetupView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Client/src/views/Home/AccountSetupView/AccountSetupView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useEffect, useState } from "react";
 import AccountSetupForm from "../../../components/AccountSetupForm/AccountSetupForm";
 import Label from "../../../core/Label/Label";
 import "./AccountSetupView.scss";
@@ -12,7 +40,6 @@ import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
 import Validator from "../../../../../Server/Validator";
 import Views from "../../Views";
-import InputField from "../../../core/InputField/InputField";
 
 const AccountSetupView = (props) => {
   const BLANK = "";
@@ -144,19 +171,18 @@ const AccountSetupView = (props) => {
    * @author Ethan Cannelongo
    * @date   11/13/21
    */
-  const updateProfilePicture = (base64) => {
-    setProfilePicture(base64);
+  const updateProfilePicture = (event) => {
+    setProfilePicture(event.target.value);
     setAccountSetupErrorMsg(BLANK);
   };
 
   return (
-    <div className="account-setup-view">
-      <h1>Study Spaces</h1>
-      <h3>Setup Your Account</h3>
-      <p>{user.email}</p>
+    &lt;div className="account-setup-view">
+      &lt;h1>Study Spaces&lt;/h1>
+
       {userIsVerified ? (
-        <div>
-          <AccountSetupForm
+        &lt;div>
+          &lt;AccountSetupForm
             user={user}
             fullName={fullName}
             areaCode={areaCode}
@@ -168,19 +194,42 @@ const AccountSetupView = (props) => {
             updateProfilePicture={updateProfilePicture}
             submitAccountSetup={submitAccountSetup}
           />
-          <p className="error-message">{accountSetupErrorMsg}</p>
-        </div>
+          &lt;p className="error-message">{accountSetupErrorMsg}&lt;/p>
+        &lt;/div>
       ) : (
-        <h1>You shouldn't be here!</h1>
+        &lt;h1>You shouldn't be here!&lt;/h1>
       )}
 
-      <div className="other-options">
-        <Label>Already have an account?</Label>
-        <Button type={ButtonTypes.Creation} onClick={signInClicked}>
+      &lt;div className="other-options">
+        &lt;Label>Already have an account?&lt;/Label>
+        &lt;Button type={ButtonTypes.Creation} onClick={signInClicked}>
           Sign In
-        </Button>
-      </div>
-    </div>
+        &lt;/Button>
+      &lt;/div>
+    &lt;/div>
   );
 };
 export default AccountSetupView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 15 2021 15:21:25 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

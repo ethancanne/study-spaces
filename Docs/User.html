@@ -399,7 +399,7 @@
     
 
     
-    <h4 class="name" id=".create"><span class="type-signature">(async, static) </span>create<span class="signature">(email, passwordHash, name, areaCode, profilePicture<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="User.html">User</a>}</span></h4>
+    <h4 class="name" id=".create"><span class="type-signature">(async, static) </span>create<span class="signature">(unverifiedUser)</span><span class="type-signature"> &rarr; {<a href="User.html">User</a>}</span></h4>
     
 
     
@@ -431,8 +431,6 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -445,157 +443,23 @@
 
         <tr>
             
-                <td class="name"><code>email</code></td>
+                <td class="name"><code>unverifiedUser</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type"><a href="UnverifiedUser.html">UnverifiedUser</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">The user's email.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>passwordHash</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The user's hashed password.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The user's name.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>areaCode</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The user's area code.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>profilePicture</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The user's profile picture.</td>
+            <td class="description last">The unverified user to create from.</td>
         </tr>
 
     
@@ -626,6 +490,13 @@
     
 
     
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Cameron Burkholder</li>
+        </ul>
+    </dd>
+    
 
     
 
@@ -636,7 +507,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line92">line 92</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line89">line 89</a>
     </li></ul></dd>
     
 
@@ -802,7 +673,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line154">line 154</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -968,7 +839,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line121">line 121</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line137">line 137</a>
     </li></ul></dd>
     
 
@@ -1078,7 +949,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line100">line 100</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -1188,7 +1059,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line109">line 109</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line125">line 125</a>
     </li></ul></dd>
     
 
@@ -1298,7 +1169,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line181">line 181</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -1408,7 +1279,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line190">line 190</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line206">line 206</a>
     </li></ul></dd>
     
 
@@ -1525,7 +1396,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line200">line 200</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line216">line 216</a>
     </li></ul></dd>
     
 
@@ -1635,7 +1506,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line210">line 210</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -1752,7 +1623,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line220">line 220</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line236">line 236</a>
     </li></ul></dd>
     
 
@@ -1862,7 +1733,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line230">line 230</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -1979,7 +1850,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line240">line 240</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line256">line 256</a>
     </li></ul></dd>
     
 
@@ -2096,7 +1967,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line254">line 254</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line270">line 270</a>
     </li></ul></dd>
     
 
@@ -2255,7 +2126,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line280">line 280</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line296">line 296</a>
     </li></ul></dd>
     
 
@@ -2414,7 +2285,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line290">line 290</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line306">line 306</a>
     </li></ul></dd>
     
 
@@ -2573,7 +2444,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line300">line 300</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line316">line 316</a>
     </li></ul></dd>
     
 
@@ -2732,7 +2603,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line310">line 310</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line326">line 326</a>
     </li></ul></dd>
     
 
@@ -2891,7 +2762,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line320">line 320</a>
+        <a href="Server_Models_User.js.html">Server/Models/User.js</a>, <a href="Server_Models_User.js.html#line336">line 336</a>
     </li></ul></dd>
     
 
@@ -2959,13 +2830,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Nov 04 2021 17:48:21 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 15 2021 15:21:26 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

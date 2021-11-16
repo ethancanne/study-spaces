@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Label/Label.js</title>
+    <title>JSDoc: Source: Client/src/state/reducers/authReducer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Label/Label.js</h1>
+    <h1 class="page-title">Source: Client/src/state/reducers/authReducer.js</h1>
 
     
 
@@ -26,22 +26,44 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React from "react";
+            <pre class="prettyprint source linenums"><code>import authConstants from "../constants/authConstants";
+
+// Load the user into the state if it is already logged in
+let user = JSON.parse(localStorage.getItem("user"));
+const currentDate = Date.now();
+const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
+const userIsLoggedIn = currentDate &lt; jwtExpirationDate;
+const initialState = user ? { isLoggedIn: userIsLoggedIn, user } : {};
 
 /**
- * Renders a label.
- * @author Cameron Burkholder
- * @date   10/21/2021
+ * This is the reducer for all actions relating to authentication
+ * A reducer is how actions transform the state into the next state
+ * @author Ethan Cannelongo
+ * @date   11/09/2021
  */
-const Label = (props) => {
-  return (
-    &lt;label className="Label" {...props}>
-      {props.children}
-    &lt;/label>
-  );
+const authReducer = (state = initialState, action) => {
+  switch (action.type) {
+    //Sign the user in and save the user to local storage
+    case authConstants.SIGN_IN:
+      localStorage.setItem("token", action.payload.authenticationToken);
+      localStorage.setItem("authenticationTokenExpirationDate", action.payload.authenticationTokenExpirationDate);
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      return { ...state, user: action.payload.user, isLoggedIn: true };
+
+    case authConstants.SIGN_OUT:
+      localStorage.clear();
+      return { ...state, user: {}, isLoggedIn: false };
+
+    case authConstants.CREATE_ACCOUNT:
+      // localStorage.setItem("unverifiedUser", JSON.stringify(action.payload.unverifiedUser));
+      return { ...state, unverifiedUser: action.payload.unverifiedUser };
+
+    default:
+      return state;
+  }
 };
 
-export default Label;
+export default authReducer;
 </code></pre>
         </article>
     </section>

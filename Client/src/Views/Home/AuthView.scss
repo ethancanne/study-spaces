@@ -10,12 +10,22 @@
   }
 
   text-align: center;
-  margin: 90px 90px 0 0;
+  margin: 50px 90px 0 0;
 
   .error-message {
     color: rgba(136, 17, 17, 0.63);
     font-size: 15px;
     font-style: italic;
+  }
+
+  .other-options {
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   @media (max-width: $mobile-width) {

@@ -83,7 +83,8 @@ class User {
   * Creates a user.
   * @param {UnverifiedUser} unverifiedUser The unverified user to create from.
   * @return {User} The created user.
-  *
+  * @author Cameron Burkholder
+  * @date   11/15/2021
   */
   static async create(unverifiedUser) {
     // CREATE THE USER IN THE DATABASE.
@@ -103,7 +104,7 @@ class User {
       console.log(error);
     }
 
-    // CREATE THE USER.
+    // RETURN THE CREATED INSTANCE.
     const user = new User(userModel);
     return user;
   }

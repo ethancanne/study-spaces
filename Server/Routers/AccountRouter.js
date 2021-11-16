@@ -67,8 +67,15 @@ class AccountRouter {
   * @param {String} request.body.confirmPassword The password confirmation of the user to be created.
   */
   static async createAccount(request, response) {
+    // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
+    const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
+    const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
+    if (unverifiedUserAlreadyExists) {
+      return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+    }
+
     // CHECK FOR AN EXISTING ACCOUNT.
-    const existingUser = await UnverifiedUser.getByEmail(request.body.email);
+    const existingUser = await User.getByEmail(request.body.email);
     const userAlreadyExists = Validator.isDefined(existingUser);
     if (userAlreadyExists) {
       return response.json({ message: ResponseMessages.Account.userAlreadyExists });
@@ -147,6 +154,7 @@ class AccountRouter {
     const verificationToken = request.body.verificationToken;
 
     // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
+    // Verifying the user creates a new user.
     let userWasVerified = false;
     let user = undefined;
     try {

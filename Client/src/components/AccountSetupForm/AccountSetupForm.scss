@@ -8,3 +8,16 @@
     flex: 40%;
   }
 }
+
+input[type="file" i] {
+  border: none;
+  padding: 90px;
+  color: white;
+  background-color: yellow;
+  appearance: none;
+}
+
+.imgPreview {
+  width: 100%;
+  padding: 20px;
+}

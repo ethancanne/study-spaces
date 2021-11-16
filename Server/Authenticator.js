@@ -56,7 +56,12 @@ class Authenticator {
     this.protectRoute = this.protectRoute.bind(this);
   }
 
-
+  /**
+  * Creates a hash for a user's password.
+  * @param {String} password The password to hash.
+  * @author Cameron Burkholder
+  * @date   11/15/2021
+  */
   static hashPassword(password) {
     const saltRounds = 10;
     const salt = Bcrypt.genSaltSync(saltRounds);
@@ -142,7 +147,7 @@ class Authenticator {
   static verifyPassword(password, user) {
     // CHECK IF THE PASSWORD IS CORRECT.
     const passwordHash = user.getPasswordHash();
-    const passwordIsCorrect = (passwordHash === password); //Bcrypt.compareSync(password, passwordHash);
+    const passwordIsCorrect = Bcrypt.compareSync(password, passwordHash);
     return passwordIsCorrect;
   }
 

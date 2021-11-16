@@ -12,6 +12,7 @@ import ResponseMessages from "../../../../../Server/Responses/ResponseMessages.j
 import Routes from "../../../../../Server/Routes/Routes.js";
 import Validator from "../../../../../Server/Validator.js";
 import Views from "../../Views.js";
+import Label from "../../../core/Label/Label";
 
 /**
  * Used to display the login form and log the user in.
@@ -111,6 +112,7 @@ const LoginView = (props) => {
       <p className="error-message">{loginErrorMsg}</p>
 
       <div className="other-options">
+        <Label>Don't have an account?</Label>
         <Button type={ButtonTypes.Creation} onClick={signUpClicked}>
           Sign Up
         </Button>

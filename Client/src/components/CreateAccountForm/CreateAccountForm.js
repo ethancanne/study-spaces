@@ -40,7 +40,7 @@ const CreateAccountForm = (props) => {
         </InputField>
 
         {props.loginDidFail}
-        <Button type={ButtonTypes.Primary}>Next</Button>
+        <Button type={ButtonTypes.Creation}>Next</Button>
       </Form>
     </div>
   );

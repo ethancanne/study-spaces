@@ -1,6 +1,15 @@
 //Input Field
 @import "../globals.scss";
 
+.Label {
+  color: rgb(172, 172, 172);
+  font-size: 11px;
+  padding-bottom: 10px;
+  font-weight: 600;
+  text-align: center;
+  width: 100%;
+}
+
 .InputField {
   padding: 10px;
   margin: 20px;
@@ -10,10 +19,6 @@
   overflow-x: visible;
 
   .Label {
-    color: rgb(172, 172, 172);
-    font-size: 11px;
-    padding-bottom: 10px;
-    font-weight: 600;
     text-align: left;
   }
   .Input {

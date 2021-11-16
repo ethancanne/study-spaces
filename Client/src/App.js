@@ -14,7 +14,7 @@ import Routes from "../../Server/Routes/Routes.js";
 import Home from "./Pages/Home/Home.js";
 import Study from "./Pages/Study.js";
 import AccountSetupView from "./Views/Home/AccountSetupView/AccountSetupView";
-import Views from "./views/Views";
+import Views from "./Views/Views";
 
 /**
  * This is the root presentational component that processes user authentication
