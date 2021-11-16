@@ -294,7 +294,9 @@ class User {
   *
   */
   async setAreaCode(areaCode) {
-
+    this.areaCode = areaCode;
+    const areaCodeSet = Validator.isDefined(this.areaCode);
+    return areaCodeSet;
   }
 
   /**
@@ -314,7 +316,9 @@ class User {
   *
   */
   async setName(name) {
-
+    this.name = name;
+    const nameSet = Validator.isDefined(this.name);
+    return nameSet;
   }
 
   /**

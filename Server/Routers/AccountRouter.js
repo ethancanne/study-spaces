@@ -152,6 +152,30 @@ class AccountRouter {
   * @date
   */
   static async setupAccount(request, response) {
+
+    const user = await request.user;
+    
+    const accountWasNotCreated = Validator.isUndefined(user);
+    if (accountWasNotCreated) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    const areaCodeSet = user.setAreaCode(request.body.areaCode);
+    if (areaCodeSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    const nameSet = user.setName(request.body.name);
+    if (nameSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    user.save();
+
+    return response.json({ message: ResponseMessages.Account.SuccessAccountSetup});
+
+
+
     // GET THE USER BEING SET UP.
     // With any route that uses authenticator.protectRoute(), the user can be accessed using
     // "request.user".
