@@ -8,6 +8,7 @@ const Routes = {
     CreateAccount: "/api/account/create",
     SetupAccount: "/api/account/setup",
     Login: "/api/account/login",
+    SetupAccount: "/api/account/setup",
     UpdateAuthenticationToken: "/api/account/update-authentication-token",
     Verify: "/api/account/verify"
   },
