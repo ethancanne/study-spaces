@@ -32,6 +32,8 @@ class AccountRouter {
     server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
     // This is used to log users in.
     server.post(Routes.Account.Login, AccountRouter.login);
+    // This is used to complete the account setup process.
+    server.post(Routes.Account.SetupAccount, authenticator.protectRoute(), AccountRouter.setupAccount);
     // Verifies a user.
     server.post(Routes.Account.Verify, AccountRouter.verify);
   }
@@ -103,7 +105,6 @@ class AccountRouter {
     });
   }
 
-
   /**
   * This allows the user to log in.
   * @param {string} request.body.email The email address of the user.
@@ -141,6 +142,50 @@ class AccountRouter {
       // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
       return response.json({ message: ResponseMessages.Account.IncorrectPassword });
     }
+  }
+
+  /**
+  * Finishes setting up an account.
+  * @param {String} request.body.areaCode The user's area code.
+  * @param {String} request.body.name The name to set for the user.
+  * @author
+  * @date
+  */
+  static async setupAccount(request, response) {
+
+    const user = await request.user;
+    
+    const accountWasNotCreated = Validator.isUndefined(user);
+    if (accountWasNotCreated) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    const areaCodeSet = user.setAreaCode(request.body.areaCode);
+    if (areaCodeSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    const nameSet = user.setName(request.body.name);
+    if (nameSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    user.save();
+
+    return response.json({ message: ResponseMessages.Account.SuccessAccountSetup});
+
+
+
+    // GET THE USER BEING SET UP.
+    // With any route that uses authenticator.protectRoute(), the user can be accessed using
+    // "request.user".
+
+    // SET THE APPROPRIATE USER FIELDS.
+
+    // SAVE THE UPDATED ACCOUNT TO THE DATABASE.
+    // Remember to handle errors and ensure that they get responses sent as well.
+
+    // SEND THE RESPONSE.
   }
 
   /**
