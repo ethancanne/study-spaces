@@ -275,7 +275,6 @@ class User {
 
       // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
       Object.assign(userModel, this);
-      console.log(userModel);
 
       // SAVE THE UPDATED DATABASE INSTANCE.
       await userModel.save();
