@@ -15,17 +15,17 @@ const AccountSetupForm = (props) => {
       <Form onSubmit={props.submitAccountSetup}>
         <InputField>
           <Label>Full Name</Label>
-          <TextInput value={props.fullName} onChange={props.updateFullName} />
+          <TextInput value={props.fullName} onChange={props.updateFullNameField} type="text" />
         </InputField>
 
         {/* <div className="inline"> */}
         <InputField>
           <Label>Area Code</Label>
-          <TextInput value={props.areaCode} onChange={props.updateAreaCode} />
+          <TextInput value={props.areaCode} onChange={props.updateAreaCodeField} type="text" />
         </InputField>
         <InputField>
           <Label>Date of Birth</Label>
-          <TextInput value={props.dateOfBirth} onChange={props.updateDateOfBirth} />
+          <TextInput value={props.dateOfBirth} onChange={props.updateDateOfBirthField} type="text" />
         </InputField>
         {/* </div> */}
         <InputField>
