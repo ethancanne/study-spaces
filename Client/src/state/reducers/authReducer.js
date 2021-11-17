@@ -5,7 +5,7 @@ let user = JSON.parse(localStorage.getItem("user"));
 const currentDate = Date.now();
 const jwtExpirationDate = new Date(localStorage.getItem("authenticationTokenExpirationDate"));
 const userIsLoggedIn = currentDate < jwtExpirationDate;
-const initialState = user ? { isLoggedIn: userIsLoggedIn, user } : {};
+const initialState = user ? { isLoggedIn: userIsLoggedIn, user } : { isLoggedIn: false };
 
 /**
  * This is the reducer for all actions relating to authentication

@@ -84,7 +84,7 @@ const App = (props) => {
             path="/verify/:verificationToken"
             render={(props) => {
               const accountSetupView = Views.Home.AccountSetup;
-              return <Home {...props} homeView={accountSetupView} />;
+              return isLoggedIn ? <Redirect to="/study" /> : <Home {...props} homeView={accountSetupView} />;
             }}
           />
         </Switch>
