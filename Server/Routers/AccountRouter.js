@@ -148,8 +148,8 @@ class AccountRouter {
   * Finishes setting up an account.
   * @param {String} request.body.areaCode The user's area code.
   * @param {String} request.body.name The name to set for the user.
-  * @author
-  * @date
+  * @author Cliff Croom
+  * @date   11/16/2021
   */
   static async setupAccount(request, response) {
     // GET THE USER BEING SET UP.
@@ -176,7 +176,16 @@ class AccountRouter {
     // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
     const userWasSaved = await verifiedUser.save();
     if (userWasSaved) {
-      response.json({ message: ResponseMessages.Account.SuccessAccountSetup });
+      const authentication = Authenticator.issueAuthenticationToken(verifiedUser);
+      const authenticationToken = authentication.token;
+      const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
+      verifiedUser.removeSensitiveAttributes();
+      response.json({
+        authenticationToken: authenticationToken,
+        authenticationTokenExpirationDate: authenticationTokenExpirationDate,
+        message: ResponseMessages.Account.SuccessAccountSetup,
+        user: verifiedUser
+      });
     } else {
       response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
     }

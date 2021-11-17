@@ -58,10 +58,12 @@ class AccountRouter {
     server.get(Routes.Account.UpdateAuthenticationToken, authenticator.protectRoute(), AccountRouter.updateAuthenticationToken);
     // This is used to create accounts.
     server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
+    // Gets the unverified user to complete the verification process.
+    server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
     // This is used to log users in.
     server.post(Routes.Account.Login, AccountRouter.login);
-    // Verifies a user.
-    server.post(Routes.Account.Verify, AccountRouter.verify);
+    // This is used to complete the account setup process.
+    server.post(Routes.Account.SetupAccount, AccountRouter.setupAccount);
   }
 
   // GET ROUTES.
@@ -95,8 +97,15 @@ class AccountRouter {
   * @param {String} request.body.confirmPassword The password confirmation of the user to be created.
   */
   static async createAccount(request, response) {
+    // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
+    const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
+    const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
+    if (unverifiedUserAlreadyExists) {
+      return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+    }
+
     // CHECK FOR AN EXISTING ACCOUNT.
-    const existingUser = await UnverifiedUser.getByEmail(request.body.email);
+    const existingUser = await User.getByEmail(request.body.email);
     const userAlreadyExists = Validator.isDefined(existingUser);
     if (userAlreadyExists) {
       return response.json({ message: ResponseMessages.Account.userAlreadyExists });
@@ -123,7 +132,6 @@ class AccountRouter {
       verificationLink: verificationLink
     });
   }
-
 
   /**
   * This allows the user to log in.
@@ -165,29 +173,75 @@ class AccountRouter {
   }
 
   /**
-  * Verifies an unverified user.
+  * Finishes setting up an account.
+  * @param {String} request.body.areaCode The user's area code.
+  * @param {String} request.body.name The name to set for the user.
+  * @author Cliff Croom
+  * @date   11/16/2021
+  */
+  static async setupAccount(request, response) {
+    // GET THE USER BEING SET UP.
+    const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
+    const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
+    if (unverifiedUserWasNotFound) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    // VERIFY THE USER.
+    const verificationToken = unverifiedUser.getVerificationToken();
+    const verifiedUser = await UnverifiedUser.verify(verificationToken);
+
+    // SET THE APPROPRIATE USER FIELDS.
+    const areaCodeSet = verifiedUser.setAreaCode(request.body.areaCode);
+    if (areaCodeSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+    const nameSet = verifiedUser.setName(request.body.name);
+    if (nameSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
+    const userWasSaved = await verifiedUser.save();
+    if (userWasSaved) {
+      const authentication = Authenticator.issueAuthenticationToken(verifiedUser);
+      const authenticationToken = authentication.token;
+      const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
+      verifiedUser.removeSensitiveAttributes();
+      response.json({
+        authenticationToken: authenticationToken,
+        authenticationTokenExpirationDate: authenticationTokenExpirationDate,
+        message: ResponseMessages.Account.SuccessAccountSetup,
+        user: verifiedUser
+      });
+    } else {
+      response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+  }
+
+  /**
+  * Gets the unverified user to complete the verification process.
   * @param {String} verificationToken The verification token used to verify the account.
   * @author Cameron Burkholder
   * @date   11/12/2021
   */
-  static async verify(request, response) {
+  static async getUnverifiedUser(request, response) {
     // PARSE THE VERIFICATION TOKEN.
     const verificationToken = request.body.verificationToken;
 
-    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
-    // Verifying the user creates a new user.
-    let userWasVerified = false;
-    let user = undefined;
+    // GET THE UNVERIFIED USER.
+    let unverifiedUser = undefined;
     try {
-      user = await UnverifiedUser.verify(verificationToken);
+      unverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
     } catch (error) {
       Log.writeError(error);
     } finally {
-      userWasVerified = Validator.isDefined(user);
-      if (userWasVerified) {
+      const unverifiedUserWasFound = Validator.isDefined(unverifiedUser);
+      if (unverifiedUserWasFound) {
+        unverifiedUser.removeSensitiveAttributes();
         response.json({
-          message: ResponseMessages.Account.UserWasVerified,
-          user: user
+          message: ResponseMessages.Account.UnverifiedUserWasFound,
+          unverifiedUser: unverifiedUser
         });
       } else {
         response.json({ message: ResponseMessages.Account.UserNotFound });
@@ -213,7 +267,7 @@ module.exports = AccountRouter;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 15 2021 15:21:25 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 17 2021 16:46:54 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
