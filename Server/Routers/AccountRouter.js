@@ -30,12 +30,12 @@ class AccountRouter {
     server.get(Routes.Account.UpdateAuthenticationToken, authenticator.protectRoute(), AccountRouter.updateAuthenticationToken);
     // This is used to create accounts.
     server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
+    // Gets the unverified user to complete the verification process.
+    server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
     // This is used to log users in.
     server.post(Routes.Account.Login, AccountRouter.login);
     // This is used to complete the account setup process.
-    server.post(Routes.Account.SetupAccount, authenticator.protectRoute(), AccountRouter.setupAccount);
-    // Verifies a user.
-    server.post(Routes.Account.Verify, AccountRouter.verify);
+    server.post(Routes.Account.SetupAccount, AccountRouter.setupAccount);
   }
 
   // GET ROUTES.
@@ -152,66 +152,50 @@ class AccountRouter {
   * @date
   */
   static async setupAccount(request, response) {
+    // GET THE USER BEING SET UP.
+    const user = request.user;
 
-    const user = await request.user;
-    
-    const accountWasNotCreated = Validator.isUndefined(user);
-    if (accountWasNotCreated) {
-      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-    }
-
+    // SET THE APPROPRIATE USER FIELDS.
     const areaCodeSet = user.setAreaCode(request.body.areaCode);
     if (areaCodeSet == false) {
       return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
     }
-
     const nameSet = user.setName(request.body.name);
     if (nameSet == false) {
       return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
     }
 
-    user.save();
-
-    return response.json({ message: ResponseMessages.Account.SuccessAccountSetup});
-
-
-
-    // GET THE USER BEING SET UP.
-    // With any route that uses authenticator.protectRoute(), the user can be accessed using
-    // "request.user".
-
-    // SET THE APPROPRIATE USER FIELDS.
-
-    // SAVE THE UPDATED ACCOUNT TO THE DATABASE.
-    // Remember to handle errors and ensure that they get responses sent as well.
-
-    // SEND THE RESPONSE.
+    // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
+    const userWasSaved = await user.save();
+    if (userWasSaved) {
+      response.json({ message: ResponseMessages.Account.SuccessAccountSetup });
+    } else {
+      response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
   }
 
   /**
-  * Verifies an unverified user.
+  * Gets the unverified user to complete the verification process.
   * @param {String} verificationToken The verification token used to verify the account.
   * @author Cameron Burkholder
   * @date   11/12/2021
   */
-  static async verify(request, response) {
+  static async getUnverifiedUser(request, response) {
     // PARSE THE VERIFICATION TOKEN.
     const verificationToken = request.body.verificationToken;
 
-    // USE THE VERIFICATION TOKEN TO VERIFY THE USER.
-    // Verifying the user creates a new user.
-    let userWasVerified = false;
-    let user = undefined;
+    // GET THE UNVERIFIED USER.
+    let unverifiedUser = undefined;
     try {
-      user = await UnverifiedUser.verify(verificationToken);
+      unverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
     } catch (error) {
       Log.writeError(error);
     } finally {
-      userWasVerified = Validator.isDefined(user);
-      if (userWasVerified) {
+      const unverifiedUserWasFound = Validator.isDefined(unverifiedUser);
+      if (unverifiedUserWasFound) {
         response.json({
-          message: ResponseMessages.Account.UserWasVerified,
-          user: user
+          message: ResponseMessages.Account.UnverifiedUserWasFound,
+          unverifiedUser: unverifiedUser
         });
       } else {
         response.json({ message: ResponseMessages.Account.UserNotFound });

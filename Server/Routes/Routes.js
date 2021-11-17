@@ -10,7 +10,7 @@ const Routes = {
     Login: "/api/account/login",
     SetupAccount: "/api/account/setup",
     UpdateAuthenticationToken: "/api/account/update-authentication-token",
-    Verify: "/api/account/verify"
+    GetUnverifiedUser: "/api/account/get-unverified-user"
   },
   StaticResources: {
     Index: "/*"
