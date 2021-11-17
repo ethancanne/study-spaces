@@ -3,21 +3,21 @@ import AccountSetupForm from "../../../components/AccountSetupForm/AccountSetupF
 import Label from "../../../core/Label/Label";
 import "./AccountSetupView.scss";
 import { useParams } from "react-router-dom";
-import Routes from "../../../../../../Server/Routes/Routes";
-import ResponseMessages from "../../../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../../Server/Routes/Routes";
+import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../../state/actions";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
-import Validator from "../../../../../../Server/Validator";
+import Validator from "../../../../../Server/Validator";
 import Views from "../../Views";
 import InputField from "../../../core/InputField/InputField";
 
 const AccountSetupView = (props) => {
   const BLANK = "";
   const [userIsVerified, setUserIsVerified] = useState(false);
-  const [fullName, setFullName] = useState(BLANK);
+  const [name, setName] = useState(BLANK);
   const [areaCode, setAreaCode] = useState(BLANK);
   const [dateOfBirth, setDateOfBirth] = useState(BLANK);
   const [profilePicture, setProfilePicture] = useState(BLANK);
@@ -53,7 +53,7 @@ const AccountSetupView = (props) => {
         const verificationWasValid = ResponseMessages.Account.UnverifiedUserWasFound === response.data.message;
 
         if (verificationWasValid) {
-          setUser(response.data.user);
+          setUser(response.data.unverifiedUser);
           setUserIsVerified(true);
         }
       }
@@ -71,12 +71,11 @@ const AccountSetupView = (props) => {
     event.stopPropagation();
 
     let response;
-    console.log(user.id);
     try {
       response = await axios.post(Routes.Account.SetupAccount, {
         verificationToken,
         user,
-        fullName,
+        name,
         areaCode,
         dateOfBirth,
         profilePicture
@@ -87,7 +86,6 @@ const AccountSetupView = (props) => {
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
       const responseIsDefined = Validator.isDefined(response);
-      console.log("ResponseIsDefined" + responseIsDefined);
 
       if (responseIsDefined) {
         // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
@@ -95,7 +93,6 @@ const AccountSetupView = (props) => {
 
         if (accountSetupWasValid) {
           const user = response.data;
-          console.log("got user:" + JSON.stringify(response.data.user));
           dispatch(signIn(response.data));
         }
       }
@@ -117,8 +114,8 @@ const AccountSetupView = (props) => {
    * @author Ethan Cannelongo
    * @date   11/13/21
    */
-  const updateFullNameField = (event) => {
-    setFullName(event.target.value);
+  const updateNameField = (event) => {
+    setName(event.target.value);
     setAccountSetupErrorMsg(BLANK);
   };
 
@@ -164,11 +161,11 @@ const AccountSetupView = (props) => {
         <div>
           <AccountSetupForm
             user={user}
-            fullName={fullName}
+            name={name}
             areaCode={areaCode}
             dateOfBirth={dateOfBirth}
             profilePicture={profilePicture}
-            updateFullNameField={updateFullNameField}
+            updateNameField={updateNameField}
             updateAreaCodeField={updateAreaCodeField}
             updateDateOfBirthField={updateDateOfBirthField}
             updateProfilePicture={updateProfilePicture}

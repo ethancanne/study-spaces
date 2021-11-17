@@ -15,7 +15,7 @@ const AccountSetupForm = (props) => {
       <Form onSubmit={props.submitAccountSetup}>
         <InputField>
           <Label>Full Name</Label>
-          <TextInput value={props.fullName} onChange={props.updateFullNameField} type="text" />
+          <TextInput value={props.name} onChange={props.updateNameField} type="text" />
         </InputField>
 
         {/* <div className="inline"> */}
