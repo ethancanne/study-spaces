@@ -3,14 +3,14 @@ import AccountSetupForm from "../../../components/AccountSetupForm/AccountSetupF
 import Label from "../../../core/Label/Label";
 import "./AccountSetupView.scss";
 import { useParams } from "react-router-dom";
-import Routes from "../../../../../Server/Routes/Routes";
-import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../../../Server/Routes/Routes";
+import ResponseMessages from "../../../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { signIn } from "../../../state/actions";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
-import Validator from "../../../../../Server/Validator";
+import Validator from "../../../../../../Server/Validator";
 import Views from "../../Views";
 import InputField from "../../../core/InputField/InputField";
 
@@ -66,13 +66,16 @@ const AccountSetupView = (props) => {
    * @date   11/13/21
    */
   const submitAccountSetup = async (event) => {
-    // SUBMIT THE CREATE ACCOUNT REQUEST.
+    // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
     event.preventDefault();
     event.stopPropagation();
+
     let response;
+    console.log(user.id);
     try {
       response = await axios.post(Routes.Account.SetupAccount, {
-        id: user.id,
+        verificationToken,
+        user,
         fullName,
         areaCode,
         dateOfBirth,
@@ -80,18 +83,20 @@ const AccountSetupView = (props) => {
       });
     } catch (error) {
       console.log(error);
-      setAccountCreationErrorMsg("error");
+      setAccountSetupErrorMsg("error");
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
       const responseIsDefined = Validator.isDefined(response);
+      console.log("ResponseIsDefined" + responseIsDefined);
 
       if (responseIsDefined) {
         // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
         const accountSetupWasValid = ResponseMessages.Account.SuccessAccountSetup === response.data.message;
 
         if (accountSetupWasValid) {
-          const user = response.data.user;
-          dispatch(signIn(user));
+          const user = response.data;
+          console.log("got user:" + JSON.stringify(response.data.user));
+          dispatch(signIn(response.data));
         }
       }
     }
