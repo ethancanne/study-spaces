@@ -201,6 +201,7 @@ class AccountRouter {
     } finally {
       const unverifiedUserWasFound = Validator.isDefined(unverifiedUser);
       if (unverifiedUserWasFound) {
+        unverifiedUser.removeSensitiveAttributes();
         response.json({
           message: ResponseMessages.Account.UnverifiedUserWasFound,
           unverifiedUser: unverifiedUser
