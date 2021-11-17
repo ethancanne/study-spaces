@@ -77,7 +77,7 @@ class UnverifiedUser {
     let verificationToken = undefined;
     while (tokenIsNotUnique) {
       // GENERATE A RANDOM TOKEN.
-      verificationToken = RandomWords({ exactly: 3, join: "-" });
+      verificationToken = RandomWords({ exactly: 5, join: "-" });
 
       // CHECK THE UNVERIFIED USERS LIST TO SEE IF THE TOKEN IS ALREADY IN USE.
       let existingUnverifiedUser = undefined;
