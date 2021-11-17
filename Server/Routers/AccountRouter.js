@@ -33,12 +33,12 @@ class AccountRouter {
     // This is used to log users in.
     server.post(Routes.Account.Login, AccountRouter.login);
     // This is used to complete the account setup process.
-    server.post(Routes.Account.SetupAccount, AccountRouter.setupAccount);
+    server.post(Routes.Account.SetupAccount, authenticator.protectRoute(), AccountRouter.setupAccount);
     // Verifies a user.
     server.post(Routes.Account.Verify, AccountRouter.verify);
   }
 
-  // GET ROUTES.--------------------------------------------------------------------
+  // GET ROUTES.
   /**
   * This updates a user's authentication token. This is done
   * for the purpose of persistent logins.
@@ -61,7 +61,7 @@ class AccountRouter {
     response.json(responseMessage);
   }
 
-  // POST ROUTES.--------------------------------------------------------------------
+  // POST ROUTES.
   /**
   * Creates an unverified account.
   * @param {String} request.body.email The email address of the user to be created.
@@ -70,7 +70,6 @@ class AccountRouter {
   */
   static async createAccount(request, response) {
     // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
-    console.log(request)
     const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
     const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
     if (unverifiedUserAlreadyExists) {
@@ -85,7 +84,7 @@ class AccountRouter {
     }
 
     // CREATE THE UNVERIFIED ACCOUNT.
-    const unverifiedUser = await UnverifiedUser.createUnverifiedUser(request.body.email, request.body.password);
+    const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
     const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
     if (accountWasNotCreated) {
       return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
@@ -98,7 +97,7 @@ class AccountRouter {
     Log.write(verificationLink);
 
     // SEND THE RESPONSE.
-    unverifiedUser.toJSON();
+    unverifiedUser.removeSensitiveAttributes();
     response.json({
       message: ResponseMessages.Account.SuccessAccountCreated,
       unverifiedUser: unverifiedUser,
@@ -132,7 +131,7 @@ class AccountRouter {
       const authentication = Authenticator.issueAuthenticationToken(user);
       const authenticationToken = authentication.token;
       const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
-      user.toJSON();
+      user.removeSensitiveAttributes();
       return response.json({
         authenticationToken: authenticationToken,
         authenticationTokenExpirationDate: authenticationTokenExpirationDate,
@@ -154,22 +153,28 @@ class AccountRouter {
   */
   static async setupAccount(request, response) {
 
-    const areaCode = request.body.areaCode
-    const name = request.body.fullName
-    const profilePicture = request.body.profilePicture
-
-    const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken); //CHANGED
-
-    const verifiedUser = await unverifiedUser.setupAccount(name, areaCode, profilePicture) //Call the create method passing in the user, which saves to the DB
-
-    const userWasSetup = Validator.isDefined(verifiedUser);
-    if (!userWasSetup) {
+    const user = await request.user;
+    
+    const accountWasNotCreated = Validator.isUndefined(user);
+    if (accountWasNotCreated) {
       return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
     }
 
-    console.log("setupUser:" + verifiedUser)
+    const areaCodeSet = user.setAreaCode(request.body.areaCode);
+    if (areaCodeSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
 
-    return response.json({ user: verifiedUser, message: ResponseMessages.Account.SuccessAccountSetup});
+    const nameSet = user.setName(request.body.name);
+    if (nameSet == false) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    user.save();
+
+    return response.json({ message: ResponseMessages.Account.SuccessAccountSetup});
+
+
 
     // GET THE USER BEING SET UP.
     // With any route that uses authenticator.protectRoute(), the user can be accessed using
@@ -198,7 +203,7 @@ class AccountRouter {
     let userWasVerified = false;
     let user = undefined;
     try {
-      user = await UnverifiedUser.getByVerificationToken(verificationToken); //CHANGED
+      user = await UnverifiedUser.verify(verificationToken);
     } catch (error) {
       Log.writeError(error);
     } finally {

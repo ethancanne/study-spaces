@@ -8,8 +8,7 @@
     "dev": "concurrently --kill-others \"nodemon --watch Server Server/Server.js\" \"webpack server --mode development\"",
     "doc": "./node_modules/.bin/jsdoc -c jsdoc.config.json",
     "heroku-postbuild": "npm prune --production",
-    "start": "node Server/Server.js",
-    "debug": "node inspect Server/Server.js"
+    "start": "node Server/Server.js"
   },
   "repository": {
     "type": "git",

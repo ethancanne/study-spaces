@@ -10,8 +10,8 @@ import allReducers from "./state/reducers";
 const persistientState = {};
 const store = createStore(
   allReducers,
-  persistientState,
-  compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+  persistientState
+  //compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 );
 
 // store.subscribe(()=>{

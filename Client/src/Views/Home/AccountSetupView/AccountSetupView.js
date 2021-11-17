@@ -65,17 +65,12 @@ const AccountSetupView = (props) => {
    * @author Ethan Cannelongo
    * @date   11/13/21
    */
-  const submitAccountSetup = async (event) => {
+  const submitAccountSetup = async () => {
     // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
-    event.preventDefault();
-    event.stopPropagation();
-
     let response;
-    console.log(user.id);
     try {
       response = await axios.post(Routes.Account.SetupAccount, {
-        verificationToken,
-        user,
+        id: user.id,
         fullName,
         areaCode,
         dateOfBirth,
@@ -95,7 +90,6 @@ const AccountSetupView = (props) => {
 
         if (accountSetupWasValid) {
           const user = response.data.user;
-          console.log("got user:" + user);
           dispatch(signIn(user));
         }
       }
