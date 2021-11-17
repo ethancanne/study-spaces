@@ -153,20 +153,28 @@ class AccountRouter {
   */
   static async setupAccount(request, response) {
     // GET THE USER BEING SET UP.
-    const user = request.user;
+    const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
+    const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
+    if (unverifiedUserWasNotFound) {
+      return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+    }
+
+    // VERIFY THE USER.
+    const verificationToken = unverifiedUser.getVerificationToken();
+    const verifiedUser = await UnverifiedUser.verify(verificationToken);
 
     // SET THE APPROPRIATE USER FIELDS.
-    const areaCodeSet = user.setAreaCode(request.body.areaCode);
+    const areaCodeSet = verifiedUser.setAreaCode(request.body.areaCode);
     if (areaCodeSet == false) {
       return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
     }
-    const nameSet = user.setName(request.body.name);
+    const nameSet = verifiedUser.setName(request.body.name);
     if (nameSet == false) {
       return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
     }
 
     // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
-    const userWasSaved = await user.save();
+    const userWasSaved = await verifiedUser.save();
     if (userWasSaved) {
       response.json({ message: ResponseMessages.Account.SuccessAccountSetup });
     } else {

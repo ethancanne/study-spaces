@@ -41,7 +41,7 @@ const AccountSetupView = (props) => {
     // SUBMIT THE VERIFY USER REQUEST.
     let response;
     try {
-      response = await axios.post(Routes.Account.Verify, {
+      response = await axios.post(Routes.Account.GetUnverifiedUser, {
         verificationToken: verificationToken
       });
     } catch (error) {
@@ -50,7 +50,7 @@ const AccountSetupView = (props) => {
       const responseIsDefined = Validator.isDefined(response);
       if (responseIsDefined) {
         // IF THE USER VERIFICATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-        const verificationWasValid = ResponseMessages.Account.UserWasVerified === response.data.message;
+        const verificationWasValid = ResponseMessages.Account.UnverifiedUserWasFound === response.data.message;
 
         if (verificationWasValid) {
           setUser(response.data.user);

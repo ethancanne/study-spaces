@@ -288,7 +288,6 @@ class UnverifiedUser {
       }
     }
   }
-
 }
 
 module.exports = UnverifiedUser;
