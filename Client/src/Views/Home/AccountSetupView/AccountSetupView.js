@@ -65,8 +65,10 @@ const AccountSetupView = (props) => {
    * @author Ethan Cannelongo
    * @date   11/13/21
    */
-  const submitAccountSetup = async () => {
-    // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
+  const submitAccountSetup = async (event) => {
+    // SUBMIT THE CREATE ACCOUNT REQUEST.
+    event.preventDefault();
+    event.stopPropagation();
     let response;
     try {
       response = await axios.post(Routes.Account.SetupAccount, {
@@ -82,7 +84,6 @@ const AccountSetupView = (props) => {
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
       const responseIsDefined = Validator.isDefined(response);
-      console.log("ResponseIsDefined" + responseIsDefined);
 
       if (responseIsDefined) {
         // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.

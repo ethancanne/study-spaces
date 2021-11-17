@@ -5,6 +5,7 @@
   "main": "./Server/Server.js",
   "scripts": {
     "build": "webpack --mode production",
+    "debug": "node inspect Server/Server.js",
     "dev": "concurrently --kill-others \"nodemon --watch Server Server/Server.js\" \"webpack server --mode development\"",
     "doc": "./node_modules/.bin/jsdoc -c jsdoc.config.json",
     "heroku-postbuild": "npm prune --production",
