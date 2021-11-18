@@ -37,7 +37,7 @@ const StudyGroupSchema = new Schema({
   },
   members: {
     type: [String],
-    required: true
+    required: false
   },
   name: {
     type: String,
