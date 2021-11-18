@@ -19,7 +19,7 @@ const AccountSetupView = (props) => {
   const [userIsVerified, setUserIsVerified] = useState(false);
   const [name, setName] = useState(BLANK);
   const [areaCode, setAreaCode] = useState(BLANK);
-  const [dateOfBirth, setDateOfBirth] = useState(BLANK);
+  const [is18OrOver, setIs18OrOver] = useState(false);
   const [profilePicture, setProfilePicture] = useState(BLANK);
   const [accountSetupErrorMsg, setAccountSetupErrorMsg] = useState(BLANK);
   const [user, setUser] = useState({});
@@ -70,6 +70,10 @@ const AccountSetupView = (props) => {
     event.preventDefault();
     event.stopPropagation();
 
+    if (!is18OrOver) {
+      return setAccountSetupErrorMsg("Uh oh, you're not old enough?");
+    }
+
     let response;
     try {
       response = await axios.post(Routes.Account.SetupAccount, {
@@ -77,12 +81,12 @@ const AccountSetupView = (props) => {
         user,
         name,
         areaCode,
-        dateOfBirth,
+        is18OrOver,
         profilePicture
       });
     } catch (error) {
       console.log(error);
-      setAccountSetupErrorMsg("error");
+      setAccountSetupErrorMsg("Uh oh, there's been an error: " + error.message);
     } finally {
       // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
       const responseIsDefined = Validator.isDefined(response);
@@ -136,8 +140,8 @@ const AccountSetupView = (props) => {
    * @author Ethan Cannelongo
    * @date   11/13/21
    */
-  const updateDateOfBirthField = (event) => {
-    setDateOfBirth(event.target.value);
+  const updateIs18OrOver = (event) => {
+    setIs18OrOver(event.target.checked);
     setAccountSetupErrorMsg(BLANK);
   };
 
@@ -163,11 +167,11 @@ const AccountSetupView = (props) => {
             user={user}
             name={name}
             areaCode={areaCode}
-            dateOfBirth={dateOfBirth}
+            is18OrOver={is18OrOver}
             profilePicture={profilePicture}
             updateNameField={updateNameField}
             updateAreaCodeField={updateAreaCodeField}
-            updateDateOfBirthField={updateDateOfBirthField}
+            updateIs18OrOver={updateIs18OrOver}
             updateProfilePicture={updateProfilePicture}
             submitAccountSetup={submitAccountSetup}
           />

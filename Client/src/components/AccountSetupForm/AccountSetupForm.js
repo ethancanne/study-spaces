@@ -18,19 +18,19 @@ const AccountSetupForm = (props) => {
           <TextInput value={props.name} onChange={props.updateNameField} type="text" />
         </InputField>
 
-        {/* <div className="inline"> */}
         <InputField>
           <Label>Area Code</Label>
           <TextInput value={props.areaCode} onChange={props.updateAreaCodeField} type="text" />
         </InputField>
         <InputField>
-          <Label>Date of Birth</Label>
-          <TextInput value={props.dateOfBirth} onChange={props.updateDateOfBirthField} type="text" />
+          <div className="inline">
+            <Label className="left Label">Are you 18 or older</Label>
+            <TextInput className="right" value={props.is18OrOver} onChange={props.updateIs18OrOver} type="checkbox" />
+          </div>
         </InputField>
-        {/* </div> */}
         <InputField>
           <Label>Profile Picture</Label>
-          <div className="inline">
+          <div className="photo">
             <FileBase64
               id="fileInput right"
               multiple={false}

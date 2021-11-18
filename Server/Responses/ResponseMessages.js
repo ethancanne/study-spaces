@@ -6,6 +6,7 @@
 const ResponseMessages = {
   Account: {
     ErrorCreateAccount: "An error occurred while attempting to create an account.",
+    NotOver18: "You need to be 18 or older to create an account.",
     IncorrectPassword: "The password provided is incorrect.",
     SuccessAccountCreated: "The account was created successfully.",
     SuccessLogin: "The login was successful.",

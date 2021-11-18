@@ -14,7 +14,6 @@ export const store = createStore(
   compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 );
 
-
 // //STORE - The globalized state for our app
 
 // //ACTION - Describes what you want to do with the state

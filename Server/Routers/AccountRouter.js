@@ -152,6 +152,12 @@ class AccountRouter {
   * @date   11/16/2021
   */
   static async setupAccount(request, response) {
+    
+    //VERIFY THE USER IS OVER 18
+    if (!(request.body.is18OrOver)){
+      return response.json({ message: ResponseMessages.Account.NotOver18 });
+    }
+    
     // GET THE USER BEING SET UP.
     const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
     const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
