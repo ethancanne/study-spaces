@@ -130,7 +130,24 @@ class StudyGroup {
   *
   */
   static async create(name, owner, subject) {
+    // CREATE THE STUDY GROUP.
+    const newStudyGroup = new StudyGroupModel({
+      name: name,
+      owner: owner,
+      subject: subject
+      // Will we need all required attributes?
+    });
 
+    // SAVE THE STUDY GROUP.
+    try {
+      await newStudyGroup.save();
+    } catch(error) {
+      Log.writeError(error);
+    }
+
+    // INSTANTIATE THE MODEL.
+    const StudyGroup = new StudyGroup(newStudyGroup);
+    return StudyGroup;
   }
 
   /**
