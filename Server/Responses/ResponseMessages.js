@@ -14,7 +14,7 @@ const ResponseMessages = {
     SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",
     UnverifiedUserWasFound: "The unverified user was found.",
     UserAlreadyExists: "A user with that email address already exists.",
-    UserNotFound: "The user was not found.",
+    UserNotFound: "The user was not found."
   }
 };
 module.exports = ResponseMessages;
