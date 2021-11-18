@@ -1,3 +1,4 @@
+//AUTH REDUCERS
 export const signIn = (user) => {
   return {
     type: "SIGN_IN",
@@ -16,5 +17,18 @@ export const createAccount = (unverifiedUser) => {
     payload: {
       unverifiedUser
     }
+  };
+};
+
+//POPUP REDUCER
+export const showStudyGroupPopup = () => {
+  return {
+    type: "SHOW_STUDY_GROUP_POPUP"
+  };
+};
+
+export const closePopup = () => {
+  return {
+    type: "CLOSE_POPUP"
   };
 };

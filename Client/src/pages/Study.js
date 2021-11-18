@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signOut } from "../state/actions";
+import { signOut, showStudyGroupPopup } from "../state/actions";
 
 import Button from "../core/Button/Button.js";
 import { Redirect } from "react-router";
@@ -17,6 +17,7 @@ const Study = () => {
         <div>
           <p>Welcome {user.name}, you are logged in!</p>
           <Button onClick={() => dispatch(signOut())}>Log out</Button>
+          <Button onClick={() => dispatch(showStudyGroupPopup())}>CLICK</Button>
         </div>
       ) : (
         <div>
