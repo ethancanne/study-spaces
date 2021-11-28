@@ -1,10 +1,12 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signOut, showStudyGroupPopup } from "../state/actions";
+import { signOut, showStudyGroupPopup } from "../../state/actions";
 
-import Button from "../core/Button/Button.js";
+import Button from "../../core/Button/Button.js";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
+
+import "./Study.scss";
 
 const Study = () => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
@@ -12,12 +14,14 @@ const Study = () => {
   const dispatch = useDispatch();
 
   return (
-    <>
+    <div className="study">
       {isLoggedIn ? (
         <div>
           <p>Welcome {user.name}, you are logged in!</p>
           <Button onClick={() => dispatch(signOut())}>Log out</Button>
-          <Button onClick={() => dispatch(showStudyGroupPopup())}>CLICK</Button>
+          <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}>
+            +
+          </button>
         </div>
       ) : (
         <div>
@@ -25,7 +29,7 @@ const Study = () => {
           <Link to="/">Log In</Link>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

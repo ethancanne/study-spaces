@@ -32,3 +32,10 @@ export const closePopup = () => {
     type: "CLOSE_POPUP"
   };
 };
+
+//Study Reducer
+export const createStudyGroup = (group) => {
+  return {
+    type: "CREATE_STUDY_GROUP"
+  };
+};

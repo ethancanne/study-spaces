@@ -1,32 +1,37 @@
 import React, { useState } from "react";
-import Views from "../Views";
-import "./popup.scss";
+import "./Popup.scss";
 import Popups from "../Popups";
 import { useSelector, useDispatch } from "react-redux";
 import { closePopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
 
+/**
+ * This is the presentational component that presents different popup views according to the
+ * view property in the popupReducer.
+ * @author Ethan Cannelongo
+ * @date   11/25/2021
+ */
 const Popup = (props) => {
-  const [view, setPopupView] = useState(props.popupView ? props.popupView : "");
+  const view = useSelector((state) => state.popupReducer.view);
   const dispatch = useDispatch();
   let popupView = <></>;
 
   switch (view) {
     case Popups.StudyGroup.Create:
-      popupView = <CreateStudyGroupView setPopupView={setPopupView} />;
-      console.log(view);
+      popupView = <CreateStudyGroupView />;
+      console.log("HELLo");
       break;
   }
 
   return (
     <div>
-      <div className="background"></div>
-
-      <div className="popup">
+      <div className={"background " + (props.isShowing ? "active" : "")}></div>
+      <div className={"popup " + (props.isShowing ? "active" : "")}>
         <div className="popup-top">
+          <h1>{view}</h1>
           <button onClick={() => dispatch(closePopup())}>X</button>
         </div>
-        {!props.children ? popupView : props.children}
+        <div className="popup-body">{!props.children ? popupView : props.children}</div>
       </div>
     </div>
   );
