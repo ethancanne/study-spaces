@@ -7,14 +7,13 @@ import studyConstants from "../constants/studyConstants";
  * @date   12/20/2021
  */
 const studyReducer = (state = { studyGroups: {} }, action) => {
-  switch (action.type) {
-      
-    case studyConstants.CREATE_STUDY_GROUP:
-      return { ...state, studyGroups: popups.StudyGroup.Create};
+    switch (action.type) {
+        case studyConstants.CREATE_STUDY_GROUP:
+            return { ...state, studyGroups: popups.StudyGroup.Create };
 
-    default:
-      return state;
-  }
+        default:
+            return state;
+    }
 };
 
 export default popupReducer;
