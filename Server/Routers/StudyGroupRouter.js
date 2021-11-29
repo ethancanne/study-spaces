@@ -32,11 +32,11 @@ class StudyGroupRouter {
     static async createStudyGroup(request, response) {
         
         // CHECK FOR AN EXISTING STUDY GROUP.
-        const existingStudyGroup = await StudyGroup.getById(request.body.studyGroupId);
-        const existingStudyGroupAlreadyExists = Validator.isDefined(existingStudyGroup);
-        if (existingStudyGroupAlreadyExists) {
-            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupAlreadyExists });
-        }
+        // const existingStudyGroup = await StudyGroup.getById(request.body.studyGroupId);
+        // const existingStudyGroupAlreadyExists = Validator.isDefined(existingStudyGroup);
+        // if (existingStudyGroupAlreadyExists) {
+        //     return response.json({ message: ResponseMessages.StudyGroup.StudyGroupAlreadyExists });
+        // }
 
         // CREATE STUDY GROUP
         const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject)
