@@ -6,27 +6,27 @@ import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import { Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signIn, signOut } from "./state/actions";
+import Popup from "./Views/Popup/Popup";
 
 import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
 import Routes from "../../Server/Routes/Routes.js";
 
 // PAGES.
 import Home from "./Pages/Home/Home.js";
-import Study from "./Pages/Study.js";
-import AccountSetupView from "./Views/Home/AccountSetupView/AccountSetupView";
+import Study from "./Pages/Study/Study.js";
 import Views from "./Views/Views";
 
 /**
  * This is the root presentational component that processes user authentication
  * and manages the display of the application"s pages.
- * @author Cameron Burkholder
+ * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/20/2021
  */
 const App = (props) => {
   const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  const isUnverifiedUser = useSelector((state) => state.authReducer.isUnverifiedUser);
   const [hasNotMounted, setHasNotMounted] = useState(false);
   const dispatch = useDispatch();
+  const popupIsShowing = useSelector((state) => state.popupReducer.isShowing);
 
   /**
    * Checks if the page has finished loaded and refreshes the authentication token
@@ -72,6 +72,7 @@ const App = (props) => {
   const verifyUser = (verificationToken) => {};
   return (
     <Router>
+      <Popup isShowing={popupIsShowing} />
       <div className="container">
         <Switch>
           <Route exact path="/">

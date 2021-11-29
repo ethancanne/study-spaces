@@ -15,7 +15,6 @@ const Validator = require("../Validator.js");
 * @author Clifton Croom
 * @date   11/17/2021
 */
-
 class StudyGroupRouter {
     /**
     * Initialize the router and serve the routes.
@@ -29,8 +28,11 @@ class StudyGroupRouter {
       server.post(Routes.StudyGroup.CreateStudyGroup, StudyGroupRouter.createStudyGroup);
     }
 
+    /**
+    *
+    */
     static async createStudyGroup(request, response) {
-        
+
         // CHECK FOR AN EXISTING STUDY GROUP.
         // const existingStudyGroup = await StudyGroup.getById(request.body.studyGroupId);
         // const existingStudyGroupAlreadyExists = Validator.isDefined(existingStudyGroup);

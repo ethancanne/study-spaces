@@ -96,7 +96,6 @@ const AccountSetupView = (props) => {
         const accountSetupWasValid = ResponseMessages.Account.SuccessAccountSetup === response.data.message;
 
         if (accountSetupWasValid) {
-          const user = response.data;
           dispatch(signIn(response.data));
         }
       }

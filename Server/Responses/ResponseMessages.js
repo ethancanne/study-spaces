@@ -15,6 +15,9 @@ const ResponseMessages = {
     UnverifiedUserWasFound: "The unverified user was found.",
     UserAlreadyExists: "A user with that email address already exists.",
     UserNotFound: "The user was not found."
+  },
+  Study: {
+    SuccessCreateStudyGroup: "The study group was created sucessfully"
   }
 };
 module.exports = ResponseMessages;

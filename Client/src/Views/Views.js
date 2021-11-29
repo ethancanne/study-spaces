@@ -1,6 +1,6 @@
 /**
  * The various possible views that each page can present.
- * @author Cameron Burkholder
+ * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/20/2021
  */
 const Views = {
