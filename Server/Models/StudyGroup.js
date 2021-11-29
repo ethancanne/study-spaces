@@ -15,7 +15,7 @@ const StudyGroupSchema = new Schema({
     type: String,
     required: true
   },
-  class: {
+  course: { //May cause problems
     type: String,
     required: false
   },
@@ -73,7 +73,7 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
 /**
 * Provides an interface for working with study groups in the database.
 * @property {String} areaCode The area code for the study group.
-* @property {String=} class The class the study group is associated with.
+* @property {String=} course The course the study group is associated with.
 * @property {String} feed The document ID for the study group's feed.
 * @property {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
 * @property {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
@@ -129,13 +129,17 @@ class StudyGroup {
   * @return {StudyGroup} The created study group.
   *
   */
-  static async create(name, owner, subject) {
+  static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school) {
     // CREATE THE STUDY GROUP.
     const newStudyGroup = new StudyGroupModel({
       name: name,
       owner: owner,
-      subject: subject
-      // Will we need all required attributes?
+      subject: subject,
+      areaCode: areaCode,
+      isOnlineGroup: isOnlineGroup,
+      isTutorGroup: isTutorGroup,
+      course: course,
+      school: school
     });
 
     // SAVE THE STUDY GROUP.
@@ -168,11 +172,11 @@ class StudyGroup {
   }
 
   /**
-  * Gets the study group's class.
-  * @return {String} The study group's associated class.
+  * Gets the study group's course.
+  * @return {String} The study group's associated course.
   *
   */
-  async getClass() {
+  async getCourse() {
 
   }
 
@@ -377,12 +381,12 @@ class StudyGroup {
   }
 
   /**
-  * Sets the study group's class.
-  * @param {String} className The class to set.
-  * @return {Boolean} True if the class was set, false otherwise.
+  * Sets the study group's course.
+  * @param {String} courseName The course to set.
+  * @return {Boolean} True if the course was set, false otherwise.
   *
   */
-  async setClass(className) {
+  async setCourse(courseName) {
 
   }
 
