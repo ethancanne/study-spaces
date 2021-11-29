@@ -32,25 +32,17 @@ class StudyGroupRouter {
     *
     */
     static async createStudyGroup(request, response) {
+      // CREATE STUDY GROUP.
+      const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject);
+      const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
+      if (studyGroupWasNotCreated) {
+          return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
+      }
 
-        // CHECK FOR AN EXISTING STUDY GROUP.
-        // const existingStudyGroup = await StudyGroup.getById(request.body.studyGroupId);
-        // const existingStudyGroupAlreadyExists = Validator.isDefined(existingStudyGroup);
-        // if (existingStudyGroupAlreadyExists) {
-        //     return response.json({ message: ResponseMessages.StudyGroup.StudyGroupAlreadyExists });
-        // }
-
-        // CREATE STUDY GROUP
-        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject)
-        const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
-        if (studyGroupWasNotCreated) {
-            return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
-        }
-
-        response.json({
-            message: ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
-            newStudyGroup: newStudyGroup
-          });
+      response.json({
+        message: ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
+        newStudyGroup: newStudyGroup
+      });
 
     }
 }

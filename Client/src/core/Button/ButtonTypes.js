@@ -4,9 +4,9 @@
  * @date   10/21/2021
  */
 const ButtonTypes = {
-  Primary: "Primary",
-  Creation: "Creation",
-  Destrucive: "Destructive"
+    Primary: "Primary",
+    Creation: "Creation",
+    Destrucive: "Destructive"
 };
 
 export default ButtonTypes;

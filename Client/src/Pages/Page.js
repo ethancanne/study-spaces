@@ -6,11 +6,11 @@ import React from "react";
  * @date   10/20/2021
  */
 const Page = (props) => {
-  return (
-    <div className="page" {...props}>
-      {props.children}
-    </div>
-  );
+    return (
+        <div className="page" {...props}>
+            {props.children}
+        </div>
+    );
 };
 
 export default Page;
