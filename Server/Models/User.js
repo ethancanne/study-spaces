@@ -123,7 +123,7 @@ class User {
   *
   */
   getAreaCode() {
-
+    return String(this.areaCode);
   }
 
   /**
@@ -195,7 +195,7 @@ class User {
   *
   */
   getConversations() {
-
+    return this.conversations; //Needs Second Look
   }
 
   /**
@@ -204,7 +204,7 @@ class User {
   *
   */
   getEmail() {
-
+    return String(this.email);
   }
 
   /**
@@ -224,7 +224,7 @@ class User {
   *
   */
   getName() {
-
+    return String(this.name)
   }
 
   /**
@@ -244,7 +244,7 @@ class User {
   *
   */
   getProfilePicture() {
-
+    return this.profilePicture; //Needs second look
   }
 
   /**
@@ -306,7 +306,9 @@ class User {
   *
   */
   async setEmail(email) {
-
+    this.email = email;
+    const emailSet = Validator.isDefined(this.email);
+    return emailSet;
   }
 
   /**
