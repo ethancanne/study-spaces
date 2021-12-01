@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Server/Routers/StudyGroupRouter.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Server/Routers/StudyGroupRouter.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Path = require("path");
+
+const Authenticator = require("../Authenticator.js");
+const Configuration = require("../../Configuration.js");
+const Log = require("../Log.js");
+const ResponseCodes = require("../Responses/ResponseCodes.js");
+const ResponseMessages = require("../Responses/ResponseMessages.js");
+const Routes = require("../Routes/Routes.js");
+const StaticResources = require("../Routes/StaticResources.js");
+const StudyGroup = require("../Models/StudyGroup.js");
+const Validator = require("../Validator.js");
+
+/**
+ * The router used to serve account-related requests.
+ * @author Clifton Croom
+ * @date   11/17/2021
+ */
+class StudyGroupRouter {
+    /**
+     * Initialize the router and serve the routes.
+     * @param {Server} server The server instance used to provide the routes.
+     * @param {Authenticator} authenticator The authenticator used to protect the routes.
+     * @author Clifton Croom
+     * @date   11/17/2021
+     */
+    static serveRoutes(server, authenticator) {
+        // This is used to create study groups.
+        server.post(Routes.StudyGroup.CreateStudyGroup, StudyGroupRouter.createStudyGroup);
+    }
+
+    /**
+     *
+     */
+    static async createStudyGroup(request, response) {
+        // CREATE STUDY GROUP.
+        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject);
+        const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
+        if (studyGroupWasNotCreated) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
+        }
+
+        response.json({
+            message: ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
+            newStudyGroup: newStudyGroup
+        });
+    }
+}
+module.exports = StudyGroupRouter;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

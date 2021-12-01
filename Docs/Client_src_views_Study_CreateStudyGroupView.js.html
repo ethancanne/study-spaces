@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Client/src/views/Study/CreateStudyGroupView.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Client/src/views/Study/CreateStudyGroupView.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import CreateStudyGroupForm from "../../components/CreateStudyGroupForm/CreateStudyGroupForm";
+import { useDispatch } from "react-redux";
+
+/**
+ * This is a specific view that is used in a popup to allow a user to create a study group
+ * @author Cameron Burkholder and Ethan Cannelongo
+ * @date   11/20/2021
+ */
+const CreateStudyGroupView = () => {
+    const dispatch = useDispatch();
+
+    const BLANK = "";
+    const [title, setTitle] = useState(BLANK); //TextInput tag
+    const [description, setDescription] = useState(BLANK); //TextInput tag
+    const [category, setCategory] = useState(BLANK); //select tag, filled with option tags
+    const [classCode, setClassCode] = useState(BLANK); //TextInput tag
+    const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false); //Input tag with type "checkbox"
+    const [isTutorGroup, setIsTutorGroup] = useState(false); //Toggle tag
+    const [isOnlineGroup, setIsOnlineGroup] = useState(false); //Toggle tag
+
+    const [groupColor, setGroupColor] = useState(BLANK); //TextInput tag for now
+
+    /**
+     * Makes an api call to the Create study group route, passing in the information entered in the form and
+     * rendering the client according to the response received
+     * @author Stacy Popenfoose
+     * @date   12/08/21
+     */
+    const submitCreateStudyGroup = async (event) => {
+        //Prevent default form behavior
+        event.preventDefault();
+        event.stopPropagation();
+
+        //Use axios to assign a variable called "response" to the response received when awaiting an API call to "Routes.Study.CreateStudyGroup," passing in an object with all of the values entered into the form.
+
+        //Wrap the axios call in a try-catch block, using the catch block to call "setErrorMessage();" passing in "e.message"
+
+        //In the finally block, use if statements to validate the following:
+        //check if the response is valid, using Validator.isDefined(response),
+        //if so, check if the response is successful, using response.data.message === ResponseMessages.SuccessCreateStudyGroup.
+
+        //If all the conditions are satisfied, then use the dispatch function, passing in the "response.data" object.  This will dispatch an action to redux, which saves the study group to the global state of the app.
+    };
+
+    return (
+        &lt;div>
+            &lt;div>
+                &lt;CreateStudyGroupForm submitCreateStudyGroup={submitCreateStudyGroup} />
+            &lt;/div>
+        &lt;/div>
+    );
+};
+
+export default CreateStudyGroupView;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

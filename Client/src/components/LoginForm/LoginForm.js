@@ -20,22 +20,22 @@ import TextInput from "../../core/Inputs/TextInput/TextInput.js";
  * @date   10/21/2021
  */
 const LoginForm = (props) => {
-  return (
-    <div className="login-form">
-      <Form onSubmit={props.submitLogin}>
-        <InputField>
-          <Label>Email</Label>
-          <TextInput value={props.email} onChange={props.updateEmailField} type="email" />
-        </InputField>
-        <InputField>
-          <Label>Password</Label>
-          <TextInput value={props.password} onChange={props.updatePasswordField} type="password" />
-        </InputField>
-        {/* {props.loginDidFail} */}
-        <Button type={ButtonTypes.Primary}>Sign in</Button>
-      </Form>
-    </div>
-  );
+    return (
+        <div className="login-form">
+            <Form onSubmit={props.submitLogin}>
+                <InputField>
+                    <Label>Email</Label>
+                    <TextInput value={props.email} onChange={props.updateEmailField} type="email" />
+                </InputField>
+                <InputField>
+                    <Label>Password</Label>
+                    <TextInput value={props.password} onChange={props.updatePasswordField} type="password" />
+                </InputField>
+                {/* {props.loginDidFail} */}
+                <Button type={ButtonTypes.Primary}>Sign in</Button>
+            </Form>
+        </div>
+    );
 };
 
 export default LoginForm;
