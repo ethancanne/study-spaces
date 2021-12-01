@@ -29,12 +29,23 @@ class StudyGroupRouter {
     }
 
     /**
-     *
+     * @param {string} request.body.name The name of the study group being created.
+     * @param {string} request.body.owner The name of the study group being created. 
+     * @param {string} request.body.subject The name of the study group being created. 
+     * @param {string} request.body.areaCode The name of the study group being created. 
+     * @param {string} request.body.inOnlineGroup The name of the study group being created. 
+     * @param {string} request.body.isTutorGroup The name of the study group being created. 
+     * @param {string} request.body.course The name of the study group being created. 
+     * @param {string} request.body.school The name of the study group being created.
+     * @author Clifton Croom
+     * @date 11/30/21 
      */
     static async createStudyGroup(request, response) {
         // CREATE STUDY GROUP.
-        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject);
+        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject, request.body.areaCode, request.body.isOnlineGroup, request.body.isTutorGroup, request.body.course, request.body.school);
         const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
+
+        // VALIDATE STUDY GROUP CREATION
         if (studyGroupWasNotCreated) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
         }
