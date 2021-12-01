@@ -21,16 +21,18 @@ const CreateStudyGroupView = () => {
   const [title, setTitle] = useState(BLANK); //TextInput tag
   const [description, setDescription] = useState(BLANK); //TextInput tag
   const [category, setCategory] = useState(BLANK); //select tag, filled with option tags
+  const [privacy, setPrivacy] = useState("Public"); //select tag, filled with option tags
   const [courseCode, setCourseCode] = useState(BLANK); //TextInput tag
   const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false); //Input tag with type "checkbox"
   const [isTutorGroup, setIsTutorGroup] = useState(false); //Toggle tag
   const [isOnlineGroup, setIsOnlineGroup] = useState(false); //Toggle tag
-
-  const [studyGroupCreationErrorMsg, setStudyGroupCreationErrorMsg] = useState(BLANK); //Toggle tag
-
   const [groupColor, setGroupColor] = useState(BLANK); //TextInput tag for now
   const [groupPhoto, setGroupPhoto] = useState(BLANK); //TextInput tag for now
 
+
+  const [studyGroupCreationErrorMsg, setStudyGroupCreationErrorMsg] = useState(BLANK); //Toggle tag
+
+  
   /**
    * Makes an api call to the Create study group route, passing in the information entered in the form and
    * rendering the client according to the response received
@@ -46,14 +48,16 @@ const CreateStudyGroupView = () => {
     //Use axios to assign a variable called "response" to the response received when awaiting an API call to "Routes.Study.CreateStudyGroup," passing in an object with all of the values entered into the form.
     let response;
     try {
-      response = await axios.post(Routes.Study.CreateStudyGroup, {
+      response = await axios.post(Routes.StudyGroup.CreateStudyGroup, {
         title,
+        groupColor,
         description,
         category,
-        classCode: courseCode,
-        school_association: isAssociatedWithSchool,
-        tutor_group: isTutorGroup,
-        online_group: isOnlineGroup
+        privacy,
+        courseCode,
+        isAssociatedWithSchool,
+        isTutorGroup,
+        isOnlineGroup,
       });
       //Wrap the axios call in a try-catch block, using the catch block to call "setErrorMessage();" passing in "e.message"
     } catch (e) {
@@ -78,46 +82,70 @@ const CreateStudyGroupView = () => {
     }
   };
 
-  //update fields?
-
-  /**
-   * Used to update the email field in the create account form.
-   * @param {Event} event The change event to update the field with.
-   * @author Cameron Burkholder
-   * @date   10/21/2021
-   */
-   const updateTitleField = (event) => {
+  const updateTitleField = (event) => {
     setTitle(event.target.value);
     setStudyGroupCreationErrorMsg(BLANK);
   };
+  const updateGroupColor = (event) => {
+    setGroupColor(event.target.value);
+    setStudyGroupCreationErrorMsg(BLANK);
+  };
 
-  /**
-   * Used to update the email field in the create account form.
-   * @param {Event} event The change event to update the field with.
-   * @author Cameron Burkholder
-   * @date   10/21/2021
-   */
-   const updateIsOnlineGroup = (event) => {
+  const updateDescriptionField = (event) => {
+    setDescription(event.target.value);
+    setStudyGroupCreationErrorMsg(BLANK);
+  };
+  const updateCategory = (event) => {
+    setCategory(event.target.options[event.target.selectedIndex].value);
+    setStudyGroupCreationErrorMsg(BLANK);
+  };
+  const updatePrivacy = (event) => {
+    setPrivacy(event.target.options[event.target.selectedIndex].value);
+    setStudyGroupCreationErrorMsg(BLANK);
+  };
+  const updateCourseCodeField = (event) => {
+    setCourseCode(event.target.value);
+    setStudyGroupCreationErrorMsg(BLANK);
+  };
+  const updateIsOnlineGroup = (event) => {
     setIsOnlineGroup(event.target.checked);
     setStudyGroupCreationErrorMsg(BLANK);
   };
-
-  const updateStudyGroupTitleField = (event) => {
-    setTitle(event.target.value);
+  const updateIsAssociatedWithSchool = (event) => {
+    setIsAssociatedWithSchool(event.target.checked);
+    setStudyGroupCreationErrorMsg(BLANK);
+  };
+  const updateIsTutorGroup = (event) => {
+    setIsTutorGroup(event.target.checked);
+    setStudyGroupCreationErrorMsg(BLANK);
   };
 
   return (
     <div className="create-studygroup-view">
         <CreateStudyGroupForm 
-        submitCreateStudyGroup={submitCreateStudyGroup} 
-        title={title}
-        description={description}
-        category={category}
-        classCode={courseCode}
-        isAssociatedWithSchool={isAssociatedWithSchool}
-        isTutorGroup={isTutorGroup}
-        isOnlineGroup={isOnlineGroup}
-        studyGroupCreationErrorMsg={studyGroupCreationErrorMsg}
+          submitCreateStudyGroup={submitCreateStudyGroup} 
+          title={title}
+          description={description}
+          category={category}
+          privacy={privacy}
+          courseCode={courseCode}
+          isAssociatedWithSchool={isAssociatedWithSchool}
+          isTutorGroup={isTutorGroup}
+          isOnlineGroup={isOnlineGroup}
+          groupColor={groupColor}
+
+          updateTitleField={updateTitleField}
+          updateDescriptionField={updateDescriptionField}
+          updateCategory={updateCategory}
+          updatePrivacy={updatePrivacy}
+          updateCourseCodeField={updateCourseCodeField}
+          updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
+          updateIsTutorGroup={updateIsTutorGroup}
+          updateIsOnlineGroup={updateIsOnlineGroup}
+          updateGroupColor={updateGroupColor}
+
+          submitCreateStudyGroup={submitCreateStudyGroup}
+          studyGroupCreationErrorMsg={studyGroupCreationErrorMsg}
         />
       <p className="error-message">{studyGroupCreationErrorMsg}</p>
     </div>

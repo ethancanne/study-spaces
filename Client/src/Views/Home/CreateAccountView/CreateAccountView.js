@@ -16,129 +16,130 @@ import Views from "../../Views.js";
 import { createAccount } from "../../../state/actions";
 
 const CreateAccountView = (props) => {
-  const BLANK = "";
-  const [email, setEmail] = useState(BLANK);
-  const [password, setPassword] = useState(BLANK);
-  const [confirmPassword, setConfirmPassword] = useState(BLANK);
-  const [accountCreationErrorMsg, setAccountCreationErrorMsg] = useState(BLANK);
+    const BLANK = "";
+    const [email, setEmail] = useState(BLANK);
+    const [password, setPassword] = useState(BLANK);
+    const [confirmPassword, setConfirmPassword] = useState(BLANK);
+    const [accountCreationErrorMsg, setAccountCreationErrorMsg] = useState(BLANK);
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  /**
-   * Submits the create account request to the server for verification.
-   * @param {Event} event The form submission event that triggers the login.
-   * @author Ethan Cannelongo
-   * @date   10/21/2021
-   */
-  const submitAccountCreation = async (event) => {
-    // PREVENT THE DEFAULT FORM SUBMISSION BEHAVIOR.
-    event.preventDefault();
-    event.stopPropagation();
+    /**
+     * Submits the create account request to the server for verification.
+     * @param {Event} event The form submission event that triggers the login.
+     * @author Ethan Cannelongo
+     * @date   10/21/2021
+     */
+    const submitAccountCreation = async (event) => {
+        // PREVENT THE DEFAULT FORM SUBMISSION BEHAVIOR.
+        event.preventDefault();
+        event.stopPropagation();
 
-    // FIRST, COMPARE THE PASSWORD AND CONFIRM PASSWORD FIELDS
-    if (password !== confirmPassword) {
-      setAccountCreationErrorMsg("Passwords don't match!");
-      return;
-    }
-
-    // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
-    let response;
-    try {
-      response = await axios.post(Routes.Account.CreateAccount, {
-        email,
-        password,
-        password_confirmation: confirmPassword
-      });
-    } catch (error) {
-      console.log(error);
-      setAccountCreationErrorMsg("error");
-    } finally {
-      // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
-      const responseIsDefined = Validator.isDefined(response);
-
-      if (responseIsDefined) {
-        // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-        const accountCreationWasValid = ResponseMessages.Account.SuccessAccountCreated === response.data.message;
-
-        if (accountCreationWasValid) {
-          // save the unverified user in state (using dispatch)
-          // set the home view to the check email screen
-
-          const unverifiedUser = response.data.unverifiedUser;
-
-          dispatch(createAccount(unverifiedUser));
-          props.setHomeView(Views.Home.VerificationEmailConfirmation);
+        // FIRST, COMPARE THE PASSWORD AND CONFIRM PASSWORD FIELDS
+        if (password !== confirmPassword) {
+            setAccountCreationErrorMsg("Passwords don't match!");
+            return;
         }
-      }
-    }
-  };
 
-  /**
-   * Used to update the email field in the create account form.
-   * @param {Event} event The change event to update the field with.
-   * @author Cameron Burkholder
-   * @date   10/21/2021
-   */
-  const updateEmailField = (event) => {
-    setEmail(event.target.value);
-    setAccountCreationErrorMsg(BLANK);
-  };
+        // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
+        let response;
+        try {
+            response = await axios.post(Routes.Account.CreateAccount, {
+                email,
+                password,
+                password_confirmation: confirmPassword
+            });
+        } catch (error) {
+            console.log(error);
+            setAccountCreationErrorMsg("error");
+        } finally {
+            // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
+            const responseIsDefined = Validator.isDefined(response);
 
-  /**
-   * Used to update the password field in the create account form.
-   * @param {Event} event The change event to update the field with.
-   * @author Cameron Burkholder
-   * @date   10/21/2021
-   */
-  const updatePasswordField = (event) => {
-    setPassword(event.target.value);
-    setAccountCreationErrorMsg(BLANK);
-  };
+            if (responseIsDefined) {
+                // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
+                const accountCreationWasValid =
+                    ResponseMessages.Account.SuccessAccountCreated === response.data.message;
 
-  /**
-   * Used to update the confirm password field in the create account form.
-   * @param {Event} event The change event to update the field with.
-   * @author Ethan Cannelongo
-   * @date   10/21/2021
-   */
-  const updateConfirmPasswordField = (event) => {
-    setConfirmPassword(event.target.value);
-    setAccountCreationErrorMsg(BLANK);
-  };
+                if (accountCreationWasValid) {
+                    // save the unverified user in state (using dispatch)
+                    // set the home view to the check email screen
 
-  /**
-   * Sets the home view to the sign in form.
-   * @param {Event} event The change event to update the field with.
-   * @author Ethan Cannelongo
-   * @date   10/21/2021
-   */
-  const signInClicked = (event) => {
-    props.setHomeView(Views.Home.Login);
-  };
+                    const unverifiedUser = response.data.unverifiedUser;
 
-  return (
-    <div className="create-account-view">
-      <h1>Study Spaces</h1>
-      <CreateAccountForm
-        email={email}
-        password={password}
-        confirmPassword={confirmPassword}
-        submitAccountCreation={submitAccountCreation}
-        updateEmailField={updateEmailField}
-        updatePasswordField={updatePasswordField}
-        updateConfirmPasswordField={updateConfirmPasswordField}
-        accountCreationErrorMsg={accountCreationErrorMsg}
-      />
-      <p className="error-message">{accountCreationErrorMsg}</p>
+                    dispatch(createAccount(unverifiedUser));
+                    props.setHomeView(Views.Home.VerificationEmailConfirmation);
+                }
+            }
+        }
+    };
 
-      <div className="other-options">
-        <Label>Already have an account?</Label>
-        <Button type={ButtonTypes.Primary} onClick={signInClicked}>
-          Sign In
-        </Button>
-      </div>
-    </div>
-  );
+    /**
+     * Used to update the email field in the create account form.
+     * @param {Event} event The change event to update the field with.
+     * @author Cameron Burkholder
+     * @date   10/21/2021
+     */
+    const updateEmailField = (event) => {
+        setEmail(event.target.value);
+        setAccountCreationErrorMsg(BLANK);
+    };
+
+    /**
+     * Used to update the password field in the create account form.
+     * @param {Event} event The change event to update the field with.
+     * @author Cameron Burkholder
+     * @date   10/21/2021
+     */
+    const updatePasswordField = (event) => {
+        setPassword(event.target.value);
+        setAccountCreationErrorMsg(BLANK);
+    };
+
+    /**
+     * Used to update the confirm password field in the create account form.
+     * @param {Event} event The change event to update the field with.
+     * @author Ethan Cannelongo
+     * @date   10/21/2021
+     */
+    const updateConfirmPasswordField = (event) => {
+        setConfirmPassword(event.target.value);
+        setAccountCreationErrorMsg(BLANK);
+    };
+
+    /**
+     * Sets the home view to the sign in form.
+     * @param {Event} event The change event to update the field with.
+     * @author Ethan Cannelongo
+     * @date   10/21/2021
+     */
+    const signInClicked = (event) => {
+        props.setHomeView(Views.Home.Login);
+    };
+
+    return (
+        <div className="create-account-view">
+            <h1>Study Spaces</h1>
+            <CreateAccountForm
+                email={email}
+                password={password}
+                confirmPassword={confirmPassword}
+                submitAccountCreation={submitAccountCreation}
+                updateEmailField={updateEmailField}
+                updatePasswordField={updatePasswordField}
+                updateConfirmPasswordField={updateConfirmPasswordField}
+                accountCreationErrorMsg={accountCreationErrorMsg}
+            />
+            <p className="error-message">{accountCreationErrorMsg}</p>
+
+            <div className="other-options">
+                <Label>Already have an account?</Label>
+                <Button type={ButtonTypes.Primary} onClick={signInClicked}>
+                    Sign In
+                </Button>
+            </div>
+        </div>
+    );
 };
 
 export default CreateAccountView;

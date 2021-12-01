@@ -20,42 +20,42 @@ import Validator from "../../../../Server/Validator.js";
  * @date   10/20/2021
  */
 const Home = (props) => {
-  const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
-  let homeView = <></>;
-  // let verificationToken = undefined;
-  // const verificationTokenExists = Validator.isDefined(props.match);
-  // if (verificationTokenExists) {
-  //   verificationToken = props.match.params.verificationToken;
-  // }
+    const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
+    let homeView = <></>;
+    // let verificationToken = undefined;
+    // const verificationTokenExists = Validator.isDefined(props.match);
+    // if (verificationTokenExists) {
+    //   verificationToken = props.match.params.verificationToken;
+    // }
 
-  switch (view) {
-    case Views.Home.Login:
-      homeView = <LoginView setHomeView={setHomeView} />;
-      break;
+    switch (view) {
+        case Views.Home.Login:
+            homeView = <LoginView setHomeView={setHomeView} />;
+            break;
 
-    case Views.Home.CreateAccount:
-      homeView = <CreateAccountView setHomeView={setHomeView} />;
-      break;
+        case Views.Home.CreateAccount:
+            homeView = <CreateAccountView setHomeView={setHomeView} />;
+            break;
 
-    case Views.Home.VerificationEmailConfirmation:
-      homeView = <VerificationEmailConfirmationView setHomeView={setHomeView} />;
-      break;
+        case Views.Home.VerificationEmailConfirmation:
+            homeView = <VerificationEmailConfirmationView setHomeView={setHomeView} />;
+            break;
 
-    case Views.Home.AccountSetup:
-      homeView = (
-        <AccountSetupView setHomeView={setHomeView} verificationToken={props.match.params.verificationToken} />
-      );
-      break;
-  }
+        case Views.Home.AccountSetup:
+            homeView = (
+                <AccountSetupView setHomeView={setHomeView} verificationToken={props.match.params.verificationToken} />
+            );
+            break;
+    }
 
-  return (
-    <div className="HomePage">
-      <h1 className="subtitle">
-        Study <br /> with <br /> excellence.
-      </h1>
-      <Page>{!props.children ? homeView : props.children}</Page>
-    </div>
-  );
+    return (
+        <div className="HomePage">
+            <h1 className="subtitle">
+                Study <br /> with <br /> excellence.
+            </h1>
+            <Page>{!props.children ? homeView : props.children}</Page>
+        </div>
+    );
 };
 
 export default Home;

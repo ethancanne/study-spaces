@@ -1,16 +1,16 @@
 import React from "react";
 import "../core.scss";
 /**
- * Renders an input field.
+ * Renders an toggle field.
  * @author Cameron Burkholder
  * @date   10/21/2021
  */
-const InputField = (props) => {
+const ToggleField = (props) => {
     return (
-        <fieldset className="InputField" {...props}>
+        <div className="ToggleField" {...props}>
             {props.children}
-        </fieldset>
+        </div>
     );
 };
 
-export default InputField;
+export default ToggleField;

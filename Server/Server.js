@@ -10,6 +10,7 @@ const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const AccountRouter = require("./Routers/AccountRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
+const StudyGroupRouter = require("./Routers/StudyGroupRouter.js");
 
 // ASSIGN THE ROOT DIRECTORY TO A GLOBAL VARIABLE FOR REUSE THROUGHOUT THE APPLICATION.
 const rootDirectory = Path.resolve("./");
@@ -64,6 +65,7 @@ server.use(Helmet());
 
 // IMPLEMENT THE SERVER ROUTES.
 AccountRouter.serveRoutes(server, authenticator);
+StudyGroupRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
 StaticResourceRouter.serveRoutes(server, authenticator);
 

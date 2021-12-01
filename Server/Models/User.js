@@ -80,22 +80,22 @@ class User {
     }
 
     /**
-    * @param {StudyGroup} studyGroup The study group to add.
-    * @return {Boolean} True if the study group was added, false otherwise.
-    */
+     * @param {StudyGroup} studyGroup The study group to add.
+     * @return {Boolean} True if the study group was added, false otherwise.
+     */
     async addStudyGroup(studyGroup) {
-      // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
-      this.studyGroups.push(studyGroup.getId());
+        // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
+        this.studyGroups.push(studyGroup.getId());
 
-      // SAVE THE CHANGE.
-      let studyGroupWasAdded = true;
-      try {
-        await this.save();
-      } catch (error) {
-        studyGroupWasAdded = false;
-        Log.writeError(error);
-      }
-      return studyGroupWasAdded;
+        // SAVE THE CHANGE.
+        let studyGroupWasAdded = true;
+        try {
+            await this.save();
+        } catch (error) {
+            studyGroupWasAdded = false;
+            Log.writeError(error);
+        }
+        return studyGroupWasAdded;
     }
 
     /**
@@ -206,34 +206,33 @@ class User {
         }
     }
 
+    /**
+     * Gets the user's conversations.
+     * @return {Conversation[]} The user's conversations.
+     *
+     */
+    async getConversations() {
+        // ID -> Conversation;
 
-  /**
-  * Gets the user's conversations.
-  * @return {Conversation[]} The user's conversations.
-  *
-  */
-  async getConversations() {
-    // ID -> Conversation;
+        // LOOP THROUGH EACH CONVERSATION ID.
+        let conversations = [];
+        this.conversations.map(async (conversationId) => {
+            let conversation = undefined;
+            try {
+                conversation = await Conversation.getById(conversationId);
+            } catch (error) {
+                Log.writeError(error);
+            } finally {
+                const conversationWasFound = Validator.isDefined(conversation);
+                if (conversationWasFound) {
+                    conversations.push(conversation);
+                }
+            }
+        });
 
-    // LOOP THROUGH EACH CONVERSATION ID.
-    let conversations = [];
-    this.conversations.map(async (conversationId) => {
-      let conversation = undefined;
-      try {
-        conversation = await Conversation.getById(conversationId);
-      } catch(error) {
-        Log.writeError(error);
-      } finally {
-        const conversationWasFound = Validator.isDefined(conversation);
-        if (conversationWasFound) {
-          conversations.push(conversation);
-        }
-      }
-    });
-
-    // RETURN CONVERSATIONS.
-    return conversations;
-  }
+        // RETURN CONVERSATIONS.
+        return conversations;
+    }
 
     /**
      * Gets the user's email.

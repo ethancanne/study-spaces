@@ -7,7 +7,7 @@ const Validator = require("../Validator.js");
 
 /**
  * Used to define the database schema for storing study groups.
- * @author Cameron Burkholder
+ * @author Clifton Croom
  * @date   10/29/2021
  */
 const StudyGroupSchema = new Schema({
@@ -16,7 +16,6 @@ const StudyGroupSchema = new Schema({
         required: true
     },
     course: {
-        //May cause problems
         type: String,
         required: false
     },
@@ -49,8 +48,8 @@ const StudyGroupSchema = new Schema({
         required: true
     },
     recurringMeeting: {
-        type: Meeting,
-        required: true
+        type: String,
+        required: false
     },
     school: {
         type: String,
@@ -124,9 +123,14 @@ class StudyGroup {
      * @param {User} owner The owner of the study group.
      * @param {String} subject The study group's subject.
      * @return {StudyGroup} The created study group.
-     *
+     * @author Clifton Croom
+     * @date   11/30/2021
      */
     static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school) {
+        // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
+        // @todo Write the actual implementation.
+        const feedId = "1";
+
         // CREATE THE STUDY GROUP.
         const newStudyGroup = new StudyGroupModel({
             name: name,
@@ -136,7 +140,9 @@ class StudyGroup {
             isOnlineGroup: isOnlineGroup,
             isTutorGroup: isTutorGroup,
             course: course,
-            school: school
+            school: school,
+            meetings: [],
+            feed: feedId
         });
 
         // SAVE THE STUDY GROUP.
@@ -147,8 +153,8 @@ class StudyGroup {
         }
 
         // INSTANTIATE THE MODEL.
-        const StudyGroup = new StudyGroup(newStudyGroup);
-        return StudyGroup;
+        const studyGroup = new StudyGroup(newStudyGroup);
+        return studyGroup;
     }
 
     /**
@@ -193,7 +199,7 @@ class StudyGroup {
      *
      */
     getId() {
-      return this._id;
+        return this._id;
     }
 
     /**
