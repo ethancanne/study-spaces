@@ -29,7 +29,11 @@ class StudyGroupRouter {
     }
 
     /**
-    *
+    ** This allows the user to log in.
+  * @param {string} request.body.email The email address of the user.
+  * @param {string} request.body.password The password of the user.
+  * @author Clifton Croom
+  * @date   11/30/2021
     */
     static async createStudyGroup(request, response) {
 
@@ -41,12 +45,15 @@ class StudyGroupRouter {
         // }
 
         // CREATE STUDY GROUP
-        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject)
+        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject, request.body.areaCode, request.body.isOnlineGroup, request.body.isTutorGroup, request.body.course, request.body.school);
+        
+        // VALIDATE STUDY GROUP CREATION
         const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
         if (studyGroupWasNotCreated) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
         }
 
+        // SEND SUCCESS MESSAGE
         response.json({
             message: ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
             newStudyGroup: newStudyGroup

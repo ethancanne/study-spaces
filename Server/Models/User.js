@@ -194,8 +194,27 @@ class User {
   * @return {Conversation[]} The user's conversations.
   *
   */
-  getConversations() {
-    return this.conversations; //Needs Second Look
+  async getConversations() {
+    // ID -> Conversation;
+
+    // LOOP THROUGH EACH CONVERSATION ID.
+    let conversations = [];
+    this.conversations.map((conversationId) => {
+      let conversation = undefined;
+      try {
+        conversation = await Conversation.getById(conversationId);
+      } catch(error) {
+        Log.writeError(error);
+      } finally {
+        const conversationWasFound = Validator.isDefined(conversation);
+        if (conversationWasFound) {
+          conversations.push(conversation);
+        }
+      }
+    });
+
+    // RETURN CONVERSATIONS.
+    return conversations;
   }
 
   /**
