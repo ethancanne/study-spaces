@@ -25,29 +25,39 @@ class StudyGroupRouter {
      */
     static serveRoutes(server, authenticator) {
         // This is used to create study groups.
-        server.post(Routes.StudyGroup.CreateStudyGroup, StudyGroupRouter.createStudyGroup);
+        server.post(Routes.StudyGroup.CreateStudyGroup, authenticator.protectRoute(), StudyGroupRouter.createStudyGroup);
     }
 
     /**
      * @param {string} request.body.name The name of the study group being created.
-     * @param {string} request.body.owner The name of the study group being created. 
-     * @param {string} request.body.subject The name of the study group being created. 
-     * @param {string} request.body.areaCode The name of the study group being created. 
-     * @param {string} request.body.inOnlineGroup The name of the study group being created. 
-     * @param {string} request.body.isTutorGroup The name of the study group being created. 
-     * @param {string} request.body.course The name of the study group being created. 
-     * @param {string} request.body.school The name of the study group being created.
+     * @param {string} request.body.subject The subject of the study group being created.
+     * @param {string} request.body.areaCode The area code of the study group being created.
+     * @param {string} request.body.inOnlineGroup True if the group is online, false otherwise.
+     * @param {string} request.body.isTutorGroup True if the group is a tutor group, false otherwise.
+     * @param {string} request.body.course The course of the study group being created.
+     * @param {string} request.user The user creating the study group.
      * @author Clifton Croom
-     * @date 11/30/21 
+     * @date 11/30/21
      */
     static async createStudyGroup(request, response) {
         // CREATE STUDY GROUP.
-        const newStudyGroup = await StudyGroup.create(request.body.name, request.body.owner, request.body.subject, request.body.areaCode, request.body.isOnlineGroup, request.body.isTutorGroup, request.body.course, request.body.school);
+        const newStudyGroup = await StudyGroup.create(request.body.name, request.user, request.body.subject, request.body.areaCode, request.body.isOnlineGroup, request.body.isTutorGroup, request.body.course, request.body.school);
         const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
 
         // VALIDATE STUDY GROUP CREATION
         if (studyGroupWasNotCreated) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
+        }
+
+        // ADD THE STUDY GROUP TO THE USER.
+        let studyGroupWasAdded = false;
+        try {
+          studyGroupWasAdded = await request.user.addStudyGroup(newStudyGroup);
+        } catch (error) {
+          Log.writeError(error);
+        }
+        if (!studyGroupWasAdded) {
+          return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
         }
 
         // SEND SUCCESS MESSAGE

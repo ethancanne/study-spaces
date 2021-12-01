@@ -80,6 +80,25 @@ class User {
     }
 
     /**
+    * @param {StudyGroup} studyGroup The study group to add.
+    * @return {Boolean} True if the study group was added, false otherwise.
+    */
+    async addStudyGroup(studyGroup) {
+      // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
+      this.studyGroups.push(studyGroup.getId());
+
+      // SAVE THE CHANGE.
+      let studyGroupWasAdded = true;
+      try {
+        await this.save();
+      } catch (error) {
+        studyGroupWasAdded = false;
+        Log.writeError(error);
+      }
+      return studyGroupWasAdded;
+    }
+
+    /**
      * Creates a user.
      * @param {UnverifiedUser} unverifiedUser The unverified user to create from.
      * @return {User} The created user.

@@ -17,6 +17,7 @@ const ResponseMessages = {
     UserNotFound: "The user was not found."
   },
   StudyGroup: {
+    ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
     SuccessStudyGroupCreated: "The study group was created sucessfully."
   }
 };

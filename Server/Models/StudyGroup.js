@@ -130,7 +130,7 @@ class StudyGroup {
         // CREATE THE STUDY GROUP.
         const newStudyGroup = new StudyGroupModel({
             name: name,
-            owner: owner,
+            owner: owner.getId(),
             subject: subject,
             areaCode: areaCode,
             isOnlineGroup: isOnlineGroup,
@@ -192,7 +192,9 @@ class StudyGroup {
      * @return {String} The document id of the study group.
      *
      */
-    getId() {}
+    getId() {
+      return this._id;
+    }
 
     /**
      * Gets the study group's meetings.
