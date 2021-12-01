@@ -198,7 +198,7 @@ class User {
 
     // LOOP THROUGH EACH CONVERSATION ID.
     let conversations = [];
-    this.conversations.map((conversationId) => {
+    this.conversations.map(async (conversationId) => {
       let conversation = undefined;
       try {
         conversation = await Conversation.getById(conversationId);
