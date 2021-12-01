@@ -16,8 +16,9 @@ const ResponseMessages = {
     UserAlreadyExists: "A user with that email address already exists.",
     UserNotFound: "The user was not found."
   },
-  Study: {
-    SuccessCreateStudyGroup: "The study group was created sucessfully"
+  StudyGroup: {
+    ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
+    SuccessStudyGroupCreated: "The study group was created sucessfully."
   }
 };
 module.exports = ResponseMessages;

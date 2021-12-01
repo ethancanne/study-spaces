@@ -1,1 +1,13 @@
 bundle.js
+*.log
+npm-debug.log*
+.DS_Store
+node_modules/
+.npm
+.env
+*.pem
+.git/
+.husky/
+Docs/
+Logs/
+Client/build

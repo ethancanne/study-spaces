@@ -11,9 +11,6 @@ const Routes = {
     SetupAccount: "/api/account/setup",
     UpdateAuthenticationToken: "/api/account/update-authentication-token"
   },
-  Study: {
-    CreateStudyGroup: "api/study/create"
-  },
   StaticResources: {
     Index: "/*"
   },

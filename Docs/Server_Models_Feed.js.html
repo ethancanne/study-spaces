@@ -34,95 +34,81 @@ const Log = require("../Log.js");
 const Validator = require("../Validator.js");
 
 /**
-* Used to define the database schema for storing study group feeds.
-* @author Cameron Burkholder
-* @date   11/03/2021
-*/
+ * Used to define the database schema for storing study group feeds.
+ * @author Cameron Burkholder
+ * @date   11/03/2021
+ */
 const FeedSchema = new Schema({
-  lastUpdated: {
-    type: Date,
-    required: true
-  },
-  posts: {
-    type: [String],
-    required: true
-  },
+    lastUpdated: {
+        type: Date,
+        required: true
+    },
+    posts: {
+        type: [String],
+        required: true
+    }
 });
 FeedSchema.set("toObject", {
-  versionKey: false,
-  transform: (document, object) => {
-    delete object.__v;
-    return object;
-  }
+    versionKey: false,
+    transform: (document, object) => {
+        delete object.__v;
+        return object;
+    }
 });
 const feedCollectionName = Configuration.getFeedCollectionName();
 const FeedModel = Mongoose.model(feedCollectionName, FeedSchema);
 
 /**
-* Provides an interface for working with a study group's feeds in the database.
-* @property {Date} lastUpdated The time when the feed was last updated. This is used to
-*   track updates to the feed.
-* @property {String[]} posts A list of posts associated with the study group's feed.
-* @author Cameron Burkholder
-* @date   11/04/2021
-*/
+ * Provides an interface for working with a study group's feeds in the database.
+ * @property {Date} lastUpdated The time when the feed was last updated. This is used to
+ *   track updates to the feed.
+ * @property {String[]} posts A list of posts associated with the study group's feed.
+ * @author Cameron Burkholder
+ * @date   11/04/2021
+ */
 class Feed {
-  /**
-  * Adds a post to the feed.
-  * @param {Post} post The post to add to the feed.
-  */
-  async addPost(post) {
+    /**
+     * Adds a post to the feed.
+     * @param {Post} post The post to add to the feed.
+     */
+    async addPost(post) {}
 
-  }
+    /**
+     * Creates a feed.
+     * @return {Feed} The feed created.
+     */
+    static async create() {}
 
-  /**
-  * Creates a feed.
-  * @return {Feed} The feed created.
-  */
-  static async create() {
+    /**
+     * Deletes a feed.
+     * @return {Boolean} True if the feed was deleted, false otherwise.
+     */
+    async delete() {}
 
-  }
+    /**
+     * Deletes a post from the feed.
+     * @param {Post} post The post to delete.
+     * @return {Boolean} True if the post gets deleted, fales otherwise.
+     */
+    async deletePost(post) {}
 
-  /**
-  * Deletes a feed.
-  * @return {Boolean} True if the feed was deleted, false otherwise.
-  */
-  async delete() {
+    /**
+     * Gets the last three posts in the feed.
+     * @return {Post[]} The last three posts from the feed.
+     */
+    async getLastThreePosts() {}
 
-  }
+    /**
+     * Gets the most recent post in the feed.
+     * @return {Post} The most recent post in the feed.
+     */
+    async getMostRecentPost() {}
 
-  /**
-  * Deletes a post from the feed.
-  * @param {Post} post The post to delete.
-  * @return {Boolean} True if the post gets deleted, fales otherwise.
-  */
-  async deletePost(post) {
-
-  }
-
-  /**
-  * Gets the last three posts in the feed.
-  * @return {Post[]} The last three posts from the feed.
-  */
-  async getLastThreePosts() {
-    
-  }
-
-  /**
-  * Gets the most recent post in the feed.
-  * @return {Post} The most recent post in the feed.
-  */
-  async getMostRecentPost() {
-
-  }
-
-  /**
-  * Gets the posts housed in a feed.
-  * @return {Post[]} The posts in the feed.
-  */
-  async getPosts() {
-
-  }
+    /**
+     * Gets the posts housed in a feed.
+     * @return {Post[]} The posts in the feed.
+     */
+    async getPosts() {}
 }
 
 module.exports = Feed;
@@ -136,13 +122,13 @@ module.exports = Feed;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 17 2021 16:46:54 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

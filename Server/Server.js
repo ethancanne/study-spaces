@@ -30,9 +30,9 @@ const configurationIsSetToProduction = Configuration.isSetToProduction();
 Log.resetLog();
 const fileLoggingIsEnabled = Configuration.fileLoggingIsEnabled();
 if (fileLoggingIsEnabled) {
-  Log.write("Logging started with file logging enabled.");
+    Log.write("Logging started with file logging enabled.");
 } else {
-  Log.write("Logging started.");
+    Log.write("Logging started.");
 }
 server.use(Log.logger);
 
@@ -40,16 +40,16 @@ server.use(Log.logger);
 const databaseUri = Configuration.getDatabaseUri();
 // Handle an error that occurs while establishing database connection.
 try {
-  Mongoose.connect(databaseUri, { useNewUrlParser: true, useUnifiedTopology: true });
-  Log.write("Connection to database established.");
-} catch(error) {
-  Log.write("An error occurred while connecting to the database.");
-  Log.writeError(error);
+    Mongoose.connect(databaseUri, { useNewUrlParser: true, useUnifiedTopology: true });
+    Log.write("Connection to database established.");
+} catch (error) {
+    Log.write("An error occurred while connecting to the database.");
+    Log.writeError(error);
 }
 // Handle an error that occurs after the database connection has been established.
 Mongoose.connection.on("error", (error) => {
-  Log.write("An error occurred after the database connection was established.");
-  Log.writeError(error);
+    Log.write("An error occurred after the database connection was established.");
+    Log.writeError(error);
 });
 
 // SETUP AUTHENTICATION.
@@ -70,5 +70,5 @@ StaticResourceRouter.serveRoutes(server, authenticator);
 // START SERVER.
 const serverPort = Configuration.getServerPort();
 server.listen(serverPort, () => {
-  Log.write(`Server deployed on port ${serverPort} in mode: ${Configuration.getNodeEnvironment()}.`);
+    Log.write(`Server deployed on port ${serverPort} in mode: ${Configuration.getNodeEnvironment()}.`);
 });

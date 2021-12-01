@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Client/src/core/Toggle/Toggle.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,35 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Client/src/core/Toggle/Toggle.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
 
+/**
+ * Renders a text input.
+ * @author Ethan Cannelongo
+ * @date   11/20/2021
+ */
+const Toggle = (props) => {
+    return (
+        &lt;label className="switch">
+            &lt;input type="checkbox" value={props.value} onChange={props.onChange} />
+            &lt;span className="slider">&lt;/span>
+        &lt;/label>
+    );
+};
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default Toggle;
+</code></pre>
+        </article>
+    </section>
 
 
 
