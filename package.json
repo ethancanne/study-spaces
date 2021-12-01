@@ -1,71 +1,71 @@
 {
-    "name": "study-spaces",
-    "version": "1.0.0",
-    "description": "Study with excellence.",
-    "main": "./Server/Server.js",
-    "scripts": {
-        "build": "webpack --mode production",
-        "debug": "node inspect Server/Server.js",
-        "dev": "concurrently --kill-others \"nodemon --watch Server Server/Server.js\" \"webpack server --mode development\"",
-        "doc": "jsdoc -c jsdoc.config.json",
-        "format": "prettier --write . --loglevel silent",
-        "heroku-postbuild": "npm prune --production",
-        "start": "node Server/Server.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/LU-CS-Capstone/SS-21-22.git"
-    },
-    "keywords": [
-        "study",
-        "groups"
-    ],
-    "author": "LU Capstone SS-21-22",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/LU-CS-Capstone/SS-21-22/issues"
-    },
-    "homepage": "https://github.com/LU-CS-Capstone/SS-21-22#readme",
-    "dependencies": {
-        "axios": "^0.23.0",
-        "bcryptjs": "^2.4.3",
-        "body-parser": "^1.19.0",
-        "crypto": "^1.0.1",
-        "dotenv": "^10.0.0",
-        "express": "^4.17.1",
-        "helmet": "^4.6.0",
-        "jsonwebtoken": "^8.5.1",
-        "mongoose": "^6.0.13",
-        "passport": "^0.5.0",
-        "passport-jwt": "^4.0.0",
-        "prettier-webpack-plugin": "^1.2.0",
-        "random-words": "^1.1.1",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "react-file-base64": "^1.0.3",
-        "react-redux": "^7.2.6",
-        "react-router": "^5.2.1",
-        "react-router-dom": "^5.3.0",
-        "redux": "^4.1.2",
-        "redux-thunk": "^2.4.0",
-        "regenerator-runtime": "^0.13.9"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.16.0",
-        "@babel/preset-env": "^7.16.4",
-        "@babel/preset-react": "^7.16.0",
-        "babel-loader": "^8.2.3",
-        "concurrently": "^6.4.0",
-        "css-loader": "^6.5.1",
-        "html-webpack-plugin": "^5.5.0",
-        "jsdoc": "^3.6.7",
-        "node-sass": "^6.0.1",
-        "nodemon": "^2.0.15",
-        "prettier": "2.5.0",
-        "sass-loader": "^12.3.0",
-        "style-loader": "^3.3.1",
-        "webpack": "^5.64.1",
-        "webpack-cli": "^4.9.1",
-        "webpack-dev-server": "^4.5.0"
-    }
+  "name": "study-spaces",
+  "version": "1.0.0",
+  "description": "Study with excellence.",
+  "main": "./Server/Server.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "debug": "node inspect Server/Server.js",
+    "dev": "concurrently --kill-others \"nodemon --watch Server Server/Server.js\" \"webpack server --mode development\"",
+    "doc": "jsdoc -c jsdoc.config.json",
+    "format": "prettier --write . --loglevel silent",
+    "heroku-postbuild": "npm prune --production",
+    "start": "node Server/Server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LU-CS-Capstone/SS-21-22.git"
+  },
+  "keywords": [
+    "study",
+    "groups"
+  ],
+  "author": "LU Capstone SS-21-22",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LU-CS-Capstone/SS-21-22/issues"
+  },
+  "homepage": "https://github.com/LU-CS-Capstone/SS-21-22#readme",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.13",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0",
+    "prettier-webpack-plugin": "^1.2.0",
+    "random-words": "^1.1.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-file-base64": "^1.0.3",
+    "react-redux": "^7.2.6",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.3.0",
+    "redux": "^4.1.2",
+    "redux-thunk": "^2.4.0",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "babel-loader": "^8.2.3",
+    "concurrently": "^6.4.0",
+    "css-loader": "^6.5.1",
+    "html-webpack-plugin": "^5.5.0",
+    "jsdoc": "^3.6.7",
+    "node-sass": "^6.0.1",
+    "nodemon": "^2.0.15",
+    "prettier": "2.5.0",
+    "sass-loader": "^12.3.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.64.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.5.0"
+  }
 }

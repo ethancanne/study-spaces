@@ -4,13 +4,13 @@
  * @date   10/20/2021
  */
 const Views = {
-    Home: {
-        Login: "Login",
-        ForgotPassword: "Forgot password",
-        CreateAccount: "Create account",
-        VerificationEmailConfirmation: "Verification email confirmation",
-        AccountSetup: "Account setup"
-    }
+  Home: {
+    Login: "Login",
+    ForgotPassword: "Forgot password",
+    CreateAccount: "Create account",
+    VerificationEmailConfirmation: "Verification email confirmation",
+    AccountSetup: "Account setup"
+  }
 };
 
 export default Views;

@@ -6,11 +6,11 @@ import React from "react";
  * @date   10/21/2021
  */
 const Form = (props) => {
-    return (
-        <form className="Form" {...props}>
-            {props.children}
-        </form>
-    );
+  return (
+    <form className="Form" {...props}>
+      {props.children}
+    </form>
+  );
 };
 
 export default Form;

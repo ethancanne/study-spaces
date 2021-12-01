@@ -23,31 +23,27 @@ import TextInput from "../../core/Inputs/TextInput/TextInput.js";
  * @date   11/10/2021
  */
 const CreateAccountForm = (props) => {
-    return (
-        <div className="create-account-form">
-            <Form onSubmit={props.submitAccountCreation}>
-                <InputField>
-                    <Label>Email</Label>
-                    <TextInput value={props.email} onChange={props.updateEmailField} type="email" />
-                </InputField>
-                <InputField>
-                    <Label>Password</Label>
-                    <TextInput value={props.password} onChange={props.updatePasswordField} type="password" />
-                </InputField>
-                <InputField>
-                    <Label>Confirm Password</Label>
-                    <TextInput
-                        value={props.confirmPassword}
-                        onChange={props.updateConfirmPasswordField}
-                        type="password"
-                    />
-                </InputField>
+  return (
+    <div className="create-account-form">
+      <Form onSubmit={props.submitAccountCreation}>
+        <InputField>
+          <Label>Email</Label>
+          <TextInput value={props.email} onChange={props.updateEmailField} type="email" />
+        </InputField>
+        <InputField>
+          <Label>Password</Label>
+          <TextInput value={props.password} onChange={props.updatePasswordField} type="password" />
+        </InputField>
+        <InputField>
+          <Label>Confirm Password</Label>
+          <TextInput value={props.confirmPassword} onChange={props.updateConfirmPasswordField} type="password" />
+        </InputField>
 
-                {props.loginDidFail}
-                <Button type={ButtonTypes.Creation}>Next</Button>
-            </Form>
-        </div>
-    );
+        {props.loginDidFail}
+        <Button type={ButtonTypes.Creation}>Next</Button>
+      </Form>
+    </div>
+  );
 };
 
 export default CreateAccountForm;

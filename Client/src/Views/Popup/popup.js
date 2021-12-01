@@ -12,29 +12,29 @@ import CreateStudyGroupView from "../Study/CreateStudyGroupView";
  * @date   11/25/2021
  */
 const Popup = (props) => {
-    const view = useSelector((state) => state.popupReducer.view);
-    const dispatch = useDispatch();
-    let popupView = <></>;
+  const view = useSelector((state) => state.popupReducer.view);
+  const dispatch = useDispatch();
+  let popupView = <></>;
 
-    switch (view) {
-        case Popups.StudyGroup.Create:
-            popupView = <CreateStudyGroupView />;
-            console.log("HELLo");
-            break;
-    }
+  switch (view) {
+    case Popups.StudyGroup.Create:
+      popupView = <CreateStudyGroupView />;
+      console.log("HELLo");
+      break;
+  }
 
-    return (
-        <div>
-            <div className={"background " + (props.isShowing ? "active" : "")}></div>
-            <div className={"popup " + (props.isShowing ? "active" : "")}>
-                <div className="popup-top">
-                    <h1>{view}</h1>
-                    <button onClick={() => dispatch(closePopup())}>X</button>
-                </div>
-                <div className="popup-body">{!props.children ? popupView : props.children}</div>
-            </div>
+  return (
+    <div>
+      <div className={"background " + (props.isShowing ? "active" : "")}></div>
+      <div className={"popup " + (props.isShowing ? "active" : "")}>
+        <div className="popup-top">
+          <h1>{view}</h1>
+          <button onClick={() => dispatch(closePopup())}>X</button>
         </div>
-    );
+        <div className="popup-body">{!props.children ? popupView : props.children}</div>
+      </div>
+    </div>
+  );
 };
 
 export default Popup;

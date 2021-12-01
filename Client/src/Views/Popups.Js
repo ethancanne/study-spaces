@@ -4,9 +4,9 @@
  * @date   10/20/2021
  */
 const Popups = {
-    StudyGroup: {
-        Create: "Create Study Group"
-    }
+  StudyGroup: {
+    Create: "Create Study Group"
+  }
 };
 
 export default Popups;

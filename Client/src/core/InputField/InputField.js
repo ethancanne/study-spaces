@@ -6,11 +6,11 @@ import "../core.scss";
  * @date   10/21/2021
  */
 const InputField = (props) => {
-    return (
-        <fieldset className="InputField" {...props}>
-            {props.children}
-        </fieldset>
-    );
+  return (
+    <fieldset className="InputField" {...props}>
+      {props.children}
+    </fieldset>
+  );
 };
 
 export default InputField;

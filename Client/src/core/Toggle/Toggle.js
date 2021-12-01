@@ -6,12 +6,12 @@ import React from "react";
  * @date   11/20/2021
  */
 const Toggle = (props) => {
-    return (
-        <label className="switch">
-            <input type="checkbox" value={props.value} onChange={props.onChange} />
-            <span className="slider"></span>
-        </label>
-    );
+  return (
+    <label className="switch">
+      <input type="checkbox" value={props.value} onChange={props.onChange} />
+      <span className="slider"></span>
+    </label>
+  );
 };
 
 export default Toggle;

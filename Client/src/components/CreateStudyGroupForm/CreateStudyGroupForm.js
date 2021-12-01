@@ -14,31 +14,31 @@ import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 
 const CreateStudyGroupForm = (props) => {
-    return (
-        <div>
-            <Form onSubmit={props.submitCreateStudyGroup}>
-                {/* Add the appropriate inputs, toggles and dropdown fields, each accompanied by a Label, for each of the fields (declared in CreateStudyGroupView File) that are required to create a study group */}
+  return (
+    <div>
+      <Form onSubmit={props.submitCreateStudyGroup}>
+        {/* Add the appropriate inputs, toggles and dropdown fields, each accompanied by a Label, for each of the fields (declared in CreateStudyGroupView File) that are required to create a study group */}
 
-                {/* Don't forget a final submit button at the end of the form */}
+        {/* Don't forget a final submit button at the end of the form */}
 
-                {/* Examples */}
-                <InputField>
-                    <Label>Study Group Title</Label>
-                    <TextInput value={props.title} onChange={props.updateTitleField} type="text" />
-                </InputField>
+        {/* Examples */}
+        <InputField>
+          <Label>Study Group Title</Label>
+          <TextInput value={props.title} onChange={props.updateTitleField} type="text" />
+        </InputField>
 
-                <InputField>
-                    <Label>Online Group?</Label>
-                    <Toggle />
-                </InputField>
+        <InputField>
+          <Label>Online Group?</Label>
+          <Toggle />
+        </InputField>
 
-                <InputField>
-                    <Label>Study Group Title</Label>
-                    <TextInput value={props.title} onChange={props.updateTitleField} type="text" />
-                </InputField>
-            </Form>
-        </div>
-    );
+        <InputField>
+          <Label>Study Group Title</Label>
+          <TextInput value={props.title} onChange={props.updateTitleField} type="text" />
+        </InputField>
+      </Form>
+    </div>
+  );
 };
 
 export default CreateStudyGroupForm;

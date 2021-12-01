@@ -1,15 +1,15 @@
 @import "../../globals.scss";
 .background {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    z-index: 20;
-    background-color: #9a5e2970;
-    pointer-events: none;
-    opacity: 1;
-    transition: all 1s;
-    opacity: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  z-index: 20;
+  background-color: #9a5e2970;
+  pointer-events: none;
+  opacity: 1;
+  transition: all 1s;
+  opacity: 0;
 }
 
 // .background {
@@ -32,26 +32,26 @@
 // }
 
 .popup {
-    position: fixed;
-    width: 60vw;
-    height: auto;
-    top: 15%;
-    left: 20%;
-    transform: translate(-50%, 0);
-    z-index: 99;
-    background-color: white;
-    border-radius: 10px;
-    transform: scale(0.8);
-    opacity: 0;
-    transition: all 0.5s;
-    pointer-events: none;
-    @include mobile {
-        border-radius: 0px;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-    }
+  position: fixed;
+  width: 60vw;
+  height: auto;
+  top: 15%;
+  left: 20%;
+  transform: translate(-50%, 0);
+  z-index: 99;
+  background-color: white;
+  border-radius: 10px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.5s;
+  pointer-events: none;
+  @include mobile {
+    border-radius: 0px;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+  }
 }
 
 // .popup {
@@ -79,42 +79,42 @@
 // }
 
 .popup-top {
-    background-color: whitesmoke;
-    padding: 0 20px 0 20px;
-    display: flex;
+  background-color: whitesmoke;
+  padding: 0 20px 0 20px;
+  display: flex;
 
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    box-shadow: rgba(0, 0, 0, 0.434) 0px 1px 90px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.434) 0px 1px 90px;
 
-    h1 {
-        color: black;
-        flex: 90%;
-        font-size: 20px;
-        font-weight: 800;
-    }
-    button {
-        border: none;
-        background-color: rgba(116, 11, 11, 0.201);
-        border-radius: 15px;
-        width: 30px;
-        height: 30px;
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-        font-size: 10px;
-        font-weight: 700;
-        color: rgb(255, 255, 255);
-        box-shadow: rgba(0, 0, 0, 0.132) 0px 1px 10px;
-        cursor: pointer;
-    }
+  h1 {
+    color: black;
+    flex: 90%;
+    font-size: 20px;
+    font-weight: 800;
+  }
+  button {
+    border: none;
+    background-color: rgba(116, 11, 11, 0.201);
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgb(255, 255, 255);
+    box-shadow: rgba(0, 0, 0, 0.132) 0px 1px 10px;
+    cursor: pointer;
+  }
 }
 
 .popup-body {
-    padding: 20px;
+  padding: 20px;
 }
 
 .active {
-    transform: scale(1);
-    pointer-events: all;
-    opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+  opacity: 1;
 }

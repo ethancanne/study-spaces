@@ -14,25 +14,25 @@ const initialState = user ? { isLoggedIn: userIsLoggedIn, user } : { isLoggedIn:
  * @date   11/09/2021
  */
 const authReducer = (state = initialState, action) => {
-    switch (action.type) {
-        //Sign the user in and save the user to local storage
-        case authConstants.SIGN_IN:
-            localStorage.setItem("token", action.payload.authenticationToken);
-            localStorage.setItem("authenticationTokenExpirationDate", action.payload.authenticationTokenExpirationDate);
-            localStorage.setItem("user", JSON.stringify(action.payload.user));
-            return { ...state, user: action.payload.user, isLoggedIn: true };
+  switch (action.type) {
+    //Sign the user in and save the user to local storage
+    case authConstants.SIGN_IN:
+      localStorage.setItem("token", action.payload.authenticationToken);
+      localStorage.setItem("authenticationTokenExpirationDate", action.payload.authenticationTokenExpirationDate);
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      return { ...state, user: action.payload.user, isLoggedIn: true };
 
-        case authConstants.SIGN_OUT:
-            localStorage.clear();
-            return { ...state, user: {}, isLoggedIn: false };
+    case authConstants.SIGN_OUT:
+      localStorage.clear();
+      return { ...state, user: {}, isLoggedIn: false };
 
-        case authConstants.CREATE_ACCOUNT:
-            // localStorage.setItem("unverifiedUser", JSON.stringify(action.payload.unverifiedUser));
-            return { ...state, unverifiedUser: action.payload.unverifiedUser };
+    case authConstants.CREATE_ACCOUNT:
+      // localStorage.setItem("unverifiedUser", JSON.stringify(action.payload.unverifiedUser));
+      return { ...state, unverifiedUser: action.payload.unverifiedUser };
 
-        default:
-            return state;
-    }
+    default:
+      return state;
+  }
 };
 
 export default authReducer;
