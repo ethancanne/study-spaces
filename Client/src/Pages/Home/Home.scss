@@ -1,39 +1,39 @@
 @import "../../globals.scss";
 .HomePage {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
 
-  .subtitle {
-    font-size: 80px;
-    margin: 100px;
-    overflow-x: visible;
-    font-weight: 300;
-    color: rgb(58, 58, 58);
-  }
-
-  &::after {
-    content: "";
-    width: 94%;
-    height: 80px;
-    background-color: #ffda5a;
-    position: absolute;
-    z-index: -2;
-    top: 7em;
-    right: 0;
-  }
-
-  @media (max-width: $mobile-width) {
-    & {
-      display: block;
-      padding: 0;
-      margin: 0;
-    }
     .subtitle {
-      display: none;
+        font-size: 80px;
+        margin: 100px;
+        overflow-x: visible;
+        font-weight: 300;
+        color: rgb(58, 58, 58);
     }
-  }
+
+    &::after {
+        content: "";
+        width: 94%;
+        height: 80px;
+        background-color: #ffda5a;
+        position: absolute;
+        z-index: -2;
+        top: 7em;
+        right: 0;
+    }
+
+    @media (max-width: $mobile-width) {
+        & {
+            display: block;
+            padding: 0;
+            margin: 0;
+        }
+        .subtitle {
+            display: none;
+        }
+    }
 }

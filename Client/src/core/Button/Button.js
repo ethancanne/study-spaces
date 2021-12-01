@@ -11,27 +11,27 @@ import ButtonTypes from "./ButtonTypes.js";
  * @date   10/21/2021
  */
 const Button = (props) => {
-  let buttonClassName;
-  switch (props.type) {
-    case ButtonTypes.Primary:
-      buttonClassName = "ButtonPrimary";
-      break;
-    case ButtonTypes.Creation:
-      buttonClassName = "ButtonCreation";
-      break;
-    case ButtonTypes.Destructive:
-      buttonClassName = "ButtonDestructive";
-      break;
-    default:
-      buttonClassName = "ButtonPrimary";
-      break;
-  }
+    let buttonClassName;
+    switch (props.type) {
+        case ButtonTypes.Primary:
+            buttonClassName = "ButtonPrimary";
+            break;
+        case ButtonTypes.Creation:
+            buttonClassName = "ButtonCreation";
+            break;
+        case ButtonTypes.Destructive:
+            buttonClassName = "ButtonDestructive";
+            break;
+        default:
+            buttonClassName = "ButtonPrimary";
+            break;
+    }
 
-  return (
-    <button className={buttonClassName + " Button"} {...props}>
-      {props.children}
-    </button>
-  );
+    return (
+        <button className={buttonClassName + " Button"} {...props}>
+            {props.children}
+        </button>
+    );
 };
 
 export default Button;

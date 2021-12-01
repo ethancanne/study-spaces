@@ -25,7 +25,11 @@ class StudyGroupRouter {
      */
     static serveRoutes(server, authenticator) {
         // This is used to create study groups.
-        server.post(Routes.StudyGroup.CreateStudyGroup, authenticator.protectRoute(), StudyGroupRouter.createStudyGroup);
+        server.post(
+            Routes.StudyGroup.CreateStudyGroup,
+            authenticator.protectRoute(),
+            StudyGroupRouter.createStudyGroup
+        );
     }
 
     /**
@@ -41,10 +45,24 @@ class StudyGroupRouter {
      */
     static async createStudyGroup(request, response) {
         // CREATE STUDY GROUP.
-        const newStudyGroup = await StudyGroup.create(request.body.name, request.user, request.body.subject, request.body.areaCode, request.body.isOnlineGroup, request.body.isTutorGroup, request.body.course, request.body.school);
+        let newStudyGroup = undefined;
+        try {
+            newStudyGroup = await StudyGroup.create(
+                request.body.name,
+                request.user,
+                request.body.subject,
+                request.body.areaCode,
+                request.body.isOnlineGroup,
+                request.body.isTutorGroup,
+                request.body.course,
+                request.body.school
+            );
+        } catch (error) {
+            Log.writeError(error);
+        }
         const studyGroupWasNotCreated = Validator.isUndefined(newStudyGroup);
 
-        // VALIDATE STUDY GROUP CREATION
+        // VALIDATE STUDY GROUP CREATION.
         if (studyGroupWasNotCreated) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
         }
@@ -52,12 +70,12 @@ class StudyGroupRouter {
         // ADD THE STUDY GROUP TO THE USER.
         let studyGroupWasAdded = false;
         try {
-          studyGroupWasAdded = await request.user.addStudyGroup(newStudyGroup);
+            studyGroupWasAdded = await request.user.addStudyGroup(newStudyGroup);
         } catch (error) {
-          Log.writeError(error);
+            Log.writeError(error);
         }
         if (!studyGroupWasAdded) {
-          return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
         }
 
         // SEND SUCCESS MESSAGE
