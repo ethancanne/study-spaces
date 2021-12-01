@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Client/src/state/reducers/popupReducer.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,39 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Client/src/state/reducers/popupReducer.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import popupConstants from "../constants/popupConstants";
+import popups from "../../Views/Popups";
+/**
+ * This is the reducer for all actions relating to popus
+ * A reducer is how actions transform the state into the next state
+ * @author Ethan Cannelongo
+ * @date   11/18/2021
+ */
+const popupReducer = (state = { view: "", isShowing: false }, action) => {
+    switch (action.type) {
+        case popupConstants.SHOW_STUDY_GROUP_POPUP:
+            return { ...state, view: popups.StudyGroup.Create, isShowing: true };
 
+        case popupConstants.CLOSE_POPUP:
+            return { ...state, view: "popups.StudyGroup.Create", isShowing: false };
+        default:
+            return state;
+    }
+};
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default popupReducer;
+</code></pre>
+        </article>
+    </section>
 
 
 

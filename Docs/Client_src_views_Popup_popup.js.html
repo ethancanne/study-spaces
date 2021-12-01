@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: Client/src/views/Popup/popup.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,58 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: Client/src/views/Popup/popup.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import "./Popup.scss";
+import Popups from "../Popups";
+import { useSelector, useDispatch } from "react-redux";
+import { closePopup } from "../../state/actions";
+import CreateStudyGroupView from "../Study/CreateStudyGroupView";
 
+/**
+ * This is the presentational component that presents different popup views according to the
+ * view property in the popupReducer.
+ * @author Ethan Cannelongo
+ * @date   11/25/2021
+ */
+const Popup = (props) => {
+    const view = useSelector((state) => state.popupReducer.view);
+    const dispatch = useDispatch();
+    let popupView = &lt;>&lt;/>;
 
-    <h3> </h3>
+    switch (view) {
+        case Popups.StudyGroup.Create:
+            popupView = &lt;CreateStudyGroupView />;
+            console.log("HELLo");
+            break;
+    }
 
+    return (
+        &lt;div>
+            &lt;div className={"background " + (props.isShowing ? "active" : "")}>&lt;/div>
+            &lt;div className={"popup " + (props.isShowing ? "active" : "")}>
+                &lt;div className="popup-top">
+                    &lt;h1>{view}&lt;/h1>
+                    &lt;button onClick={() => dispatch(closePopup())}>X&lt;/button>
+                &lt;/div>
+                &lt;div className="popup-body">{!props.children ? popupView : props.children}&lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+};
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default Popup;
+</code></pre>
+        </article>
+    </section>
 
 
 

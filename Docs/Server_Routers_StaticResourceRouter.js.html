@@ -33,37 +33,42 @@ const Routes = require("../Routes/Routes.js");
 const StaticResources = require("../Routes/StaticResources.js");
 
 /**
-* The router used to serve static resources.
-* @author Cameron Burkholder
-* @date   10/20/2021
-*/
+ * The router used to serve static resources.
+ * @author Cameron Burkholder
+ * @date   10/20/2021
+ */
 class StaticResourceRouter {
-  /**
-  * Initialize the router and serve the routes.
-  * @param {Server} server The server instance used to provide the routes.
-  * @param {Authenticator} authenticator The authenticator used to protect the routes.
-  * @author Cameron Burkholder
-  * @date   10/20/2021
-  */
-  static serveRoutes(server, authenticator) {
-    // This serves the default index file, used to display all other contents of the application.
-    server.get(Routes.StaticResources.Index, StaticResourceRouter.getIndexFile);
-  }
+    /**
+     * Initialize the router and serve the routes.
+     * @param {Server} server The server instance used to provide the routes.
+     * @param {Authenticator} authenticator The authenticator used to protect the routes.
+     * @author Cameron Burkholder
+     * @date   10/20/2021
+     */
+    static serveRoutes(server, authenticator) {
+        // This serves the default index file, used to display all other contents of the application.
+        server.get(Routes.StaticResources.Index, StaticResourceRouter.getIndexFile);
+    }
 
-  // GET ROUTES.
-  /**
-  * This serves the index file.
-  * @param  {object} request The request being served.
-  * @param  {object} response The response being generated.
-  * @author Cameron Burkholder
-  * @date   07/31/2021
-  */
-  static getIndexFile(request, response) {
-    // SEND THE INDEX FILE.
-    const staticResourceFolder = Configuration.getStaticResourceFolder();
-    const indexFileFilepath = Path.join(global.rootDirectory, "Client", staticResourceFolder, StaticResources.Index);
-    response.sendFile(indexFileFilepath);
-  }
+    // GET ROUTES.
+    /**
+     * This serves the index file.
+     * @param  {object} request The request being served.
+     * @param  {object} response The response being generated.
+     * @author Cameron Burkholder
+     * @date   07/31/2021
+     */
+    static getIndexFile(request, response) {
+        // SEND THE INDEX FILE.
+        const staticResourceFolder = Configuration.getStaticResourceFolder();
+        const indexFileFilepath = Path.join(
+            global.rootDirectory,
+            "Client",
+            staticResourceFolder,
+            StaticResources.Index
+        );
+        response.sendFile(indexFileFilepath);
+    }
 }
 
 module.exports = StaticResourceRouter;
@@ -77,13 +82,13 @@ module.exports = StaticResourceRouter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Nov 17 2021 16:46:54 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
