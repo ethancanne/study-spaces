@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 
 /**
  * This is a specific view that is used in a popup to allow a user to create a study group
- * @author Cameron Burkholder and Ethan Cannelongo
+ * @author Ethan Cannelongo
  * @date   11/20/2021
  */
 const CreateStudyGroupView = () => {
@@ -20,6 +20,7 @@ const CreateStudyGroupView = () => {
   const [isOnlineGroup, setIsOnlineGroup] = useState(false); //Toggle tag
 
   const [groupColor, setGroupColor] = useState(BLANK); //TextInput tag for now
+  const [groupPhoto, setGroupPhoto] = useState(BLANK); //TextInput tag for now
 
   /**
    * Makes an api call to the Create study group route, passing in the information entered in the form and
@@ -29,6 +30,7 @@ const CreateStudyGroupView = () => {
    */
   const submitCreateStudyGroup = async (event) => {
     //Prevent default form behavior
+
     event.preventDefault();
     event.stopPropagation();
 
@@ -43,10 +45,20 @@ const CreateStudyGroupView = () => {
     //If all the conditions are satisfied, then use the dispatch function, passing in the "response.data" object.  This will dispatch an action to redux, which saves the study group to the global state of the app.
   };
 
+  const updateTitleField = (event) => {
+    setTitle(event.target.value);
+  };
+
   return (
     <div>
       <div>
-        <CreateStudyGroupForm submitCreateStudyGroup={submitCreateStudyGroup} />
+        <CreateStudyGroupForm
+          submitCreateStudyGroup={submitCreateStudyGroup}
+          title={title}
+          description={description}
+          updateDescriptionField={setDescription}
+          updateTitleField={updateTitleField}
+        />
       </div>
     </div>
   );

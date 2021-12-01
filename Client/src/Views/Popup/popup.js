@@ -25,7 +25,7 @@ const Popup = (props) => {
 
   return (
     <div>
-      <div className={"background " + (props.isShowing ? "active" : "")}></div>
+      <div className={"background " + (props.isShowing ? "active" : "")} onClick={() => dispatch(closePopup())}></div>
       <div className={"popup " + (props.isShowing ? "active" : "")}>
         <div className="popup-top">
           <h1>{view}</h1>

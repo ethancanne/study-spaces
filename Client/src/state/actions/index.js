@@ -33,9 +33,10 @@ export const closePopup = () => {
   };
 };
 
-//Study Reducer
-export const createStudyGroup = (group) => {
+//Study Groups Reducer
+export const addStudyGroup = (group) => {
   return {
-    type: "CREATE_STUDY_GROUP"
+    type: "ADD_STUDY_GROUP",
+    payload: group
   };
 };

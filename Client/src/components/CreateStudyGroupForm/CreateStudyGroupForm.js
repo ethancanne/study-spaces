@@ -28,13 +28,13 @@ const CreateStudyGroupForm = (props) => {
         </InputField>
 
         <InputField>
-          <Label>Online Group?</Label>
-          <Toggle />
+          <Label>Study Group Description</Label>
+          <TextInput value={props.descritption} onChange={props.updateDescriptionField} type="text" />
         </InputField>
 
         <InputField>
-          <Label>Study Group Title</Label>
-          <TextInput value={props.title} onChange={props.updateTitleField} type="text" />
+          <Label>Online Group?</Label>
+          <Toggle />
         </InputField>
       </Form>
     </div>
