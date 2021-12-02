@@ -3,6 +3,7 @@ const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
+const PrivacySettings = require("./PrivacySettings.js");
 const Validator = require("../Validator.js");
 
 /**
@@ -44,6 +45,10 @@ const StudyGroupSchema = new Schema({
         required: true
     },
     owner: {
+        type: String,
+        required: true
+    },
+    privacySetting: {
         type: String,
         required: true
     },
@@ -132,17 +137,20 @@ class StudyGroup {
         const feedId = "1";
 
         // CREATE THE STUDY GROUP.
+        const EMPTY_LIST_OF_MEETINGS = [];
+        const ownerId = owner.getId();
         const newStudyGroup = new StudyGroupModel({
-            name: name,
-            owner: owner.getId(),
-            subject: subject,
             areaCode: areaCode,
+            course: course,
+            feed: feedId,
             isOnlineGroup: isOnlineGroup,
             isTutorGroup: isTutorGroup,
-            course: course,
+            meetings: EMPTY_LIST_OF_MEETINGS,
+            name: name,
+            owner: ownerId,
+            privacySetting: PrivacySettings.Open,
             school: school,
-            meetings: [],
-            feed: feedId
+            subject: subject
         });
 
         // SAVE THE STUDY GROUP.
