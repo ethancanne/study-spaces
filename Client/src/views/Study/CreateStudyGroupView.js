@@ -3,6 +3,8 @@ import CreateStudyGroupForm from "../../components/CreateStudyGroupForm/CreateSt
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import {addStudyGroup} from '../../state/actions/index'
+import { closePopup } from "../../state/actions";
+
 
 // are these needed?
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
@@ -18,15 +20,15 @@ const CreateStudyGroupView = () => {
   const dispatch = useDispatch();
 
   const BLANK = "";
-  const [title, setTitle] = useState(BLANK); //TextInput tag
+  const [name, setName] = useState(BLANK); //TextInput tag
   const [description, setDescription] = useState(BLANK); //TextInput tag
-  const [category, setCategory] = useState(BLANK); //select tag, filled with option tags
+  const [subject, setSubject] = useState('That'); //select tag, filled with option tags
   const [privacy, setPrivacy] = useState("Public"); //select tag, filled with option tags
   const [courseCode, setCourseCode] = useState(BLANK); //TextInput tag
   const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false); //Input tag with type "checkbox"
   const [isTutorGroup, setIsTutorGroup] = useState(false); //Toggle tag
   const [isOnlineGroup, setIsOnlineGroup] = useState(false); //Toggle tag
-  const [groupColor, setGroupColor] = useState(BLANK); //TextInput tag for now
+  const [groupColor, setGroupColor] = useState("#000000"); //TextInput tag for now
   const [groupPhoto, setGroupPhoto] = useState(BLANK); //TextInput tag for now
 
 
@@ -36,7 +38,7 @@ const CreateStudyGroupView = () => {
   /**
    * Makes an api call to the Create study group route, passing in the information entered in the form and
    * rendering the client according to the response received
-   * @author Stacey Popenfoose
+   * @author Stacey Popenfoose and Ethan Cannelongo
    * @date   12/08/21
    */
   const submitCreateStudyGroup = async (event) => {
@@ -48,12 +50,14 @@ const CreateStudyGroupView = () => {
     //Use axios to assign a variable called "response" to the response received when awaiting an API call to "Routes.Study.CreateStudyGroup," passing in an object with all of the values entered into the form.
     let response;
     try {
+      axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
       response = await axios.post(Routes.StudyGroup.CreateStudyGroup, {
-        title,
+        name,
         groupColor,
         description,
-        category,
-        privacy,
+        subject,
+        privacySetting: privacy,
         courseCode,
         isAssociatedWithSchool,
         isTutorGroup,
@@ -75,15 +79,19 @@ const CreateStudyGroupView = () => {
 
         if (studyGroupCreationWasValid) {
           //If all the conditions are satisfied, then use the dispatch function, passing in the "response.data" object.  This will dispatch an action to redux, which saves the study group to the global state of the app.
-          dispatch(addStudyGroup(response.data));
-          //props?
+          dispatch(addStudyGroup(response.data.newStudyGroup));
+          dispatch(closePopup());
+        }else{
+          setStudyGroupCreationErrorMsg(response.data.message);
         }
+      }else{
+        setStudyGroupCreationErrorMsg("There's been a problem with the server");
       }
     }
   };
 
-  const updateTitleField = (event) => {
-    setTitle(event.target.value);
+  const updateNameField = (event) => {
+    setName(event.target.value);
     setStudyGroupCreationErrorMsg(BLANK);
   };
   const updateGroupColor = (event) => {
@@ -95,8 +103,8 @@ const CreateStudyGroupView = () => {
     setDescription(event.target.value);
     setStudyGroupCreationErrorMsg(BLANK);
   };
-  const updateCategory = (event) => {
-    setCategory(event.target.options[event.target.selectedIndex].value);
+  const updateSubjectField = (event) => {
+    setSubject(event.target.options[event.target.selectedIndex].value);
     setStudyGroupCreationErrorMsg(BLANK);
   };
   const updatePrivacy = (event) => {
@@ -124,9 +132,9 @@ const CreateStudyGroupView = () => {
     <div className="create-studygroup-view">
         <CreateStudyGroupForm 
           submitCreateStudyGroup={submitCreateStudyGroup} 
-          title={title}
+          name={name}
           description={description}
-          category={category}
+          subject={subject}
           privacy={privacy}
           courseCode={courseCode}
           isAssociatedWithSchool={isAssociatedWithSchool}
@@ -134,9 +142,9 @@ const CreateStudyGroupView = () => {
           isOnlineGroup={isOnlineGroup}
           groupColor={groupColor}
 
-          updateTitleField={updateTitleField}
+          updateNameField={updateNameField}
           updateDescriptionField={updateDescriptionField}
-          updateCategory={updateCategory}
+          updateSubjectField={updateSubjectField}
           updatePrivacy={updatePrivacy}
           updateCourseCodeField={updateCourseCodeField}
           updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}

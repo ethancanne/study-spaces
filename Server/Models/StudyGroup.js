@@ -13,7 +13,7 @@ const Validator = require("../Validator.js");
 const StudyGroupSchema = new Schema({
     areaCode: {
         type: String,
-        required: true
+        required: false
     },
     course: {
         type: String,
@@ -56,6 +56,10 @@ const StudyGroupSchema = new Schema({
         required: false
     },
     subject: {
+        type: String,
+        required: true
+    },
+    groupColor: {
         type: String,
         required: true
     }
@@ -126,7 +130,7 @@ class StudyGroup {
      * @author Clifton Croom
      * @date   11/30/2021
      */
-    static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school) {
+    static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
         // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
         // @todo Write the actual implementation.
         const feedId = "1";
@@ -142,7 +146,8 @@ class StudyGroup {
             course: course,
             school: school,
             meetings: [],
-            feed: feedId
+            feed: feedId,
+            groupColor
         });
 
         // SAVE THE STUDY GROUP.
@@ -191,7 +196,30 @@ class StudyGroup {
      * @async
      *
      */
-    static async getById(studyGroupId) {}
+    static async getById(studyGroupId) {
+        // CONVERT THE USER ID TO THE ACCEPTABLE TYPE.
+        const convertedStudyGroupId = Mongoose.Types.ObjectId(studyGroupId);
+
+        // GET THE USER BASED ON THE GIVEN ID.
+        let studyGroupRecord = false;
+        try {
+            studyGroupRecord = await StudyGroupModel.findOne({ _id: convertedStudyGroupId }).exec();
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group by ID.");
+            Log.writeError(error);
+            // If an error occurs, it should be returned.
+            return error;
+        } finally {
+            // If the user wasn't able to be found in the database, this routine should return undefined.
+            let studyGroup = undefined;
+            let studyGroupWasFound = Validator.isDefined(studyGroupRecord);
+            if (studyGroupWasFound) {
+                // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+                studyGroup = new StudyGroup(studyGroupRecord);
+            }
+            return studyGroup;
+        }
+    }
 
     /**
      * Gets the document id of the study group in the database as a string.

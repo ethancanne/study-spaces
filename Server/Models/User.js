@@ -4,6 +4,7 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
+const StudyGroup = require("./StudyGroup.js");
 
 /**
  * Used to define the database schema for storing users.
@@ -232,6 +233,36 @@ class User {
 
         // RETURN CONVERSATIONS.
         return conversations;
+    }
+
+    /**
+     * Gets the user's Study Groups.
+     * @return {StudyGroup[]} The user's Study Groups.
+     *
+     */
+     async getStudyGroups() {
+        // ID -> Conversation;
+
+        // LOOP THROUGH EACH CONVERSATION ID.
+        let studyGroups = [];
+        await Promise.all(this.studyGroups.map(async (studyGroupId) => {
+            let studyGroup = undefined;
+            try {
+                studyGroup = await StudyGroup.getById(studyGroupId);
+                
+            } catch (error) {
+                Log.writeError(error);
+            } finally {
+                const studyGroupWasFound = Validator.isDefined(studyGroup);
+                if (studyGroupWasFound) {
+                    studyGroups.push(studyGroup);
+                    console.log(studyGroups)
+                }
+            }
+        }));
+        console.log(studyGroups)
+        // RETURN CONVERSATIONS.
+        return studyGroups;
     }
 
     /**

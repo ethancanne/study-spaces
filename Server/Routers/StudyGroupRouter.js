@@ -9,6 +9,7 @@ const Routes = require("../Routes/Routes.js");
 const StaticResources = require("../Routes/StaticResources.js");
 const StudyGroup = require("../Models/StudyGroup.js");
 const Validator = require("../Validator.js");
+const User = require("../Models/User.js");
 
 /**
  * The router used to serve account-related requests.
@@ -30,6 +31,11 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             StudyGroupRouter.createStudyGroup
         );
+        server.get(
+            Routes.StudyGroup.GetUserStudyGroups,
+            authenticator.protectRoute(),
+            StudyGroupRouter.getUserStudyGroups
+        );
     }
 
     /**
@@ -46,6 +52,7 @@ class StudyGroupRouter {
     static async createStudyGroup(request, response) {
         // CREATE STUDY GROUP.
         let newStudyGroup = undefined;
+        console.log(request.body)
         try {
             newStudyGroup = await StudyGroup.create(
                 request.body.name,
@@ -55,7 +62,8 @@ class StudyGroupRouter {
                 request.body.isOnlineGroup,
                 request.body.isTutorGroup,
                 request.body.course,
-                request.body.school
+                request.body.school,
+                request.body.groupColor
             );
         } catch (error) {
             Log.writeError(error);
@@ -83,6 +91,33 @@ class StudyGroupRouter {
             message: ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
             newStudyGroup: newStudyGroup
         });
+    }
+
+
+
+
+
+    static async getUserStudyGroups(request, response) {
+        // CREATE STUDY GROUP.
+        let studyGroups = undefined;
+        try {
+            studyGroups = await request.user.getStudyGroups()
+
+        } catch (error) {
+            Log.writeError(error);
+        }finally{
+            // SEND SUCCESS MESSAGE
+            if (Validator.isDefined(studyGroups)){
+                response.json({
+                    message: ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
+                    studyGroups: studyGroups
+                });
+            }else{
+                response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
+            }
+        }
+       
+       
     }
 }
 module.exports = StudyGroupRouter;

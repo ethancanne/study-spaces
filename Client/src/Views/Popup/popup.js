@@ -19,12 +19,11 @@ const Popup = (props) => {
   switch (view) {
     case Popups.StudyGroup.Create:
       popupView = <CreateStudyGroupView />;
-      console.log("HELLo");
       break;
   }
 
   return (
-    <div>
+    <div className="popup-wrapper">
       <div className={"background " + (props.isShowing ? "active" : "")} onClick={() => dispatch(closePopup())}></div>
       <div className={"popup " + (props.isShowing ? "active" : "")}>
         <div className="popup-top">

@@ -3,7 +3,7 @@ import "./LoginView.scss";
 import axios from "axios";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signIn, signOut } from "../../../state/actions";
+import { addStudyGroup, signIn, signOut } from "../../../state/actions";
 
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
 import Button from "../../../core/Button/Button.js";
@@ -57,8 +57,9 @@ const LoginView = (props) => {
                 // IF THE USER HAS LOGGED IN, CONFIGURE THE CLIENT TO REFLECT THIS.
                 const loginWasValid = ResponseMessages.Account.SuccessLogin === response.data.message;
                 if (loginWasValid) {
-                    const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
+                    const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
                     dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
+
                 } else {
                     setLoginErrorMsg(response.data.message);
                     dispatch(signOut);

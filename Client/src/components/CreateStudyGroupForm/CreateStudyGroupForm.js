@@ -25,14 +25,13 @@ import ColorPicker from "../../core/ColorPicker/ColorPicker";
  * @param {string} props.title
  * @param {string} props.description
  * @param {} props.privacy
- * @param {} props.category
+ * @param {} props.subject
  * @param {} props.classCode
  * @param {} props.isAssociatedWithSchool
  * @param {} props.isTutorGroup
  * @param {} props.isOnlineGroup
  *
  */
-
 const CreateStudyGroupForm = (props) => {
     return (
         <div>
@@ -43,8 +42,8 @@ const CreateStudyGroupForm = (props) => {
                 {/* user text input */}
                 <div className="side-by-side">
                   <InputField>
-                      <Label>Title</Label>
-                      <TextInput value={props.title} onChange={props.updateTitleField} type="text" />
+                      <Label>Study Group Name</Label>
+                      <TextInput value={props.name} onChange={props.updateNameField} type="text" />
                   </InputField>
                   <InputField>
                       <Label>Color</Label>
@@ -62,13 +61,13 @@ const CreateStudyGroupForm = (props) => {
                
                 <div className="side-by-side">
                   <InputField>
-                    <Label>Category</Label>
-                    <Dropdown options={["This", "That"]} onChange={props.updateCategory}/>
+                    <Label>Subject</Label>
+                    <Dropdown options={["This", "That"]} onChange={props.updateSubjectField}/>
                   </InputField>
                   
                   <InputField>
                     <Label>Privacy</Label>
-                    <Dropdown options={["Public", "Public"]} onChange={props.updatePrivacy}/>
+                    <Dropdown options={["Public", "Public", "Public"]} onChange={props.updatePrivacy}/>
                   </InputField>
 
                   <InputField>

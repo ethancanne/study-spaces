@@ -13,29 +13,16 @@
   opacity: 0;
 }
 
-// .background {
-//   width: 100vw;
-//   height: 100vh;
-//   position: fixed;
-//   top: 0;
-//   z-index: 20;
-//   background-color: #79491f98;
-//   // pointer-events: none;
-//   transition: all 1s;
-//   opacity: 0;
-//   animation: fade 0.3s forwards;
-// }
-
-// @keyframes fade {
-//   100% {
-//     opacity: 1;
-//   }
-// }
+.popup-wrapper{
+  position: relative;
+}
 
 .popup {
   position: fixed;
+  overflow-y: scroll;
   width: 60vw;
   height: auto;
+  // max-height: 70vh;
   top: 15%;
   left: 20%;
   transform: translate(-50%, 0);
@@ -55,29 +42,6 @@
   }
 }
 
-// .popup {
-//   z-index: 21;
-//   position: fixed;
-//   overflow: hidden;
-
-//   left: 50%;
-//   right: 50%;
-//   top: 50%;
-//   // text-align: center;
-//   transform: scale(0.9) translate(-50%, -50%);
-//   opacity: 0;
-//   width: 60vw;
-//   height: auto;
-//   background-color: white;
-//   animation: fadeZoomIn 0.3s ease-in-out forwards;
-//   // padding: 10px;
-// }
-// @keyframes fadeZoomIn {
-//   100% {
-//     transform: scale(1) translate(-50%, -50%);
-//     opacity: 1;
-//   }
-// }
 
 .popup-top {
   padding: 20px 30px 0 30px;
@@ -110,6 +74,7 @@
 
 .popup-body {
   padding: 20px;
+  max-height: 50vh;
 }
 
 .active {

@@ -49,7 +49,7 @@ const App = (props) => {
      */
     const updateAuthenticationToken = async () => {
         if (isLoggedIn) {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("authenticationToken");
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
             let response = undefined;
             try {
                 response = await axios.get(Routes.Account.UpdateAuthenticationToken);
@@ -70,6 +70,7 @@ const App = (props) => {
     };
 
     const verifyUser = (verificationToken) => {};
+    
     return (
         <Router>
             <Popup isShowing={popupIsShowing} />
