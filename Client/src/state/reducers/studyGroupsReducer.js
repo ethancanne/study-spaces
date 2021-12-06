@@ -9,7 +9,11 @@ import studyGroupsConstants from "../constants/studyGroupsConstants";
 const studyGroupsReducer = (state = {studyGroups: []}, action) => {
   switch (action.type) {
     case studyGroupsConstants.ADD_STUDY_GROUP:
-      return { ...state, studyGroups: [...(state.studyGroups), action.payload] };
+      if (!action.payload.reset)
+        return { ...state, studyGroups: [...(state.studyGroups), action.payload.group] };
+
+      return { ...state, studyGroups: [action.payload.group] };
+
 
     default:
       return state;

@@ -49,7 +49,7 @@ const Study = () => {
           console.log(studyGroups)
           if(studyGroups){
             studyGroups.map(s=>{
-                dispatch(addStudyGroup(s));
+                dispatch(addStudyGroup(s, true));
             })
           }
         }else{
