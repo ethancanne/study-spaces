@@ -75,7 +75,9 @@ class AccountRouter {
     static async createAccount(request, response) {
         // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
         const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
+
         const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
+
         if (unverifiedUserAlreadyExists) {
             return response.json({ message: ResponseMessages.Account.userAlreadyExists });
         }
@@ -96,27 +98,31 @@ class AccountRouter {
 
         // EMAIL THE VERIFICATION LINK TO THE USER.
         const verificationToken = unverifiedUser.verificationToken;
-        let verificationLink = `http://${request.hostname}/verify/${verificationToken}`;
-        const emailSubject = "";
-        const emailBody = "";
-        // Write to log file for now.
+        let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+        const emailSubject = "Your Study Spaces Verification Link";
+        const emailBody = "Click this: " + verificationLink;
+
         let emailWasSent = false;
+
         try {
-          emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
+            emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
         } catch (error) {
-          Log.writeError(error);
+            console.log("sending email error in accout router");
+            Log.writeError(error);
         }
-        const emailWasNotSend = !emailWasSent;
-        if (emailWasNotSend) {
-          return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+        console.log(emailWasSent);
+
+        if (!emailWasSent) {
+            console.log("Failed");
+
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
 
         // SEND THE RESPONSE.
         unverifiedUser.removeSensitiveAttributes();
         response.json({
             message: ResponseMessages.Account.SuccessAccountCreated,
-            unverifiedUser: unverifiedUser,
-            verificationLink: verificationLink
+            unverifiedUser: unverifiedUser
         });
     }
 
