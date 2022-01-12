@@ -138,7 +138,6 @@ class User {
     /**
      * Gets the user's area code.
      * @return {String} The user's area code.
-     *
      */
     getAreaCode() {
         return String(this.areaCode);
@@ -210,7 +209,6 @@ class User {
     /**
      * Gets the user's conversations.
      * @return {Conversation[]} The user's conversations.
-     *
      */
     async getConversations() {
         // ID -> Conversation;
@@ -238,7 +236,6 @@ class User {
     /**
      * Gets the user's Study Groups.
      * @return {StudyGroup[]} The user's Study Groups.
-     *
      */
      async getStudyGroups() {
         // ID -> Conversation;
@@ -249,7 +246,7 @@ class User {
             let studyGroup = undefined;
             try {
                 studyGroup = await StudyGroup.getById(studyGroupId);
-                
+
             } catch (error) {
                 Log.writeError(error);
             } finally {
@@ -268,7 +265,6 @@ class User {
     /**
      * Gets the user's email.
      * @return {String} The user's email.
-     *
      */
     getEmail() {
         return String(this.email);
@@ -281,14 +277,12 @@ class User {
      * @date   10/10/2021
      */
     getId() {
-        // GET THE DOCUMENT ID OF THE USER.
         return String(this._id);
     }
 
     /**
      * Gets the user's name.
      * @return {String} The user's name.
-     *
      */
     getName() {
         return String(this.name);
@@ -301,17 +295,15 @@ class User {
      * @date   10/22/2021
      */
     getPasswordHash() {
-        // GET THE PASSWORD HASH.
         return this.passwordHash;
     }
 
     /**
      * Gets the user's profile picture.
      * @return {String} The user's profile picture.
-     *
      */
     getProfilePicture() {
-        return this.profilePicture; //Needs second look
+        return this.profilePicture;
     }
 
     /**
@@ -370,7 +362,6 @@ class User {
      * Sets the user's email.
      * @param {String} email The email to set.
      * @return {Boolean} True if the email was set, false otherwise.
-     *
      */
     async setEmail(email) {
         this.email = email;
@@ -382,7 +373,6 @@ class User {
      * Sets the user's name.
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
-     *
      */
     async setName(name) {
         this.name = name;
@@ -394,7 +384,6 @@ class User {
      * Sets the user's profile picture.
      * @param {String} newProfilePicture The profile picture to set.
      * @return {Boolean} True if the profile picture was set, false otherwise.
-     *
      */
     async setProfilePicture(newProfilePicture) {}
 
@@ -402,7 +391,6 @@ class User {
      * Update's the user's password.
      * @param {String} newPassword The new password to set.
      * @return {Boolean} True if the password was updated, false otherwise.
-     *
      */
     async updatePassword(newPassword) {}
 }
