@@ -122,7 +122,6 @@ class StudyGroup {
      * Adds a member to the study group.
      * @param {User} newMember The member to add to the group.
      * @return {Boolean} True if the member was added, false otherwise.
-     *
      */
     async addMember(newMember) {}
 
@@ -179,21 +178,22 @@ class StudyGroup {
     /**
      * Gets the study group's area code.
      * @return {String} The study group's area code.
-     *
      */
-    getAreaCode() {}
+    getAreaCode() {
+      return this.areaCode;
+    }
 
     /**
      * Gets the study group's course.
      * @return {String} The study group's associated course.
-     *
      */
-    async getCourse() {}
+    async getCourse() {
+      return this.course;
+    }
 
     /**
      * Gets the study group feed.
      * @return {StudyGroupFeed} The study group's feed.
-     *
      */
     async getFeed() {}
 
@@ -202,7 +202,6 @@ class StudyGroup {
      * @param  {String} studyGroupId The study group ID to search for.
      * @return {StudyGroup} The study group instance, if found; otherwise undefined.
      * @async
-     *
      */
     static async getById(studyGroupId) {
         // CONVERT THE USER ID TO THE ACCEPTABLE TYPE.
@@ -232,7 +231,6 @@ class StudyGroup {
     /**
      * Gets the document id of the study group in the database as a string.
      * @return {String} The document id of the study group.
-     *
      */
     getId() {
         return this._id;
@@ -254,9 +252,10 @@ class StudyGroup {
     /**
      * Gets the study group's name.
      * @return {String} The study group's name.
-     *
      */
-    getName() {}
+    getName() {
+      return this.name;
+    }
 
     /**
      * Gets the study group's upcoming meeting.
@@ -267,76 +266,74 @@ class StudyGroup {
     /**
      * Gets the study group's one-time meetings.
      * @return {Meeting[]} The study group's one-time meetings.
-     *
      */
     async getOneTimeMeetings() {}
 
     /**
      * Gets the study group's owner.
      * @return {User} The study group's owner.
-     *
      */
     async getOwner() {}
 
     /**
      * Gets the study group's recurring meeting schedule.
      * @return {Meeting} The recurring meeting schedule.
-     *
      */
     async getRecurringMeeting() {}
 
     /**
      * Gets the study group's school.
      * @return {String} The study group's school.
-     *
      */
-    getSchool() {}
+    getSchool() {
+      return this.school;
+    }
 
     /**
      * Gets the study group's subject.
      * @return {String} The study group's subject.
-     *
      */
-    getSubject() {}
+    getSubject() {
+      return this.subject;
+    }
 
     /**
      * Checks if the group is an online group.
      * @return {Boolean} True if the group is an online group, false otherwise.
      */
-    isOnlineGroup() {}
+    isOnlineGroup() {
+      return this.isOnlineGroup;
+    }
 
     /**
      * Checks if the group is a tutor group.
      * @return {Boolean} True if the group is a tutor group, false otherwise.
-     *
      */
-    isTutorGroup() {}
+    isTutorGroup() {
+      return this.isTutorGroup;
+    }
 
     /**
      * Sets the group to be an in-person group.
      * @return {Boolean} True if the group was set to be in-person, false otherwise.
-     *
      */
     async makeInPerson() {}
 
     /**
      * Sets the group to be an online group.
      * @return {Boolean} True if the group was set to be an online group, false otherwise.
-     *
      */
     async makeOnline() {}
 
     /**
      * Sets the group to be a regular study group.
      * @return {Boolean} True if the group was set to be a regular study group, false otherwise.
-     *
      */
     async makeStudyGroup() {}
 
     /**
      * Sets the group to be a tutor group.
      * @return {Boolean} True if the group was set to be a tutor group, false otherwise.
-     *
      */
     async makeTutorGroup() {}
 
@@ -351,7 +348,6 @@ class StudyGroup {
      * Removes a member from the study group.
      * @param {User} member The member to remove from the group.
      * @return {Boolean} True if the member was removed, false otherwise.
-     *
      */
     async removeMember(member) {}
 
@@ -359,7 +355,6 @@ class StudyGroup {
      * This saves the associated user document in the database with the current properties
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
-     *
      */
     async save() {}
 
@@ -367,7 +362,6 @@ class StudyGroup {
      * Sets the study group's area code.
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
-     *
      */
     async setAreaCode(areaCode) {}
 
@@ -375,7 +369,6 @@ class StudyGroup {
      * Sets the study group's course.
      * @param {String} courseName The course to set.
      * @return {Boolean} True if the course was set, false otherwise.
-     *
      */
     async setCourse(courseName) {}
 
@@ -383,7 +376,6 @@ class StudyGroup {
      * Sets the study group's name.
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
-     *
      */
     async setName(name) {}
 
@@ -391,7 +383,6 @@ class StudyGroup {
      * Sets the study group's school.
      * @param {String} school The school to set.
      * @return {Boolean} True if the school was set, false otherwise.
-     *
      */
     async setSchool(school) {}
 
@@ -399,7 +390,6 @@ class StudyGroup {
      * Sets the study group's subject.
      * @param {String} subject The subject to set.
      * @return {Boolean} True if the subject was set, false otherwise.
-     *
      */
     async setSubject(subject) {}
 
@@ -407,7 +397,6 @@ class StudyGroup {
      * Updates the study group's meeting.
      * @param {Meeting} updatedMeeting The meeting to update.
      * @return {Boolean} True if the meeting was updated, false otherwise.
-     *
      */
     async updateMeeting(updatedMeeting) {}
 
@@ -415,7 +404,6 @@ class StudyGroup {
      * Checks if the user is a member of the study group.
      * @param {User} user The user to check for study group membership.
      * @return {Boolean} True if the user is a member of the study group, false otherwise.
-     *
      */
     async userIsAMember(user) {}
 }

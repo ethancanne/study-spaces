@@ -31,12 +31,10 @@ const PostSchema = new Schema({
         required: false
     },
     responses: {
-        type: [String],
+        type: [Array],
         required: false
     }
-
 });
-
 PostSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -44,12 +42,11 @@ PostSchema.set("toObject", {
         return object;
     }
 });
-
 const PostCollectionName = Configuration.getPostCollectionName();
 const PostModel = Mongoose.model(PostCollectionName, PostSchema);
 
 /**
- * 
+ *
  * @author Cliff Croom
  * @date   01/11/2021
  */
@@ -66,8 +63,8 @@ class Post {
 
     /**
      * Creates a post.
-     * @param 
-     * @param 
+     * @param
+     * @param
      * @return {Post} The post created.
      *
      */
@@ -75,8 +72,8 @@ class Post {
 
      /**
      * Creates a post response.
-     * @param 
-     * @param 
+     * @param
+     * @param
      * @return {Boolean} The post response created.
      *
      */
@@ -96,7 +93,7 @@ class Post {
      */
     async save() {}
 
-    
+
     /**
      * Gets the title.
      * @return {String} The title of the post.
@@ -145,7 +142,7 @@ class Post {
      *
      */
     getResponses() {}
-    
+
     /**
      * Sets the title.
      * @param {String} title The title to set.
@@ -161,7 +158,7 @@ class Post {
       *
       */
     setMessage() {}
- 
+
      /**
       * Sets the Type.
       * @param {String} type The type to set.
@@ -169,7 +166,7 @@ class Post {
       *
       */
     setType() {}
- 
+
      /**
       * Sets the Creator's DocumentID.
       * @param {String} creator The type to set.
@@ -177,7 +174,7 @@ class Post {
       *
       */
     setCreator() {}
- 
+
       /**
       * Sets the attachment.
       * @param {String} attachment The attachment to set.
@@ -185,7 +182,7 @@ class Post {
       *
       */
     setAttachment() {}
- 
+
      /**
       * Sets the timestamp.
       * @param {String} timestamp The timestamp to set.
@@ -193,7 +190,7 @@ class Post {
       *
       */
     setTimestamp() {}
- 
+
      /**
       * Adds the Responses array.
       * @param {String} response The response to add.
@@ -209,7 +206,6 @@ class Post {
       *
       */
     deleteResponse() {}
-    
 
 }
 
