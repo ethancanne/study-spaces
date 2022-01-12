@@ -31,7 +31,7 @@ const PostSchema = new Schema({
         required: false
     },
     responses: {
-        type: [String],
+        type: [[String][String]],
         required: false
     }
 
@@ -141,7 +141,7 @@ class Post {
 
     /**
      * Gets the Responses array.
-     * @return {String} The responses to the post.
+     * @return {[[String][String]]} The responses to the post.
      *
      */
     getResponses() {}
@@ -204,7 +204,7 @@ class Post {
 
     /**
       * Deletes a response.
-      * @param {String} responseID The response to be deleted.
+      * @param {String} responseIndex The response to be deleted.
       * @return {Boolean} True if the response was deleted, false otherwise.
       *
       */

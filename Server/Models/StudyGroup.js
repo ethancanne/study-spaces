@@ -8,7 +8,7 @@ const Validator = require("../Validator.js");
 
 /**
  * Used to define the database schema for storing study groups.
- * @author Clifton Croom
+ * @author Cliff Croom
  * @date   10/29/2021
  */
 const StudyGroupSchema = new Schema({
