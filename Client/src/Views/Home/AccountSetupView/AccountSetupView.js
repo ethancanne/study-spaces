@@ -14,6 +14,12 @@ import Validator from "../../../../../Server/Validator";
 import Views from "../../Views";
 import InputField from "../../../core/InputField/InputField";
 
+/**
+ * Once the user has verified their account and clicked the link, this view is used to present the acount setup form so they can offically create their account on the home page
+ * @param {function} setHomeView Used to set the view of this page, if the user presses the log in button
+ * @author Ethan Cannelongo
+ * @date   10/21/2021
+ */
 const AccountSetupView = (props) => {
     const BLANK = "";
     const [userIsVerified, setUserIsVerified] = useState(false);

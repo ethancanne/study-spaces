@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut, showStudyGroupPopup, addStudyGroup } from "../../state/actions";
 import Validator from "../../../../Server/Validator";
@@ -13,75 +13,82 @@ import axios from "axios";
 import "./Study.scss";
 import StudyGroupView from "../../Views/Study/studyGroupView/StudyGroupView";
 
+/**
+ * Renders the study page, displaying all the study groups the user is a member of.
+ * @author Ethan Cannelongo
+ * @date   11/20/2021
+ */
 const Study = () => {
-  const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-  const user = useSelector((state) => state.authReducer.user);
-  const studyGroups = useSelector((state) => state.studyGroupsReducer.studyGroups);
+    const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+    const user = useSelector((state) => state.authReducer.user);
+    const studyGroups = useSelector((state) => state.studyGroupsReducer.studyGroups);
 
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    async function getGroups() {
-      await getStudyGroups();
-    }
-    getGroups();
-  }, [])
-
-  const getStudyGroups = async ()=>{
-   
-    let response;
-    try {
-      axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-
-      response = await axios.get(Routes.StudyGroup.GetUserStudyGroups)
-      //Wrap the axios call in a try-catch block, using the catch block to call "setErrorMessage();" passing in "e.message"
-    } catch (e) {
-      console.log(e);
-    } finally {
-      const responseIsDefined = Validator.isDefined(response);
-
-      if (responseIsDefined) {
-        const studyGroupCreationWasValid =
-          ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
-
-        if (studyGroupCreationWasValid) {
-          const studyGroups = response.data.studyGroups
-          console.log(studyGroups)
-          if(studyGroups){
-            studyGroups.map(s=>{
-                dispatch(addStudyGroup(s, true));
-            })
-          }
-        }else{
-          console.log("That didn't work")
+    useEffect(() => {
+        async function getGroups() {
+            await getStudyGroups();
         }
-      }else{
-        console.log("That didn't work")
-      }
-    }
-  }
+        getGroups();
+    }, []);
 
-  return (
-    <div className="study">
-      {isLoggedIn ? ( 
-        <div>
-          <p>Welcome {user.name}, you are logged in!</p>
-          <Button onClick={() => dispatch(signOut())}>Log out</Button>
-          <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
-          <div className="study-groups-container">
-            {Validator.isDefined(studyGroups) &&studyGroups.map((studyGroup) => (
-              <StudyGroupView title={studyGroup.name}  />
-            ))}
-          </div>
+    /**
+     * Retrieves all study groups the user is a member of from the server
+     * @author Ethan Cannelongo
+     * @date   11/20/2021
+     */
+    const getStudyGroups = async () => {
+        let response;
+        try {
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+            response = await axios.get(Routes.StudyGroup.GetUserStudyGroups);
+        } catch (e) {
+            console.log(e);
+        } finally {
+            const responseIsDefined = Validator.isDefined(response);
+
+            if (responseIsDefined) {
+                const studyGroupCreationWasValid =
+                    ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
+
+                if (studyGroupCreationWasValid) {
+                    const studyGroups = response.data.studyGroups;
+                    console.log(studyGroups);
+                    if (studyGroups) {
+                        studyGroups.map((s) => {
+                            dispatch(addStudyGroup(s, true));
+                        });
+                    }
+                } else {
+                    console.log("That didn't work");
+                }
+            } else {
+                console.log("That didn't work");
+            }
+        }
+    };
+
+    return (
+        <div className="study">
+            {isLoggedIn ? (
+                <div>
+                    <p>Welcome {user.name}, you are logged in!</p>
+                    <Button onClick={() => dispatch(signOut())}>Log out</Button>
+                    <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
+                    <div className="study-groups-container">
+                        {Validator.isDefined(studyGroups) &&
+                            studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}
+                    </div>
+                </div>
+            ) : (
+                <div>
+                    <p>You are currently a guest!</p>
+                    <Link to="/">Log In</Link>
+                </div>
+            )}
         </div>
-      ) : (
-        <div>
-          <p>You are currently a guest!</p>
-          <Link to="/">Log In</Link>
-        </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default Study;

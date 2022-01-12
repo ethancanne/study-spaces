@@ -15,6 +15,12 @@ import Views from "../../Views.js";
 
 import { createAccount } from "../../../state/actions";
 
+/**
+ * This view presents the create account form on the home page
+ * @param {function} setHomeView Used to set the view of this page, if the user presses the log in button
+ * @author Ethan Cannelongo
+ * @date   10/21/2021
+ */
 const CreateAccountView = (props) => {
     const BLANK = "";
     const [email, setEmail] = useState(BLANK);

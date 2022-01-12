@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * Renders a text input.
+ * Renders a toggle switch.
  * @author Ethan Cannelongo
  * @date   11/20/2021
  */

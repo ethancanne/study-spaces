@@ -4,6 +4,12 @@ import { useSelector } from "react-redux";
 import Views from "../../Views";
 import Button from "../../../core/Button/Button";
 
+/**
+ * Once a user creates an account, this view will be displayed on the home page to indicate that the user needs to verify the account to continue setting it up
+ * @param {function} setHomeView Used to set the view of the home page, if the user presses the log in button
+ * @author Ethan Cannelongo
+ * @date   11/02/2021
+ */
 const VerificationEmailConfirmationView = (props) => {
     const unverifiedUser = useSelector((state) => state.authReducer.unverifiedUser);
     return (

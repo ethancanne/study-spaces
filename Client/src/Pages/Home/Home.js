@@ -16,6 +16,7 @@ import Validator from "../../../../Server/Validator.js";
  * The home page of the application. This is shown when the user has not logged in.
  * @param {function} clientSideLogin The function used to log in a user from the client-side perspective.
  * @param {function} clientSideLogout The function used to log out a user from the client-side perspective.
+ * @param {string} homeView The view that is supposed to be displayed on the home page, defined in Views.js
  * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/20/2021
  */
@@ -28,6 +29,7 @@ const Home = (props) => {
     //   verificationToken = props.match.params.verificationToken;
     // }
 
+    //
     switch (view) {
         case Views.Home.Login:
             homeView = <LoginView setHomeView={setHomeView} />;
