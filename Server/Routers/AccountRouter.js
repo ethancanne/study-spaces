@@ -97,8 +97,19 @@ class AccountRouter {
         // EMAIL THE VERIFICATION LINK TO THE USER.
         const verificationToken = unverifiedUser.verificationToken;
         let verificationLink = `http://${request.hostname}/verify/${verificationToken}`;
+        const emailSubject = "";
+        const emailBody = "";
         // Write to log file for now.
-        Log.write(verificationLink);
+        let emailWasSent = false;
+        try {
+          emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
+        } catch (error) {
+          Log.writeError(error);
+        }
+        const emailWasNotSend = !emailWasSent;
+        if (emailWasNotSend) {
+          return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+        }
 
         // SEND THE RESPONSE.
         unverifiedUser.removeSensitiveAttributes();

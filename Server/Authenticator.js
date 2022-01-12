@@ -98,6 +98,24 @@ class Authenticator {
     }
 
     /**
+    * Sends an email to a user.
+    * @param {UnverifiedUser} user The user to send the email to.
+    * @param {String} subject The subject of the email.
+    * @param {String} body The body of the email.
+    * @return {Boolean} True if the email was sent, false otherwise.
+    * @author Cameron Burkholder
+    * @date   01/12/2022
+    * @async
+    */
+    static async sendEmail(user, subject, body) {
+      // GET THE USERS EMAIL ADDRESS.
+      const emailAddress = user.getEmail();
+
+      // SEND THE EMAIL.
+      /** @todo use nodemailer */
+    }
+
+    /**
      * Used to verify that a JSON web token is associated with a valid user.
      * @param {object} jsonWebTokenPayload The JSON web token payload to check.
      * @param {function} nextMiddlewareFunction The next function to execute after this one.
