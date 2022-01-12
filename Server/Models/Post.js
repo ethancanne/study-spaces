@@ -55,7 +55,7 @@ const PostModel = Mongoose.model(PostCollectionName, PostSchema);
  */
 class Post {
     /**
-     * Initializes the post passed inn from the database.
+     * Initializes the post passed in from the database.
      * @param  {Mongoose.Schema} PostSchema The database record for a given post.
      * @author Cliff Croom
      * @date   01/11/2021
