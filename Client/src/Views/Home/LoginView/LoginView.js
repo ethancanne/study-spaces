@@ -18,7 +18,8 @@ import Label from "../../../core/Label/Label";
  * Used to display the login form and log the user in.
  * @param {function} clientSideLogin Used to log the user in from the client-side perspective.
  * @param {function} clientSideLogout Used to log the user out from the client-side perspective.
- * @author Cameron Burkholder
+ * @param {function} setHomeView Used to set the view of the home page, if the user presses the create account button
+ * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/21/2021
  */
 const LoginView = (props) => {
@@ -59,7 +60,6 @@ const LoginView = (props) => {
                 if (loginWasValid) {
                     const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
                     dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
-
                 } else {
                     setLoginErrorMsg(response.data.message);
                     dispatch(signOut);

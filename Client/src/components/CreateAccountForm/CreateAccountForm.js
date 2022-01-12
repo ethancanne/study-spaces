@@ -11,7 +11,7 @@ import Routes from "../../../../Server/Routes/Routes.js";
 import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
- * Renders a login form.
+ * Renders a create account form.
  * @param {string} props.email The email address in the form.
  * @param {string} props.password The password in the form.
  * @param {string} props.confirmPassword The value of the confirm password field in the form.

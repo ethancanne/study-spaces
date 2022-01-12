@@ -1,8 +1,9 @@
 import React from "react";
 import "../core.scss";
+
 /**
  * Renders an toggle field.
- * @author Cameron Burkholder
+ * @author Ethan Cannelongo
  * @date   10/21/2021
  */
 const ToggleField = (props) => {

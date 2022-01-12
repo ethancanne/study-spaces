@@ -7,7 +7,6 @@ import { Provider } from "react-redux";
 import allReducers from "./state/reducers";
 
 import Validator from "../../Server/Validator.js";
-// import { loadState, saveState } from "./state/localStorage.js";
 
 const persistientState = {};
 const reduxDevToolsAreInstalled =
@@ -20,41 +19,6 @@ export const store = reduxDevToolsAreInstalled
           compose(applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
       )
     : createStore(allReducers, persistientState);
-
-// //STORE - The globalized state for our app
-
-// //ACTION - Describes what you want to do with the state
-// const increment = () => {
-//   return {
-//     type: "INCREMENT"
-//   };
-// };
-// const decrement = () => {
-//   return {
-//     type: "DECREMENT"
-//   };
-// };
-
-// //REDUCER - How your actions transform the state into the next state
-// const counter = (state = 0, action) => {
-//   switch (action.type) {
-//     case "INCREMENT":
-//       return state + 1;
-
-//     case "DECREMENT":
-//       return state - 1;
-//   }
-// };
-
-// let store = createStore(counter);
-
-// store.subscribe(() => console.log(store.getState()));
-
-// //DISPATCH - Send the action to the reducer to finally update the store
-// store.dispatch(increment());
-// store.dispatch(increment());
-// store.dispatch(increment());
-// store.dispatch(decrement());
 
 ReactDOM.render(
     <Provider store={store}>
