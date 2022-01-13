@@ -1,4 +1,6 @@
 const Path = require("path");
+const multer = require("multer");
+const sharp = require("sharp");
 
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
@@ -38,8 +40,26 @@ class AccountRouter {
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
+
+        //Get Uploaded Picture
+        const fileFilter = (req, file, cb) => {
+            const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+            if (allowedFileTypes.includes(file.mimetype)) {
+                cb(null, true);
+            } else {
+                cb(new Error("File format not supported."), false);
+            }
+        };
+
+        const upload = multer({
+            limits: {
+                fileSize: 2000000
+            },
+            fileFilter: fileFilter
+        });
+
         // This is used to complete the account setup process.
-        server.post(Routes.Account.SetupAccount, AccountRouter.setupAccount);
+        server.post(Routes.Account.SetupAccount, upload.single("profilePicture"), AccountRouter.setupAccount);
     }
 
     // GET ROUTES.
@@ -197,6 +217,20 @@ class AccountRouter {
         const nameSet = verifiedUser.setName(request.body.name);
         if (nameSet == false) {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+        }
+
+        if (Validator.isDefined(request.file)) {
+            //Resize the profile picture and convert it to a png
+            const profilePicture = await sharp(request.file.buffer)
+                .resize({ height: 200, width: 200 })
+                .png()
+                .toBuffer();
+            //Encode the picture to base64 and store it in db
+            const encoded = profilePicture.toString("base64");
+            const profilePictureSet = verifiedUser.setProfilePicture(encoded);
+            if (profilePictureSet == false) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
         }
 
         // SAVE THE UPDATED ACCOUNT TO THE DATABSE.

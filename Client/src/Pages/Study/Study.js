@@ -74,6 +74,8 @@ const Study = () => {
             {isLoggedIn ? (
                 <div>
                     <p>Welcome {user.name}, you are logged in!</p>
+
+                    <img src={" data:image/jpeg;charset=utf-8;base64," + user.profilePicture} alt="" />
                     <Button onClick={() => dispatch(signOut())}>Log out</Button>
                     <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
                     <div className="study-groups-container">

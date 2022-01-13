@@ -82,13 +82,18 @@ const AccountSetupView = (props) => {
 
         let response;
         try {
-            response = await axios.post(Routes.Account.SetupAccount, {
-                verificationToken,
-                user,
-                name,
-                areaCode,
-                is18OrOver,
-                profilePicture
+            const formData = new FormData();
+            formData.append("profilePicture", profilePicture);
+            formData.append("verificationToken", verificationToken);
+            formData.append("user", user);
+            formData.append("name", name);
+            formData.append("areaCode", areaCode);
+            formData.append("is18OrOver", is18OrOver);
+
+            response = await axios.post(Routes.Account.SetupAccount, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
             });
         } catch (error) {
             console.log(error);
@@ -156,8 +161,8 @@ const AccountSetupView = (props) => {
      * @author Ethan Cannelongo
      * @date   11/13/21
      */
-    const updateProfilePicture = (base64) => {
-        setProfilePicture(base64);
+    const updateProfilePicture = (event) => {
+        setProfilePicture(event.target.files[0]);
         setAccountSetupErrorMsg(BLANK);
     };
 

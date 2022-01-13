@@ -50,11 +50,14 @@ const AccountSetupForm = (props) => {
                 <InputField>
                     <Label>Profile Picture</Label>
                     <div className="photo">
-                        <FileBase64
+                        <input
+                            type="file"
                             id="fileInput right"
-                            multiple={false}
-                            onDone={({ base64 }) => props.updateProfilePicture(base64)}
+                            accept=".png, .jpg, .jpeg"
+                            name="profilePicture"
+                            onChange={props.updateProfilePicture}
                         />
+
                         <img className="imgPreview" id="left" src={props.profilePicture} alt="" />
                     </div>
                 </InputField>

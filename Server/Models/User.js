@@ -33,7 +33,7 @@ const UserSchema = new Schema({
         required: true
     },
     profilePicture: {
-        type: Buffer,
+        type: String,
         required: false
     },
     studyGroups: {
@@ -237,27 +237,28 @@ class User {
      * Gets the user's Study Groups.
      * @return {StudyGroup[]} The user's Study Groups.
      */
-     async getStudyGroups() {
+    async getStudyGroups() {
         // ID -> Conversation;
 
         // LOOP THROUGH EACH CONVERSATION ID.
         let studyGroups = [];
-        await Promise.all(this.studyGroups.map(async (studyGroupId) => {
-            let studyGroup = undefined;
-            try {
-                studyGroup = await StudyGroup.getById(studyGroupId);
-
-            } catch (error) {
-                Log.writeError(error);
-            } finally {
-                const studyGroupWasFound = Validator.isDefined(studyGroup);
-                if (studyGroupWasFound) {
-                    studyGroups.push(studyGroup);
-                    console.log(studyGroups)
+        await Promise.all(
+            this.studyGroups.map(async (studyGroupId) => {
+                let studyGroup = undefined;
+                try {
+                    studyGroup = await StudyGroup.getById(studyGroupId);
+                } catch (error) {
+                    Log.writeError(error);
+                } finally {
+                    const studyGroupWasFound = Validator.isDefined(studyGroup);
+                    if (studyGroupWasFound) {
+                        studyGroups.push(studyGroup);
+                        console.log(studyGroups);
+                    }
                 }
-            }
-        }));
-        console.log(studyGroups)
+            })
+        );
+        console.log(studyGroups);
         // RETURN CONVERSATIONS.
         return studyGroups;
     }
@@ -385,7 +386,11 @@ class User {
      * @param {String} newProfilePicture The profile picture to set.
      * @return {Boolean} True if the profile picture was set, false otherwise.
      */
-    async setProfilePicture(newProfilePicture) {}
+    async setProfilePicture(newProfilePicture) {
+        this.profilePicture = newProfilePicture;
+        const profilePictureSet = Validator.isDefined(this.profilePicture);
+        return profilePictureSet;
+    }
 
     /**
      * Update's the user's password.
