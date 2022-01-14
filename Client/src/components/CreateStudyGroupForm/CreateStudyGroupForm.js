@@ -19,11 +19,11 @@ import ColorPicker from "../../core/ColorPicker/ColorPicker";
 
 /**
  * Renders a create study group form
- * @param {string} props.title
- * @param {string} props.description
- * @param {string} props.privacy
- * @param {string} props.subject
- * @param {string} props.classCode
+ * @param {String} props.title
+ * @param {String} props.description
+ * @param {String} props.privacy
+ * @param {String} props.subject
+ * @param {String} props.classCode
  * @param {boolean} props.isAssociatedWithSchool
  * @param {boolean} props.isTutorGroup
  * @param {boolean} props.isOnlineGroup

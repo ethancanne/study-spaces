@@ -8,7 +8,7 @@ const Validator = require("../Validator.js");
 
 /**
  * Used to define the database schema for storing study groups.
- * @author Clifton Croom
+ * @author Cliff Croom
  * @date   10/29/2021
  */
 const StudyGroupSchema = new Schema({
@@ -38,7 +38,7 @@ const StudyGroupSchema = new Schema({
     },
     members: {
         type: [String],
-        required: false
+        required: true
     },
     name: {
         type: String,
@@ -90,7 +90,7 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
  * @property {String} name The name of the study group.
  * @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
  * @property {String} owner The study group owner's document ID.
- * @property {Meeting} recurringMeeting The study group's recurring meeting schedule.
+ * @property {Meeting=} recurringMeeting The study group's recurring meeting schedule.
  * @property {String=} school The school the study group is associated with.
  * @property {String} subject The subject the study group supports.
  * @author Cameron Burkholder
@@ -115,6 +115,8 @@ class StudyGroup {
      * Adds a one-time meeting.
      * @param {Meeting} newMeeting The meeting to add.
      * @return {Boolean} True if the meeting was added, false otherwise.
+     *
+     * @async
      */
     async addMeeting(newMeeting) {}
 
@@ -123,6 +125,7 @@ class StudyGroup {
      * @param {User} newMember The member to add to the group.
      * @return {Boolean} True if the member was added, false otherwise.
      *
+     * @async
      */
     async addMember(newMember) {}
 
@@ -134,6 +137,8 @@ class StudyGroup {
      * @return {StudyGroup} The created study group.
      * @author Clifton Croom
      * @date   11/30/2021
+     * @async
+     * @static
      */
     static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
         // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
@@ -142,6 +147,7 @@ class StudyGroup {
 
         // CREATE THE STUDY GROUP.
         const EMPTY_LIST_OF_MEETINGS = [];
+        const EMPTY_LIST_OF_MEMBERS = [];
         const ownerId = owner.getId();
         const newStudyGroup = new StudyGroupModel({
             areaCode: areaCode,
@@ -150,6 +156,7 @@ class StudyGroup {
             isOnlineGroup: isOnlineGroup,
             isTutorGroup: isTutorGroup,
             meetings: EMPTY_LIST_OF_MEETINGS,
+            members: EMPTY_LIST_OF_MEMBERS,
             name: name,
             owner: ownerId,
             privacySetting: PrivacySettings.Open,
@@ -173,27 +180,33 @@ class StudyGroup {
     /**
      * Deletes a study group.
      * @return {Boolean} True if the study group was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {}
 
     /**
      * Gets the study group's area code.
      * @return {String} The study group's area code.
-     *
      */
-    getAreaCode() {}
+    getAreaCode() {
+        return this.areaCode;
+    }
 
     /**
      * Gets the study group's course.
      * @return {String} The study group's associated course.
      *
      */
-    async getCourse() {}
+    getCourse() {
+        return this.course;
+    }
 
     /**
      * Gets the study group feed.
-     * @return {StudyGroupFeed} The study group's feed.
+     * @return {Feed} The study group's feed.
      *
+     * @async
      */
     async getFeed() {}
 
@@ -201,15 +214,17 @@ class StudyGroup {
      * Gets the study group record from the database using the document ID.
      * @param  {String} studyGroupId The study group ID to search for.
      * @return {StudyGroup} The study group instance, if found; otherwise undefined.
+     * @author Cliff Croom
+     * @date   01/14/2022
      * @async
-     *
+     * @static
      */
     static async getById(studyGroupId) {
         // CONVERT THE USER ID TO THE ACCEPTABLE TYPE.
         const convertedStudyGroupId = Mongoose.Types.ObjectId(studyGroupId);
 
         // GET THE USER BASED ON THE GIVEN ID.
-        let studyGroupRecord = false;
+        let studyGroupRecord = undefined;
         try {
             studyGroupRecord = await StudyGroupModel.findOne({ _id: convertedStudyGroupId }).exec();
         } catch (error) {
@@ -232,7 +247,6 @@ class StudyGroup {
     /**
      * Gets the document id of the study group in the database as a string.
      * @return {String} The document id of the study group.
-     *
      */
     getId() {
         return this._id;
@@ -241,6 +255,8 @@ class StudyGroup {
     /**
      * Gets the study group's meetings.
      * @return {Meeting[]} The study group's meetings.
+     *
+     * @async
      */
     async getMeetings() {}
 
@@ -248,19 +264,23 @@ class StudyGroup {
      * Gets the study group's members.
      * @return {User[]} The study group's members.
      *
+     * @async
      */
     async getMembers() {}
 
     /**
      * Gets the study group's name.
      * @return {String} The study group's name.
-     *
      */
-    getName() {}
+    getName() {
+        return this.name;
+    }
 
     /**
      * Gets the study group's upcoming meeting.
      * @return {Meeting} The very next study group meeting.
+     *
+     * @async
      */
     async getNextMeeting() {}
 
@@ -268,6 +288,7 @@ class StudyGroup {
      * Gets the study group's one-time meetings.
      * @return {Meeting[]} The study group's one-time meetings.
      *
+     * @async
      */
     async getOneTimeMeetings() {}
 
@@ -275,6 +296,7 @@ class StudyGroup {
      * Gets the study group's owner.
      * @return {User} The study group's owner.
      *
+     * @async
      */
     async getOwner() {}
 
@@ -282,40 +304,47 @@ class StudyGroup {
      * Gets the study group's recurring meeting schedule.
      * @return {Meeting} The recurring meeting schedule.
      *
+     * @async
      */
     async getRecurringMeeting() {}
 
     /**
      * Gets the study group's school.
      * @return {String} The study group's school.
-     *
      */
-    getSchool() {}
+    getSchool() {
+        return this.school;
+    }
 
     /**
      * Gets the study group's subject.
      * @return {String} The study group's subject.
-     *
      */
-    getSubject() {}
+    getSubject() {
+        return this.subject;
+    }
 
     /**
      * Checks if the group is an online group.
      * @return {Boolean} True if the group is an online group, false otherwise.
      */
-    isOnlineGroup() {}
+    isOnlineGroup() {
+        return this.isOnlineGroup;
+    }
 
     /**
      * Checks if the group is a tutor group.
      * @return {Boolean} True if the group is a tutor group, false otherwise.
-     *
      */
-    isTutorGroup() {}
+    isTutorGroup() {
+        return this.isTutorGroup;
+    }
 
     /**
      * Sets the group to be an in-person group.
      * @return {Boolean} True if the group was set to be in-person, false otherwise.
      *
+     * @async
      */
     async makeInPerson() {}
 
@@ -323,6 +352,7 @@ class StudyGroup {
      * Sets the group to be an online group.
      * @return {Boolean} True if the group was set to be an online group, false otherwise.
      *
+     * @async
      */
     async makeOnline() {}
 
@@ -330,6 +360,7 @@ class StudyGroup {
      * Sets the group to be a regular study group.
      * @return {Boolean} True if the group was set to be a regular study group, false otherwise.
      *
+     * @async
      */
     async makeStudyGroup() {}
 
@@ -337,6 +368,7 @@ class StudyGroup {
      * Sets the group to be a tutor group.
      * @return {Boolean} True if the group was set to be a tutor group, false otherwise.
      *
+     * @async
      */
     async makeTutorGroup() {}
 
@@ -344,6 +376,8 @@ class StudyGroup {
      * Removes a meeting from the study group's one-time meeting schedule.
      * @param {Meeting} meeting The meeting to remove.
      * @return {Booleam} True if the meeting was removed, false otherwise.
+     *
+     * @async
      */
     async removeMeeting(meeting) {}
 
@@ -352,6 +386,7 @@ class StudyGroup {
      * @param {User} member The member to remove from the group.
      * @return {Boolean} True if the member was removed, false otherwise.
      *
+     * @async
      */
     async removeMember(member) {}
 
@@ -360,6 +395,7 @@ class StudyGroup {
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
      *
+     * @async
      */
     async save() {}
 
@@ -368,6 +404,7 @@ class StudyGroup {
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
      *
+     * @async
      */
     async setAreaCode(areaCode) {}
 
@@ -376,6 +413,7 @@ class StudyGroup {
      * @param {String} courseName The course to set.
      * @return {Boolean} True if the course was set, false otherwise.
      *
+     * @async
      */
     async setCourse(courseName) {}
 
@@ -384,6 +422,7 @@ class StudyGroup {
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
      *
+     * @async
      */
     async setName(name) {}
 
@@ -392,6 +431,7 @@ class StudyGroup {
      * @param {String} school The school to set.
      * @return {Boolean} True if the school was set, false otherwise.
      *
+     * @async
      */
     async setSchool(school) {}
 
@@ -400,6 +440,7 @@ class StudyGroup {
      * @param {String} subject The subject to set.
      * @return {Boolean} True if the subject was set, false otherwise.
      *
+     * @async
      */
     async setSubject(subject) {}
 
@@ -408,6 +449,7 @@ class StudyGroup {
      * @param {Meeting} updatedMeeting The meeting to update.
      * @return {Boolean} True if the meeting was updated, false otherwise.
      *
+     * @async
      */
     async updateMeeting(updatedMeeting) {}
 
@@ -416,6 +458,7 @@ class StudyGroup {
      * @param {User} user The user to check for study group membership.
      * @return {Boolean} True if the user is a member of the study group, false otherwise.
      *
+     * @async
      */
     async userIsAMember(user) {}
 }

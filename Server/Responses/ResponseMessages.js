@@ -20,7 +20,6 @@ const ResponseMessages = {
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
         SuccessStudyGroupCreated: "The study group was created sucessfully.",
         SuccessStudyGroupsRetrieved: "The study groups were retrieved sucessfully."
-
     }
 };
 module.exports = ResponseMessages;

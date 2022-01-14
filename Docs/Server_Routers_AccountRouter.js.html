@@ -26,7 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Path = require("path");
+            <pre class="prettyprint source linenums"><code>const multer = require("multer");
+const Path = require("path");
+const sharp = require("sharp");
 
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
@@ -66,8 +68,26 @@ class AccountRouter {
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
+
+        // Get Uploaded Picture
+        const fileFilter = (req, file, cb) => {
+            const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+            if (allowedFileTypes.includes(file.mimetype)) {
+                cb(null, true);
+            } else {
+                cb(new Error("File format not supported."), false);
+            }
+        };
+
+        const upload = multer({
+            limits: {
+                fileSize: 2000000
+            },
+            fileFilter: fileFilter
+        });
+
         // This is used to complete the account setup process.
-        server.post(Routes.Account.SetupAccount, AccountRouter.setupAccount);
+        server.post(Routes.Account.SetupAccount, upload.single("profilePicture"), AccountRouter.setupAccount);
     }
 
     // GET ROUTES.
@@ -78,6 +98,7 @@ class AccountRouter {
      * @param  {object} response The response being generated.
      * @author Cameron Burkholder
      * @date   07/31/2021
+     * @static
      */
     static updateAuthenticationToken(request, response) {
         // GET THE AUTHENTICATION TOKEN.
@@ -99,6 +120,10 @@ class AccountRouter {
      * @param {String} request.body.email The email address of the user to be created.
      * @param {String} request.body.password The password of the user to be created.
      * @param {String} request.body.confirmPassword The password confirmation of the user to be created.
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
+     * @static
      */
     static async createAccount(request, response) {
         // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
@@ -124,25 +149,36 @@ class AccountRouter {
 
         // EMAIL THE VERIFICATION LINK TO THE USER.
         const verificationToken = unverifiedUser.verificationToken;
-        let verificationLink = `http://${request.hostname}/verify/${verificationToken}`;
-        // Write to log file for now.
-        Log.write(verificationLink);
+        let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+        const emailSubject = "Your Study Spaces Verification Link";
+        const emailBody = "Click this: " + verificationLink;
+        let emailWasSent = false;
+        try {
+            emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
+        } catch (error) {
+            Log.write("An error occurred while sending an email during the account creation process.");
+            Log.writeError(error);
+        }
+        if (!emailWasSent) {
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+        }
 
         // SEND THE RESPONSE.
         unverifiedUser.removeSensitiveAttributes();
         response.json({
             message: ResponseMessages.Account.SuccessAccountCreated,
-            unverifiedUser: unverifiedUser,
-            verificationLink: verificationLink
+            unverifiedUser: unverifiedUser
         });
     }
 
     /**
      * This allows the user to log in.
-     * @param {string} request.body.email The email address of the user.
-     * @param {string} request.body.password The password of the user.
+     * @param {String} request.body.email The email address of the user.
+     * @param {String} request.body.password The password of the user.
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @async
+     * @static
      */
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
@@ -182,6 +218,8 @@ class AccountRouter {
      * @param {String} request.body.name The name to set for the user.
      * @author Cliff Croom
      * @date   11/16/2021
+     * @async
+     * @static
      */
     static async setupAccount(request, response) {
         //VERIFY THE USER IS OVER 18
@@ -210,6 +248,20 @@ class AccountRouter {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
 
+        if (Validator.isDefined(request.file)) {
+            //Resize the profile picture and convert it to a png
+            const profilePicture = await sharp(request.file.buffer)
+                .resize({ height: 200, width: 200 })
+                .png()
+                .toBuffer();
+            //Encode the picture to base64 and store it in db
+            const encoded = profilePicture.toString("base64");
+            const profilePictureSet = verifiedUser.setProfilePicture(encoded);
+            if (profilePictureSet == false) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+        }
+
         // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
         const userWasSaved = await verifiedUser.save();
         if (userWasSaved) {
@@ -233,6 +285,8 @@ class AccountRouter {
      * @param {String} verificationToken The verification token used to verify the account.
      * @author Cameron Burkholder
      * @date   11/12/2021
+     * @async
+     * @static
      */
     static async getUnverifiedUser(request, response) {
         // PARSE THE VERIFICATION TOKEN.
@@ -270,13 +324,13 @@ module.exports = AccountRouter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 14 2022 10:24:57 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

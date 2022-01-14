@@ -79,7 +79,7 @@ class Log {
 
     /**
      * Writes a message to the logs.
-     * @param  {string} message The message to write.
+     * @param  {String} message The message to write.
      * @author Cameron Burkholder
      * @date   07/29/2021
      */
@@ -112,7 +112,7 @@ class Log {
 
     /**
      * Writes a message to the log file.
-     * @param  {string} message The message to write to the file.
+     * @param  {String} message The message to write to the file.
      * @author Cameron Burkholder
      * @date   07/29/2021
      */

@@ -11,11 +11,15 @@ const TextInput = (props) => {
     const typeIsDefined = Validator.isDefined(props.type);
     const type = typeIsDefined ? props.type : "text";
 
-    return <>
-    {props.isTextArea ? 
-    (<textarea className="Input" value={props.value} onChange={props.onChange} type={type} {...props} />) : 
-    (<input className="Input" value={props.value} onChange={props.onChange} type={type} {...props} />)}
-    </>
+    return (
+        <>
+            {props.isTextArea ? (
+                <textarea className="Input" value={props.value} onChange={props.onChange} type={type} {...props} />
+            ) : (
+                <input className="Input" value={props.value} onChange={props.onChange} type={type} {...props} />
+            )}
+        </>
+    );
 };
 
 export default TextInput;

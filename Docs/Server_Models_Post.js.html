@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Server/Models/Post.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Server/Models/Post.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Mongoose = require("mongoose");
+const Schema = Mongoose.Schema;
+
+/**
+ * @author Cliff Croom
+ * @date   01/11/2022
+ */
+const PostSchema = new Schema({
+    attachment: {
+        type: String,
+        required: false
+    },
+    creator: {
+        type: String,
+        required: true
+    },
+    message: {
+        type: String,
+        required: true
+    },
+    responses: {
+        type: [Object],
+        required: true
+    },
+    timeStamp: {
+        type: Date,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    }
+});
+PostSchema.set("toObject", {
+    versionKey: false,
+    transform: (document, object) => {
+        delete object.__v;
+        return object;
+    }
+});
+const PostCollectionName = Configuration.getPostCollectionName();
+const PostModel = Mongoose.model(PostCollectionName, PostSchema);
+
+/**
+ * @author Cliff Croom
+ * @date   01/11/2021
+ * @property {String=} attachment An optional attachment (picture or file) the user can upload.
+ * @property {String} creator The document ID of the post's author.
+ * @property {String} message The post's body.
+ * @property {Object[]} responses A list of post responses.
+ * @property {Date} timestamp The time the post was posted.
+ * @property {String} title The post's title.
+ * @property {String} type The type of post.
+ */
+class Post {
+    /**
+     * Initializes the post passed in from the database.
+     * @param  {Mongoose.Schema} PostSchema The database record for a given post.
+     * @author Cliff Croom
+     * @date   01/11/2021
+     */
+    constructor(PostSchema) {
+        Object.assign(this, PostSchema.toObject());
+    }
+
+    /**
+     * Adds a response to the responses array.
+     * @param {String} response The response to add.
+     * @return {Boolean} True if the response array was updated, false otherwise.
+     *
+     * @async
+     */
+    async addResponse() {}
+
+    /**
+     * Creates a post.
+     * @param
+     * @param
+     * @return {Post} The post created.
+     *
+     */
+    static async create() {}
+
+    /**
+     * Creates a post response.
+     * @param
+     * @param
+     * @return {Boolean} The post response created.
+     *
+     */
+    static async createResponse() {}
+
+    /**
+     * Deletes the post.
+     * @return {Boolean} True if the post was deleted, false otherwise.
+     *
+     * @async
+     */
+    async delete() {}
+
+    /**
+     * Deletes a response.
+     * @param {String} responseIndex The response to be deleted.
+     * @return {Boolean} True if the response was deleted, false otherwise.
+     *
+     * @async
+     */
+    async deleteResponse(responseIndex) {}
+
+    /**
+     * Gets the attachment.
+     * @return {String} The attachment of the post.
+     *
+     */
+    getAttachment() {}
+
+    /**
+     * Gets the creator's document ID.
+     * @return {String} The creator's document ID.
+     *
+     */
+    getCreator() {}
+
+    /**
+     * Gets the message.
+     * @return {String} The message of the post.
+     *
+     */
+    getMessage() {}
+
+    /**
+     * Gets the responses array.
+     * @return {Object[]} The responses to the post.
+     *
+     */
+    getResponses() {}
+
+    /**
+     * Gets the timestamp.
+     * @return {String} The timestamp of the post.
+     *
+     */
+    getTimestamp() {}
+
+    /**
+     * Gets the title.
+     * @return {String} The title of the post.
+     *
+     */
+    getTitle() {}
+
+    /**
+     * Gets the type.
+     * @return {String} The type of the post.
+     *
+     */
+    getType() {}
+
+    /**
+     * Saves the post.
+     * @return {Boolean} True if the post was saved, false otherwise.
+     *
+     * @async
+     */
+    async save() {}
+
+    /**
+     * Sets the message.
+     * @param {String} message The message to set.
+     * @return {Boolean} True if the message was set, false otherwise.
+     *
+     * @async
+     */
+    async setMessage() {}
+
+    /**
+     * Sets the attachment.
+     * @param {String} attachment The attachment to set.
+     * @return {Boolean} True if the attachment was set, false otherwise.
+     *
+     * @async
+     */
+    async setAttachment() {}
+
+    /**
+     * Sets the title.
+     * @param {String} title The title to set.
+     * @return {Boolean} True if the title was set, false otherwise.
+     *
+     * @async
+     */
+    async setTitle() {}
+
+    /**
+     * Sets the Type.
+     * @param {String} type The type to set.
+     * @return {Boolean} True if the type was set, false otherwise.
+     *
+     * @async
+     */
+    async setType() {}
+}
+
+module.exports = Post;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 14 2022 10:24:57 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

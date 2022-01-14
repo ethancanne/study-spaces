@@ -34,9 +34,9 @@ export const closePopup = () => {
 };
 
 //Study Groups Reducer
-export const addStudyGroup = (group, reset=false) => {
-  return {
-    type: "ADD_STUDY_GROUP",
-    payload: {group, reset}
-  };
+export const addStudyGroup = (group, reset = false) => {
+    return {
+        type: "ADD_STUDY_GROUP",
+        payload: { group, reset }
+    };
 };

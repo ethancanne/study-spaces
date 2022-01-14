@@ -22,8 +22,8 @@ const server = Express();
 const staticResourceFolder = Configuration.getStaticResourceFolder();
 const staticResourceFilepath = Path.join(global.rootDirectory, "Client", staticResourceFolder);
 server.use(Express.static(staticResourceFilepath));
-server.use(BodyParser.urlencoded({ extended: false }));
-server.use(BodyParser.json());
+server.use(BodyParser.urlencoded({ limit: "200mb", extended: false }));
+server.use(BodyParser.json({ limit: "200mb" }));
 const configurationIsSetToProduction = Configuration.isSetToProduction();
 
 // ENABLE LOGGING.
@@ -62,6 +62,9 @@ const authenticator = new Authenticator(server, Passport);
 // ADD SECURITY MIDDLEWARE.
 // Helmet is used to help with basic security.
 server.use(Helmet());
+
+//Make uploads path accessable
+server.use("/uploads", Express.static("uploads"));
 
 // IMPLEMENT THE SERVER ROUTES.
 AccountRouter.serveRoutes(server, authenticator);

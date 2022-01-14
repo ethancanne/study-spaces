@@ -3,6 +3,7 @@ const ExtractJsonWebToken = require("passport-jwt").ExtractJwt;
 const JsonWebToken = require("jsonwebtoken");
 const JwtStrategy = require("passport-jwt").Strategy;
 const Mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
 
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
@@ -98,21 +99,50 @@ class Authenticator {
     }
 
     /**
-    * Sends an email to a user.
-    * @param {UnverifiedUser} user The user to send the email to.
-    * @param {String} subject The subject of the email.
-    * @param {String} body The body of the email.
-    * @return {Boolean} True if the email was sent, false otherwise.
-    * @author Cameron Burkholder
-    * @date   01/12/2022
-    * @async
-    */
+     * Sends an email to a user.
+     * @param {UnverifiedUser} user The user to send the email to.
+     * @param {String} subject The subject of the email.
+     * @param {String} body The body of the email.
+     * @return {Boolean} True if the email was sent, false otherwise.
+     * @author Cameron Burkholder
+     * @date   01/12/2022
+     * @async
+     */
     static async sendEmail(user, subject, body) {
-      // GET THE USERS EMAIL ADDRESS.
-      const emailAddress = user.getEmail();
+        // GET THE USERS EMAIL ADDRESS.
+        const emailAddress = user.getEmail();
 
-      // SEND THE EMAIL.
-      /** @todo use nodemailer */
+        // SEND THE EMAIL.
+
+        // Generate test SMTP service account from ethereal.email
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_ACCOUNT,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        });
+
+        var worked = "testing";
+
+        // send mail with defined transport object
+        try {
+            let info = await transporter.sendMail({
+                from: process.env.EMAIL_ACCOUNT,
+                to: emailAddress, // list of receivers
+                subject: subject, // Subject line
+                text: body, // plain text body
+                html: "<h1>" + body + "</h1>" // html body
+            });
+            console.log("Sending mail worked");
+
+            return true;
+        } catch {
+            console.log("Sending mail failed");
+            return false;
+        }
     }
 
     /**
@@ -153,7 +183,7 @@ class Authenticator {
 
     /**
      * Checks if the provided password is correct.
-     * @param {string} password The password to check.
+     * @param {String} password The password to check.
      * @param {User} user The user to check the password for.
      * @return {boolean} True if the password is correct, false otherwise.
      * @author Cameron Burkholder

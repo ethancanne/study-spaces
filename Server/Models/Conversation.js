@@ -32,8 +32,8 @@ const ConversationModel = Mongoose.model(conversationCollectionName, Conversatio
 
 /**
  * Provides an interface for working with conversations in the database.
- * @property {String} messages The messages in the conversation.
- * @property {String} participants The two users that the conversation is between.
+ * @property {String[]} messages The messages in the conversation.
+ * @property {String[]} participants The two users that the conversation is between.
  * @author Cameron Burkholder
  * @date   10/29/2021
  */
@@ -58,13 +58,16 @@ class Conversation {
      * @param {User} receiver The user receiving the first message in the conversation.
      * @return {Conversation} The conversation created.
      *
+     * @async
+     * @static
      */
-    static async create() {}
+    static async create(sender, receiver) {}
 
     /**
      * Deletes the conversation.
      * @return {Boolean} True if the conversation was deleted, false otherwise.
      *
+     * @async
      */
     async delete() {}
 
@@ -73,6 +76,8 @@ class Conversation {
      * @param {String[]} participants The list of participants for the conversation.
      * @return {Conversation} The conversation between the participants.
      *
+     * @async
+     * @static
      */
     static async getByParticipants(participants) {}
 
@@ -88,6 +93,7 @@ class Conversation {
      * Gets the messages of a conversation.
      * @return {Message[]} A list of messages between the two participants.
      *
+     * @async
      */
     async getMessages() {}
 
@@ -95,6 +101,7 @@ class Conversation {
      * Updates the conversation in the database.
      * @return {Boolean} True if the conversation was saved, false otherwise.
      *
+     * @async
      */
     async save() {}
 
@@ -103,6 +110,7 @@ class Conversation {
      * @param {Message} message The message to send.
      * @return {Boolean} True if the message was sent, false otherwise.
      *
+     * @async
      */
     async sendMessage(message) {}
 }

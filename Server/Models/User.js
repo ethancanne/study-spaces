@@ -33,7 +33,7 @@ const UserSchema = new Schema({
         required: true
     },
     profilePicture: {
-        type: Buffer,
+        type: String,
         required: false
     },
     studyGroups: {
@@ -53,14 +53,14 @@ const UserModel = Mongoose.model(userCollectionName, UserSchema);
 
 /**
  * Provides an interface for working with users in the database.
- * @property {String} areaCode - The user's area code.
- * @property {String[]} conversations - The user's conversations/chats. This is stored as a list of
+ * @property {String} areaCode The user's area code.
+ * @property {String[]} conversations The user's conversations/chats. This is stored as a list of
  *   MongoDB document IDs so that the conversations can be accessed directly from the user.
- * @property {String} email - The user's email address.
- * @property {String} name - The user's name.
- * @property {String} passwordHash - The user's hashed password.
- * @property {Buffer} profilePicture - The user's profile picture. This must be less than 16MB.
- * @property {String[]} studyGroups - The study groups the user is a part of. This is stored as a list
+ * @property {String} email The user's email address.
+ * @property {String} name The user's name.
+ * @property {String} passwordHash The user's hashed password.
+ * @property {Buffer} profilePicture The user's profile picture. This must be less than 16MB.
+ * @property {String[]} studyGroups The study groups the user is a part of. This is stored as a list
  *   of MongoDB document IDs so that the study groups can be accessed directly from the user.
  * @author Cameron Burkholder
  * @date   07/29/2021
@@ -83,6 +83,8 @@ class User {
     /**
      * @param {StudyGroup} studyGroup The study group to add.
      * @return {Boolean} True if the study group was added, false otherwise.
+     *
+     * @async
      */
     async addStudyGroup(studyGroup) {
         // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
@@ -105,6 +107,8 @@ class User {
      * @return {User} The created user.
      * @author Cameron Burkholder
      * @date   11/15/2021
+     * @async
+     * @static
      */
     static async create(unverifiedUser) {
         // CREATE THE USER IN THE DATABASE.
@@ -132,13 +136,14 @@ class User {
     /**
      * Deletes a user.
      * @return {Boolean} True if the user was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {}
 
     /**
      * Gets the user's area code.
      * @return {String} The user's area code.
-     *
      */
     getAreaCode() {
         return String(this.areaCode);
@@ -148,9 +153,10 @@ class User {
      * Gets the user record from the database using the document ID.
      * @param  {String} userId The user ID to search for.
      * @return {User} The user instance, if found; otherwise undefined.
-     * @async
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @async
+     * @static
      */
     static async getById(userId) {
         // CONVERT THE USER ID TO THE ACCEPTABLE TYPE.
@@ -181,9 +187,10 @@ class User {
      * Gets the user record from the database using the user's email.
      * @param  {String} userEmail The user email to search for.
      * @return {User} The user instance, if found; otherwise undefined.
-     * @async
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @async
+     * @static
      */
     static async getByEmail(userEmail) {
         // GET THE USER BASED ON THE GIVEN EMAIL.
@@ -210,7 +217,6 @@ class User {
     /**
      * Gets the user's conversations.
      * @return {Conversation[]} The user's conversations.
-     *
      */
     async getConversations() {
         // ID -> Conversation;
@@ -239,28 +245,30 @@ class User {
      * Gets the user's Study Groups.
      * @return {StudyGroup[]} The user's Study Groups.
      *
+     * @async
      */
-     async getStudyGroups() {
+    async getStudyGroups() {
         // ID -> Conversation;
 
         // LOOP THROUGH EACH CONVERSATION ID.
         let studyGroups = [];
-        await Promise.all(this.studyGroups.map(async (studyGroupId) => {
-            let studyGroup = undefined;
-            try {
-                studyGroup = await StudyGroup.getById(studyGroupId);
-                
-            } catch (error) {
-                Log.writeError(error);
-            } finally {
-                const studyGroupWasFound = Validator.isDefined(studyGroup);
-                if (studyGroupWasFound) {
-                    studyGroups.push(studyGroup);
-                    console.log(studyGroups)
+        await Promise.all(
+            this.studyGroups.map(async (studyGroupId) => {
+                let studyGroup = undefined;
+                try {
+                    studyGroup = await StudyGroup.getById(studyGroupId);
+                } catch (error) {
+                    Log.writeError(error);
+                } finally {
+                    const studyGroupWasFound = Validator.isDefined(studyGroup);
+                    if (studyGroupWasFound) {
+                        studyGroups.push(studyGroup);
+                        console.log(studyGroups);
+                    }
                 }
-            }
-        }));
-        console.log(studyGroups)
+            })
+        );
+        console.log(studyGroups);
         // RETURN CONVERSATIONS.
         return studyGroups;
     }
@@ -268,7 +276,8 @@ class User {
     /**
      * Gets the user's email.
      * @return {String} The user's email.
-     *
+     * @author Cameron Burkholder
+     * @date   11/14/2022
      */
     getEmail() {
         return String(this.email);
@@ -281,14 +290,14 @@ class User {
      * @date   10/10/2021
      */
     getId() {
-        // GET THE DOCUMENT ID OF THE USER.
         return String(this._id);
     }
 
     /**
      * Gets the user's name.
      * @return {String} The user's name.
-     *
+     * @author Cameron Burkholder
+     * @date   11/14/2022
      */
     getName() {
         return String(this.name);
@@ -301,17 +310,17 @@ class User {
      * @date   10/22/2021
      */
     getPasswordHash() {
-        // GET THE PASSWORD HASH.
         return this.passwordHash;
     }
 
     /**
      * Gets the user's profile picture.
      * @return {String} The user's profile picture.
-     *
+     * @author Cameron Burkholder
+     * @date   01/14/2022
      */
     getProfilePicture() {
-        return this.profilePicture; //Needs second look
+        return this.profilePicture;
     }
 
     /**
@@ -321,7 +330,6 @@ class User {
      * @date   10/22/2021
      */
     removeSensitiveAttributes() {
-        // DELETE SENSITIVE ATTRIBUTES FROM THE USER.
         delete this.passwordHash;
         return this;
     }
@@ -330,9 +338,9 @@ class User {
      * This saves the associated user document in the database with the current properties
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
-     * @async
      * @author Cameron Burkholder
      * @date   08/02/2021
+     * @async
      */
     async save() {
         let userWasSaved = false;
@@ -358,7 +366,9 @@ class User {
      * Sets the user's area code.
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
     async setAreaCode(areaCode) {
         this.areaCode = areaCode;
@@ -370,7 +380,9 @@ class User {
      * Sets the user's email.
      * @param {String} email The email to set.
      * @return {Boolean} True if the email was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
     async setEmail(email) {
         this.email = email;
@@ -382,7 +394,9 @@ class User {
      * Sets the user's name.
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
     async setName(name) {
         this.name = name;
@@ -394,15 +408,22 @@ class User {
      * Sets the user's profile picture.
      * @param {String} newProfilePicture The profile picture to set.
      * @return {Boolean} True if the profile picture was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
-    async setProfilePicture(newProfilePicture) {}
+    async setProfilePicture(newProfilePicture) {
+        this.profilePicture = newProfilePicture;
+        const profilePictureSet = Validator.isDefined(this.profilePicture);
+        return profilePictureSet;
+    }
 
     /**
      * Update's the user's password.
      * @param {String} newPassword The new password to set.
      * @return {Boolean} True if the password was updated, false otherwise.
      *
+     * @async
      */
     async updatePassword(newPassword) {}
 }

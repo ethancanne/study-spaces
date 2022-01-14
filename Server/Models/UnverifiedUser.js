@@ -66,13 +66,15 @@ class UnverifiedUser {
      * @param {String} password The unverified user's password.
      * @return {UnverifiedUser} The unverified user created.
      *
+     * @async
+     * @static
      */
     static async create(email, password) {
         // GENERATE THE USER'S HASHED PASSWORD.
         const hashedPassword = Authenticator.hashPassword(password);
 
         // GENERATE THE VERIFICATION TOKEN.
-        // Generate a random token.
+        // The verification token cannot already exist in the database.
         let tokenIsNotUnique = true;
         let verificationToken = undefined;
         while (tokenIsNotUnique) {
@@ -111,6 +113,8 @@ class UnverifiedUser {
     /**
      * Deletes an unverified user.
      * @return {Boolean} True if the unverified user was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {
         // DELETE THE UNVERIFIED USER.
@@ -130,9 +134,10 @@ class UnverifiedUser {
      * Gets the user record from the database using the user's email.
      * @param  {String} verificationToken The verification token used to search for an unverified user.
      * @return {UnverifiedUser} The user instance, if found; otherwise undefined.
-     * @async
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @async
+     * @static
      */
     static async getByEmail(email) {
         // GET THE USER BASED ON THE GIVEN EMAIL.
@@ -160,9 +165,10 @@ class UnverifiedUser {
      * Gets the user record from the database using the user's email.
      * @param  {String} verificationToken The verification token used to search for an unverified user.
      * @return {UnverifiedUser} The user instance, if found; otherwise undefined.
-     * @async
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @async
+     * @static
      */
     static async getByVerificationToken(verificationToken) {
         // GET THE USER BASED ON THE GIVEN VERIFICATION TOKEN.
@@ -193,7 +199,6 @@ class UnverifiedUser {
      * @date 11/15/2021
      */
     getEmail() {
-        // GET THE EMAIL.
         return this.email;
     }
 
@@ -204,7 +209,6 @@ class UnverifiedUser {
      * @date   11/15/2021
      */
     getPasswordHash() {
-        // GET THE PASSWORD HASH.
         return this.passwordHash;
     }
 
@@ -215,7 +219,6 @@ class UnverifiedUser {
      * @date   11/15/2021
      */
     getVerificationToken() {
-        // GET THE VERIFICATION TOKEN.
         return this.verificationToken;
     }
 
@@ -235,6 +238,7 @@ class UnverifiedUser {
      * @return {Boolean} True if the unverified user was saved, false otherwise.
      * @author Cameron Burkholder
      * @date   11/12/2021
+     * @async
      */
     async save() {
         let unverifiedUserWasSaved = false;
@@ -258,11 +262,13 @@ class UnverifiedUser {
 
     /**
      * Verifies a user's account. This process involves creating a normal user document and deleting
-     * the unverified user document.
+     *    the unverified user document.
      * @param {String} verificationToken The verification token to identify the user being verified.
      * @return {User} The verified user.
      * @author Cameron Burkholder
      * @date   11/15/2021
+     * @async
+     * @static
      */
     static async verify(verificationToken) {
         // GET THE UNVERIFIED USER ASSOCIATED WITH THE VERIFICATION TOKEN.

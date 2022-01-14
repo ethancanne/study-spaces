@@ -63,6 +63,8 @@ class Message {
      * @param {String} value The message sent by the user.
      * @return {Message} The conversation created.
      *
+     * @async
+     * @static
      */
     static async create(sender, value) {}
 
@@ -70,6 +72,7 @@ class Message {
      * Deletes the message.
      * @return {Boolean} True if the message was deleted, false otherwise.
      *
+     * @async
      */
     async delete() {}
 
@@ -78,6 +81,8 @@ class Message {
      * @param {String} messageId The document ID of the message to get.
      * @return {Message} The message requested.
      *
+     * @async
+     * @static
      */
     static async getById(messageId) {}
 

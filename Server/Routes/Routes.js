@@ -16,7 +16,7 @@ const Routes = {
     },
     StudyGroup: {
         CreateStudyGroup: "/api/study-group/create",
-        GetUserStudyGroups: '/api/study-group/get'
+        GetUserStudyGroups: "/api/study-group/get"
     }
 };
 module.exports = Routes;

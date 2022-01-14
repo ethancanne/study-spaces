@@ -31,20 +31,20 @@ const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
+const PrivacySettings = require("./PrivacySettings.js");
 const Validator = require("../Validator.js");
 
 /**
  * Used to define the database schema for storing study groups.
- * @author Cameron Burkholder
+ * @author Cliff Croom
  * @date   10/29/2021
  */
 const StudyGroupSchema = new Schema({
     areaCode: {
         type: String,
-        required: true
+        required: false
     },
     course: {
-        //May cause problems
         type: String,
         required: false
     },
@@ -66,7 +66,7 @@ const StudyGroupSchema = new Schema({
     },
     members: {
         type: [String],
-        required: false
+        required: true
     },
     name: {
         type: String,
@@ -76,15 +76,23 @@ const StudyGroupSchema = new Schema({
         type: String,
         required: true
     },
-    recurringMeeting: {
-        type: Meeting,
+    privacySetting: {
+        type: String,
         required: true
+    },
+    recurringMeeting: {
+        type: String,
+        required: false
     },
     school: {
         type: String,
         required: false
     },
     subject: {
+        type: String,
+        required: true
+    },
+    groupColor: {
         type: String,
         required: true
     }
@@ -110,7 +118,7 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
  * @property {String} name The name of the study group.
  * @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
  * @property {String} owner The study group owner's document ID.
- * @property {Meeting} recurringMeeting The study group's recurring meeting schedule.
+ * @property {Meeting=} recurringMeeting The study group's recurring meeting schedule.
  * @property {String=} school The school the study group is associated with.
  * @property {String} subject The subject the study group supports.
  * @author Cameron Burkholder
@@ -135,6 +143,8 @@ class StudyGroup {
      * Adds a one-time meeting.
      * @param {Meeting} newMeeting The meeting to add.
      * @return {Boolean} True if the meeting was added, false otherwise.
+     *
+     * @async
      */
     async addMeeting(newMeeting) {}
 
@@ -143,6 +153,7 @@ class StudyGroup {
      * @param {User} newMember The member to add to the group.
      * @return {Boolean} True if the member was added, false otherwise.
      *
+     * @async
      */
     async addMember(newMember) {}
 
@@ -152,19 +163,34 @@ class StudyGroup {
      * @param {User} owner The owner of the study group.
      * @param {String} subject The study group's subject.
      * @return {StudyGroup} The created study group.
-     *
+     * @author Clifton Croom
+     * @date   11/30/2021
+     * @async
+     * @static
      */
-    static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school) {
+    static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
+        // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
+        // @todo Write the actual implementation.
+        const feedId = "1";
+
         // CREATE THE STUDY GROUP.
+        const EMPTY_LIST_OF_MEETINGS = [];
+        const EMPTY_LIST_OF_MEMBERS = [];
+        const ownerId = owner.getId();
         const newStudyGroup = new StudyGroupModel({
-            name: name,
-            owner: owner,
-            subject: subject,
             areaCode: areaCode,
+            course: course,
+            feed: feedId,
             isOnlineGroup: isOnlineGroup,
             isTutorGroup: isTutorGroup,
-            course: course,
-            school: school
+            meetings: EMPTY_LIST_OF_MEETINGS,
+            members: EMPTY_LIST_OF_MEMBERS,
+            name: name,
+            owner: ownerId,
+            privacySetting: PrivacySettings.Open,
+            school: school,
+            subject: subject,
+            groupColor
         });
 
         // SAVE THE STUDY GROUP.
@@ -175,34 +201,40 @@ class StudyGroup {
         }
 
         // INSTANTIATE THE MODEL.
-        const StudyGroup = new StudyGroup(newStudyGroup);
-        return StudyGroup;
+        const studyGroup = new StudyGroup(newStudyGroup);
+        return studyGroup;
     }
 
     /**
      * Deletes a study group.
      * @return {Boolean} True if the study group was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {}
 
     /**
      * Gets the study group's area code.
      * @return {String} The study group's area code.
-     *
      */
-    getAreaCode() {}
+    getAreaCode() {
+        return this.areaCode;
+    }
 
     /**
      * Gets the study group's course.
      * @return {String} The study group's associated course.
      *
      */
-    async getCourse() {}
+    getCourse() {
+        return this.course;
+    }
 
     /**
      * Gets the study group feed.
-     * @return {StudyGroupFeed} The study group's feed.
+     * @return {Feed} The study group's feed.
      *
+     * @async
      */
     async getFeed() {}
 
@@ -210,21 +242,49 @@ class StudyGroup {
      * Gets the study group record from the database using the document ID.
      * @param  {String} studyGroupId The study group ID to search for.
      * @return {StudyGroup} The study group instance, if found; otherwise undefined.
+     * @author Cliff Croom
+     * @date   01/14/2022
      * @async
-     *
+     * @static
      */
-    static async getById(studyGroupId) {}
+    static async getById(studyGroupId) {
+        // CONVERT THE USER ID TO THE ACCEPTABLE TYPE.
+        const convertedStudyGroupId = Mongoose.Types.ObjectId(studyGroupId);
+
+        // GET THE USER BASED ON THE GIVEN ID.
+        let studyGroupRecord = undefined;
+        try {
+            studyGroupRecord = await StudyGroupModel.findOne({ _id: convertedStudyGroupId }).exec();
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group by ID.");
+            Log.writeError(error);
+            // If an error occurs, it should be returned.
+            return error;
+        } finally {
+            // If the user wasn't able to be found in the database, this routine should return undefined.
+            let studyGroup = undefined;
+            let studyGroupWasFound = Validator.isDefined(studyGroupRecord);
+            if (studyGroupWasFound) {
+                // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+                studyGroup = new StudyGroup(studyGroupRecord);
+            }
+            return studyGroup;
+        }
+    }
 
     /**
      * Gets the document id of the study group in the database as a string.
      * @return {String} The document id of the study group.
-     *
      */
-    getId() {}
+    getId() {
+        return this._id;
+    }
 
     /**
      * Gets the study group's meetings.
      * @return {Meeting[]} The study group's meetings.
+     *
+     * @async
      */
     async getMeetings() {}
 
@@ -232,19 +292,23 @@ class StudyGroup {
      * Gets the study group's members.
      * @return {User[]} The study group's members.
      *
+     * @async
      */
     async getMembers() {}
 
     /**
      * Gets the study group's name.
      * @return {String} The study group's name.
-     *
      */
-    getName() {}
+    getName() {
+        return this.name;
+    }
 
     /**
      * Gets the study group's upcoming meeting.
      * @return {Meeting} The very next study group meeting.
+     *
+     * @async
      */
     async getNextMeeting() {}
 
@@ -252,6 +316,7 @@ class StudyGroup {
      * Gets the study group's one-time meetings.
      * @return {Meeting[]} The study group's one-time meetings.
      *
+     * @async
      */
     async getOneTimeMeetings() {}
 
@@ -259,6 +324,7 @@ class StudyGroup {
      * Gets the study group's owner.
      * @return {User} The study group's owner.
      *
+     * @async
      */
     async getOwner() {}
 
@@ -266,40 +332,47 @@ class StudyGroup {
      * Gets the study group's recurring meeting schedule.
      * @return {Meeting} The recurring meeting schedule.
      *
+     * @async
      */
     async getRecurringMeeting() {}
 
     /**
      * Gets the study group's school.
      * @return {String} The study group's school.
-     *
      */
-    getSchool() {}
+    getSchool() {
+        return this.school;
+    }
 
     /**
      * Gets the study group's subject.
      * @return {String} The study group's subject.
-     *
      */
-    getSubject() {}
+    getSubject() {
+        return this.subject;
+    }
 
     /**
      * Checks if the group is an online group.
      * @return {Boolean} True if the group is an online group, false otherwise.
      */
-    isOnlineGroup() {}
+    isOnlineGroup() {
+        return this.isOnlineGroup;
+    }
 
     /**
      * Checks if the group is a tutor group.
      * @return {Boolean} True if the group is a tutor group, false otherwise.
-     *
      */
-    isTutorGroup() {}
+    isTutorGroup() {
+        return this.isTutorGroup;
+    }
 
     /**
      * Sets the group to be an in-person group.
      * @return {Boolean} True if the group was set to be in-person, false otherwise.
      *
+     * @async
      */
     async makeInPerson() {}
 
@@ -307,6 +380,7 @@ class StudyGroup {
      * Sets the group to be an online group.
      * @return {Boolean} True if the group was set to be an online group, false otherwise.
      *
+     * @async
      */
     async makeOnline() {}
 
@@ -314,6 +388,7 @@ class StudyGroup {
      * Sets the group to be a regular study group.
      * @return {Boolean} True if the group was set to be a regular study group, false otherwise.
      *
+     * @async
      */
     async makeStudyGroup() {}
 
@@ -321,6 +396,7 @@ class StudyGroup {
      * Sets the group to be a tutor group.
      * @return {Boolean} True if the group was set to be a tutor group, false otherwise.
      *
+     * @async
      */
     async makeTutorGroup() {}
 
@@ -328,6 +404,8 @@ class StudyGroup {
      * Removes a meeting from the study group's one-time meeting schedule.
      * @param {Meeting} meeting The meeting to remove.
      * @return {Booleam} True if the meeting was removed, false otherwise.
+     *
+     * @async
      */
     async removeMeeting(meeting) {}
 
@@ -336,6 +414,7 @@ class StudyGroup {
      * @param {User} member The member to remove from the group.
      * @return {Boolean} True if the member was removed, false otherwise.
      *
+     * @async
      */
     async removeMember(member) {}
 
@@ -344,6 +423,7 @@ class StudyGroup {
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
      *
+     * @async
      */
     async save() {}
 
@@ -352,6 +432,7 @@ class StudyGroup {
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
      *
+     * @async
      */
     async setAreaCode(areaCode) {}
 
@@ -360,6 +441,7 @@ class StudyGroup {
      * @param {String} courseName The course to set.
      * @return {Boolean} True if the course was set, false otherwise.
      *
+     * @async
      */
     async setCourse(courseName) {}
 
@@ -368,6 +450,7 @@ class StudyGroup {
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
      *
+     * @async
      */
     async setName(name) {}
 
@@ -376,6 +459,7 @@ class StudyGroup {
      * @param {String} school The school to set.
      * @return {Boolean} True if the school was set, false otherwise.
      *
+     * @async
      */
     async setSchool(school) {}
 
@@ -384,6 +468,7 @@ class StudyGroup {
      * @param {String} subject The subject to set.
      * @return {Boolean} True if the subject was set, false otherwise.
      *
+     * @async
      */
     async setSubject(subject) {}
 
@@ -392,6 +477,7 @@ class StudyGroup {
      * @param {Meeting} updatedMeeting The meeting to update.
      * @return {Boolean} True if the meeting was updated, false otherwise.
      *
+     * @async
      */
     async updateMeeting(updatedMeeting) {}
 
@@ -400,6 +486,7 @@ class StudyGroup {
      * @param {User} user The user to check for study group membership.
      * @return {Boolean} True if the user is a member of the study group, false otherwise.
      *
+     * @async
      */
     async userIsAMember(user) {}
 }
@@ -415,13 +502,13 @@ module.exports = StudyGroup;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 14 2022 10:24:57 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

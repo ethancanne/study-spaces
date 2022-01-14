@@ -3,7 +3,7 @@ import popups from "../../Views/Popups";
 /**
  * This is the reducer for all actions relating to popus
  * @param  {object} state The inital state of the reducer
- * @param  {string} action The action from popupConstants that transforms the state into the next state
+ * @param  {String} action The action from popupConstants that transforms the state into the next state
  * @author Ethan Cannelongo
  * @date   11/18/2021
  */

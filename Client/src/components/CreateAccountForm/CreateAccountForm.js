@@ -12,9 +12,9 @@ import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
  * Renders a create account form.
- * @param {string} props.email The email address in the form.
- * @param {string} props.password The password in the form.
- * @param {string} props.confirmPassword The value of the confirm password field in the form.
+ * @param {String} props.email The email address in the form.
+ * @param {String} props.password The password in the form.
+ * @param {String} props.confirmPassword The value of the confirm password field in the form.
  * @param {function} props.submitAccountCreation Used to submit the AccountCreation form.
  * @param {function} props.updateEmailField The function used to update the email address.
  * @param {function} props.updatePasswordField The function used to update the password.
