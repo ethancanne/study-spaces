@@ -10,13 +10,8 @@ const Validator = require("../Validator.js");
  * @author Cameron Burkholder
  * @date   11/03/2021
  */
-const FeedSchema = new Schema({
-    studyGroup: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: Configuration.getStudyGroupCollectionName(),
-        required: true
-    }
-});
+const FeedSchema = new Schema({});
+
 FeedSchema.virtual("posts", {
     ref: "Post",
     localField: "_id",

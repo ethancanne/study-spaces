@@ -67,6 +67,11 @@ const StudyGroupSchema = new Schema({
     groupColor: {
         type: String,
         required: true
+    },
+    feed: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getFeedCollectionName(),
+        required: true
     }
 });
 StudyGroupSchema.set("toObject", {
@@ -76,6 +81,13 @@ StudyGroupSchema.set("toObject", {
         return object;
     }
 });
+
+userSchema.pre("init", async function (next) {
+    const studyGroup = this;
+    //Create Feed and assign its object id to the feed property of this study group.
+    next();
+});
+
 const studyGroupCollectionName = Configuration.getStudyGroupCollectionName();
 const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchema);
 
