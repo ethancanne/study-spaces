@@ -6,7 +6,11 @@ const Schema = Mongoose.Schema;
  * @date   01/11/2022
  */
 const PostSchema = new Schema({
-    title: {
+    attachment: {
+        type: String,
+        required: false
+    },
+    creator: {
         type: String,
         required: true
     },
@@ -14,29 +18,21 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
-    type: {
-        type: String,
-        required: true
-    },
-    creator: {
-        type: String,
-        required: true
-    },
-    timeStamp: {
-        type: Date,
-        required: true
-    },
-    attachment: {
-        type: String,
-        required: false
-    },
     responses: {
         type: [String],
         required: false
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
     }
+}, {
 
 });
-
 PostSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -44,12 +40,11 @@ PostSchema.set("toObject", {
         return object;
     }
 });
-
 const PostCollectionName = Configuration.getPostCollectionName();
 const PostModel = Mongoose.model(PostCollectionName, PostSchema);
 
 /**
- * 
+ *
  * @author Cliff Croom
  * @date   01/11/2021
  */
@@ -61,13 +56,17 @@ class Post {
      * @date   01/11/2021
      */
     constructor(PostSchema) {
+        // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
+        // In order to maximize the usability of this class, the attributes stored in the database
+        // record are copied to the instance of this class so they can be properly editied.
+        // The post schema is converted to a regular object to sanitize it of wrapper methods and properties.
         Object.assign(this, PostSchema.toObject());
     }
 
     /**
      * Creates a post.
-     * @param 
-     * @param 
+     * @param
+     * @param
      * @return {Post} The post created.
      *
      */
@@ -75,8 +74,8 @@ class Post {
 
      /**
      * Creates a post response.
-     * @param 
-     * @param 
+     * @param
+     * @param
      * @return {Boolean} The post response created.
      *
      */
@@ -112,7 +111,7 @@ class Post {
         }
     }
 
-    
+
     /**
      * Gets the title.
      * @return {String} The title of the post.
@@ -175,7 +174,7 @@ class Post {
     getResponses() {
         return String(this.response);
     }
-    
+
     /**
      * Sets the title.
      * @param {String} title The title to set.
@@ -191,7 +190,7 @@ class Post {
       *
       */
     setMessage() {}
- 
+
      /**
       * Sets the Type.
       * @param {String} type The type to set.
@@ -199,7 +198,7 @@ class Post {
       *
       */
     setType() {}
- 
+
      /**
       * Sets the Creator's DocumentID.
       * @param {String} creator The type to set.
@@ -207,7 +206,7 @@ class Post {
       *
       */
     setCreator() {}
- 
+
       /**
       * Sets the attachment.
       * @param {String} attachment The attachment to set.
@@ -215,7 +214,7 @@ class Post {
       *
       */
     setAttachment() {}
- 
+
      /**
       * Sets the timestamp.
       * @param {String} timestamp The timestamp to set.
@@ -223,7 +222,7 @@ class Post {
       *
       */
     setTimestamp() {}
- 
+
      /**
       * Adds the Responses array.
       * @param {String} response The response to add.
@@ -239,7 +238,7 @@ class Post {
       *
       */
     deleteResponse() {}
-    
+
 
 }
 

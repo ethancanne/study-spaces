@@ -11,13 +11,13 @@ const Validator = require("../Validator.js");
  * @date   11/03/2021
  */
 const FeedSchema = new Schema({
-    
+
     posts: {
         type: [String],
         required: true
     },
-    
-    
+
+
 },
 
 
@@ -41,6 +41,20 @@ const FeedModel = Mongoose.model(feedCollectionName, FeedSchema);
  * @date   11/04/2021
  */
 class Feed {
+    /**
+     * Initializes the post passed in from the database.
+     * @param  {Mongoose.Schema} PostSchema The database record for a given post.
+     * @author Cliff Croom
+     * @date   01/11/2021
+     */
+    constructor(PostSchema) {
+        // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
+        // In order to maximize the usability of this class, the attributes stored in the database
+        // record are copied to the instance of this class so they can be properly editied.
+        // The feed schema is converted to a regular object to sanitize it of wrapper methods and properties.
+        Object.assign(this, PostSchema.toObject());
+    }
+
     /**
      * Adds a post to the feed.
      * @param {Post} post The post to add to the feed.
