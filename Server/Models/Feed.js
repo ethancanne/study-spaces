@@ -11,15 +11,17 @@ const Validator = require("../Validator.js");
  * @date   11/03/2021
  */
 const FeedSchema = new Schema({
-    lastUpdated: {
-        type: Date,
-        required: true
-    },
+    
     posts: {
         type: [String],
         required: true
-    }
-});
+    },
+    
+    
+},
+
+
+);
 FeedSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -46,16 +48,33 @@ class Feed {
      *
      * @async
      */
-    async addPost(post) {}
+    async addPost(post) {
+
+    }
 
     /**
      * Creates a feed.
      * @return {Feed} The feed created.
-     *
      * @async
      * @static
      */
-    static async create() {}
+    static async create() {
+        // CREATE FEED IN THE DATABASE.
+        const BLANK = "BLANK";
+        const EMPTY = [];
+        const feedModel = new feedModel({
+            posts: EMPTY
+        });
+        try {
+            await feedModel.save();
+        } catch (error) {
+            console.log(error);
+        }
+
+        // RETURN THE CREATED INSTANCE.
+        const feed = new Feed(feedModel);
+        return feed;
+    }
 
     /**
      * Deletes a feed.
@@ -80,7 +99,12 @@ class Feed {
      *
      * @async
      */
-    async getLastThreePosts() {}
+    async getLastThreePosts() {
+        let threePosts =   [this.posts[posts.length - 3],
+                            this.posts[posts.length - 2],
+                            this.posts[posts.length - 1]];
+        return threePosts;
+    }
 
     /**
      * Gets the most recent post in the feed.
@@ -88,7 +112,9 @@ class Feed {
      *
      * @async
      */
-    async getMostRecentPost() {}
+    async getMostRecentPost() {
+        return this.post;
+    }
 
     /**
      * Gets the posts housed in a feed.
@@ -96,7 +122,9 @@ class Feed {
      *
      * @async
      */
-    async getPosts() {}
+    async getPosts() {
+        return this.posts;
+    }
 }
 
 module.exports = Feed;
