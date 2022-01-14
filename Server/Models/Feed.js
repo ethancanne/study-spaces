@@ -11,8 +11,9 @@ const Validator = require("../Validator.js");
  * @date   11/03/2021
  */
 const FeedSchema = new Schema({
-    posts: {
-        type: [String],
+    studyGroup: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getStudyGroupCollectionName(),
         required: true
     }
 });
