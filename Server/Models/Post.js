@@ -6,11 +6,7 @@ const Schema = Mongoose.Schema;
  * @date   01/11/2022
  */
 const PostSchema = new Schema({
-    attachment: {
-        type: String,
-        required: false
-    },
-    creator: {
+    title: {
         type: String,
         required: true
     },
@@ -18,23 +14,29 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
-    responses: {
-        type: [Object],
+    type: {
+        type: String,
+        required: true
+    },
+    creator: {
+        type: String,
         required: true
     },
     timeStamp: {
         type: Date,
         required: true
     },
-    title: {
+    attachment: {
         type: String,
-        required: true
+        required: false
     },
-    type: {
-        type: String,
-        required: true
+    responses: {
+        type: [String],
+        required: false
     }
+
 });
+
 PostSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -42,19 +44,14 @@ PostSchema.set("toObject", {
         return object;
     }
 });
+
 const PostCollectionName = Configuration.getPostCollectionName();
 const PostModel = Mongoose.model(PostCollectionName, PostSchema);
 
 /**
+ * 
  * @author Cliff Croom
  * @date   01/11/2021
- * @property {String=} attachment An optional attachment (picture or file) the user can upload.
- * @property {String} creator The document ID of the post's author.
- * @property {String} message The post's body.
- * @property {Object[]} responses A list of post responses.
- * @property {Date} timestamp The time the post was posted.
- * @property {String} title The post's title.
- * @property {String} type The type of post.
  */
 class Post {
     /**
@@ -68,27 +65,18 @@ class Post {
     }
 
     /**
-     * Adds a response to the responses array.
-     * @param {String} response The response to add.
-     * @return {Boolean} True if the response array was updated, false otherwise.
-     *
-     * @async
-     */
-    async addResponse() {}
-
-    /**
      * Creates a post.
-     * @param
-     * @param
+     * @param 
+     * @param 
      * @return {Post} The post created.
      *
      */
     static async create() {}
 
-    /**
+     /**
      * Creates a post response.
-     * @param
-     * @param
+     * @param 
+     * @param 
      * @return {Boolean} The post response created.
      *
      */
@@ -98,111 +86,161 @@ class Post {
      * Deletes the post.
      * @return {Boolean} True if the post was deleted, false otherwise.
      *
-     * @async
      */
     async delete() {}
 
     /**
-     * Deletes a response.
-     * @param {String} responseIndex The response to be deleted.
-     * @return {Boolean} True if the response was deleted, false otherwise.
-     *
+     * Saves the post.
+     * @return {Boolean} True if the post was saved, false otherwise.
      * @async
+     * @author Stacey Popenfoose
+     * @date 01/13/2022
      */
-    async deleteResponse(responseIndex) {}
+    async save() {
+        let postWasSaved = false;
+        try {
+            let postModel = await PostModel.findOne({_id: this._id}).exec();
+            Object.assign(postModel, this);
+            await postModel.save();
+            postWasSaved = true;
 
+        } catch (error) {
+            Log.write("An error occurred while attempting to retrieve the user to save.");
+            Log.writeError(error);
+        } finally {
+            return postWasSaved;
+        }
+    }
+
+    
     /**
-     * Gets the attachment.
-     * @return {String} The attachment of the post.
+     * Gets the title.
+     * @return {String} The title of the post.
      *
      */
-    getAttachment() {}
-
-    /**
-     * Gets the creator's document ID.
-     * @return {String} The creator's document ID.
-     *
-     */
-    getCreator() {}
+    getTitle() {
+        return String(this.title);
+    }
 
     /**
      * Gets the message.
      * @return {String} The message of the post.
      *
      */
-    getMessage() {}
+    getMessage() {
+        return String(this.message);
+    }
 
     /**
-     * Gets the responses array.
-     * @return {Object[]} The responses to the post.
+     * Gets the Type.
+     * @return {String} The type of the post.
      *
      */
-    getResponses() {}
+    getType() {
+        return String(this.type);
+    }
+
+    /**
+     * Gets the Creator's DocumentID.
+     * @return {String} The Creator's DocumentID.
+     *
+     */
+    getCreator() {
+        return String(this.creator);
+    }
+
+     /**
+     * Gets the attachment.
+     * @return {String} The attachment of the post.
+     *
+     */
+    getAttachment() {
+        return String(this.attachment);
+    }
 
     /**
      * Gets the timestamp.
      * @return {String} The timestamp of the post.
      *
      */
-    getTimestamp() {}
+    getTimestamp() {
+        return String(this.timestamp); // capitalization?
+    }
 
     /**
-     * Gets the title.
-     * @return {String} The title of the post.
+     * Gets the Responses array.
+     * @return {String} The responses to the post.
      *
      */
-    getTitle() {}
-
-    /**
-     * Gets the type.
-     * @return {String} The type of the post.
-     *
-     */
-    getType() {}
-
-    /**
-     * Saves the post.
-     * @return {Boolean} True if the post was saved, false otherwise.
-     *
-     * @async
-     */
-    async save() {}
-
-    /**
-     * Sets the message.
-     * @param {String} message The message to set.
-     * @return {Boolean} True if the message was set, false otherwise.
-     *
-     * @async
-     */
-    async setMessage() {}
-
-    /**
-     * Sets the attachment.
-     * @param {String} attachment The attachment to set.
-     * @return {Boolean} True if the attachment was set, false otherwise.
-     *
-     * @async
-     */
-    async setAttachment() {}
-
+    getResponses() {
+        return String(this.response);
+    }
+    
     /**
      * Sets the title.
      * @param {String} title The title to set.
      * @return {Boolean} True if the title was set, false otherwise.
      *
-     * @async
      */
-    async setTitle() {}
+    setTitle() {}
+
+     /**
+      * Sets the message.
+      * @param {String} message The message to set.
+      * @return {Boolean} True if the message was set, false otherwise.
+      *
+      */
+    setMessage() {}
+ 
+     /**
+      * Sets the Type.
+      * @param {String} type The type to set.
+      * @return {Boolean} True if the type was set, false otherwise.
+      *
+      */
+    setType() {}
+ 
+     /**
+      * Sets the Creator's DocumentID.
+      * @param {String} creator The type to set.
+      * @return {Boolean} True if the Creator's DocumentID was set, false otherwise.
+      *
+      */
+    setCreator() {}
+ 
+      /**
+      * Sets the attachment.
+      * @param {String} attachment The attachment to set.
+      * @return {Boolean} True if the attachment was set, false otherwise.
+      *
+      */
+    setAttachment() {}
+ 
+     /**
+      * Sets the timestamp.
+      * @param {String} timestamp The timestamp to set.
+      * @return {Boolean} True if the timestamp was set, false otherwise.
+      *
+      */
+    setTimestamp() {}
+ 
+     /**
+      * Adds the Responses array.
+      * @param {String} response The response to add.
+      * @return {Boolean} True if the response array was set, false otherwise.
+      *
+      */
+    addResponse() {}
 
     /**
-     * Sets the Type.
-     * @param {String} type The type to set.
-     * @return {Boolean} True if the type was set, false otherwise.
-     *
-     * @async
-     */
-    async setType() {}
+      * Deletes a response.
+      * @param {String} responseID The response to be deleted.
+      * @return {Boolean} True if the response was deleted, false otherwise.
+      *
+      */
+    deleteResponse() {}
+    
+
 }
 
 module.exports = Post;
