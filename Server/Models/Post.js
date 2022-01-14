@@ -33,7 +33,12 @@ const PostSchema = new Schema({
     responses: {
         type: [String],
         required: false
-    }
+    },
+    feedId: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: 'Feed',
+        required: true,
+    },
 
 });
 

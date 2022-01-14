@@ -20,6 +20,12 @@ const FeedSchema = new Schema({
         required: true
     }
 });
+FeedSchema.virtual("posts", {
+    ref: "Post",
+    localField: "_id",
+    foreignField: "feedId"
+});
+
 FeedSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
