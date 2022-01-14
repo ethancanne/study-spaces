@@ -82,7 +82,7 @@ StudyGroupSchema.set("toObject", {
     }
 });
 
-userSchema.pre("init", async function (next) {
+StudyGroupSchema.pre("init", async function (next) {
     const studyGroup = this;
     //Create Feed and assign its object id to the feed property of this study group.
     next();
