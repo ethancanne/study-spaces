@@ -92,9 +92,25 @@ class Post {
     /**
      * Saves the post.
      * @return {Boolean} True if the post was saved, false otherwise.
-     *
+     * @async
+     * @author Stacey Popenfoose
+     * @date 01/13/2022
      */
-    async save() {}
+    async save() {
+        let postWasSaved = false;
+        try {
+            let postModel = await PostModel.findOne({_id: this._id}).exec();
+            Object.assign(postModel, this);
+            await postModel.save();
+            postWasSaved = true;
+
+        } catch (error) {
+            Log.write("An error occurred while attempting to retrieve the user to save.");
+            Log.writeError(error);
+        } finally {
+            return postWasSaved;
+        }
+    }
 
     
     /**
@@ -102,49 +118,63 @@ class Post {
      * @return {String} The title of the post.
      *
      */
-    getTitle() {}
+    getTitle() {
+        return String(this.title);
+    }
 
     /**
      * Gets the message.
      * @return {String} The message of the post.
      *
      */
-    getMessage() {}
+    getMessage() {
+        return String(this.message);
+    }
 
     /**
      * Gets the Type.
      * @return {String} The type of the post.
      *
      */
-    getType() {}
+    getType() {
+        return String(this.type);
+    }
 
     /**
      * Gets the Creator's DocumentID.
      * @return {String} The Creator's DocumentID.
      *
      */
-    getCreator() {}
+    getCreator() {
+        return String(this.creator);
+    }
 
      /**
      * Gets the attachment.
      * @return {String} The attachment of the post.
      *
      */
-    getAttachment() {}
+    getAttachment() {
+        return String(this.attachment);
+    }
 
     /**
      * Gets the timestamp.
      * @return {String} The timestamp of the post.
      *
      */
-    getTimestamp() {}
+    getTimestamp() {
+        return String(this.timestamp); // capitalization?
+    }
 
     /**
      * Gets the Responses array.
      * @return {String} The responses to the post.
      *
      */
-    getResponses() {}
+    getResponses() {
+        return String(this.response);
+    }
     
     /**
      * Sets the title.
