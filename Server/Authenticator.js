@@ -183,7 +183,7 @@ class Authenticator {
 
     /**
      * Checks if the provided password is correct.
-     * @param {string} password The password to check.
+     * @param {String} password The password to check.
      * @param {User} user The user to check the password for.
      * @return {boolean} True if the password is correct, false otherwise.
      * @author Cameron Burkholder

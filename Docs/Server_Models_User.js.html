@@ -32,6 +32,7 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
+const StudyGroup = require("./StudyGroup.js");
 
 /**
  * Used to define the database schema for storing users.
@@ -60,7 +61,7 @@ const UserSchema = new Schema({
         required: true
     },
     profilePicture: {
-        type: Buffer,
+        type: String,
         required: false
     },
     studyGroups: {
@@ -80,14 +81,14 @@ const UserModel = Mongoose.model(userCollectionName, UserSchema);
 
 /**
  * Provides an interface for working with users in the database.
- * @property {String} areaCode - The user's area code.
- * @property {String[]} conversations - The user's conversations/chats. This is stored as a list of
+ * @property {String} areaCode The user's area code.
+ * @property {String[]} conversations The user's conversations/chats. This is stored as a list of
  *   MongoDB document IDs so that the conversations can be accessed directly from the user.
- * @property {String} email - The user's email address.
- * @property {String} name - The user's name.
- * @property {String} passwordHash - The user's hashed password.
- * @property {Buffer} profilePicture - The user's profile picture. This must be less than 16MB.
- * @property {String[]} studyGroups - The study groups the user is a part of. This is stored as a list
+ * @property {String} email The user's email address.
+ * @property {String} name The user's name.
+ * @property {String} passwordHash The user's hashed password.
+ * @property {Buffer} profilePicture The user's profile picture. This must be less than 16MB.
+ * @property {String[]} studyGroups The study groups the user is a part of. This is stored as a list
  *   of MongoDB document IDs so that the study groups can be accessed directly from the user.
  * @author Cameron Burkholder
  * @date   07/29/2021
@@ -108,11 +109,34 @@ class User {
     }
 
     /**
+     * @param {StudyGroup} studyGroup The study group to add.
+     * @return {Boolean} True if the study group was added, false otherwise.
+     *
+     * @async
+     */
+    async addStudyGroup(studyGroup) {
+        // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
+        this.studyGroups.push(studyGroup.getId());
+
+        // SAVE THE CHANGE.
+        let studyGroupWasAdded = true;
+        try {
+            await this.save();
+        } catch (error) {
+            studyGroupWasAdded = false;
+            Log.writeError(error);
+        }
+        return studyGroupWasAdded;
+    }
+
+    /**
      * Creates a user.
      * @param {UnverifiedUser} unverifiedUser The unverified user to create from.
      * @return {User} The created user.
      * @author Cameron Burkholder
      * @date   11/15/2021
+     * @async
+     * @static
      */
     static async create(unverifiedUser) {
         // CREATE THE USER IN THE DATABASE.
@@ -140,13 +164,14 @@ class User {
     /**
      * Deletes a user.
      * @return {Boolean} True if the user was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {}
 
     /**
      * Gets the user's area code.
      * @return {String} The user's area code.
-     *
      */
     getAreaCode() {
         return String(this.areaCode);
@@ -156,9 +181,10 @@ class User {
      * Gets the user record from the database using the document ID.
      * @param  {String} userId The user ID to search for.
      * @return {User} The user instance, if found; otherwise undefined.
-     * @async
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @async
+     * @static
      */
     static async getById(userId) {
         // CONVERT THE USER ID TO THE ACCEPTABLE TYPE.
@@ -189,9 +215,10 @@ class User {
      * Gets the user record from the database using the user's email.
      * @param  {String} userEmail The user email to search for.
      * @return {User} The user instance, if found; otherwise undefined.
-     * @async
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @async
+     * @static
      */
     static async getByEmail(userEmail) {
         // GET THE USER BASED ON THE GIVEN EMAIL.
@@ -218,16 +245,67 @@ class User {
     /**
      * Gets the user's conversations.
      * @return {Conversation[]} The user's conversations.
-     *
      */
-    getConversations() {
-        return this.conversations; //Needs Second Look
+    async getConversations() {
+        // ID -> Conversation;
+
+        // LOOP THROUGH EACH CONVERSATION ID.
+        let conversations = [];
+        this.conversations.map(async (conversationId) => {
+            let conversation = undefined;
+            try {
+                conversation = await Conversation.getById(conversationId);
+            } catch (error) {
+                Log.writeError(error);
+            } finally {
+                const conversationWasFound = Validator.isDefined(conversation);
+                if (conversationWasFound) {
+                    conversations.push(conversation);
+                }
+            }
+        });
+
+        // RETURN CONVERSATIONS.
+        return conversations;
+    }
+
+    /**
+     * Gets the user's Study Groups.
+     * @return {StudyGroup[]} The user's Study Groups.
+     *
+     * @async
+     */
+    async getStudyGroups() {
+        // ID -> Conversation;
+
+        // LOOP THROUGH EACH CONVERSATION ID.
+        let studyGroups = [];
+        await Promise.all(
+            this.studyGroups.map(async (studyGroupId) => {
+                let studyGroup = undefined;
+                try {
+                    studyGroup = await StudyGroup.getById(studyGroupId);
+                } catch (error) {
+                    Log.writeError(error);
+                } finally {
+                    const studyGroupWasFound = Validator.isDefined(studyGroup);
+                    if (studyGroupWasFound) {
+                        studyGroups.push(studyGroup);
+                        console.log(studyGroups);
+                    }
+                }
+            })
+        );
+        console.log(studyGroups);
+        // RETURN CONVERSATIONS.
+        return studyGroups;
     }
 
     /**
      * Gets the user's email.
      * @return {String} The user's email.
-     *
+     * @author Cameron Burkholder
+     * @date   11/14/2022
      */
     getEmail() {
         return String(this.email);
@@ -240,14 +318,14 @@ class User {
      * @date   10/10/2021
      */
     getId() {
-        // GET THE DOCUMENT ID OF THE USER.
         return String(this._id);
     }
 
     /**
      * Gets the user's name.
      * @return {String} The user's name.
-     *
+     * @author Cameron Burkholder
+     * @date   11/14/2022
      */
     getName() {
         return String(this.name);
@@ -260,17 +338,17 @@ class User {
      * @date   10/22/2021
      */
     getPasswordHash() {
-        // GET THE PASSWORD HASH.
         return this.passwordHash;
     }
 
     /**
      * Gets the user's profile picture.
      * @return {String} The user's profile picture.
-     *
+     * @author Cameron Burkholder
+     * @date   01/14/2022
      */
     getProfilePicture() {
-        return this.profilePicture; //Needs second look
+        return this.profilePicture;
     }
 
     /**
@@ -280,7 +358,6 @@ class User {
      * @date   10/22/2021
      */
     removeSensitiveAttributes() {
-        // DELETE SENSITIVE ATTRIBUTES FROM THE USER.
         delete this.passwordHash;
         return this;
     }
@@ -289,9 +366,9 @@ class User {
      * This saves the associated user document in the database with the current properties
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
-     * @async
      * @author Cameron Burkholder
      * @date   08/02/2021
+     * @async
      */
     async save() {
         let userWasSaved = false;
@@ -317,7 +394,9 @@ class User {
      * Sets the user's area code.
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
     async setAreaCode(areaCode) {
         this.areaCode = areaCode;
@@ -329,7 +408,9 @@ class User {
      * Sets the user's email.
      * @param {String} email The email to set.
      * @return {Boolean} True if the email was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
     async setEmail(email) {
         this.email = email;
@@ -341,7 +422,9 @@ class User {
      * Sets the user's name.
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
     async setName(name) {
         this.name = name;
@@ -353,15 +436,22 @@ class User {
      * Sets the user's profile picture.
      * @param {String} newProfilePicture The profile picture to set.
      * @return {Boolean} True if the profile picture was set, false otherwise.
-     *
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
      */
-    async setProfilePicture(newProfilePicture) {}
+    async setProfilePicture(newProfilePicture) {
+        this.profilePicture = newProfilePicture;
+        const profilePictureSet = Validator.isDefined(this.profilePicture);
+        return profilePictureSet;
+    }
 
     /**
      * Update's the user's password.
      * @param {String} newPassword The new password to set.
      * @return {Boolean} True if the password was updated, false otherwise.
      *
+     * @async
      */
     async updatePassword(newPassword) {}
 }
@@ -377,13 +467,13 @@ module.exports = User;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 14 2022 10:24:57 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

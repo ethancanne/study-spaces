@@ -1,5 +1,5 @@
-const Path = require("path");
 const multer = require("multer");
+const Path = require("path");
 const sharp = require("sharp");
 
 const Authenticator = require("../Authenticator.js");
@@ -41,7 +41,7 @@ class AccountRouter {
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
 
-        //Get Uploaded Picture
+        // Get Uploaded Picture
         const fileFilter = (req, file, cb) => {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
             if (allowedFileTypes.includes(file.mimetype)) {
@@ -70,6 +70,7 @@ class AccountRouter {
      * @param  {object} response The response being generated.
      * @author Cameron Burkholder
      * @date   07/31/2021
+     * @static
      */
     static updateAuthenticationToken(request, response) {
         // GET THE AUTHENTICATION TOKEN.
@@ -91,13 +92,15 @@ class AccountRouter {
      * @param {String} request.body.email The email address of the user to be created.
      * @param {String} request.body.password The password of the user to be created.
      * @param {String} request.body.confirmPassword The password confirmation of the user to be created.
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
+     * @static
      */
     static async createAccount(request, response) {
         // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
         const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
-
         const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
-
         if (unverifiedUserAlreadyExists) {
             return response.json({ message: ResponseMessages.Account.userAlreadyExists });
         }
@@ -121,20 +124,14 @@ class AccountRouter {
         let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
         const emailSubject = "Your Study Spaces Verification Link";
         const emailBody = "Click this: " + verificationLink;
-
         let emailWasSent = false;
-
         try {
             emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
         } catch (error) {
-            console.log("sending email error in accout router");
+            Log.write("An error occurred while sending an email during the account creation process.");
             Log.writeError(error);
         }
-        console.log(emailWasSent);
-
         if (!emailWasSent) {
-            console.log("Failed");
-
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
 
@@ -148,10 +145,12 @@ class AccountRouter {
 
     /**
      * This allows the user to log in.
-     * @param {string} request.body.email The email address of the user.
-     * @param {string} request.body.password The password of the user.
+     * @param {String} request.body.email The email address of the user.
+     * @param {String} request.body.password The password of the user.
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @async
+     * @static
      */
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
@@ -191,6 +190,8 @@ class AccountRouter {
      * @param {String} request.body.name The name to set for the user.
      * @author Cliff Croom
      * @date   11/16/2021
+     * @async
+     * @static
      */
     static async setupAccount(request, response) {
         //VERIFY THE USER IS OVER 18
@@ -256,6 +257,8 @@ class AccountRouter {
      * @param {String} verificationToken The verification token used to verify the account.
      * @author Cameron Burkholder
      * @date   11/12/2021
+     * @async
+     * @static
      */
     static async getUnverifiedUser(request, response) {
         // PARSE THE VERIFICATION TOKEN.

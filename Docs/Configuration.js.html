@@ -42,6 +42,7 @@ class Configuration {
      * @return {boolean} True if file logging is enabled, false otherwise.
      * @author Cameron Burkholder
      * @date   10/20/2021
+     * @static
      */
     static fileLoggingIsEnabled() {
         return process.env.FILE_LOGGING_IS_ENABLED;
@@ -52,9 +53,9 @@ class Configuration {
      * @return {String} The name of the collection used to store conversations.
      * @author Cameron Burkholder
      * @date   10/29/2021
+     * @static
      */
     static getConversationCollectionName() {
-        // GET THE CONVERSATION COLLECTION NAME.
         return process.env.COLLECTION_FOR_CONVERSATIONS;
     }
 
@@ -62,9 +63,10 @@ class Configuration {
      * Gets the database URI to use. The URI to use might differ depending
      * on if the application is in development or production, so there are
      * possibly two correct URIs depending on the context.
-     * @return {string} The database URI to use.
+     * @return {String} The database URI to use.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getDatabaseUri() {
         const applicationIsInProduction = Configuration.isSetToProduction();
@@ -79,9 +81,10 @@ class Configuration {
 
     /**
      * Gets the development database URI.
-     * @return {string} The development database URI.
+     * @return {String} The development database URI.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getDevelopmentDatabaseUri() {
         return process.env.DEVELOPMENT_DATABASE_URI;
@@ -92,9 +95,9 @@ class Configuration {
      * @return {String} The name of the collection used to store study group feeds.
      * @author Cameron Burkholder
      * @date   11/03/2021
+     * @static
      */
     static getFeedCollectionName() {
-        // GET THE STUDY GROUP FEED COLLECTION NAME.
         return process.env.COLLECTION_FOR_FEEDS;
     }
 
@@ -105,15 +108,15 @@ class Configuration {
      * @date   11/03/2021
      */
     static getLocationCollectionName() {
-        // GET THE LOCATION COLLECTION NAME.
-        return process.env.COLLECTION_FOR_LOCATION;
+        return process.env.COLLECTION_FOR_LOCATIONS;
     }
 
     /**
      * Gets the log file file name for the server logs.
-     * @return {string} The log file name.
+     * @return {String} The log file name.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getLogFileName() {
         return process.env.LOG_FILE_NAME;
@@ -124,6 +127,7 @@ class Configuration {
      * @return {String} The log folder name.
      * @author Cameron Burkholder
      * @date   11/09/2021
+     * @static
      */
     static getLogFolderName() {
         return process.env.LOG_FOLDER_NAME;
@@ -134,9 +138,9 @@ class Configuration {
      * @return {String} The name of the collection used to store study group meetings.
      * @author Cameron Burkholder
      * @date   11/03/2021
+     * @static
      */
     static getMeetingCollectionName() {
-        // GET THE MEETING COLLECTION NAME.
         return process.env.COLLECTION_FOR_MEETINGS;
     }
 
@@ -145,18 +149,19 @@ class Configuration {
      * @return {String} The name of the collection used to store messages.
      * @author Cameron Burkholder
      * @date   10/29/2021
+     * @static
      */
     static getMessageCollectionName() {
-        // GET THE MESSAGE COLLECTION NAME.
         return process.env.COLLECTION_FOR_MESSAGES;
     }
 
     /**
      * Gets the node environment. This determines whether the application
      * is in production mode or development mode.
-     * @return {string} The node environment.
+     * @return {String} The node environment.
      * @author Cameron Burkholder
      * @date   10/20/2021
+     * @static
      */
     static getNodeEnvironment() {
         return process.env.NODE_ENV;
@@ -167,28 +172,30 @@ class Configuration {
      * @return {String} The name of the collection used to store posts.
      * @author Cameron Burkholder
      * @date   11/03/2021
+     * @static
      */
     static getPostCollectionName() {
-        // GET THE POSTS COLLECTION NAME.
         return process.env.COLLECTION_FOR_POSTS;
     }
 
     /**
      * Gets the private RSA key. This is used for authentiction token encryption.
-     * @return {string} The private RSA key.
+     * @return {String} The private RSA key.
      * @author Cameron Burkholder
      * @date   10/20/2021
+     * @static
      */
     static getPrivateRsaKey() {
-        // EXPLICITLY WRITE NEWLINE CHARACTERS.
+        // The RSA key needs newline escape characters replaced with actual new lines.
         return process.env.RSA_PRIVATE_KEY.replace(/\\n/g, "\n");
     }
 
     /**
      * Gets the production database URI.
-     * @return {string} The production database URI.
+     * @return {String} The production database URI.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getProductionDatabaseUri() {
         return process.env.PRODUCTION_DATABASE_URI;
@@ -196,35 +203,39 @@ class Configuration {
 
     /**
      * Gets the public RSA key. This is used for authentication token encryption.
-     * @return {string} The public RSA key.
+     * @return {String} The public RSA key.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getPublicRsaKey() {
-        // EXPLICITLY WRITE NEWLINE CHARACTERS.
+        // The RSA key needs newline escape characters replaced with actual new lines.
         return process.env.RSA_PUBLIC_KEY.replace(/\\n/g, "\n");
     }
 
     /**
      * Gets the server port to use.
-     * @return {string} The server port.
+     * @return {String} The server port.
      * @author Cameron Burkholder
      * @date   07/31/2021
+     * @static
      */
     static getServerPort() {
-        // GET THE SERVER PORT.
+        // The default port used in most applications is 5000. In the event that the
+        // application is being hosted on a remote server, the port assigned to the
+        // process running the application might be different, so that one should be used.
         const DEFAULT_PORT = 5000;
         return process.env.PORT || DEFAULT_PORT;
     }
 
     /**
      * Gets the filepath of the folder for the static resource build to serve.
-     * @return {string} The filepath of the folder to serve the static resource build from.
+     * @return {String} The filepath of the folder to serve the static resource build from.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getStaticResourceFolder() {
-        // GET THE STATIC RESOURCE FOLDER TO USE.
         return process.env.STATIC_RESOURCE_FOLDER;
     }
 
@@ -233,9 +244,9 @@ class Configuration {
      * @return {String} The name of the collection used to store study groups.
      * @author Cameron Burkholder
      * @date   10/29/2021
+     * @static
      */
     static getStudyGroupCollectionName() {
-        // GET THE STUDY GROUP COLLECTION NAME.
         return process.env.COLLECTION_FOR_STUDY_GROUPS;
     }
 
@@ -244,20 +255,20 @@ class Configuration {
      * @return {String} The name of the collection used to store unverified users.
      * @author Cameron Burkholder
      * @date   10/29/2021
+     * @static
      */
     static getUnverifiedUserCollectionName() {
-        // GET THE UNVERIFIED USER COLLECTION NAME.
         return process.env.COLLECTION_FOR_UNVERIFIED_USERS;
     }
 
     /**
      * Gets the name of the collection used to store users.
-     * @return {string} The name of the collection used to store users.
+     * @return {String} The name of the collection used to store users.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static getUserCollectionName() {
-        // GET THE USER COLLECTION NAME.
         return process.env.COLLECTION_FOR_USERS;
     }
 
@@ -266,9 +277,9 @@ class Configuration {
      * @return {bool} True if the application is in production mode; false otherwise.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static isSetToProduction() {
-        // DETERMINE IF THE CURRENT CONFIGURATION MODE IS PRODUCTION.
         const productionStatusName = "production";
         let applicationIsInProduction = process.env.NODE_ENV === productionStatusName;
         return applicationIsInProduction;
@@ -286,13 +297,13 @@ module.exports = Configuration;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyReducer">studyReducer</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Nov 29 2021 17:45:19 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 14 2022 10:24:57 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -11,10 +11,10 @@ import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
  * Renders an account setup form.
- * @param {string} props.name The value of the full name field in the form
- * @param {string} props.areaCode The value of the area code field in the form
+ * @param {String} props.name The value of the full name field in the form
+ * @param {String} props.areaCode The value of the area code field in the form
  * @param {boolean} props.is18OrOver The value of the is 18 or over switch in the form.
- * @param {string} props.profilePicture the binary value of the uploaded profile picture
+ * @param {String} props.profilePicture the binary value of the uploaded profile picture
  * @param {function} props.submitAccountSetup Used to submit the Account Setup form.
  * @param {function} props.updateNameField The function used to update the name value.
  * @param {function} props.updateAreaCodeField The function used to update the area code value.

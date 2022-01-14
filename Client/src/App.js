@@ -70,7 +70,7 @@ const App = (props) => {
     };
 
     const verifyUser = (verificationToken) => {};
-    
+
     return (
         <Router>
             <Popup isShowing={popupIsShowing} />

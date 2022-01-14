@@ -42,43 +42,59 @@ class Feed {
     /**
      * Adds a post to the feed.
      * @param {Post} post The post to add to the feed.
+     * @return {Boolean} True if the post was added, false otherwise.
+     *
+     * @async
      */
     async addPost(post) {}
 
     /**
      * Creates a feed.
      * @return {Feed} The feed created.
+     *
+     * @async
+     * @static
      */
     static async create() {}
 
     /**
      * Deletes a feed.
      * @return {Boolean} True if the feed was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {}
 
     /**
      * Deletes a post from the feed.
      * @param {Post} post The post to delete.
-     * @return {Boolean} True if the post gets deleted, fales otherwise.
+     * @return {Boolean} True if the post gets deleted, false otherwise.
+     *
+     * @async
      */
     async deletePost(post) {}
 
     /**
      * Gets the last three posts in the feed.
      * @return {Post[]} The last three posts from the feed.
+     *
+     * @async
      */
     async getLastThreePosts() {}
 
     /**
      * Gets the most recent post in the feed.
      * @return {Post} The most recent post in the feed.
+     *
+     * @async
      */
     async getMostRecentPost() {}
 
     /**
      * Gets the posts housed in a feed.
      * @return {Post[]} The posts in the feed.
+     *
+     * @async
      */
     async getPosts() {}
 }

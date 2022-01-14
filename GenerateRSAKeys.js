@@ -1,15 +1,15 @@
-/* rsa_keygen.js */
-
 const crypto = require("crypto");
 const path = require("path");
 const fs = require("fs");
 
-/*
-  @func: genKeyPair
-  @desc: Generate a private and public key for use in asymmetric encryption/decryption in JWTs.
-  @params: none
-*/
+/**
+ * This generates a pair of RSA keys for use in hashing a password
+ * and generating JSON web tokens, among other things.
+ * @author Cameron Burkholder
+ * @date   07/29/2021
+ */
 function generateRSAKeyPair() {
+    // DEFINE THE SCHEME FOR GENERATING THE RSA KEY PAIR.
     const keyPair = crypto.generateKeyPairSync("rsa", {
         modulusLength: 4096,
         publicKeyEncoding: {
@@ -21,12 +21,13 @@ function generateRSAKeyPair() {
             format: "pem"
         }
     });
-    // Create the public key file
+
+    // CREATE THE PUBLIC KEY FILE.
     fs.writeFileSync(path.join(__dirname, "id_rsa_pub.pem"), keyPair.publicKey);
 
-    // Create the private key file
+    // CREATE THE PRIVATE KEY FILE.
     fs.writeFileSync(path.join(__dirname, "id_rsa_priv.pem"), keyPair.privateKey);
 }
 
-// Generates the keypair.
+// GENERATE THE RSA KEY PAIR.
 generateRSAKeyPair();

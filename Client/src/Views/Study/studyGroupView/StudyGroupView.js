@@ -3,7 +3,7 @@ import "./StudyGroupView.scss";
 
 /**
  * Used to display a joined study group on the study page
- * @param {string} title title of the study group
+ * @param {String} title title of the study group
  * @author Ethan Cannelongo
  * @date   11/02/2021
  */

@@ -11,8 +11,8 @@ import TextInput from "../../core/Inputs/TextInput/TextInput.js";
 
 /**
  * Renders a login form.
- * @param {string} props.email The email address in the form.
- * @param {string} props.password The password in the form.
+ * @param {String} props.email The email address in the form.
+ * @param {String} props.password The password in the form.
  * @param {function} props.submitLogin Used to submit the login form.
  * @param {function} props.updateEmailField The function used to update the email address.
  * @param {function} props.updatePasswordField The function used to update the password.

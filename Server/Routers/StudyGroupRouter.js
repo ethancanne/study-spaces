@@ -23,6 +23,7 @@ class StudyGroupRouter {
      * @param {Authenticator} authenticator The authenticator used to protect the routes.
      * @author Clifton Croom
      * @date   11/17/2021
+     * @static
      */
     static serveRoutes(server, authenticator) {
         // This is used to create study groups.
@@ -39,20 +40,21 @@ class StudyGroupRouter {
     }
 
     /**
-     * @param {string} request.body.name The name of the study group being created.
-     * @param {string} request.body.subject The subject of the study group being created.
-     * @param {string} request.body.areaCode The area code of the study group being created.
-     * @param {string} request.body.inOnlineGroup True if the group is online, false otherwise.
-     * @param {string} request.body.isTutorGroup True if the group is a tutor group, false otherwise.
-     * @param {string} request.body.course The course of the study group being created.
-     * @param {string} request.user The user creating the study group.
+     * @param {String} request.body.name The name of the study group being created.
+     * @param {String} request.body.subject The subject of the study group being created.
+     * @param {String} request.body.areaCode The area code of the study group being created.
+     * @param {String} request.body.inOnlineGroup True if the group is online, false otherwise.
+     * @param {String} request.body.isTutorGroup True if the group is a tutor group, false otherwise.
+     * @param {String} request.body.course The course of the study group being created.
+     * @param {String} request.user The user creating the study group.
      * @author Clifton Croom
-     * @date 11/30/21
+     * @date   11/30/21
+     * @async
+     * @static
      */
     static async createStudyGroup(request, response) {
         // CREATE STUDY GROUP.
         let newStudyGroup = undefined;
-        console.log(request.body)
         try {
             newStudyGroup = await StudyGroup.create(
                 request.body.name,
@@ -93,31 +95,32 @@ class StudyGroupRouter {
         });
     }
 
-
-
-
-
+    /**
+     * Gets the study groups a user is a part of.
+     * @param
+     * @author Ethan Cannelongo
+     * @date   01/14/2022
+     * @async
+     * @static
+     */
     static async getUserStudyGroups(request, response) {
         // CREATE STUDY GROUP.
         let studyGroups = undefined;
         try {
-            studyGroups = await request.user.getStudyGroups()
-
+            studyGroups = await request.user.getStudyGroups();
         } catch (error) {
             Log.writeError(error);
-        }finally{
-            // SEND SUCCESS MESSAGE
-            if (Validator.isDefined(studyGroups)){
+        } finally {
+            // SEND SUCCESS MESSAGE.
+            if (Validator.isDefined(studyGroups)) {
                 response.json({
                     message: ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
                     studyGroups: studyGroups
                 });
-            }else{
+            } else {
                 response.json({ message: ResponseMessages.StudyGroup.ErrorCreateStudyGroup });
             }
         }
-       
-       
     }
 }
 module.exports = StudyGroupRouter;

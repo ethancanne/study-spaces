@@ -10,6 +10,7 @@ class Validator {
      * @return {bool} True if the variable is defined, false otherwise.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static isDefined(variable) {
         const undefinedType = "undefined";
@@ -24,6 +25,7 @@ class Validator {
      * @return {bool} True if the variable is an error, false otherwise.
      * @author Cameron Burkholder
      * @date   08/02/2021
+     * @static
      */
     static isError(variable) {
         const variableIsError = variable instanceof Error;
@@ -36,6 +38,7 @@ class Validator {
      * @return {bool} True if the variable is undefined, false otherwise.
      * @author Cameron Burkholder
      * @date   07/29/2021
+     * @static
      */
     static isUndefined(variable) {
         const undefinedType = "undefined";
@@ -47,6 +50,7 @@ class Validator {
      * @todo This needs done. For now this function does nothing.
      * @author Cameron Burkholder
      * @date   10/22/2021
+     * @static
      */
     static validateLoginInput(request, response, nextMiddlewareFunction) {
         nextMiddlewareFunction();

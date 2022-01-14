@@ -1,17 +1,16 @@
-.create-study-group-form{
+.create-study-group-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-.side-by-side{
+.side-by-side {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 
-    >*{
+    > * {
         width: 200px;
         flex: 1;
     }
-
 }

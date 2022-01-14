@@ -57,12 +57,17 @@ class Conversation {
      * @param {User} sender The user sending the first message in the conversation.
      * @param {User} receiver The user receiving the first message in the conversation.
      * @return {Conversation} The conversation created.
+     *
+     * @async
+     * @static
      */
-    static async create() {}
+    static async create(sender, receiver) {}
 
     /**
      * Deletes the conversation.
      * @return {Boolean} True if the conversation was deleted, false otherwise.
+     *
+     * @async
      */
     async delete() {}
 
@@ -70,6 +75,9 @@ class Conversation {
      * Gets a conversation based on the participants that it includes.
      * @param {String[]} participants The list of participants for the conversation.
      * @return {Conversation} The conversation between the participants.
+     *
+     * @async
+     * @static
      */
     static async getByParticipants(participants) {}
 
@@ -77,18 +85,23 @@ class Conversation {
      * Gets the other participant in the conversation.
      * @param {User} participant The first participant in the conversation.
      * @return {User} The other participant in the conversation.
+     *
      */
     getOtherParticipant(participant) {}
 
     /**
      * Gets the messages of a conversation.
      * @return {Message[]} A list of messages between the two participants.
+     *
+     * @async
      */
     async getMessages() {}
 
     /**
      * Updates the conversation in the database.
      * @return {Boolean} True if the conversation was saved, false otherwise.
+     *
+     * @async
      */
     async save() {}
 
@@ -96,6 +109,8 @@ class Conversation {
      * Sends a message.
      * @param {Message} message The message to send.
      * @return {Boolean} True if the message was sent, false otherwise.
+     *
+     * @async
      */
     async sendMessage(message) {}
 }

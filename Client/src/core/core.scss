@@ -35,10 +35,8 @@
         outline-width: 0;
     }
 
-
-
     //Dropdown
-    .dropdown{
+    .dropdown {
         padding: 5px 5px 5px 5px;
         font-size: 16px;
         box-shadow: 0px 10px 10px rgba(128, 128, 128, 0.13);
@@ -46,7 +44,7 @@
         border-bottom: lightgray 8px solid;
         transition-property: border-bottom;
         height: 40px;
-    
+
         transition-duration: 0.2s;
         -webkit-appearance: none;
         -moz-appearance: none;
@@ -55,19 +53,19 @@
         background-color: white;
         background-size: 20px;
     }
-    
+
     .dropdown:focus {
         border: none;
         border-bottom: rgba(139, 79, 11, 0.616) 8px solid;
         outline-width: 0;
     }
 
-    .color-picker{
+    .color-picker {
         border: none;
         height: 50px;
         min-width: 200px;
         position: relative;
-        &::after{
+        &::after {
             content: "(Click to Change)";
             position: absolute;
             color: white;
@@ -77,11 +75,8 @@
             left: 0;
             right: 0;
             text-align: center;
-
         }
     }
-
-    
 }
 
 .Button {
@@ -133,13 +128,13 @@
         width: 60px;
         height: 34px;
     }
-    
+
     .Toggle input {
         opacity: 0;
         width: 0;
         height: 0;
     }
-    
+
     .slider {
         position: absolute;
         border-radius: 34px;
@@ -152,7 +147,7 @@
         -webkit-transition: 0.4s;
         transition: 0.4s;
     }
-    
+
     .slider:before {
         position: absolute;
         border-radius: 50%;
@@ -165,20 +160,19 @@
         -webkit-transition: 0.4s;
         transition: 0.4s;
     }
-    
+
     input:checked + .slider {
         // background-color: #346130;
     }
-    
+
     input:focus + .slider {
         // box-shadow: 0 0 1px #346130;
     }
-    
+
     input:checked + .slider:before {
         -webkit-transform: translateX(26px);
         -ms-transform: translateX(26px);
         background-color: rgba(0, 128, 0, 0.452);
         transform: translateX(26px);
     }
-    
 }

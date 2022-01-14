@@ -29,6 +29,7 @@ class StaticResourceRouter {
      * @param  {object} response The response being generated.
      * @author Cameron Burkholder
      * @date   07/31/2021
+     * @static
      */
     static getIndexFile(request, response) {
         // SEND THE INDEX FILE.
