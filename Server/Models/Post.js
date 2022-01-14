@@ -6,7 +6,11 @@ const Schema = Mongoose.Schema;
  * @date   01/11/2022
  */
 const PostSchema = new Schema({
-    title: {
+    attachment: {
+        type: String,
+        required: false
+    },
+    creator: {
         type: String,
         required: true
     },
@@ -14,19 +18,15 @@ const PostSchema = new Schema({
         type: String,
         required: true
     },
+    responses: {
+        type: [String],
+        required: false
+    },
+    title: {
+        type: String,
+        required: true
+    },
     type: {
-        type: String,
-        required: true
-    },
-    creator: {
-        type: String,
-        required: true
-    },
-    timeStamp: {
-        type: Date,
-        required: true
-    },
-    attachment: {
         type: String,
         required: false
     },
@@ -36,12 +36,10 @@ const PostSchema = new Schema({
     },
     feedId: {
         type: Mongoose.Schema.Types.ObjectId,
-        ref: 'Feed',
-        required: true,
-    },
-
+        ref: "Feed",
+        required: true
+    }
 });
-
 PostSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -49,12 +47,11 @@ PostSchema.set("toObject", {
         return object;
     }
 });
-
 const PostCollectionName = Configuration.getPostCollectionName();
 const PostModel = Mongoose.model(PostCollectionName, PostSchema);
 
 /**
- * 
+ *
  * @author Cliff Croom
  * @date   01/11/2021
  */
@@ -66,22 +63,26 @@ class Post {
      * @date   01/11/2021
      */
     constructor(PostSchema) {
+        // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
+        // In order to maximize the usability of this class, the attributes stored in the database
+        // record are copied to the instance of this class so they can be properly editied.
+        // The post schema is converted to a regular object to sanitize it of wrapper methods and properties.
         Object.assign(this, PostSchema.toObject());
     }
 
     /**
      * Creates a post.
-     * @param 
-     * @param 
+     * @param
+     * @param
      * @return {Post} The post created.
      *
      */
     static async create() {}
 
-     /**
+    /**
      * Creates a post response.
-     * @param 
-     * @param 
+     * @param
+     * @param
      * @return {Boolean} The post response created.
      *
      */
@@ -104,11 +105,10 @@ class Post {
     async save() {
         let postWasSaved = false;
         try {
-            let postModel = await PostModel.findOne({_id: this._id}).exec();
+            let postModel = await PostModel.findOne({ _id: this._id }).exec();
             Object.assign(postModel, this);
             await postModel.save();
             postWasSaved = true;
-
         } catch (error) {
             Log.write("An error occurred while attempting to retrieve the user to save.");
             Log.writeError(error);
@@ -117,7 +117,6 @@ class Post {
         }
     }
 
-    
     /**
      * Gets the title.
      * @return {String} The title of the post.
@@ -154,7 +153,7 @@ class Post {
         return String(this.creator);
     }
 
-     /**
+    /**
      * Gets the attachment.
      * @return {String} The attachment of the post.
      *
@@ -180,7 +179,7 @@ class Post {
     getResponses() {
         return String(this.response);
     }
-    
+
     /**
      * Sets the title.
      * @param {String} title The title to set.
@@ -189,63 +188,61 @@ class Post {
      */
     setTitle() {}
 
-     /**
-      * Sets the message.
-      * @param {String} message The message to set.
-      * @return {Boolean} True if the message was set, false otherwise.
-      *
-      */
+    /**
+     * Sets the message.
+     * @param {String} message The message to set.
+     * @return {Boolean} True if the message was set, false otherwise.
+     *
+     */
     setMessage() {}
- 
-     /**
-      * Sets the Type.
-      * @param {String} type The type to set.
-      * @return {Boolean} True if the type was set, false otherwise.
-      *
-      */
+
+    /**
+     * Sets the Type.
+     * @param {String} type The type to set.
+     * @return {Boolean} True if the type was set, false otherwise.
+     *
+     */
     setType() {}
- 
-     /**
-      * Sets the Creator's DocumentID.
-      * @param {String} creator The type to set.
-      * @return {Boolean} True if the Creator's DocumentID was set, false otherwise.
-      *
-      */
+
+    /**
+     * Sets the Creator's DocumentID.
+     * @param {String} creator The type to set.
+     * @return {Boolean} True if the Creator's DocumentID was set, false otherwise.
+     *
+     */
     setCreator() {}
- 
-      /**
-      * Sets the attachment.
-      * @param {String} attachment The attachment to set.
-      * @return {Boolean} True if the attachment was set, false otherwise.
-      *
-      */
+
+    /**
+     * Sets the attachment.
+     * @param {String} attachment The attachment to set.
+     * @return {Boolean} True if the attachment was set, false otherwise.
+     *
+     */
     setAttachment() {}
- 
-     /**
-      * Sets the timestamp.
-      * @param {String} timestamp The timestamp to set.
-      * @return {Boolean} True if the timestamp was set, false otherwise.
-      *
-      */
+
+    /**
+     * Sets the timestamp.
+     * @param {String} timestamp The timestamp to set.
+     * @return {Boolean} True if the timestamp was set, false otherwise.
+     *
+     */
     setTimestamp() {}
- 
-     /**
-      * Adds the Responses array.
-      * @param {String} response The response to add.
-      * @return {Boolean} True if the response array was set, false otherwise.
-      *
-      */
+
+    /**
+     * Adds the Responses array.
+     * @param {String} response The response to add.
+     * @return {Boolean} True if the response array was set, false otherwise.
+     *
+     */
     addResponse() {}
 
     /**
-      * Deletes a response.
-      * @param {String} responseID The response to be deleted.
-      * @return {Boolean} True if the response was deleted, false otherwise.
-      *
-      */
+     * Deletes a response.
+     * @param {String} responseID The response to be deleted.
+     * @return {Boolean} True if the response was deleted, false otherwise.
+     *
+     */
     deleteResponse() {}
-    
-
 }
 
 module.exports = Post;
