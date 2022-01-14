@@ -82,7 +82,19 @@ class Feed {
      *
      * @async
      */
-    async delete() {}
+    async delete() {
+        // DELETE THE FEED.
+        let feedWasDeleted = false;
+        let recordsDeleted = undefined;
+        try {
+            recordsDeleted = await FeedModel.deleteOne({ _id: this._id });
+        } catch (error) {
+            Log.writeError(error);
+        } finally {
+            feedWasDeleted = recordsDeleted.ok;
+            return feedWasDeleted;
+        }
+    }
 
     /**
      * Deletes a post from the feed.
