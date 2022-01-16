@@ -1,0 +1,41 @@
+@import "../../globals.scss";
+
+.menu {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 340px;
+    border-bottom: $border-color 5px solid;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+    position: absolute;
+    top: -3.5em;
+    right: 0px;
+    z-index: 10;
+    box-shadow: inset 0px 10px 20px rgba(0, 0, 0, 0.151);
+    &.isShowing {
+        top: 3em;
+        pointer-events: all;
+        overflow: visible;
+    }
+}
+
+.background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    z-index: 20;
+    background-color: #9a5e2970;
+    backdrop-filter: blur(5px);
+    pointer-events: none;
+    transition: all 0.5s;
+    opacity: 0;
+
+    &.active {
+        pointer-events: all;
+        opacity: 1;
+    }
+}

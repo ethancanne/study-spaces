@@ -71,9 +71,7 @@ class Feed {
         // CREATE FEED IN THE DATABASE.
         const BLANK = "BLANK";
         const EMPTY = [];
-        const feedModel = new feedModel({
-            posts: EMPTY
-        });
+        const feedModel = new FeedModel({});
         try {
             await feedModel.save();
         } catch (error) {
@@ -82,7 +80,7 @@ class Feed {
 
         // RETURN THE CREATED INSTANCE.
         const feed = new Feed(feedModel);
-        return feed;
+        return feedModel._id;
     }
 
     /**

@@ -5,6 +5,7 @@ const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const PrivacySettings = require("./PrivacySettings.js");
 const Validator = require("../Validator.js");
+const Feed = require("./Feed");
 
 /**
  * Used to define the database schema for storing study groups.
@@ -82,12 +83,6 @@ StudyGroupSchema.set("toObject", {
     }
 });
 
-StudyGroupSchema.pre("init", async function (next) {
-    const studyGroup = this;
-    //Create Feed and assign its object id to the feed property of this study group.
-    next();
-});
-
 const studyGroupCollectionName = Configuration.getStudyGroupCollectionName();
 const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchema);
 
@@ -147,7 +142,7 @@ class StudyGroup {
      * @param {User} owner The owner of the study group.
      * @param {String} subject The study group's subject.
      * @return {StudyGroup} The created study group.
-     * @author Clifton Croom
+     * @author Clifton Croom and Ethan Cannelongo
      * @date   11/30/2021
      * @async
      * @static
@@ -155,7 +150,9 @@ class StudyGroup {
     static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
         // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
         // @todo Write the actual implementation.
-        const feedId = "1";
+        const newFeed = await Feed.create();
+        const newFeedId = Mongoose.Types.ObjectId(newFeed);
+        console.log(newFeedId);
 
         // CREATE THE STUDY GROUP.
         const EMPTY_LIST_OF_MEETINGS = [];
@@ -164,7 +161,7 @@ class StudyGroup {
         const newStudyGroup = new StudyGroupModel({
             areaCode: areaCode,
             course: course,
-            feed: feedId,
+            feed: newFeedId,
             isOnlineGroup: isOnlineGroup,
             isTutorGroup: isTutorGroup,
             meetings: EMPTY_LIST_OF_MEETINGS,

@@ -87,12 +87,16 @@ const App = (props) => {
                         render={(props) => {
                             const accountSetupView = Views.Home.AccountSetup;
                             return isLoggedIn ? (
-                                <Redirect to="/study" />
+                                <>
+                                    <Redirect to="/study" />
+                                </>
                             ) : (
                                 <Home {...props} homeView={accountSetupView} />
                             );
                         }}
                     />
+                    <Route path="/search" render={(props) => {}} />
+                    <Route path="/message" render={(props) => {}} />
                 </Switch>
             </div>
         </Router>

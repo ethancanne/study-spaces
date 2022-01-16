@@ -1,3 +1,4 @@
+import "./Study.scss";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut, showStudyGroupPopup, addStudyGroup } from "../../state/actions";
@@ -10,7 +11,7 @@ import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-import "./Study.scss";
+import TopBar from "../../components/TopBar/TopBar";
 import StudyGroupView from "../../Views/Study/studyGroupView/StudyGroupView";
 
 /**
@@ -70,25 +71,25 @@ const Study = () => {
     };
 
     return (
-        <div className="study">
-            {isLoggedIn ? (
-                <div>
-                    <p>Welcome {user.name}, you are logged in!</p>
-
-                    <img src={" data:image/jpeg;charset=utf-8;base64," + user.profilePicture} alt="" />
-                    <Button onClick={() => dispatch(signOut())}>Log out</Button>
-                    <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
-                    <div className="study-groups-container">
-                        {Validator.isDefined(studyGroups) &&
-                            studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}
+        <div>
+            <TopBar currentPage="study" />
+            <div className="study">
+                {isLoggedIn ? (
+                    <div>
+                        <Button onClick={() => dispatch(signOut())}>Log out</Button>
+                        <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
+                        <div className="study-groups-container">
+                            {Validator.isDefined(studyGroups) &&
+                                studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div>
-                    <p>You are currently a guest!</p>
-                    <Link to="/">Log In</Link>
-                </div>
-            )}
+                ) : (
+                    <div>
+                        <p>You are currently a guest!</p>
+                        <Link to="/">Log In</Link>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };
