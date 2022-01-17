@@ -131,7 +131,7 @@ class AccountRouter {
             Log.write("An error occurred while sending an email during the account creation process.");
             Log.writeError(error);
         }
-        if (!emailWasSent) {
+        if (!emailWasSent && Configuration.isSetToProduction()) {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
 

@@ -136,11 +136,11 @@ class Authenticator {
                 text: body, // plain text body
                 html: "<h1>" + body + "</h1>" // html body
             });
-            console.log("Sending mail worked");
+            Log.write("Sending email worked");
 
             return true;
         } catch {
-            console.log("Sending mail failed");
+            Log.write("Sending email failed.");
             return false;
         }
     }
