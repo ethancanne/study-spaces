@@ -120,7 +120,8 @@ class Post {
     /**
      * Gets the title.
      * @return {String} The title of the post.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getTitle() {
         return String(this.title);
@@ -129,7 +130,8 @@ class Post {
     /**
      * Gets the message.
      * @return {String} The message of the post.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getMessage() {
         return String(this.message);
@@ -138,7 +140,8 @@ class Post {
     /**
      * Gets the Type.
      * @return {String} The type of the post.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getType() {
         return String(this.type);
@@ -147,7 +150,8 @@ class Post {
     /**
      * Gets the Creator's DocumentID.
      * @return {String} The Creator's DocumentID.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getCreator() {
         return String(this.creator);
@@ -156,7 +160,8 @@ class Post {
     /**
      * Gets the attachment.
      * @return {String} The attachment of the post.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getAttachment() {
         return String(this.attachment);
@@ -165,7 +170,8 @@ class Post {
     /**
      * Gets the timestamp.
      * @return {String} The timestamp of the post.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getTimestamp() {
         return String(this.timestamp); // capitalization?
@@ -174,7 +180,8 @@ class Post {
     /**
      * Gets the Responses array.
      * @return {String} The responses to the post.
-     *
+     * @author Stacey Popenfoose
+     * @date 1/13/2022
      */
     getResponses() {
         return String(this.response);
