@@ -11,7 +11,13 @@ const PostSchema = new Schema({
         required: false
     },
     creator: {
-        type: String,
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getUserCollectionName(),
+        required: true
+    },
+    feedId: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: "Feed",
         required: true
     },
     message: {
@@ -29,15 +35,6 @@ const PostSchema = new Schema({
     type: {
         type: String,
         required: false
-    },
-    responses: {
-        type: [String],
-        required: false
-    },
-    feedId: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: "Feed",
-        required: true
     }
 });
 PostSchema.set("toObject", {

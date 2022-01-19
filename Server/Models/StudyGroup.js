@@ -22,6 +22,11 @@ const StudyGroupSchema = new Schema({
         required: false
     },
     feed: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getFeedCollectionName(),
+        required: true
+    },
+    groupColor: {
         type: String,
         required: true
     },
@@ -34,11 +39,13 @@ const StudyGroupSchema = new Schema({
         required: true
     },
     meetings: {
-        type: [String],
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getMeetingCollectionName(),
         required: true
     },
     members: {
-        type: [String],
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getUserCollectionName(),
         required: true
     },
     name: {
@@ -46,7 +53,8 @@ const StudyGroupSchema = new Schema({
         required: true
     },
     owner: {
-        type: String,
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getUserCollectionName(),
         required: true
     },
     privacySetting: {
@@ -54,7 +62,8 @@ const StudyGroupSchema = new Schema({
         required: true
     },
     recurringMeeting: {
-        type: String,
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getMeetingCollectionName(),
         required: false
     },
     school: {
@@ -63,15 +72,6 @@ const StudyGroupSchema = new Schema({
     },
     subject: {
         type: String,
-        required: true
-    },
-    groupColor: {
-        type: String,
-        required: true
-    },
-    feed: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: Configuration.getFeedCollectionName(),
         required: true
     }
 });
@@ -90,14 +90,14 @@ const StudyGroupModel = Mongoose.model(studyGroupCollectionName, StudyGroupSchem
  * Provides an interface for working with study groups in the database.
  * @property {String} areaCode The area code for the study group.
  * @property {String=} course The course the study group is associated with.
- * @property {String} feed The document ID for the study group's feed.
+ * @property {Mongoose.Schema.Types.ObjectId} feed The document ID for the study group's feed.
  * @property {Boolean} isOnlineGroup Indicates whether or not the study group is an online group.
  * @property {Boolean} isTutorGroup Indicates whether or not the study group is a tutor group.
- * @property {String[]} members The list of document IDs for members in the study group.
+ * @property {Mongoose.Schema.Types.ObjectId[]} members The list of document IDs for members in the study group.
  * @property {String} name The name of the study group.
- * @property {Boolean} oneTimeMeetings The list of one-off meetings associated with the study group.
- * @property {String} owner The study group owner's document ID.
- * @property {Meeting=} recurringMeeting The study group's recurring meeting schedule.
+ * @property {Mongoose.Schema.Types.ObjectId[]} oneTimeMeetings The list of one-off meetings associated with the study group.
+ * @property {Mongoose.Schema.Types.ObjectId} owner The study group owner's document ID.
+ * @property {Mongoose.Schema.Types.ObjectId=} recurringMeeting The study group's recurring meeting schedule.
  * @property {String=} school The school the study group is associated with.
  * @property {String} subject The subject the study group supports.
  * @author Cameron Burkholder
@@ -165,7 +165,7 @@ class StudyGroup {
             meetings: EMPTY_LIST_OF_MEETINGS,
             members: EMPTY_LIST_OF_MEMBERS,
             name: name,
-            owner: ownerId,
+            owner: Mongoose.Types.ObjectId(ownerId),
             privacySetting: PrivacySettings.Open,
             school: school,
             subject: subject,

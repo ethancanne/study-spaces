@@ -17,7 +17,8 @@ const UserSchema = new Schema({
         required: true
     },
     conversations: {
-        type: [String],
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getConversationCollectionName(),
         required: true
     },
     email: {
@@ -37,7 +38,8 @@ const UserSchema = new Schema({
         required: false
     },
     studyGroups: {
-        type: [String],
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getStudyGroupCollectionName(),
         required: true
     }
 });
@@ -54,13 +56,13 @@ const UserModel = Mongoose.model(userCollectionName, UserSchema);
 /**
  * Provides an interface for working with users in the database.
  * @property {String} areaCode The user's area code.
- * @property {String[]} conversations The user's conversations/chats. This is stored as a list of
+ * @property {Mongoose.Schema.Types.ObjectId[]} conversations The user's conversations/chats. This is stored as a list of
  *   MongoDB document IDs so that the conversations can be accessed directly from the user.
  * @property {String} email The user's email address.
  * @property {String} name The user's name.
  * @property {String} passwordHash The user's hashed password.
  * @property {Buffer} profilePicture The user's profile picture. This must be less than 16MB.
- * @property {String[]} studyGroups The study groups the user is a part of. This is stored as a list
+ * @property {Mongoose.Schema.Types.ObjectId[]} studyGroups The study groups the user is a part of. This is stored as a list
  *   of MongoDB document IDs so that the study groups can be accessed directly from the user.
  * @author Cameron Burkholder
  * @date   07/29/2021
@@ -88,7 +90,7 @@ class User {
      */
     async addStudyGroup(studyGroup) {
         // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
-        this.studyGroups.push(studyGroup.getId());
+        this.studyGroups.push(Mongoose.Types.ObjectId(studyGroup.getId()));
 
         // SAVE THE CHANGE.
         let studyGroupWasAdded = true;

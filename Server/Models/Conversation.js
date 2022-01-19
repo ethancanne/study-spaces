@@ -12,11 +12,13 @@ const Validator = require("../Validator.js");
  */
 const ConversationSchema = new Schema({
     messages: {
-        type: [String],
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getMessageCollectionName(),
         required: true
     },
     participants: {
-        type: [String],
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getUserCollectionName(),
         required: true
     }
 });
@@ -32,8 +34,8 @@ const ConversationModel = Mongoose.model(conversationCollectionName, Conversatio
 
 /**
  * Provides an interface for working with conversations in the database.
- * @property {String[]} messages The messages in the conversation.
- * @property {String[]} participants The two users that the conversation is between.
+ * @property {Mongoose.Schema.Types.ObjectId[]} messages The messages in the conversation.
+ * @property {Mongoose.Schema.Types.ObjectId[]} participants The people in the conversation.
  * @author Cameron Burkholder
  * @date   10/29/2021
  */
