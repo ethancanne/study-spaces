@@ -149,10 +149,8 @@ class StudyGroup {
      */
     static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
         // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
-        // @todo Write the actual implementation.
         const newFeed = await Feed.create();
         const newFeedId = Mongoose.Types.ObjectId(newFeed);
-        console.log(newFeedId);
 
         // CREATE THE STUDY GROUP.
         const EMPTY_LIST_OF_MEETINGS = [];
