@@ -40,6 +40,7 @@ class AccountRouter {
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
+
         // This is used to allow users to upload profile pictures.
         const fileFilter = (req, file, cb) => {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -49,12 +50,15 @@ class AccountRouter {
                 cb(new Error("File format not supported."), false);
             }
         };
+
+        //Limit the file size
         const upload = multer({
             limits: {
                 fileSize: 2000000
             },
             fileFilter: fileFilter
         });
+
         // This is used to complete the account setup process.
         server.post(Routes.Account.SetupAccount, upload.single("profilePicture"), AccountRouter.setupAccount);
     }

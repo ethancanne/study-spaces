@@ -15,6 +15,7 @@ import Routes from "../../Server/Routes/Routes.js";
 import Home from "./Pages/Home/Home.js";
 import Study from "./Pages/Study/Study.js";
 import Views from "./Views/Views";
+import Search from "./Pages/Search/Search";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -79,9 +80,7 @@ const App = (props) => {
                     <Route exact path="/">
                         {isLoggedIn ? <Redirect to="/study" /> : <Home />}
                     </Route>
-                    <Route exact path="/study">
-                        <Study />
-                    </Route>
+
                     <Route
                         path="/verify/:verificationToken"
                         render={(props) => {
@@ -95,7 +94,12 @@ const App = (props) => {
                             );
                         }}
                     />
-                    <Route path="/search" render={(props) => {}} />
+                    <Route exact path="/study">
+                        <Study />
+                    </Route>
+                    <Route exact path="/search">
+                        <Search />;
+                    </Route>
                     <Route path="/message" render={(props) => {}} />
                 </Switch>
             </div>

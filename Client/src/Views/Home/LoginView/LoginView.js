@@ -2,8 +2,8 @@ import "./LoginView.scss";
 
 import axios from "axios";
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { addStudyGroup, signIn, signOut } from "../../../state/actions";
+import { useDispatch } from "react-redux";
+import { signIn, signOut } from "../../../state/actions";
 
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
 import Button from "../../../core/Button/Button.js";
@@ -70,33 +70,33 @@ const LoginView = (props) => {
 
     /**
      * Used to update the email field in the login form.
-     * @param {Event} event The change event to update the field with.
+     * @param {Event} e The change event to update the field with.
      * @author Cameron Burkholder
      * @date   10/21/2021
      */
-    const updateEmailField = (event) => {
-        setEmail(event.target.value);
+    const updateEmailField = (e) => {
+        setEmail(e.target.value);
         setLoginErrorMsg(BLANK);
     };
 
     /**
      * Used to update the password field in the login form.
-     * @param {Event} event The change event to update the field with.
+     * @param {Event} e The change event to update the field with.
      * @author Cameron Burkholder
      * @date   10/21/2021
      */
-    const updatePasswordField = (event) => {
-        setPassword(event.target.value);
+    const updatePasswordField = (e) => {
+        setPassword(e.target.value);
         setLoginErrorMsg(BLANK);
     };
 
     /**
      * Sets the home view to the sign up form.
-     * @param {Event} event The change event to update the field with.
+     * @param {Event} e The change event to update the field with.
      * @author Ethan Cannelongo
      * @date   10/21/2021
      */
-    const signUpClicked = (event) => {
+    const signUpClicked = (e) => {
         props.setHomeView(Views.Home.CreateAccount);
     };
 

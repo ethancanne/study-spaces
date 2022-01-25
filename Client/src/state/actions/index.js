@@ -1,19 +1,23 @@
+import studyGroupsConstants from "../constants/studyGroupsConstants";
+import authConstants from "../constants/authConstants";
+import popupConstants from "../constants/popupConstants";
+
 //AUTH REDUCERS
 export const signIn = (user) => {
     return {
-        type: "SIGN_IN",
+        type: authConstants.SIGN_IN,
         payload: user
     };
 };
 export const signOut = () => {
     return {
-        type: "SIGN_OUT"
+        type: authConstants.SIGN_OUT
     };
 };
 
 export const createAccount = (unverifiedUser) => {
     return {
-        type: "CREATE_ACCOUNT",
+        type: authConstants.CREATE_ACCOUNT,
         payload: {
             unverifiedUser
         }
@@ -23,20 +27,27 @@ export const createAccount = (unverifiedUser) => {
 //POPUP REDUCER
 export const showStudyGroupPopup = () => {
     return {
-        type: "SHOW_STUDY_GROUP_POPUP"
+        type: popupConstants.SHOW_STUDY_GROUP_POPUP
     };
 };
 
 export const closePopup = () => {
     return {
-        type: "CLOSE_POPUP"
+        type: popupConstants.CLOSE_POPUP
     };
 };
 
-//Study Groups Reducer
+//STUDY GROUP REDUCERS
 export const addStudyGroup = (group, reset = false) => {
     return {
-        type: "ADD_STUDY_GROUP",
+        type: studyGroupsConstants.ADD_STUDY_GROUP,
         payload: { group, reset }
+    };
+};
+
+export const populateStudyGroupSearch = (group) => {
+    return {
+        type: studyGroupsConstants.POPULATE_SEARCH,
+        payload: { groups }
     };
 };
