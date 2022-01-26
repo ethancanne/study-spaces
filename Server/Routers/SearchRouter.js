@@ -12,7 +12,7 @@ const Validator = require("../Validator.js");
 
 /**
  * The router used to serve search-related requests.
- * @param 
+ * @param
  * @author Clifton Croom
  * @date   11/17/2021
  */
@@ -26,24 +26,24 @@ const Validator = require("../Validator.js");
         }
         /**
          * Gets the search results from the study group search.
-         * 
+         *
          * @author Clifton Croom
          * @date   01/25/2022
          * @async
          * @static
          */
         static async getSearchResults(request, response) {
-        
+
         // Empty variable for array of study groups.
         let studyGroups = undefined;
 
         // Try and catch errors while requesting study groups.
         try {
-            studyGroups = await request.StudyGroup.search();
-        } 
+            studyGroups = await request.StudyGroup.search(request.body.filters);
+        }
         catch (error) {
             Log.writeError(error);
-        } 
+        }
         finally {
             // Send success message and array of studyGroups.
             if (Validator.isDefined(studyGroups)) {
