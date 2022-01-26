@@ -14,6 +14,9 @@ const Routes = {
     StaticResources: {
         Index: "/*"
     },
+    Search: {
+        GetSearchResults: "api/search/get"
+    },
     StudyGroup: {
         CreateStudyGroup: "/api/study-group/create",
         GetUserStudyGroups: "/api/study-group/get"
