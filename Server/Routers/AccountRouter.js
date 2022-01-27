@@ -99,24 +99,28 @@ class AccountRouter {
      * @static
      */
     static async createAccount(request, response) {
-        // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
-        const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
-        const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
-        if (unverifiedUserAlreadyExists) {
-            return response.json({ message: ResponseMessages.Account.userAlreadyExists });
-        }
+        try {
+            // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
+            const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
+            const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
+            if (unverifiedUserAlreadyExists) {
+                return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+            }
 
-        // CHECK FOR AN EXISTING ACCOUNT.
-        const existingUser = await User.getByEmail(request.body.email);
-        const userAlreadyExists = Validator.isDefined(existingUser);
-        if (userAlreadyExists) {
-            return response.json({ message: ResponseMessages.Account.userAlreadyExists });
-        }
+            // CHECK FOR AN EXISTING ACCOUNT.
+            const existingUser = await User.getByEmail(request.body.email);
+            const userAlreadyExists = Validator.isDefined(existingUser);
+            if (userAlreadyExists) {
+                return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+            }
 
-        // CREATE THE UNVERIFIED ACCOUNT.
-        const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
-        const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
-        if (accountWasNotCreated) {
+            // CREATE THE UNVERIFIED ACCOUNT.
+            const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
+            const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
+            if (accountWasNotCreated) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+        } catch {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
 
@@ -131,6 +135,7 @@ class AccountRouter {
         } catch (error) {
             Log.write("An error occurred while sending an email during the account creation process.");
             Log.writeError(error);
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
         if (!emailWasSent && Configuration.isSetToProduction()) {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });

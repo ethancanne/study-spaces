@@ -17,7 +17,9 @@ const Search = () => {
             <TopBar currentPage="search" />
             <Page>
                 <div className="search-page">
-                    <h1 className="page-title">Search</h1>
+                    <div className="page-title">
+                        <h1>Search</h1>
+                    </div>
                     <div className="search-area">
                         <SearchView />
                         <SearchResultsView />

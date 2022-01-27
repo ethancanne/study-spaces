@@ -10,11 +10,13 @@ const Notification = (props) => {
     const dispatch = useDispatch();
 
     var className = "";
+    var timeout;
 
     switch (type) {
         case notificationTypes.ERROR:
+            clearTimeout(timeout);
             className = "error";
-            setTimeout(function () {
+            timeout = setTimeout(function () {
                 dispatch(hideNotification());
             }, 5000);
     }

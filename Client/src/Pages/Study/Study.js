@@ -77,7 +77,9 @@ const Study = () => {
 
             <Page>
                 <div className="study">
-                    <h1 className="page-title">Study</h1>
+                    <div className="page-title">
+                        <h1>Study</h1>
+                    </div>
                     {isLoggedIn ? (
                         <div>
                             <Button onClick={() => dispatch(signOut())}>Log out</Button>

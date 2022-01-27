@@ -24,7 +24,6 @@ const CreateAccountView = (props) => {
     const [email, setEmail] = useState(BLANK);
     const [password, setPassword] = useState(BLANK);
     const [confirmPassword, setConfirmPassword] = useState(BLANK);
-    const [accountCreationErrorMsg, setAccountCreationErrorMsg] = useState(BLANK);
 
     const dispatch = useDispatch();
 
@@ -41,7 +40,7 @@ const CreateAccountView = (props) => {
 
         // FIRST, COMPARE THE PASSWORD AND CONFIRM PASSWORD FIELDS
         if (password !== confirmPassword) {
-            setAccountCreationErrorMsg("Passwords don't match!");
+            dispatch(showErrorNotification("Passwords don't match"));
             return;
         }
 
@@ -72,10 +71,13 @@ const CreateAccountView = (props) => {
                     const unverifiedUser = response.data.unverifiedUser;
 
                     dispatch(createAccount(unverifiedUser));
+
                     props.setHomeView(Views.Home.VerificationEmailConfirmation);
                 } else {
                     dispatch(showErrorNotification(response.data.message));
                 }
+            } else {
+                dispatch(showErrorNotification("There was an error"));
             }
         }
     };
@@ -88,7 +90,6 @@ const CreateAccountView = (props) => {
      */
     const updateEmailField = (event) => {
         setEmail(event.target.value);
-        setAccountCreationErrorMsg(BLANK);
     };
 
     /**
@@ -99,7 +100,6 @@ const CreateAccountView = (props) => {
      */
     const updatePasswordField = (event) => {
         setPassword(event.target.value);
-        setAccountCreationErrorMsg(BLANK);
     };
 
     /**
@@ -110,7 +110,6 @@ const CreateAccountView = (props) => {
      */
     const updateConfirmPasswordField = (event) => {
         setConfirmPassword(event.target.value);
-        setAccountCreationErrorMsg(BLANK);
     };
 
     /**
@@ -134,7 +133,6 @@ const CreateAccountView = (props) => {
                 updateEmailField={updateEmailField}
                 updatePasswordField={updatePasswordField}
                 updateConfirmPasswordField={updateConfirmPasswordField}
-                accountCreationErrorMsg={accountCreationErrorMsg}
             />
 
             <div className="other-options">
