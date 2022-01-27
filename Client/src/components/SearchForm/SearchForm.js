@@ -30,15 +30,42 @@ const SearchForm = ({
         <div className="search-form">
             <Form onSubmit={submitSearch}>
                 <InputField>
-                    <Label></Label>
+                    <Label>Title</Label>
+                    <TextInput value="" onChange="" />
+                </InputField>
+                <InputField>
+                    <Label>Category</Label>
+                    <TextInput value="" onChange="" />
+                </InputField>
+                <InputField>
+                    <Label>Owner</Label>
+                    <TextInput value="" onChange="" />
+                </InputField>
+                <InputField>
+                    <Label>Class Code</Label>
+                    <TextInput value="" onChange="" />
+                </InputField>
+                <InputField>
+                    <Label>Proximity</Label>
                     <TextInput value="" onChange="" />
                 </InputField>
                 <InputField>
                     <Label></Label>
-                    <TextInput value="" onChange="" />
+                    <TextInput value="" onChange="" type="checkbox" />
                 </InputField>
                 <InputField>
-                    <Label></Label>
+                    <Label>Show Only Liberty University Groups</Label>
+                        <label class="switch">
+                            <TextInput value="" onChange="" type="checkbox" />
+                            <span class="slider round"></span>
+                        </label>
+                </InputField>
+                <InputField>
+                    <Label>Show Only Online Groups</Label>
+                    <TextInput value="" onChange="" type="checkbox" />
+                </InputField>
+                <InputField>
+                    <Label>Show Only Tutor Groups</Label>
                     <TextInput value="" onChange="" type="checkbox" />
                 </InputField>
                 <Button type={ButtonTypes.Primary}>Search</Button>
