@@ -15,10 +15,10 @@ import { populateStudyGroupSearch } from "../../state/actions";
 const SearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [category, setCategory] = useState("");
-    const [proximity, setProximity] = useState("");
-    const [schoolOnly, setSchoolOnly] = useState(false);
-    const [onlineOnly, setOnlineOnly] = useState(false);
-    const [tutorOnly, setTutorOnly] = useState(false);
+    const [isAssociatedWithSchool, setSchoolOnly] = useState(false);
+    const [isOnline, setIsOnline] = useState(false);
+    const [isTutor, setIsTutor] = useState(false);
+    const [isGroup, setIsGroup] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ const SearchView = () => {
         let response;
         try {
             //TODO - Write out request
-            response = await axios.post();
+            response = await axios.post(Routes.Search.GetSearchResults);
         } catch (error) {
             console.log(error);
         } finally {
@@ -76,9 +76,9 @@ const SearchView = () => {
      * @author ???
      * @date  ?/??/22
      */
-    const updateProximity = (e) => {
-        setProximity(e.target.value);
-    };
+    // const updateProximity = (e) => {
+    //     setProximity(e.target.value);
+    // };
 
     /**
      * Used to update the "show only groups associated with school" checkbox in the search form.
@@ -86,7 +86,7 @@ const SearchView = () => {
      * @author ???
      * @date  ?/??/22
      */
-    const updateSchoolOnly = (e) => {
+    const updateIsSchool = (e) => {
         setSchoolOnly(e.target.checked);
     };
 
@@ -96,35 +96,45 @@ const SearchView = () => {
      * @author ???
      * @date  ?/??/22
      */
-    const updateOnlineOnly = (e) => {
-        setOnlineOnly(e.target.checked);
+    const updateIsOnline = (e) => {
+        setIsOnline(e.target.checked);
     };
 
     /**
-     * Used to update the "show only tutor groups" checkbox in the search form.
+     * Used to update the "show only tutors" checkbox in the search form.
      * @param {Event} e The change event to update the field with.
      * @author ???
      * @date  ?/??/22
      */
-    const updateTutorOnly = (e) => {
-        setTutorOnly(e.target.checked);
+    const updateIsTutor = (e) => {
+        setIsTutor(e.target.checked);
+    };
+
+    /**
+     * Used to update the "show only groups" checkbox in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateIsGroup = (e) => {
+        setIsGroup(e.target.checked);
     };
 
     return (
-        <div>
+        <div className="search-view">
             <SearchForm
                 searchTerm={searchTerm}
                 category={category}
-                proximity={proximity}
-                schoolOnly={schoolOnly}
-                onlineOnly={onlineOnly}
-                tutorOnly={tutorOnly}
+                isAssociatedWithSchool={isAssociatedWithSchool}
+                isOnline={isOnline}
+                isTutor={isTutor}
+                isGroup={isGroup}
                 updateSearchTerm={updateSearchTerm}
                 updateCategory={updateCategory}
-                updateProximity={updateProximity}
-                updateSchoolOnly={updateSchoolOnly}
-                updateOnlineOnly={updateOnlineOnly}
-                updateTutorOnly={updateTutorOnly}
+                updateIsSchool={updateIsSchool}
+                updateIsOnline={updateIsOnline}
+                updateIsTutor={updateIsTutor}
+                updateIsGroup={updateIsGroup}
                 submitSearch={submitSearch}
             />
         </div>

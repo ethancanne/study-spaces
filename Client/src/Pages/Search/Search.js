@@ -12,13 +12,17 @@ import SearchResultsView from "../../Views/Search/SearchResultView";
  */
 const Search = () => {
     return (
-        <div>
+        <>
             <TopBar currentPage="search" />
-            <div className="searchPage">
-                <SearchView />
-                <SearchResultsView />
+
+            <div className="search-page">
+                <h1 className="page-title">Search</h1>
+                <div className="search-area">
+                    <SearchView />
+                    <SearchResultsView />
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

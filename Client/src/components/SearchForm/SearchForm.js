@@ -14,16 +14,16 @@ import Label from "../../core/Label/Label.js";
 const SearchForm = ({
     searchTerm,
     category,
-    proximity,
-    schoolOnly,
-    onlineOnly,
-    tutorOnly,
+    isAssociatedWithSchool,
+    isOnline,
+    isTutor,
+    isGroup,
     updateSearchTerm,
     updateCategory,
-    updateProximity,
-    updateSchoolOnly,
-    updateOnlineOnly,
-    updateTutorOnly,
+    updateIsAssociatedWithSchool,
+    updateIsOnline,
+    updateIsTutor,
+    updateIsGroup,
     submitSearch
 }) => {
     return (
@@ -36,6 +36,10 @@ const SearchForm = ({
                 <InputField>
                     <Label></Label>
                     <TextInput value="" onChange="" />
+                </InputField>
+                <InputField>
+                    <Label></Label>
+                    <TextInput value="" onChange="" type="checkbox" />
                 </InputField>
                 <Button type={ButtonTypes.Primary}>Search</Button>
             </Form>

@@ -417,70 +417,69 @@ class StudyGroup {
     * @date   01/25/2022
     */
     static async search(filters) {
-      // CONVERT THE FILTERS QUERY INTO A MONGOOSE-READABLE FORMAT.
-      // Since the filters query was defined to make more domain-level sense,
-      // it must be converted to a form that Mongoose can parse to generate the search.
-      // Additionally, using regex on the search term allows us to find all names, courses,
-      // and subjects similar to the search term using the like operator from Mongoose.
-      const searchTerm = new RegExp(`${filters.searchTerm}`, "i");
-      let searchFilter = {
-        $or: [
-          { name: searchTerm },
-          { course: searchTerm },
-          { subject: searchTerm }
-        ]
-      };
+        // CONVERT THE FILTERS QUERY INTO A MONGOOSE-READABLE FORMAT.
+        // Since the filters query was defined to make more domain-level sense,
+        // it must be converted to a form that Mongoose can parse to generate the search.
+        // Additionally, using regex on the search term allows us to find all names, courses,
+        // and subjects similar to the search term using the like operator from Mongoose.
+        const searchTerm = new RegExp(`${filters.searchTerm}`, "i");
 
-      // ADD OPTIONAL PARAMETERS TO THE SEARCH.
-      const schoolFilteringIsEnabled = Validator.isDefined(filters.school);
-      if (schoolFilteringIsEnabled) {
-        // Using the regex format allows us to search for all school names
-        // like the one entered.
-        const schoolRegex = new RegExp(`${filters.school}`, "i");
-        searchFilter.school = schoolRegex;
-      }
+        let searchFilter = {
+            $or: [{ name: searchTerm }, { course: searchTerm }, { subject: searchTerm }]
+        };
 
-      // DETERMINE IF THE SEARCH SHOULD BE FOR TUTOR GROUPS.
-      const isSearchingForTutorGroups = filters.isTutorGroup;
-      if (isSearchingForTutorGroups) {
-        searchFilter.isTutorGroup = true;
-      }
+        // ADD OPTIONAL PARAMETERS TO THE SEARCH.
+        const schoolFilteringIsEnabled = Validator.isDefined(filters.school);
+        if (schoolFilteringIsEnabled) {
+            // Using the regex format allows us to search for all school names
+            // like the one entered.
+            const schoolRegex = new RegExp(`${filters.school}`, "i");
+            searchFilter.school = schoolRegex;
+        }
 
-      // DETERMINE THE TYPE OF GROUP BEING SEARCHED FOR.
-      // The type of the group determines if the user is interested in seeing
-      // groups that meet in-person, online, or both.
-      switch (filters.StudyGroupType) {
-        case StudyGroupTypes.InPerson:
-          searchFilter.isOnlineGroup = false;
-          break;
-        case StudyGroupTypes.Online:
-          searchFilter.isOnlineGroup = true;
-        case StudyGroupTypes.Mixed:
-        default:
-          // If the user is searching for study groups that are in person
-          // or online, then that is the same as performing a search without
-          // specifying what the isOnlineGroup attribute should be.
-          break;
-      }
+        // DETERMINE IF THE SEARCH SHOULD BE FOR TUTOR GROUPS.
+        const isSearchingForTutorGroups = filters.isTutorGroup;
+        if (isSearchingForTutorGroups) {
+            searchFilter.isTutorGroup = true;
+        }
 
-      // FIND ALL STUDY GROUPS MATCHING THE SEARCH CONDITIONS.
-      let studyGroups = undefined;
-      try {
-        studyGroups = await StudyGroupModel.find(searchFilter);
-      } catch(error) {
-        Log.write(`An error occurred while attempting to search for study groups matching the search filter: ${searchFilter}`);
-        Log.writeError(error);
-      }
+        // DETERMINE THE TYPE OF GROUP BEING SEARCHED FOR.
+        // The type of the group determines if the user is interested in seeing
+        // groups that meet in-person, online, or both.
+        switch (filters.StudyGroupType) {
+            case StudyGroupTypes.InPerson:
+                searchFilter.isOnlineGroup = false;
+                break;
+            case StudyGroupTypes.Online:
+                searchFilter.isOnlineGroup = true;
+            case StudyGroupTypes.Mixed:
+            default:
+                // If the user is searching for study groups that are in person
+                // or online, then that is the same as performing a search without
+                // specifying what the isOnlineGroup attribute should be.
+                break;
+        }
 
-      // FILTER STUDY GROUPS BASED ON PROXIMITY.
-      // Since all requirements involving this element of the search
-      // are marked as optional, this filter won't be applied in our current iteration.
+        // FIND ALL STUDY GROUPS MATCHING THE SEARCH CONDITIONS.
+        let studyGroups = undefined;
+        try {
+            studyGroups = await StudyGroupModel.find(searchFilter);
+        } catch (error) {
+            Log.write(
+                `An error occurred while attempting to search for study groups matching the search filter: ${searchFilter}`
+            );
+            Log.writeError(error);
+        }
 
-      // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
-      /** @todo this */
+        // FILTER STUDY GROUPS BASED ON PROXIMITY.
+        // Since all requirements involving this element of the search
+        // are marked as optional, this filter won't be applied in our current iteration.
 
-      // RETURN THE STUDY GROUPS FOUND.
-      return studyGroups;
+        // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
+        /** @todo this */
+
+        // RETURN THE STUDY GROUPS FOUND.
+        return studyGroups;
     }
 
     /**

@@ -8,13 +8,24 @@ import { useSelector } from "react-redux";
  * @author ???
  */
 const SearchResultView = () => {
-    const groups = useSelector((state) => state.studyGroupsReducer.groups);
+    const search = useSelector((state) => state.studyGroupsReducer.search);
     return (
-        <div>
+        <div className="search-results">
             {/* Render groups from search using search listing found within state */}
-            {/* {groups.map((group) => (
-                <SearchListing />
-            ))} */}
+            {search.map((group) => (
+                <SearchListing
+                    title={group.title}
+                    school={group.school}
+                    owner={group.owner}
+                    category={group.category}
+                    courseCode={group.courseCode}
+                    isTutor={group.isTutor}
+                    isOnline={group.isOnline}
+                    schedule={group.schedule}
+                    groupColor={group.groupColor}
+                    key={group.title}
+                />
+            ))}
         </div>
     );
 };

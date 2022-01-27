@@ -8,7 +8,24 @@ import studyGroupsConstants from "../constants/studyGroupsConstants";
  * @author Ethan Cannelongo
  * @date   12/20/2021
  */
-const studyGroupsReducer = (state = { studyGroups: [] }, action) => {
+const studyGroupsReducer = (
+    state = {
+        studyGroups: [],
+        search: [
+            {
+                title: "Hello Group",
+                owner: "Ethan Cannelongo",
+                category: "Computer Science",
+                school: "Liberty University",
+                courseCode: "CSIS 215",
+                isOnline: true,
+                groupColor: "#8a593b7c",
+                schedule: "Mondays at 8:00pm"
+            }
+        ]
+    },
+    action
+) => {
     switch (action.type) {
         case studyGroupsConstants.ADD_STUDY_GROUP:
             if (!action.payload.reset) return { ...state, studyGroups: [...state.studyGroups, action.payload.group] };

@@ -98,7 +98,7 @@ const App = (props) => {
                         <Study />
                     </Route>
                     <Route exact path="/search">
-                        <Search />;
+                        <Search />
                     </Route>
                     <Route path="/message" render={(props) => {}} />
                 </Switch>

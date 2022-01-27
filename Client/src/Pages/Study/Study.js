@@ -74,6 +74,7 @@ const Study = () => {
         <div>
             <TopBar currentPage="study" />
             <div className="study">
+                <h1 className="page-title">Study</h1>
                 {isLoggedIn ? (
                     <div>
                         <Button onClick={() => dispatch(signOut())}>Log out</Button>

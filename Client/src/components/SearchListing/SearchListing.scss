@@ -1,0 +1,47 @@
+@import "../../globals.scss";
+
+.listing-container {
+    background-color: #ffffff23;
+    box-shadow: rgba(120, 120, 120, 0.249) 3px 5px 5px 1px;
+    display: flex;
+    height: 80px;
+    margin: 5px 10px 10px 10px;
+
+    .title-photo-container {
+        display: flex;
+        align-items: center;
+        border-left: #ffffff7c 5px solid;
+        color: white;
+        box-shadow: rgba(48, 48, 48, 0.153) 10px 10px 20px;
+        overflow: hidden;
+        padding: 20px;
+        font-size: 10px;
+    }
+    .group-info-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .group-info-item {
+            p {
+                color: gray;
+                font-size: 8px;
+            }
+            h2 {
+                font-size: 14px;
+                white-space: nowrap;
+            }
+            &#owner-info {
+                h2 {
+                    white-space: unset;
+
+                    word-wrap: break-word;
+                    max-width: 100px;
+                }
+                border-left: none;
+            }
+            padding: 5px 15px 5px 15px;
+            border-left: rgba(125, 125, 125, 0.345) 2px solid;
+        }
+    }
+}
