@@ -1,0 +1,14 @@
+.page {
+    animation: loadUp 0.3s ease-out;
+    height: 100%;
+}
+@keyframes loadUp {
+    0% {
+        opacity: 0;
+        padding-top: 5px;
+    }
+    100% {
+        opacity: 1;
+        padding-top: 0px;
+    }
+}

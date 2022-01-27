@@ -1,6 +1,7 @@
-import React, { useState } from "react";
 import "./Popup.scss";
-import Popups from "../Popups";
+
+import React, { useState } from "react";
+import popupTypes from "./PopupTypes";
 import { useSelector, useDispatch } from "react-redux";
 import { closePopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
@@ -19,7 +20,7 @@ const Popup = (props) => {
     let popupView = <></>;
 
     switch (view) {
-        case Popups.StudyGroup.Create:
+        case popupTypes.StudyGroup.Create:
             popupView = <CreateStudyGroupView />;
             break;
     }

@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import popupReducer from "./popupReducer";
 import studyGroupsReducer from "./studyGroupsReducer";
+import notificationReducer from "./notificationReducer";
 
 /**
  * This function combines all the reducers so they all can be referenced from this file
@@ -11,7 +12,8 @@ import studyGroupsReducer from "./studyGroupsReducer";
 const allReducers = combineReducers({
     authReducer,
     popupReducer,
-    studyGroupsReducer
+    studyGroupsReducer,
+    notificationReducer
 });
 
 export default allReducers;

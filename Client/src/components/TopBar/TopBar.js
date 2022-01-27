@@ -17,7 +17,9 @@ const TopBar = ({ currentPage }) => {
             <div className="top-bar">
                 <div className="wrapper">
                     <div className="left">
-                        <h1>Study Spaces</h1>
+                        <Link to="/" style={{ textDecoration: "none" }}>
+                            <h1>Study Spaces</h1>
+                        </Link>
                         <Link to="/study" className={currentPage === "study" ? "active nav-item" : "nav-item"}>
                             <p>Study</p>
                         </Link>

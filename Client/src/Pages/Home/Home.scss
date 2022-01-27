@@ -32,6 +32,9 @@
             padding: 0;
             margin: 0;
         }
+        &::after {
+            display: none;
+        }
         .subtitle {
             display: none;
         }

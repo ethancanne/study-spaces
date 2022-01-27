@@ -13,6 +13,7 @@ import axios from "axios";
 
 import TopBar from "../../components/TopBar/TopBar";
 import StudyGroupView from "../../Views/Study/studyGroupView/StudyGroupView";
+import Page from "../Page";
 
 /**
  * Renders the study page, displaying all the study groups the user is a member of.
@@ -73,24 +74,27 @@ const Study = () => {
     return (
         <div>
             <TopBar currentPage="study" />
-            <div className="study">
-                <h1 className="page-title">Study</h1>
-                {isLoggedIn ? (
-                    <div>
-                        <Button onClick={() => dispatch(signOut())}>Log out</Button>
-                        <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
-                        <div className="study-groups-container">
-                            {Validator.isDefined(studyGroups) &&
-                                studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}
+
+            <Page>
+                <div className="study">
+                    <h1 className="page-title">Study</h1>
+                    {isLoggedIn ? (
+                        <div>
+                            <Button onClick={() => dispatch(signOut())}>Log out</Button>
+                            <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
+                            <div className="study-groups-container">
+                                {Validator.isDefined(studyGroups) &&
+                                    studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}
+                            </div>
                         </div>
-                    </div>
-                ) : (
-                    <div>
-                        <p>You are currently a guest!</p>
-                        <Link to="/">Log In</Link>
-                    </div>
-                )}
-            </div>
+                    ) : (
+                        <div>
+                            <p>You are currently a guest!</p>
+                            <Link to="/">Log In</Link>
+                        </div>
+                    )}
+                </div>
+            </Page>
         </div>
     );
 };

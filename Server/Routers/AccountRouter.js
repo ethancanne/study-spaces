@@ -200,56 +200,60 @@ class AccountRouter {
             return response.json({ message: ResponseMessages.Account.NotOver18 });
         }
 
-        // GET THE USER BEING SET UP.
-        const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
-        const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
-        if (unverifiedUserWasNotFound) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-
-        // VERIFY THE USER.
-        const verificationToken = unverifiedUser.getVerificationToken();
-        const verifiedUser = await UnverifiedUser.verify(verificationToken);
-
-        // SET THE APPROPRIATE USER FIELDS.
-        const areaCodeSet = verifiedUser.setAreaCode(request.body.areaCode);
-        if (areaCodeSet == false) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-        const nameSet = verifiedUser.setName(request.body.name);
-        if (nameSet == false) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-
-        if (Validator.isDefined(request.file)) {
-            //Resize the profile picture and convert it to a png
-            const profilePicture = await sharp(request.file.buffer)
-                .resize({ height: 200, width: 200 })
-                .png()
-                .toBuffer();
-            //Encode the picture to base64 and store it in db
-            const encoded = profilePicture.toString("base64");
-            const profilePictureSet = verifiedUser.setProfilePicture(encoded);
-            if (profilePictureSet == false) {
+        try {
+            // GET THE USER BEING SET UP.
+            const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
+            const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
+            if (unverifiedUserWasNotFound) {
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
             }
-        }
 
-        // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
-        const userWasSaved = await verifiedUser.save();
-        if (userWasSaved) {
-            const authentication = Authenticator.issueAuthenticationToken(verifiedUser);
-            const authenticationToken = authentication.token;
-            const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
-            verifiedUser.removeSensitiveAttributes();
-            response.json({
-                authenticationToken: authenticationToken,
-                authenticationTokenExpirationDate: authenticationTokenExpirationDate,
-                message: ResponseMessages.Account.SuccessAccountSetup,
-                user: verifiedUser
-            });
-        } else {
-            response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            // VERIFY THE USER.
+            const verificationToken = unverifiedUser.getVerificationToken();
+            const verifiedUser = await UnverifiedUser.verify(verificationToken);
+
+            // SET THE APPROPRIATE USER FIELDS.
+            const areaCodeSet = verifiedUser.setAreaCode(request.body.areaCode);
+            if (areaCodeSet == false) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+            const nameSet = verifiedUser.setName(request.body.name);
+            if (nameSet == false) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+
+            if (Validator.isDefined(request.file)) {
+                //Resize the profile picture and convert it to a png
+                const profilePicture = await sharp(request.file.buffer)
+                    .resize({ height: 200, width: 200 })
+                    .png()
+                    .toBuffer();
+                //Encode the picture to base64 and store it in db
+                const encoded = profilePicture.toString("base64");
+                const profilePictureSet = verifiedUser.setProfilePicture(encoded);
+                if (profilePictureSet === false) {
+                    return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+                }
+            }
+
+            // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
+            const userWasSaved = await verifiedUser.save();
+            if (userWasSaved) {
+                const authentication = Authenticator.issueAuthenticationToken(verifiedUser);
+                const authenticationToken = authentication.token;
+                const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
+                verifiedUser.removeSensitiveAttributes();
+                response.json({
+                    authenticationToken: authenticationToken,
+                    authenticationTokenExpirationDate: authenticationTokenExpirationDate,
+                    message: ResponseMessages.Account.SuccessAccountSetup,
+                    user: verifiedUser
+                });
+            } else {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+        } catch {
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
     }
 
@@ -271,16 +275,18 @@ class AccountRouter {
             unverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
         } catch (error) {
             Log.writeError(error);
+            console.log(error);
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         } finally {
             const unverifiedUserWasFound = Validator.isDefined(unverifiedUser);
             if (unverifiedUserWasFound) {
                 unverifiedUser.removeSensitiveAttributes();
-                response.json({
+                return response.json({
                     message: ResponseMessages.Account.UnverifiedUserWasFound,
                     unverifiedUser: unverifiedUser
                 });
             } else {
-                response.json({ message: ResponseMessages.Account.UserNotFound });
+                return response.json({ message: ResponseMessages.Account.UserNotFound });
             }
         }
     }

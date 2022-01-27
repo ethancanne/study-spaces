@@ -1,8 +1,8 @@
 import React from "react";
-import "./VerificationEmailConfirmationView.scss";
 import { useSelector } from "react-redux";
 import Views from "../../Views";
 import Button from "../../../core/Button/Button";
+import AuthView from "../AuthView";
 
 /**
  * Once a user creates an account, this view will be displayed on the home page to indicate that the user needs to verify the account to continue setting it up
@@ -13,8 +13,8 @@ import Button from "../../../core/Button/Button";
 const VerificationEmailConfirmationView = (props) => {
     const unverifiedUser = useSelector((state) => state.authReducer.unverifiedUser);
     return (
-        <div className="verification-email-confirmation-view">
-            <h1>You're almost there</h1>
+        <AuthView>
+            <h1>You're almost there!</h1>
             <p>
                 Check your email: <strong>{unverifiedUser.email}</strong> for a link to continue the signup process
             </p>
@@ -26,7 +26,7 @@ const VerificationEmailConfirmationView = (props) => {
             >
                 Return
             </Button>
-        </div>
+        </AuthView>
     );
 };
 

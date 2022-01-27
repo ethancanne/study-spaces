@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import TopBar from "../../components/TopBar/TopBar";
 import SearchView from "../../Views/Search/SearchView";
 import SearchResultsView from "../../Views/Search/SearchResultView";
+import Page from "../Page";
 
 /**
  * Renders the Search page
@@ -14,14 +15,15 @@ const Search = () => {
     return (
         <>
             <TopBar currentPage="search" />
-
-            <div className="search-page">
-                <h1 className="page-title">Search</h1>
-                <div className="search-area">
-                    <SearchView />
-                    <SearchResultsView />
+            <Page>
+                <div className="search-page">
+                    <h1 className="page-title">Search</h1>
+                    <div className="search-area">
+                        <SearchView />
+                        <SearchResultsView />
+                    </div>
                 </div>
-            </div>
+            </Page>
         </>
     );
 };

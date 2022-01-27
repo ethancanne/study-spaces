@@ -1,19 +1,17 @@
-import "./CreateAccountView.scss";
-
 import React from "react";
 import axios from "axios";
 import Validator from "../../../../../Server/Validator";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { createAccount, showErrorNotification } from "../../../state/actions";
 import CreateAccountForm from "../../../components/CreateAccountForm/CreateAccountForm";
 import Routes from "../../../../../Server/Routes/Routes.js";
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages.js";
 import Button from "../../../core/Button/Button.js";
-import Label from "../../../core/Label/Label.js";
 import Views from "../../Views.js";
 
-import { createAccount } from "../../../state/actions";
+import AuthView from "../AuthView";
 
 /**
  * This view presents the create account form on the home page
@@ -57,7 +55,7 @@ const CreateAccountView = (props) => {
             });
         } catch (error) {
             console.log(error);
-            setAccountCreationErrorMsg("error");
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
         } finally {
             // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
             const responseIsDefined = Validator.isDefined(response);
@@ -75,6 +73,8 @@ const CreateAccountView = (props) => {
 
                     dispatch(createAccount(unverifiedUser));
                     props.setHomeView(Views.Home.VerificationEmailConfirmation);
+                } else {
+                    dispatch(showErrorNotification(response.data.message));
                 }
             }
         }
@@ -124,8 +124,8 @@ const CreateAccountView = (props) => {
     };
 
     return (
-        <div className="create-account-view">
-            <h1>Study Spaces</h1>
+        <AuthView>
+            <p>Create Your Account</p>
             <CreateAccountForm
                 email={email}
                 password={password}
@@ -136,15 +136,14 @@ const CreateAccountView = (props) => {
                 updateConfirmPasswordField={updateConfirmPasswordField}
                 accountCreationErrorMsg={accountCreationErrorMsg}
             />
-            <p className="error-message">{accountCreationErrorMsg}</p>
 
             <div className="other-options">
-                <Label>Already have an account?</Label>
+                <p>Already have an account?</p>
                 <Button type={ButtonTypes.Primary} onClick={signInClicked}>
                     Sign In
                 </Button>
             </div>
-        </div>
+        </AuthView>
     );
 };
 

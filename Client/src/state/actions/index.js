@@ -1,6 +1,4 @@
-import studyGroupsConstants from "../constants/studyGroupsConstants";
-import authConstants from "../constants/authConstants";
-import popupConstants from "../constants/popupConstants";
+import { studyGroupsConstants, authConstants, popupConstants, notificationConstants } from "../constants/constants";
 
 //AUTH REDUCERS
 export const signIn = (user) => {
@@ -49,5 +47,19 @@ export const populateStudyGroupSearch = (group) => {
     return {
         type: studyGroupsConstants.POPULATE_SEARCH,
         payload: { groups }
+    };
+};
+
+//NOTIFICATION REDUCERS
+export const showErrorNotification = (message) => {
+    return {
+        type: notificationConstants.SHOW_ERROR_NOTIFICATION,
+        payload: { message }
+    };
+};
+
+export const hideNotification = () => {
+    return {
+        type: notificationConstants.HIDE_NOTIFICATION
     };
 };

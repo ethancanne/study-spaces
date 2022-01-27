@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import AccountSetupForm from "../../../components/AccountSetupForm/AccountSetupForm";
 import Label from "../../../core/Label/Label";
-import "./AccountSetupView.scss";
 import { useParams } from "react-router-dom";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { signIn } from "../../../state/actions";
+import { signIn, showErrorNotification } from "../../../state/actions";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
 import Validator from "../../../../../Server/Validator";
 import Views from "../../Views";
 import InputField from "../../../core/InputField/InputField";
+import AuthView from "../AuthView";
 
 /**
  * Once the user has verified their account and clicked the link, this view is used to present the acount setup form so they can offically create their account on the home page
@@ -72,12 +72,14 @@ const AccountSetupView = (props) => {
      * @date   11/13/21
      */
     const submitAccountSetup = async (event) => {
-        // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
+        // SUBMIT THE CREATE ACCOUNT REQUEST.
         event.preventDefault();
         event.stopPropagation();
 
         if (!is18OrOver) {
-            return setAccountSetupErrorMsg("Uh oh, you're not old enough?");
+            console.log("NOT 18");
+            dispatch(showErrorNotification("You need to be 18 or older to sign up"));
+            return;
         }
 
         let response;
@@ -97,7 +99,7 @@ const AccountSetupView = (props) => {
             });
         } catch (error) {
             console.log(error);
-            setAccountSetupErrorMsg("Uh oh, there's been an error: " + error.message);
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
         } finally {
             // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
             const responseIsDefined = Validator.isDefined(response);
@@ -108,7 +110,11 @@ const AccountSetupView = (props) => {
 
                 if (accountSetupWasValid) {
                     dispatch(signIn(response.data));
+                } else {
+                    dispatch(showErrorNotification(response.data.message));
                 }
+            } else {
+                dispatch(showErrorNotification("There was a problem creating your account"));
             }
         }
     };
@@ -130,7 +136,6 @@ const AccountSetupView = (props) => {
      */
     const updateNameField = (event) => {
         setName(event.target.value);
-        setAccountSetupErrorMsg(BLANK);
     };
 
     /**
@@ -141,7 +146,6 @@ const AccountSetupView = (props) => {
      */
     const updateAreaCodeField = (event) => {
         setAreaCode(event.target.value);
-        setAccountSetupErrorMsg(BLANK);
     };
 
     /**
@@ -152,7 +156,6 @@ const AccountSetupView = (props) => {
      */
     const updateIs18OrOver = (event) => {
         setIs18OrOver(event.target.checked);
-        setAccountSetupErrorMsg(BLANK);
     };
 
     /**
@@ -163,12 +166,10 @@ const AccountSetupView = (props) => {
      */
     const updateProfilePicture = (event) => {
         setProfilePicture(event.target.files[0]);
-        setAccountSetupErrorMsg(BLANK);
     };
 
     return (
-        <div className="account-setup-view">
-            <h1>Study Spaces</h1>
+        <AuthView>
             <h3>Setup Your Account</h3>
             <p>{user.email}</p>
             {userIsVerified ? (
@@ -192,12 +193,12 @@ const AccountSetupView = (props) => {
             )}
 
             <div className="other-options">
-                <Label>Already have an account?</Label>
+                <p>Already have an account?</p>
                 <Button type={ButtonTypes.Creation} onClick={signInClicked}>
                     Sign In
                 </Button>
             </div>
-        </div>
+        </AuthView>
     );
 };
 export default AccountSetupView;

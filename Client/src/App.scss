@@ -10,6 +10,14 @@
 }
 html {
     background-color: $main-background-color;
+    /* The image used */
+    background-image: url("https://www.flipnational.org/wp-content/uploads/2018/03/CAE-Website-Full-Background-Texture1902x1200-9.jpg");
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
     height: 100%;
 
     body {
@@ -19,9 +27,11 @@ html {
             .container {
                 height: 100%;
                 overflow: hidden;
+
                 .page-title {
                     padding: 40px;
-                    background-color: whitesmoke;
+                    background-color: rgba(245, 245, 245, 0.329);
+                    backdrop-filter: blur(10px);
                     color: black;
                     text-shadow: rgba(0, 0, 0, 0.123) 0 3px 1px;
                     box-shadow: rgba(120, 120, 120, 0.249) 3px 5px 5px 1px;

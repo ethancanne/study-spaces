@@ -19,6 +19,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        overflow-y: hidden;
 
         .left {
             display: flex;
@@ -27,6 +28,7 @@
             h1 {
                 font-size: 20px;
                 padding-right: 20px;
+                color: black;
             }
             .nav-item {
                 margin: 20px;

@@ -1,12 +1,17 @@
 @import "../../globals.scss";
 
-@mixin auth-view {
+.auth-view {
     padding: 3em 1em 1em 1em;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 0px 3px 4px rgba(128, 128, 128, 0.212);
+    background-color: rgba(255, 255, 255, 0.646);
+    backdrop-filter: blur(20px);
+    box-shadow: 0px 3px 4px rgba(128, 128, 128, 0.377);
     width: 30em;
     h1 {
         text-align: center;
+    }
+    p {
+        padding-top: 10px;
+        color: rgb(79, 79, 79);
     }
 
     text-align: center;
@@ -26,13 +31,18 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        p {
+            font-size: 10px;
+            color: darkgray;
+            margin-bottom: -10px;
+        }
     }
 
     @media (max-width: $mobile-width) {
         & {
             width: 100vw;
             height: 100vh;
-            padding: 0;
+            padding: 20px;
             margin: 0;
         }
     }

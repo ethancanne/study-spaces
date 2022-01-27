@@ -1,9 +1,7 @@
-import "./LoginView.scss";
-
 import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signIn, signOut } from "../../../state/actions";
+import { signIn, signOut, showErrorNotification } from "../../../state/actions";
 
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
 import Button from "../../../core/Button/Button.js";
@@ -13,6 +11,7 @@ import Routes from "../../../../../Server/Routes/Routes.js";
 import Validator from "../../../../../Server/Validator.js";
 import Views from "../../Views.js";
 import Label from "../../../core/Label/Label";
+import AuthView from "../AuthView";
 
 /**
  * Used to display the login form and log the user in.
@@ -26,8 +25,6 @@ const LoginView = (props) => {
     const BLANK = "";
     const [email, setEmail] = useState(BLANK);
     const [password, setPassword] = useState(BLANK);
-    const [loginErrorMsg, setLoginErrorMsg] = useState(BLANK);
-
     const dispatch = useDispatch();
 
     /**
@@ -50,7 +47,7 @@ const LoginView = (props) => {
             });
         } catch (error) {
             console.log(error);
-            setLoginErrorMsg(loginErrorMsg);
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
         } finally {
             // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
             const responseIsDefined = Validator.isDefined(response);
@@ -61,7 +58,7 @@ const LoginView = (props) => {
                     const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
                     dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
                 } else {
-                    setLoginErrorMsg(response.data.message);
+                    dispatch(showErrorNotification(response.data.message));
                     dispatch(signOut);
                 }
             }
@@ -76,7 +73,6 @@ const LoginView = (props) => {
      */
     const updateEmailField = (e) => {
         setEmail(e.target.value);
-        setLoginErrorMsg(BLANK);
     };
 
     /**
@@ -87,7 +83,6 @@ const LoginView = (props) => {
      */
     const updatePasswordField = (e) => {
         setPassword(e.target.value);
-        setLoginErrorMsg(BLANK);
     };
 
     /**
@@ -101,8 +96,7 @@ const LoginView = (props) => {
     };
 
     return (
-        <div className="login-view">
-            <h1>Study Spaces</h1>
+        <AuthView>
             <LoginForm
                 email={email}
                 password={password}
@@ -110,15 +104,14 @@ const LoginView = (props) => {
                 updateEmailField={updateEmailField}
                 updatePasswordField={updatePasswordField}
             />
-            <p className="error-message">{loginErrorMsg}</p>
 
             <div className="other-options">
-                <Label>Don't have an account?</Label>
+                <p>Don't have an account?</p>
                 <Button type={ButtonTypes.Creation} onClick={signUpClicked}>
                     Sign Up
                 </Button>
             </div>
-        </div>
+        </AuthView>
     );
 };
 

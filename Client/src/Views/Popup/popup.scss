@@ -1,17 +1,4 @@
 @import "../../globals.scss";
-.background {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    z-index: 20;
-    background-color: #9a5e2970;
-    backdrop-filter: blur(5px);
-    pointer-events: none;
-    opacity: 1;
-    transition: all 0.5s;
-    opacity: 0;
-}
 
 .popup-wrapper {
     position: relative;
@@ -27,6 +14,8 @@
     transform: translate(-50%, 0);
     z-index: 99;
     background-color: white;
+
+    box-shadow: rgba(0, 0, 0, 0.123) 5px 5px 20px;
     transform: scale(0.8);
     opacity: 0;
     transition: all 0.5s;
@@ -43,11 +32,19 @@
 
 .popup-top {
     padding: 20px 30px 0 30px;
+    height: 70px;
+    overflow-y: hidden;
+
     display: flex;
+    width: 100%;
 
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    border-bottom: $border-color 5px solid;
+    background-color: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(3px);
+    padding-bottom: 15px;
 
     h1 {
         color: black;
@@ -65,14 +62,14 @@
         font-size: 15px;
         font-weight: 700;
         color: rgb(255, 255, 255);
-        box-shadow: rgba(0, 0, 0, 0.132) 0px 1px 10px;
+        // box-shadow: rgba(0, 0, 0, 0.132) 0px 1px 10px;
         cursor: pointer;
     }
 }
 
 .popup-body {
     padding: 20px;
-    max-height: 50vh;
+    max-height: 70vh;
 }
 
 .active {

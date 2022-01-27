@@ -21,7 +21,6 @@ const ResponseMessages = {
         SuccessStudyGroupCreated: "The study group was created sucessfully.",
         SuccessStudyGroupsRetrieved: "The study groups were retrieved sucessfully.",
         ErrorGettingSearchResults: "An error ocurred while attempting to get search results."
-
     }
 };
 module.exports = ResponseMessages;

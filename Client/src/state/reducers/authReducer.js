@@ -1,4 +1,4 @@
-import authConstants from "../constants/authConstants";
+import { authConstants } from "../constants/constants";
 
 // Load the user into the state if it is already logged in
 let user = JSON.parse(localStorage.getItem("user"));

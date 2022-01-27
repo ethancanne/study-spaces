@@ -1,4 +1,4 @@
-import studyGroupsConstants from "../constants/studyGroupsConstants";
+import { studyGroupsConstants } from "../constants/constants";
 
 /**
  * This is the reducer for all actions relating to study groups

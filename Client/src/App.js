@@ -7,6 +7,7 @@ import { Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signIn, signOut } from "./state/actions";
 import Popup from "./Views/Popup/Popup";
+import Notification from "./Views/Notifications/Notification";
 
 import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
 import Routes from "../../Server/Routes/Routes.js";
@@ -28,6 +29,7 @@ const App = (props) => {
     const [hasNotMounted, setHasNotMounted] = useState(false);
     const dispatch = useDispatch();
     const popupIsShowing = useSelector((state) => state.popupReducer.isShowing);
+    const notificationIsShowing = useSelector((state) => state.notificationReducer.isShowing);
 
     /**
      * Checks if the page has finished loaded and refreshes the authentication token
@@ -75,6 +77,7 @@ const App = (props) => {
     return (
         <Router>
             <Popup isShowing={popupIsShowing} />
+            <Notification isShowing={notificationIsShowing} />
             <div className="container">
                 <Switch>
                     <Route exact path="/">
