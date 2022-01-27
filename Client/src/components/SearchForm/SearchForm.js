@@ -9,17 +9,24 @@ import Label from "../../core/Label/Label.js";
 
 /**
  * Renders a search form for searching study groups
- * @author ???
+ * @author Stacey Popenfoose
+ * @date 1/27/2022
  */
 const SearchForm = ({
     searchTerm,
     category,
+    owner,
+    classCode,
+    proximity,
     isAssociatedWithSchool,
     isOnline,
     isTutor,
     isGroup,
     updateSearchTerm,
     updateCategory,
+    updateOwner,
+    updateClassCode,
+    updateProximity,
     updateIsAssociatedWithSchool,
     updateIsOnline,
     updateIsTutor,
@@ -31,42 +38,37 @@ const SearchForm = ({
             <Form onSubmit={submitSearch}>
                 <InputField>
                     <Label>Title</Label>
-                    <TextInput value="" onChange="" />
+                    <TextInput value={searchTerm} onChange={updateSearchTerm} />
                 </InputField>
                 <InputField>
                     <Label>Category</Label>
-                    <TextInput value="" onChange="" />
+                    <TextInput value={category} onChange={updateCategory} />
                 </InputField>
                 <InputField>
                     <Label>Owner</Label>
-                    <TextInput value="" onChange="" />
+                    <TextInput value={owner} onChange={updateOwner} />
                 </InputField>
                 <InputField>
                     <Label>Class Code</Label>
-                    <TextInput value="" onChange="" />
+                    <TextInput value={classCode} onChange={updateClassCode} />
                 </InputField>
                 <InputField>
                     <Label>Proximity</Label>
-                    <TextInput value="" onChange="" />
-                </InputField>
-                <InputField>
-                    <Label></Label>
-                    <TextInput value="" onChange="" type="checkbox" />
+                    <TextInput value={proximity} onChange={updateProximity} />
                 </InputField>
                 <InputField>
                     <Label>Show Only Liberty University Groups</Label>
                         <label class="switch">
-                            <TextInput value="" onChange="" type="checkbox" />
-                            <span class="slider round"></span>
+                            <TextInput value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />
                         </label>
                 </InputField>
                 <InputField>
                     <Label>Show Only Online Groups</Label>
-                    <TextInput value="" onChange="" type="checkbox" />
+                    <TextInput value={isOnline} onChange={updateIsOnline} type="checkbox" />
                 </InputField>
                 <InputField>
                     <Label>Show Only Tutor Groups</Label>
-                    <TextInput value="" onChange="" type="checkbox" />
+                    <TextInput value={isTutor} onChange={updateIsTutor} type="checkbox" />
                 </InputField>
                 <Button type={ButtonTypes.Primary}>Search</Button>
             </Form>
