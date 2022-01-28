@@ -120,33 +120,35 @@ class AccountRouter {
             if (accountWasNotCreated) {
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
             }
+
+            // EMAIL THE VERIFICATION LINK TO THE USER.
+            const verificationToken = unverifiedUser.verificationToken;
+            let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+            const emailSubject = "Your Study Spaces Verification Link";
+            const emailBody = "Click this: " + verificationLink;
+
+            //Send the Verification
+            let emailWasSent = false;
+            try {
+                emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
+            } catch (error) {
+                Log.write("An error occurred while sending an email during the account creation process.");
+                Log.writeError(error);
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+            if (!emailWasSent && Configuration.isSetToProduction()) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+
+            // SEND THE RESPONSE.
+            unverifiedUser.removeSensitiveAttributes();
+            response.json({
+                message: ResponseMessages.Account.SuccessAccountCreated,
+                unverifiedUser: unverifiedUser
+            });
         } catch {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
-
-        // EMAIL THE VERIFICATION LINK TO THE USER.
-        const verificationToken = unverifiedUser.verificationToken;
-        let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
-        const emailSubject = "Your Study Spaces Verification Link";
-        const emailBody = "Click this: " + verificationLink;
-        let emailWasSent = false;
-        try {
-            emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
-        } catch (error) {
-            Log.write("An error occurred while sending an email during the account creation process.");
-            Log.writeError(error);
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-        if (!emailWasSent && Configuration.isSetToProduction()) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-
-        // SEND THE RESPONSE.
-        unverifiedUser.removeSensitiveAttributes();
-        response.json({
-            message: ResponseMessages.Account.SuccessAccountCreated,
-            unverifiedUser: unverifiedUser
-        });
     }
 
     /**

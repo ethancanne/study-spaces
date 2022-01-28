@@ -87,6 +87,7 @@ class UnverifiedUser {
                 existingUnverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
             } catch (error) {
                 Log.writeError(error);
+                throw error;
             }
             tokenIsNotUnique = Validator.isDefined(existingUnverifiedUser);
         }
