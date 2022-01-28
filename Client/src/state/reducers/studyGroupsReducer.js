@@ -15,7 +15,7 @@ const studyGroupsReducer = (
             {
                 title: "Hello Group",
                 owner: "Ethan Cannelongo",
-                category: "Computer Science",
+                subject: "Computer Science",
                 school: "Liberty University",
                 courseCode: "CSIS 215",
                 isOnline: true,

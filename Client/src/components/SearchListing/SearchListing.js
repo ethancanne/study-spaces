@@ -4,7 +4,7 @@ import "./SearchListing.scss";
  * A view for displaying a single study group listing resulting from a search query
  * @author ???
  */
-const SearchListing = ({ title, school, owner, category, courseCode, isTutor, isOnline, schedule, groupColor }) => {
+const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isOnline, schedule, groupColor }) => {
     return (
         <div
             className="listing-container"
@@ -37,9 +37,9 @@ const SearchListing = ({ title, school, owner, category, courseCode, isTutor, is
                     <p>School:</p>
                     <h2>{school}</h2>
                 </div>
-                <div className="group-info-item" id="category-info">
-                    <p>Category:</p>
-                    <h2>{category}</h2>
+                <div className="group-info-item" id="subject-info">
+                    <p>Subject:</p>
+                    <h2>{subject}</h2>
                 </div>
                 <div className="group-info-item" id="courseCode-info">
                     <p>Course Code:</p>

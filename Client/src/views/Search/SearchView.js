@@ -14,11 +14,10 @@ import { populateStudyGroupSearch } from "../../state/actions";
  */
 const SearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [category, setCategory] = useState("");
-    const [isAssociatedWithSchool, setSchoolOnly] = useState(false);
-    const [isOnline, setIsOnline] = useState(false);
-    const [isTutor, setIsTutor] = useState(false);
-    const [isGroup, setIsGroup] = useState(false);
+    const [subject, setSubject] = useState("");
+    const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
+    const [meetingFormat, setMeetingFormat] = useState("");
+    const [type, setType] = useState("");
 
     const dispatch = useDispatch();
 
@@ -33,7 +32,13 @@ const SearchView = () => {
         let response;
         try {
             //TODO - Write out request
-            response = await axios.post(Routes.Search.GetSearchResults);
+            response = await axios.post(Routes.Search.GetSearchResults, {
+                searchTerm,
+                subject,
+                isAssociatedWithSchool,
+                meetingFormat,
+                type
+            });
         } catch (error) {
             console.log(error);
         } finally {
@@ -61,13 +66,13 @@ const SearchView = () => {
     };
 
     /**
-     * Used to update the category dropdown field in the search form.
+     * Used to update the subject dropdown field in the search form.
      * @param {Event} e The change event to update the field with.
      * @author ???
      * @date  ?/??/22
      */
-    const updateCategory = (e) => {
-        setCategory(e.target.value);
+    const updateSubject = (e) => {
+        setSubject(e.target.value);
     };
 
     /**
@@ -86,55 +91,42 @@ const SearchView = () => {
      * @author ???
      * @date  ?/??/22
      */
-    const updateIsSchool = (e) => {
-        setSchoolOnly(e.target.checked);
+    const updateIsAssociatedWithSchool = (e) => {
+        setIsAssociatedWithSchool(e.target.checked);
     };
 
     /**
-     * Used to update the "show only online groups" checkbox in the search form.
+     * Used to update the chosen meeting format from the dropdown menu in the search form.
      * @param {Event} e The change event to update the field with.
      * @author ???
      * @date  ?/??/22
      */
-    const updateIsOnline = (e) => {
-        setIsOnline(e.target.checked);
+    const updateMeetingFormat = (e) => {
+        setMeetingFormat(e.target.options[e.target.selectedIndex].value);
     };
 
     /**
-     * Used to update the "show only tutors" checkbox in the search form.
+     * Used to update the chosen type from the dropdown menu in the search form.
      * @param {Event} e The change event to update the field with.
      * @author ???
      * @date  ?/??/22
      */
-    const updateIsTutor = (e) => {
-        setIsTutor(e.target.checked);
+    const updateType = (e) => {
+        setType(e.target.options[e.target.selectedIndex].value);
     };
-
-    /**
-     * Used to update the "show only groups" checkbox in the search form.
-     * @param {Event} e The change event to update the field with.
-     * @author ???
-     * @date  ?/??/22
-     */
-    const updateIsGroup = (e) => {
-        setIsGroup(e.target.checked);
-    };
-
     return (
         <div className="search-view">
             <SearchForm
                 searchTerm={searchTerm}
-                category={category}
+                subject={subject}
                 isAssociatedWithSchool={isAssociatedWithSchool}
-                isOnline={isOnline}
-                isTutor={isTutor}
-                isGroup={isGroup}
+                meetingFormat={meetingFormat}
+                type={type}
                 updateSearchTerm={updateSearchTerm}
-                updateCategory={updateCategory}
-                updateIsSchool={updateIsSchool}
-                updateIsOnline={updateIsOnline}
-                updateIsTutor={updateIsTutor}
-                updateIsGroup={updateIsGroup}
+                updateSubject={updateSubject}
+                updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
+                updateMeetingFormat={updateMeetingFormat}
+                updateType={updateType}
                 submitSearch={submitSearch}
             />
         </div>

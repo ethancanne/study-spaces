@@ -17,7 +17,7 @@ const SearchResultView = () => {
                     title={group.title}
                     school={group.school}
                     owner={group.owner}
-                    category={group.category}
+                    subject={group.subject}
                     courseCode={group.courseCode}
                     isTutor={group.isTutor}
                     isOnline={group.isOnline}

@@ -6,8 +6,8 @@ import Form from "../../core/Form/Form.js";
 import InputField from "../../core/InputField/InputField.js";
 import TextInput from "../../core/Inputs/TextInput/TextInput";
 import Label from "../../core/Label/Label.js";
-import ToggleField from '../../core/ToggleField/ToggleField.js';
-import Toggle from '../../core/Toggle/Toggle.js'
+import ToggleField from "../../core/ToggleField/ToggleField.js";
+import Toggle from "../../core/Toggle/Toggle.js";
 import Dropdown from "../../core/Dropdown/Dropdown";
 
 /**
@@ -17,23 +17,21 @@ import Dropdown from "../../core/Dropdown/Dropdown";
  */
 const SearchForm = ({
     searchTerm,
-    category,
+    subject,
     owner,
     classCode,
     proximity,
     isAssociatedWithSchool,
-    isOnline,
-    isTutor,
-    isGroup,
+    meetingFormat,
+    type,
     updateSearchTerm,
-    updateCategory,
+    updateSubject,
     updateOwner,
     updateClassCode,
     updateProximity,
     updateIsAssociatedWithSchool,
-    updateIsOnline,
-    updateIsTutor,
-    updateIsGroup,
+    updateMeetingFormat,
+    updateType,
     submitSearch
 }) => {
     return (
@@ -44,8 +42,8 @@ const SearchForm = ({
                     <TextInput value={searchTerm} onChange={updateSearchTerm} />
                 </InputField>
                 <InputField>
-                    <Label>Category</Label>
-                    <TextInput value={category} onChange={updateCategory} />
+                    <Label>Subject</Label>
+                    <TextInput value={subject} onChange={updateSubject} />
                 </InputField>
                 <InputField>
                     <Label>Owner</Label>
@@ -69,7 +67,7 @@ const SearchForm = ({
                 </ToggleField>
                 <ToggleField>
                     <Label>Show Only Tutor Groups</Label>
-                    <Toggle value={isTutor} onChange={updateIsTutor}/>
+                    <Toggle value={isTutor} onChange={updateIsTutor} />
                 </ToggleField>
                 <Button type={ButtonTypes.Primary}>Search</Button>
             </Form>
