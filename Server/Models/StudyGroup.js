@@ -4,7 +4,7 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const PrivacySettings = require("./PrivacySettings.js");
-const StudyGroupTypes = require("./StudyGroupTypes.js");
+const MeetingFormats = require("./MeetingFormats.js");
 const Subjects = require("./Subjects.js");
 const Validator = require("../Validator.js");
 const Feed = require("./Feed");
@@ -464,14 +464,14 @@ class StudyGroup {
         // DETERMINE THE TYPE OF GROUP BEING SEARCHED FOR.
         // The type of the group determines if the user is interested in seeing
         // groups that meet in-person, online, or both.
-        switch (filters.studyGroupType) {
-            case StudyGroupTypes.InPerson:
+        switch (filters.meetingFormat) {
+            case MeetingFormats.InPerson:
                 searchFilter.isOnlineGroup = false;
                 break;
-            case StudyGroupTypes.Online:
+            case MeetingFormats.Online:
                 searchFilter.isOnlineGroup = true;
                 break;
-            case StudyGroupTypes.Mixed:
+            case MeetingFormats.Mixed:
             default:
                 // If the user is searching for study groups that are in person
                 // or online, then that is the same as performing a search without

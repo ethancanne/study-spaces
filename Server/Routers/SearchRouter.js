@@ -31,10 +31,11 @@ class SearchRouter {
     static async getSearchResults(request, response) {
         // Empty variable for array of study groups.
         let studyGroups = undefined;
+        const filters = request.body;
 
         // Try and catch errors while requesting study groups.
         try {
-            studyGroups = await StudyGroup.search(request.body.filters);
+            studyGroups = await StudyGroup.search(filters);
         } catch (error) {
             Log.writeError(error);
         } finally {
