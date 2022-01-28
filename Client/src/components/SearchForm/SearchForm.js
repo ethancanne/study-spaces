@@ -6,6 +6,9 @@ import Form from "../../core/Form/Form.js";
 import InputField from "../../core/InputField/InputField.js";
 import TextInput from "../../core/Inputs/TextInput/TextInput";
 import Label from "../../core/Label/Label.js";
+import ToggleField from '../../core/ToggleField/ToggleField.js';
+import Toggle from '../../core/Toggle/Toggle.js'
+import Dropdown from "../../core/Dropdown/Dropdown";
 
 /**
  * Renders a search form for searching study groups
@@ -56,20 +59,18 @@ const SearchForm = ({
                     <Label>Proximity</Label>
                     <TextInput value={proximity} onChange={updateProximity} />
                 </InputField>
-                <InputField>
+                <ToggleField>
                     <Label>Show Only Liberty University Groups</Label>
-                        <label class="switch">
-                            <TextInput value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />
-                        </label>
-                </InputField>
-                <InputField>
+                    <Toggle value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />
+                </ToggleField>
+                <ToggleField>
                     <Label>Show Only Online Groups</Label>
-                    <TextInput value={isOnline} onChange={updateIsOnline} type="checkbox" />
-                </InputField>
-                <InputField>
+                    <Toggle value={isOnline} onChange={updateIsOnline} type="checkbox" />
+                </ToggleField>
+                <ToggleField>
                     <Label>Show Only Tutor Groups</Label>
-                    <TextInput value={isTutor} onChange={updateIsTutor} type="checkbox" />
-                </InputField>
+                    <Toggle value={isTutor} onChange={updateIsTutor}/>
+                </ToggleField>
                 <Button type={ButtonTypes.Primary}>Search</Button>
             </Form>
         </div>
