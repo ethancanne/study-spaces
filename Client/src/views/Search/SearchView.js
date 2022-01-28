@@ -1,11 +1,12 @@
 import "./SearchView.scss";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import Routes from "../../../../Server/Routes/Routes";
 import Validator from "../../../../Server/Validator.js";
 import { useDispatch } from "react-redux";
-import { populateStudyGroupSearch } from "../../state/actions";
+import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
 
 /**
  * A view for inputting search terms and filters for searching study groups
@@ -35,12 +36,13 @@ const SearchView = () => {
             response = await axios.post(Routes.Search.GetSearchResults, {
                 searchTerm,
                 subject,
-                isAssociatedWithSchool,
+                school: isAssociatedWithSchool ? "Liberty University" : null,
                 meetingFormat,
                 type
             });
         } catch (error) {
             console.log(error);
+            dispatch(showErrorNotification("Cannot search... Sorry"));
         } finally {
             const responseIsDefined = Validator.isDefined(response);
 
@@ -50,7 +52,11 @@ const SearchView = () => {
 
                 if (studyGroupsRetrivalWasValid) {
                     dispatch(populateStudyGroupSearch(response.data));
+                } else {
+                    dispatch(showErrorNotification("Cannot search... Sorry"));
                 }
+            } else {
+                dispatch(showErrorNotification("Cannot search... Sorry"));
             }
         }
     };

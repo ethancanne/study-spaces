@@ -3,9 +3,10 @@
 .search-view {
     flex: 30%;
     height: 100%;
+    padding-bottom: 50px;
     box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.071);
     border-right: $border-color 5px solid;
     background-color: rgb(255, 255, 255);
     z-index: 4;
-    overflow: hidden;
+    overflow: auto;
 }

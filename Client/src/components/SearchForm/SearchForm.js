@@ -8,7 +8,7 @@ import TextInput from "../../core/Inputs/TextInput/TextInput";
 import Label from "../../core/Label/Label.js";
 import ToggleField from "../../core/ToggleField/ToggleField.js";
 import Toggle from "../../core/Toggle/Toggle.js";
-import Dropdown from "../../core/Dropdown/Dropdown";
+import Dropdown from "../../core/Dropdown/Dropdown.js";
 
 /**
  * Renders a search form for searching study groups
@@ -18,17 +18,11 @@ import Dropdown from "../../core/Dropdown/Dropdown";
 const SearchForm = ({
     searchTerm,
     subject,
-    owner,
-    classCode,
-    proximity,
     isAssociatedWithSchool,
     meetingFormat,
     type,
     updateSearchTerm,
     updateSubject,
-    updateOwner,
-    updateClassCode,
-    updateProximity,
     updateIsAssociatedWithSchool,
     updateMeetingFormat,
     updateType,
@@ -38,36 +32,28 @@ const SearchForm = ({
         <div className="search-form">
             <Form onSubmit={submitSearch}>
                 <InputField>
-                    <Label>Title</Label>
+                    <Label>Search Term</Label>
                     <TextInput value={searchTerm} onChange={updateSearchTerm} />
                 </InputField>
                 <InputField>
-                    <Label>Subject</Label>
-                    <TextInput value={subject} onChange={updateSubject} />
+                    <Label>Category</Label>
+                    <Dropdown options={["Option 1", "Option 2", "Option 3"]} value={subject} onChange={updateSubject} />
                 </InputField>
                 <InputField>
-                    <Label>Owner</Label>
-                    <TextInput value={owner} onChange={updateOwner} />
+                    <Label>Meeting Format</Label>
+                    <Dropdown
+                        options={["In Person", "Online", "Mixed"]}
+                        onChange={updateMeetingFormat}
+                        value={meetingFormat}
+                    />
                 </InputField>
                 <InputField>
-                    <Label>Class Code</Label>
-                    <TextInput value={classCode} onChange={updateClassCode} />
-                </InputField>
-                <InputField>
-                    <Label>Proximity</Label>
-                    <TextInput value={proximity} onChange={updateProximity} />
+                    <Label>Type</Label>
+                    <Dropdown options={["Tutor", "Group", "Mixed"]} onChange={updateType} value={type} />
                 </InputField>
                 <ToggleField>
-                    <Label>Show Only Liberty University Groups</Label>
+                    <Label>Show Only Groups Associated with Your School</Label>
                     <Toggle value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />
-                </ToggleField>
-                <ToggleField>
-                    <Label>Show Only Online Groups</Label>
-                    <Toggle value={isOnline} onChange={updateIsOnline} type="checkbox" />
-                </ToggleField>
-                <ToggleField>
-                    <Label>Show Only Tutor Groups</Label>
-                    <Toggle value={isTutor} onChange={updateIsTutor} />
                 </ToggleField>
                 <Button type={ButtonTypes.Primary}>Search</Button>
             </Form>
