@@ -9,7 +9,7 @@ import Label from "../../core/Label/Label.js";
 import ToggleField from "../../core/ToggleField/ToggleField.js";
 import Toggle from "../../core/Toggle/Toggle.js";
 import Dropdown from "../../core/Dropdown/Dropdown.js";
-// import types from "../../../../";
+import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 
 /**
  * Renders a search form for searching study groups
@@ -30,8 +30,8 @@ const SearchForm = ({
     submitSearch
 }) => {
     return (
-        <div className="search-form">
-            <Form onSubmit={submitSearch}>
+        <div>
+            <Form onSubmit={submitSearch} className="search-form">
                 <InputField>
                     <Label>Search Term</Label>
                     <TextInput value={searchTerm} onChange={updateSearchTerm} />
@@ -40,18 +40,20 @@ const SearchForm = ({
                     <Label>Category</Label>
                     <Dropdown options={["This", "That"]} value={subject} onChange={updateSubject} />
                 </InputField>
-                <InputField>
-                    <Label>Meeting Format</Label>
-                    <Dropdown
-                        options={["In Person", "Online", "Mixed"]}
-                        onChange={updateMeetingFormat}
-                        value={meetingFormat}
-                    />
-                </InputField>
-                <InputField>
-                    <Label>Type</Label>
-                    <Dropdown options={["Tutor", "Group", "Mixed"]} onChange={updateType} value={type} />
-                </InputField>
+                <div className="side-by-side">
+                    <InputField>
+                        <Label>Meeting Format</Label>
+                        <Dropdown
+                            options={[...Object.values(MeetingFormats)]}
+                            onChange={updateMeetingFormat}
+                            value={meetingFormat}
+                        />
+                    </InputField>
+                    <InputField>
+                        <Label>Type</Label>
+                        <Dropdown options={["Group", "Tutor", "Mixed"]} onChange={updateType} value={type} />
+                    </InputField>
+                </div>
                 <ToggleField>
                     <Label>Show Only Groups Associated with Your School</Label>
                     <Toggle value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />

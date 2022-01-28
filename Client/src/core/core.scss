@@ -41,7 +41,7 @@
         font-size: 16px;
         box-shadow: 0px 10px 10px rgba(128, 128, 128, 0.13);
         border: none;
-        border-bottom: lightgray 8px solid;
+        border-bottom: rgba(211, 211, 211, 0.591) 8px solid;
         transition-property: border-bottom;
         height: 40px;
 
@@ -114,7 +114,6 @@
     align-items: center;
     padding: 10px;
     margin: 20px;
-    width: 100%;
     .Label {
         text-align: left;
         width: 90px;
@@ -160,15 +159,6 @@
         -webkit-transition: 0.4s;
         transition: 0.4s;
     }
-
-    input:checked + .slider {
-        // background-color: #346130;
-    }
-
-    input:focus + .slider {
-        // box-shadow: 0 0 1px #346130;
-    }
-
     input:checked + .slider:before {
         -webkit-transform: translateX(26px);
         -ms-transform: translateX(26px);

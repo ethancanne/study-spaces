@@ -7,6 +7,7 @@ import Routes from "../../../../Server/Routes/Routes";
 import Validator from "../../../../Server/Validator.js";
 import { useDispatch } from "react-redux";
 import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
+import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 
 /**
  * A view for inputting search terms and filters for searching study groups
@@ -17,8 +18,8 @@ const SearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [subject, setSubject] = useState("");
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
-    const [meetingFormat, setMeetingFormat] = useState("");
-    const [type, setType] = useState("");
+    const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
+    const [type, setType] = useState("Group");
 
     const dispatch = useDispatch();
 
@@ -32,7 +33,7 @@ const SearchView = () => {
         e.stopPropagation();
         let response;
         try {
-            //TODO - Write out request
+            //Send Search Request -  TODO: change the value that is sent if isAssociatedWithSchool is true to the school of the logged in user
             response = await axios.post(Routes.Search.GetSearchResults, {
                 searchTerm,
                 subject,
