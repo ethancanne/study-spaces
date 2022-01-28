@@ -56,7 +56,6 @@ const Study = () => {
 
                 if (studyGroupCreationWasValid) {
                     const studyGroups = response.data.studyGroups;
-                    console.log(studyGroups);
                     if (studyGroups) {
                         studyGroups.map((s) => {
                             dispatch(addStudyGroup(s, true));

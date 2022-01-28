@@ -9,6 +9,7 @@ const Authenticator = require("./Authenticator.js");
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const AccountRouter = require("./Routers/AccountRouter.js");
+const SearchRouter = require("./Routers/SearchRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 const StudyGroupRouter = require("./Routers/StudyGroupRouter.js");
 
@@ -69,6 +70,7 @@ server.use("/uploads", Express.static("uploads"));
 // IMPLEMENT THE SERVER ROUTES.
 AccountRouter.serveRoutes(server, authenticator);
 StudyGroupRouter.serveRoutes(server, authenticator);
+SearchRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
 StaticResourceRouter.serveRoutes(server, authenticator);
 

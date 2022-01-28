@@ -16,46 +16,39 @@ const Validator = require("../Validator.js");
  * @author Clifton Croom
  * @date   11/17/2021
  */
- class SearchRouter {
-        static serveRoutes(server, authenticator) {
-            server.get(
-                Routes.Search.GetSearchResults,
-                authenticator.protectRoute(),
-                SearchRouter.getSearchResults
-            );
-        }
-        /**
-         * Gets the search results from the study group search.
-         *
-         * @author Clifton Croom
-         * @date   01/25/2022
-         * @async
-         * @static
-         */
-        static async getSearchResults(request, response) {
-
+class SearchRouter {
+    static serveRoutes(server, authenticator) {
+        server.post(Routes.Search.GetSearchResults, SearchRouter.getSearchResults);
+    }
+    /**
+     * Gets the search results from the study group search.
+     *
+     * @author Clifton Croom
+     * @date   01/25/2022
+     * @async
+     * @static
+     */
+    static async getSearchResults(request, response) {
         // Empty variable for array of study groups.
         let studyGroups = undefined;
 
         // Try and catch errors while requesting study groups.
         try {
-            studyGroups = await request.StudyGroup.search(request.body.filters);
-        }
-        catch (error) {
+            studyGroups = await StudyGroup.search(request.body.filters);
+        } catch (error) {
             Log.writeError(error);
-        }
-        finally {
+        } finally {
             // Send success message and array of studyGroups.
             if (Validator.isDefined(studyGroups)) {
                 response.json({
                     message: ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
                     studyGroups: studyGroups
                 });
-            // Send error message.
+                // Send error message.
             } else {
                 response.json({ message: ResponseMessages.StudyGroup.ErrorGettingSearchResults });
             }
         }
     }
- }
+}
 module.exports = SearchRouter;

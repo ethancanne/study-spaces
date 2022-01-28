@@ -15,7 +15,7 @@ const Routes = {
         Index: "/*"
     },
     Search: {
-        GetSearchResults: "api/search/get"
+        GetSearchResults: "/api/search/get"
     },
     StudyGroup: {
         CreateStudyGroup: "/api/study-group/create",
