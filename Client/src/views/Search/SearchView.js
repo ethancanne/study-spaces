@@ -51,7 +51,7 @@ const SearchView = () => {
                     ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
 
                 if (studyGroupsRetrivalWasValid) {
-                    dispatch(populateStudyGroupSearch(response.data));
+                    dispatch(populateStudyGroupSearch(response.data.studyGroups));
                 } else {
                     dispatch(showErrorNotification("Cannot search... Sorry"));
                 }
