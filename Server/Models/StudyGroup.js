@@ -126,7 +126,9 @@ class StudyGroup {
      *
      * @async
      */
-    async addMeeting(newMeeting) {}
+    async addMeeting(newMeeting) {
+        //!!!!!
+    }
 
     /**
      * Adds a member to the study group.
@@ -387,7 +389,9 @@ class StudyGroup {
      *
      * @async
      */
-    async removeMeeting(meeting) {}
+    async removeMeeting(meeting) {
+        //!!!!!
+    }
 
     /**
      * Removes a member from the study group.
