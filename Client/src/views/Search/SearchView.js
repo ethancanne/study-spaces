@@ -52,6 +52,7 @@ const SearchView = () => {
 
                 if (studyGroupsRetrivalWasValid) {
                     dispatch(populateStudyGroupSearch(response.data.studyGroups));
+                    console.log(response.data.studyGroups);
                 } else {
                     dispatch(showErrorNotification("Cannot search... Sorry"));
                 }

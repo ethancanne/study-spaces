@@ -43,7 +43,7 @@ export const addStudyGroup = (group, reset = false) => {
     };
 };
 
-export const populateStudyGroupSearch = (group) => {
+export const populateStudyGroupSearch = (groups) => {
     return {
         type: studyGroupsConstants.POPULATE_SEARCH,
         payload: { groups }

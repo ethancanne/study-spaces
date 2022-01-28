@@ -9,6 +9,7 @@ import Label from "../../core/Label/Label.js";
 import ToggleField from "../../core/ToggleField/ToggleField.js";
 import Toggle from "../../core/Toggle/Toggle.js";
 import Dropdown from "../../core/Dropdown/Dropdown.js";
+// import types from "../../../../";
 
 /**
  * Renders a search form for searching study groups
@@ -37,7 +38,7 @@ const SearchForm = ({
                 </InputField>
                 <InputField>
                     <Label>Category</Label>
-                    <Dropdown options={["Option 1", "Option 2", "Option 3"]} value={subject} onChange={updateSubject} />
+                    <Dropdown options={["This", "That"]} value={subject} onChange={updateSubject} />
                 </InputField>
                 <InputField>
                     <Label>Meeting Format</Label>
