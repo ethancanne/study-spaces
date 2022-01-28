@@ -443,22 +443,22 @@ class StudyGroup {
         }
         const subjectFilteringIsEnabled = Subjects.Any !== filters.subject;
         if (subjectFilteringIsEnabled) {
-          searchFilter.subject = filters.subject;
+            searchFilter.subject = filters.subject;
         }
 
         // DETERMINE IF THE SEARCH SHOULD BE FOR TUTOR GROUPS.
         switch (filters.type) {
-          case "Tutor":
-            searchFilter.isTutorGroup = true;
-            break;
-          case "Group":
-            searchFilter.isTutorGroup = false;
-          case "Mixed":
-          default:
-            // If the user is searching for study groups that are tutor groups
-            // or normal groups, then that is the same as performing a search without
-            // specifying what the isTutorGroup attribute should be.
-            break;
+            case "Tutor":
+                searchFilter.isTutorGroup = true;
+                break;
+            case "Group":
+                searchFilter.isTutorGroup = false;
+            case "Mixed":
+            default:
+                // If the user is searching for study groups that are tutor groups
+                // or normal groups, then that is the same as performing a search without
+                // specifying what the isTutorGroup attribute should be.
+                break;
         }
 
         // DETERMINE THE TYPE OF GROUP BEING SEARCHED FOR.
@@ -481,7 +481,6 @@ class StudyGroup {
 
         // FIND ALL STUDY GROUPS MATCHING THE SEARCH CONDITIONS.
         let studyGroups = undefined;
-        console.log(searchFilter);
         try {
             studyGroups = await StudyGroupModel.find(searchFilter);
         } catch (error) {

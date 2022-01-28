@@ -6,8 +6,8 @@ import Form from "../../core/Form/Form.js";
 import InputField from "../../core/InputField/InputField.js";
 import TextInput from "../../core/Inputs/TextInput/TextInput";
 import Label from "../../core/Label/Label.js";
-import ToggleField from '../../core/ToggleField/ToggleField.js';
-import Toggle from '../../core/Toggle/Toggle.js'
+import ToggleField from "../../core/ToggleField/ToggleField.js";
+import Toggle from "../../core/Toggle/Toggle.js";
 import Dropdown from "../../core/Dropdown/Dropdown.js";
 
 /**
@@ -44,7 +44,7 @@ const SearchForm = ({
                 </InputField>
                 <InputField>
                     <Label>Type</Label>
-                    <Dropdown options={["Tutor", "Group", "Both"]} onChange={updateType}/>
+                    <Dropdown options={["Tutor", "Group", "Both"]} onChange={updateType} />
                 </InputField>
                 <ToggleField>
                     <Label>Show Only Liberty University Groups</Label>

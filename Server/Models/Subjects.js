@@ -3,6 +3,6 @@
  *
  */
 const Subjects = {
-  Any: ""
+    Any: ""
 };
 module.exports = Subjects;

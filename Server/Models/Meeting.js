@@ -51,7 +51,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
  * @author Cliff Croom
  * @date   01/11/2021
  */
- class Meeting {
+class Meeting {
     /**
      * Initializes the meeting passed in from the database.
      * @param  {Mongoose.Schema} MeetingSchema The database record for a given post.
@@ -73,9 +73,9 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @async
      * @static
      */
-     static async create(date, details, frequency, location, roomNumber, time) {
+    static async create(date, details, frequency, location, roomNumber, time) {
         // CREATE MEETING IN THE DATABASE.
-        
+
         const meetingModel = new MeetingModel({
             date: date,
             details: details,
@@ -101,7 +101,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * Gets the meeting's date.
      * @return {Date} The meeting's date.
      */
-     getDate() {
+    getDate() {
         return Date(this.date);
     }
 
@@ -109,7 +109,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * Gets the meeting's details.
      * @return {String} The meeting's details.
      */
-     getDetails() {
+    getDetails() {
         return String(this.details);
     }
 
@@ -117,7 +117,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * Gets the meeting's frequency.
      * @return {String} The meeting's frequency.
      */
-     getFrequency() {
+    getFrequency() {
         return String(this.frequency);
     }
 
@@ -125,7 +125,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * Gets the meeting's location.
      * @return {String} The meeting's location.
      */
-     getLocation() {
+    getLocation() {
         return String(this.location);
     }
 
@@ -133,7 +133,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * Gets the meeting's room number.
      * @return {String} The meeting's room number.
      */
-     getRoomNumber() {
+    getRoomNumber() {
         return String(this.roomNumber);
     }
 
@@ -141,7 +141,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * Gets the meeting time.
      * @return {String} The meeting time.
      */
-     getTime() {
+    getTime() {
         return String(this.time);
     }
 
@@ -152,7 +152,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @param {String} date The date to set.
      * @return {Boolean} True if the date was set, false otherwise.
      */
-     setDate(date) {
+    setDate(date) {
         this.date = date;
         const dateSet = Validator.isDefined(this.date);
         return dateSet;
@@ -163,7 +163,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @param {String} details The details to set.
      * @return {Boolean} True if the details was set, false otherwise.
      */
-     setDetails(details) {
+    setDetails(details) {
         this.details = details;
         const detailsSet = Validator.isDefined(this.details);
         return detailsSet;
@@ -174,7 +174,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @param {String} frequency The frequency to set.
      * @return {Boolean} True if the frequency was set, false otherwise.
      */
-     setFrequency(frequency) {
+    setFrequency(frequency) {
         this.frequency = frequency;
         const frequencySet = Validator.isDefined(this.frequency);
         return frequencySet;
@@ -185,7 +185,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @param {String} location The location to set.
      * @return {Boolean} True if the location was set, false otherwise.
      */
-     setLocation(location) {
+    setLocation(location) {
         this.location = location;
         const locationSet = Validator.isDefined(this.location);
         return locationSet;
@@ -196,7 +196,7 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @param {String} roomNumber The room number to set.
      * @return {Boolean} True if the room number was set, false otherwise.
      */
-     setRoomNumber(roomNumber) {
+    setRoomNumber(roomNumber) {
         this.roomNumber = roomNumber;
         const roomNumberSet = Validator.isDefined(this.roomNumber);
         return roomNumberSet;
@@ -207,11 +207,10 @@ const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
      * @param {String} time The time to set.
      * @return {Boolean} True if the time was set, false otherwise.
      */
-     setTime(time) {
+    setTime(time) {
         this.time = time;
         const timeSet = Validator.isDefined(this.time);
         return timeSet;
     }
-
 }
 module.exports = Meeting;
