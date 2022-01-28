@@ -6,9 +6,9 @@
  * @author Cameron Burkholder
  * @date   01/25/2022
  */
-const StudyGroupTypes = {
+const MeetingFormats = {
     InPerson: "In person",
     Mixed: "In person or online",
     Online: "Online"
 };
-module.exports = StudyGroupTypes;
+module.exports = MeetingFormats;

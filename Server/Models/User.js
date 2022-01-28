@@ -265,12 +265,10 @@ class User {
                     const studyGroupWasFound = Validator.isDefined(studyGroup);
                     if (studyGroupWasFound) {
                         studyGroups.push(studyGroup);
-                        console.log(studyGroups);
                     }
                 }
             })
         );
-        console.log(studyGroups);
         // RETURN CONVERSATIONS.
         return studyGroups;
     }
