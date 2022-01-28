@@ -18,9 +18,8 @@ const Validator = require("../Validator.js");
  */
  class SearchRouter {
         static serveRoutes(server, authenticator) {
-            server.get(
+            server.post(
                 Routes.Search.GetSearchResults,
-                authenticator.protectRoute(),
                 SearchRouter.getSearchResults
             );
         }
@@ -33,29 +32,28 @@ const Validator = require("../Validator.js");
          * @static
          */
         static async getSearchResults(request, response) {
+          // Empty variable for array of study groups.
+          let studyGroups = undefined;
 
-        // Empty variable for array of study groups.
-        let studyGroups = undefined;
-
-        // Try and catch errors while requesting study groups.
-        try {
-            studyGroups = await request.StudyGroup.search(request.body.filters);
-        }
-        catch (error) {
-            Log.writeError(error);
-        }
-        finally {
-            // Send success message and array of studyGroups.
-            if (Validator.isDefined(studyGroups)) {
-                response.json({
-                    message: ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
-                    studyGroups: studyGroups
-                });
-            // Send error message.
-            } else {
-                response.json({ message: ResponseMessages.StudyGroup.ErrorGettingSearchResults });
-            }
-        }
+          // Try and catch errors while requesting study groups.
+          try {
+              studyGroups = await StudyGroup.search(request.body.filters);
+          }
+          catch (error) {
+              Log.writeError(error);
+          }
+          finally {
+              // Send success message and array of studyGroups.
+              if (Validator.isDefined(studyGroups)) {
+                  response.json({
+                      message: ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
+                      studyGroups: studyGroups
+                  });
+              // Send error message.
+              } else {
+                  response.json({ message: ResponseMessages.StudyGroup.ErrorGettingSearchResults });
+              }
+          }
     }
  }
 module.exports = SearchRouter;

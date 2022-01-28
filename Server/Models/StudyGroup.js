@@ -5,6 +5,7 @@ const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const PrivacySettings = require("./PrivacySettings.js");
 const StudyGroupTypes = require("./StudyGroupTypes.js");
+const Subjects = require("./Subjects.js");
 const Validator = require("../Validator.js");
 const Feed = require("./Feed");
 
@@ -429,7 +430,7 @@ class StudyGroup {
         const searchTerm = new RegExp(`${filters.searchTerm}`, "i");
 
         let searchFilter = {
-            $or: [{ name: searchTerm }, { course: searchTerm }, { subject: searchTerm }]
+            $or: [{ name: searchTerm }, { course: searchTerm }]
         };
 
         // ADD OPTIONAL PARAMETERS TO THE SEARCH.
@@ -440,22 +441,36 @@ class StudyGroup {
             const schoolRegex = new RegExp(`${filters.school}`, "i");
             searchFilter.school = schoolRegex;
         }
+        const subjectFilteringIsEnabled = Subjects.Any !== filters.subject;
+        if (subjectFilteringIsEnabled) {
+          searchFilter.subject = filters.subject;
+        }
 
         // DETERMINE IF THE SEARCH SHOULD BE FOR TUTOR GROUPS.
-        const isSearchingForTutorGroups = filters.isTutorGroup;
-        if (isSearchingForTutorGroups) {
+        switch (filters.type) {
+          case "Tutor":
             searchFilter.isTutorGroup = true;
+            break;
+          case "Group":
+            searchFilter.isTutorGroup = false;
+          case "Mixed":
+          default:
+            // If the user is searching for study groups that are tutor groups
+            // or normal groups, then that is the same as performing a search without
+            // specifying what the isTutorGroup attribute should be.
+            break;
         }
 
         // DETERMINE THE TYPE OF GROUP BEING SEARCHED FOR.
         // The type of the group determines if the user is interested in seeing
         // groups that meet in-person, online, or both.
-        switch (filters.StudyGroupType) {
+        switch (filters.studyGroupType) {
             case StudyGroupTypes.InPerson:
                 searchFilter.isOnlineGroup = false;
                 break;
             case StudyGroupTypes.Online:
                 searchFilter.isOnlineGroup = true;
+                break;
             case StudyGroupTypes.Mixed:
             default:
                 // If the user is searching for study groups that are in person
@@ -466,6 +481,7 @@ class StudyGroup {
 
         // FIND ALL STUDY GROUPS MATCHING THE SEARCH CONDITIONS.
         let studyGroups = undefined;
+        console.log(searchFilter);
         try {
             studyGroups = await StudyGroupModel.find(searchFilter);
         } catch (error) {
