@@ -35,7 +35,7 @@ const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isO
                 </div>
                 <div className="group-info-item" id="school-info">
                     <p>School:</p>
-                    <h2>{school}</h2>
+                    <h2>{school ? school : "None"}</h2>
                 </div>
                 <div className="group-info-item" id="subject-info">
                     <p>Subject:</p>
@@ -43,7 +43,7 @@ const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isO
                 </div>
                 <div className="group-info-item" id="courseCode-info">
                     <p>Course Code:</p>
-                    <h2>{courseCode}</h2>
+                    <h2>{courseCode ? courseCode : "None"}</h2>
                 </div>
                 <div className="group-info-item" id="schedule-info">
                     {isOnline ? (

@@ -16,7 +16,7 @@ const SearchResultView = () => {
                 <SearchListing
                     title={group.name}
                     school={group.school}
-                    owner={group.owner}
+                    owner={group.owner.name}
                     subject={group.subject}
                     courseCode={group.courseCode}
                     isTutor={group.isTutor}

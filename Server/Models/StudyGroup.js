@@ -2,12 +2,13 @@ const Mongoose = require("mongoose");
 const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
-const Log = require("../Log.js");
-const PrivacySettings = require("./PrivacySettings.js");
-const MeetingFormats = require("./MeetingFormats.js");
-const Subjects = require("./Subjects.js");
-const Validator = require("../Validator.js");
 const Feed = require("./Feed");
+const Log = require("../Log.js");
+const MeetingFormats = require("./MeetingFormats.js");
+const PrivacySettings = require("./PrivacySettings.js");
+const Subjects = require("./Subjects.js");
+const User = require("./User.js");
+const Validator = require("../Validator.js");
 
 /**
  * Used to define the database schema for storing study groups.
@@ -496,6 +497,16 @@ class StudyGroup {
 
         // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
         /** @todo this */
+
+        // FILL IN THE OWNER ATTRIBUTE OF EACH STUDY GROUP.
+        /** @todo this */
+        let studyGroupIndex = 0;
+        while (studyGroupIndex < studyGroups.length) {
+          const studyGroup = studyGroups[studyGroupIndex];
+          await studyGroup.populate("owner");
+          studyGroup.owner.passwordHash = undefined;
+          studyGroupIndex++;
+        }
 
         // RETURN THE STUDY GROUPS FOUND.
         return studyGroups;

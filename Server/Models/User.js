@@ -79,7 +79,11 @@ class User {
         // In order to maximize the usability of this class, the attributes stored in the database
         // record are copied to the instance of this class so they can be properly editied.
         // The user schema is converted to a regular object to sanitize it of wrapper methods and properties.
-        Object.assign(this, userSchema.toObject());
+        if (typeof userSchema === "object") {
+          Object.assign(this, userSchema);
+        } else {
+          Object.assign(this, userSchema.toObject());
+        }
     }
 
     /**
@@ -250,9 +254,7 @@ class User {
      * @async
      */
     async getStudyGroups() {
-        // ID -> Conversation;
-
-        // LOOP THROUGH EACH CONVERSATION ID.
+        // LOOP THROUGH EACH STUDY GROUP ID.
         let studyGroups = [];
         await Promise.all(
             this.studyGroups.map(async (studyGroupId) => {
@@ -427,5 +429,4 @@ class User {
      */
     async updatePassword(newPassword) {}
 }
-
 module.exports = User;
