@@ -20,6 +20,7 @@ const SearchView = () => {
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
+    const [timeRange, setTimeRange] = useState(["00:00", "24:00"]);
 
     const dispatch = useDispatch();
 
@@ -39,7 +40,9 @@ const SearchView = () => {
                 subject,
                 school: isAssociatedWithSchool ? "Liberty University" : null,
                 meetingFormat,
-                type
+                type,
+                startTime: timeRange[0],
+                endTime: timeRange[1]
             });
         } catch (error) {
             console.log(error);
@@ -122,6 +125,16 @@ const SearchView = () => {
     const updateType = (e) => {
         setType(e.target.options[e.target.selectedIndex].value);
     };
+
+    /**
+     * Used to update the chosen type from the dropdown menu in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateTimeRange = (value) => {
+        setTimeRange(value);
+    };
     return (
         <div className="search-view">
             <SearchForm
@@ -130,11 +143,13 @@ const SearchView = () => {
                 isAssociatedWithSchool={isAssociatedWithSchool}
                 meetingFormat={meetingFormat}
                 type={type}
+                timeRange={timeRange}
                 updateSearchTerm={updateSearchTerm}
                 updateSubject={updateSubject}
                 updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
                 updateMeetingFormat={updateMeetingFormat}
                 updateType={updateType}
+                updateTimeRange={updateTimeRange}
                 submitSearch={submitSearch}
             />
         </div>
