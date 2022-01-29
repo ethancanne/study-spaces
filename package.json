@@ -9,6 +9,7 @@
         "dev": "concurrently --kill-others \"nodemon --watch Server Server/Server.js\" \"webpack server --mode development\"",
         "doc": "jsdoc -c jsdoc.config.json",
         "format": "prettier --write . --loglevel silent",
+        "heroku-prebuild": "npm i -f",
         "heroku-postbuild": "npm prune --production",
         "start": "node Server/Server.js"
     },
