@@ -12,6 +12,7 @@ import Dropdown from "../../core/Dropdown/Dropdown.js";
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 import TimeRange from "../../core/Range/TimeRange";
 import MultipleDropdown from "../../core/Dropdown/MultipleDropdown";
+import { Days } from "../../../../Server/Models/Time";
 
 /**
  * Renders a search form for searching study groups
@@ -25,12 +26,14 @@ const SearchForm = ({
     meetingFormat,
     type,
     timeRange,
+    days,
     updateSearchTerm,
     updateSubject,
     updateIsAssociatedWithSchool,
     updateMeetingFormat,
     updateType,
     updateTimeRange,
+    updateDays,
     submitSearch
 }) => {
     return (
@@ -45,7 +48,8 @@ const SearchForm = ({
                     <Dropdown options={["This", "That"]} value={subject} onChange={updateSubject} />
                 </InputField>
                 <InputField>
-                    <MultipleDropdown items={days} />
+                    <Label>Days</Label>
+                    <MultipleDropdown items={[...Object.values(Days)]} setItems={updateDays} />
                 </InputField>
                 <InputField>
                     <Label>Meeting Time Range</Label>

@@ -26,7 +26,7 @@ function getStyles(name, personName, theme) {
     };
 }
 
-const MultipleDropdown = (items, setItem) => {
+const MultipleDropdown = ({ items, setItems }) => {
     const theme = useTheme();
     const [chosenItem, setChosenItem] = useState([]);
 
@@ -38,19 +38,22 @@ const MultipleDropdown = (items, setItem) => {
             // On autofill we get a stringified value.
             typeof value === "string" ? value.split(",") : value
         );
+        setItems(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
     };
 
     return (
         <div>
-            <FormControl sx={{ m: 1, width: 300 }}>
-                <InputLabel id="demo-multiple-chip-label">Chip</InputLabel>
+            <FormControl sx={{ width: "100%" }}>
                 <Select
                     labelId="demo-multiple-chip-label"
                     id="demo-multiple-chip"
                     multiple
                     value={chosenItem}
                     onChange={handleChange}
-                    input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                    input={<OutlinedInput id="select-multiple-chip" />}
                     renderValue={(selected) => (
                         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                             {selected.map((value) => (
@@ -61,7 +64,7 @@ const MultipleDropdown = (items, setItem) => {
                     MenuProps={MenuProps}
                 >
                     {items.map((item) => (
-                        <MenuItem key={name} value={item} style={getStyles(item, chosenItem, theme)}>
+                        <MenuItem key={item} value={item} style={getStyles(item, chosenItem, theme)}>
                             {item}
                         </MenuItem>
                     ))}

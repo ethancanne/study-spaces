@@ -21,14 +21,26 @@ const SearchView = () => {
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
     const [timeRange, setTimeRange] = useState(["00:00", "24:00"]);
+    const [days, setDays] = useState([]);
 
     const dispatch = useDispatch();
 
     /**
      * Retrieves study groups from search query by sending a request to the server
-     * @author ???
+     * @author Ethan Cannelongo
+     * @date 01/29/22
      */
     const submitSearch = async (e) => {
+        console.log({
+            searchTerm,
+            subject,
+            school: isAssociatedWithSchool ? "Liberty University" : null,
+            meetingFormat,
+            type,
+            startTime: timeRange[0],
+            endTime: timeRange[1],
+            days
+        });
         // SUBMIT THE SEARCH REQUEST.
         e.preventDefault();
         e.stopPropagation();
@@ -42,7 +54,8 @@ const SearchView = () => {
                 meetingFormat,
                 type,
                 startTime: timeRange[0],
-                endTime: timeRange[1]
+                endTime: timeRange[1],
+                days
             });
         } catch (error) {
             console.log(error);
@@ -70,7 +83,7 @@ const SearchView = () => {
     /**
      * Used to update the search term field in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author ???
+     * @author Ethan Cannelongo
      * @date  ?/??/22
      */
     const updateSearchTerm = (e) => {
@@ -80,7 +93,7 @@ const SearchView = () => {
     /**
      * Used to update the subject dropdown field in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author ???
+     * @author Ethan Cannelongo
      * @date  ?/??/22
      */
     const updateSubject = (e) => {
@@ -88,19 +101,9 @@ const SearchView = () => {
     };
 
     /**
-     * Used to update the proximity dropdown field in the search form.
-     * @param {Event} e The change event to update the field with.
-     * @author ???
-     * @date  ?/??/22
-     */
-    // const updateProximity = (e) => {
-    //     setProximity(e.target.value);
-    // };
-
-    /**
      * Used to update the "show only groups associated with school" checkbox in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author ???
+     * @author Ethan Cannelongo
      * @date  ?/??/22
      */
     const updateIsAssociatedWithSchool = (e) => {
@@ -110,7 +113,7 @@ const SearchView = () => {
     /**
      * Used to update the chosen meeting format from the dropdown menu in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author ???
+     * @author Ethan Cannelongo
      * @date  ?/??/22
      */
     const updateMeetingFormat = (e) => {
@@ -120,7 +123,7 @@ const SearchView = () => {
     /**
      * Used to update the chosen type from the dropdown menu in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author ???
+     * @author Ethan Cannelongo
      * @date  ?/??/22
      */
     const updateType = (e) => {
@@ -128,13 +131,24 @@ const SearchView = () => {
     };
 
     /**
-     * Used to update the chosen type from the dropdown menu in the search form.
-     * @param {Event} e The change event to update the field with.
-     * @author ???
+     * Used to update the chosen time range in the search form.
+     * @param {Array} value The [startTime, endTime]
+     * @author Ethan Cannelongo
      * @date  ?/??/22
      */
     const updateTimeRange = (value) => {
         setTimeRange(value);
+    };
+
+    /**
+     * Used to update the chosen time range in the search form.
+     * @param {Array} value An array of chosen days
+     * @author Ethan Cannelongo
+     * @date  ?/??/22
+     */
+    const updateDays = (value) => {
+        console.log(value);
+        setDays(value);
     };
     return (
         <div className="search-view">
@@ -145,12 +159,14 @@ const SearchView = () => {
                 meetingFormat={meetingFormat}
                 type={type}
                 timeRange={timeRange}
+                days={days}
                 updateSearchTerm={updateSearchTerm}
                 updateSubject={updateSubject}
                 updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
                 updateMeetingFormat={updateMeetingFormat}
                 updateType={updateType}
                 updateTimeRange={updateTimeRange}
+                updateDays={updateDays}
                 submitSearch={submitSearch}
             />
         </div>
