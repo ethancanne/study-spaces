@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: JsonWebTokenStrategyOptions</title>
+    <title>JSDoc: Source: Client/src/components/SearchListing/SearchListing.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,148 +17,83 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: JsonWebTokenStrategyOptions</h1>
+    <h1 class="page-title">Source: Client/src/components/SearchListing/SearchListing.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>JsonWebTokenStrategyOptions<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Used to model the options a JSON web token-based authentication strategy can have.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="JsonWebTokenStrategyOptions"><span class="type-signature"></span>new JsonWebTokenStrategyOptions<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Initializes a set of default JSON web token options.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import "./SearchListing.scss";
+/**
+ * A view for displaying a single study group listing resulting from a search query
+ * @author ???
+ */
+const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isOnline, schedule, groupColor }) => {
+    return (
+        &lt;div
+            className="listing-container"
+            style={{
+                border: `${groupColor} 5px solid`
+            }}
+        >
+            &lt;div
+                className="title-photo-container"
+                style={{
+                    backgroundColor: groupColor
+                }}
+            >
+                &lt;h1 className="group-title">{title}&lt;/h1>
+            &lt;/div>
+            &lt;div className="group-info-container">
+                &lt;div className="group-info-item" id="owner-info">
+                    {isTutor ? (
+                        &lt;p>
+                            &lt;strong>Tutor:&lt;/strong>
+                        &lt;/p>
+                    ) : (
+                        &lt;p>
+                            &lt;strong>Owner:&lt;/strong>
+                        &lt;/p>
+                    )}
+                    &lt;h2>{owner}&lt;/h2>
+                &lt;/div>
+                &lt;div className="group-info-item" id="school-info">
+                    &lt;p>School:&lt;/p>
+                    &lt;h2>{school ? school : "None"}&lt;/h2>
+                &lt;/div>
+                &lt;div className="group-info-item" id="subject-info">
+                    &lt;p>Subject:&lt;/p>
+                    &lt;h2>{subject}&lt;/h2>
+                &lt;/div>
+                &lt;div className="group-info-item" id="courseCode-info">
+                    &lt;p>Course Code:&lt;/p>
+                    &lt;h2>{courseCode ? courseCode : "None"}&lt;/h2>
+                &lt;/div>
+                &lt;div className="group-info-item" id="schedule-info">
+                    {isOnline ? (
+                        &lt;p>
+                            Meets &lt;strong>Online&lt;/strong> Every:
+                        &lt;/p>
+                    ) : (
+                        &lt;p>
+                            Meets &lt;strong>In-Person&lt;/strong> Every:
+                        &lt;/p>
+                    )}
+                    &lt;h2>{schedule}&lt;/h2>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+};
+
+export default SearchListing;
+</code></pre>
+        </article>
+    </section>
 
 
 

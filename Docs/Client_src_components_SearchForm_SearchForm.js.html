@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: JsonWebTokenStrategyOptions</title>
+    <title>JSDoc: Source: Client/src/components/SearchForm/SearchForm.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,148 +17,85 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: JsonWebTokenStrategyOptions</h1>
+    <h1 class="page-title">Source: Client/src/components/SearchForm/SearchForm.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>JsonWebTokenStrategyOptions<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Used to model the options a JSON web token-based authentication strategy can have.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="JsonWebTokenStrategyOptions"><span class="type-signature"></span>new JsonWebTokenStrategyOptions<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Initializes a set of default JSON web token options.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Authenticator.js.html">Server/Authenticator.js</a>, <a href="Server_Authenticator.js.html#line19">line 19</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import "./SearchForm.scss";
+import Button from "../../core/Button/Button.js";
+import ButtonTypes from "../../core/Button/ButtonTypes";
+import Form from "../../core/Form/Form.js";
+import InputField from "../../core/InputField/InputField.js";
+import TextInput from "../../core/Inputs/TextInput/TextInput";
+import Label from "../../core/Label/Label.js";
+import ToggleField from "../../core/ToggleField/ToggleField.js";
+import Toggle from "../../core/Toggle/Toggle.js";
+import Dropdown from "../../core/Dropdown/Dropdown.js";
+import MeetingFormats from "../../../../Server/Models/MeetingFormats";
+
+/**
+ * Renders a search form for searching study groups
+ * @author Stacey Popenfoose
+ * @date 1/27/2022
+ */
+const SearchForm = ({
+    searchTerm,
+    subject,
+    isAssociatedWithSchool,
+    meetingFormat,
+    type,
+    updateSearchTerm,
+    updateSubject,
+    updateIsAssociatedWithSchool,
+    updateMeetingFormat,
+    updateType,
+    submitSearch
+}) => {
+    return (
+        &lt;div>
+            &lt;Form onSubmit={submitSearch} className="search-form">
+                &lt;InputField>
+                    &lt;Label>Search Term&lt;/Label>
+                    &lt;TextInput value={searchTerm} onChange={updateSearchTerm} />
+                &lt;/InputField>
+                &lt;InputField>
+                    &lt;Label>Category&lt;/Label>
+                    &lt;Dropdown options={["This", "That"]} value={subject} onChange={updateSubject} />
+                &lt;/InputField>
+                &lt;div className="side-by-side">
+                    &lt;InputField>
+                        &lt;Label>Meeting Format&lt;/Label>
+                        &lt;Dropdown
+                            options={[...Object.values(MeetingFormats)]}
+                            onChange={updateMeetingFormat}
+                            value={meetingFormat}
+                        />
+                    &lt;/InputField>
+                    &lt;InputField>
+                        &lt;Label>Type&lt;/Label>
+                        &lt;Dropdown options={["Group", "Tutor", "Mixed"]} onChange={updateType} value={type} />
+                    &lt;/InputField>
+                &lt;/div>
+                &lt;ToggleField>
+                    &lt;Label>Show Only Groups Associated with Your School&lt;/Label>
+                    &lt;Toggle value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />
+                &lt;/ToggleField>
+                &lt;Button type={ButtonTypes.Primary}>Search&lt;/Button>
+            &lt;/Form>
+        &lt;/div>
+    );
+};
+
+export default SearchForm;
+</code></pre>
+        </article>
+    </section>
 
 
 

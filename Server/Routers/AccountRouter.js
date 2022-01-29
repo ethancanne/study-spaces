@@ -215,33 +215,26 @@ class AccountRouter {
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
             }
 
-            // VERIFY THE USER.
-            const verificationToken = unverifiedUser.getVerificationToken();
-            const verifiedUser = await UnverifiedUser.verify(verificationToken);
-
-            // SET THE APPROPRIATE USER FIELDS.
-            const areaCodeSet = verifiedUser.setAreaCode(request.body.areaCode);
-            if (areaCodeSet == false) {
-                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-            }
-            const nameSet = verifiedUser.setName(request.body.name);
-            if (nameSet == false) {
-                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-            }
-
+            // DETERMINE IF A PROFILE PICTURE HAS BEEN PROVIDED.
+            let encoded = undefined;
             if (Validator.isDefined(request.file)) {
-                //Resize the profile picture and convert it to a png
+                // Resize the profile picture and convert it to a png
                 const profilePicture = await sharp(request.file.buffer)
                     .resize({ height: 200, width: 200 })
                     .png()
                     .toBuffer();
-                //Encode the picture to base64 and store it in db
-                const encoded = profilePicture.toString("base64");
-                const profilePictureSet = verifiedUser.setProfilePicture(encoded);
-                if (profilePictureSet === false) {
-                    return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-                }
+                // Encode the picture to base64 and store it in db
+                encoded = profilePicture.toString("base64");
             }
+
+            // VERIFY THE USER.
+            const verificationToken = unverifiedUser.getVerificationToken();
+            const verifiedUser = await UnverifiedUser.verify(
+                verificationToken,
+                request.body.areaCode,
+                request.body.name,
+                encoded
+            );
 
             // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
             const userWasSaved = await verifiedUser.save();

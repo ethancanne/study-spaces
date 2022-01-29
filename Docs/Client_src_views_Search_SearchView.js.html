@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/pages/Study/Study.js</title>
+    <title>JSDoc: Source: Client/src/views/Search/SearchView.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/pages/Study/Study.js</h1>
+    <h1 class="page-title">Source: Client/src/views/Search/SearchView.js</h1>
 
     
 
@@ -26,109 +26,151 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import "./Study.scss";
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { signOut, showStudyGroupPopup, addStudyGroup } from "../../state/actions";
-import Validator from "../../../../Server/Validator";
-import Routes from "../../../../Server/Routes/Routes";
-import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
-
-import Button from "../../core/Button/Button.js";
-import { Redirect } from "react-router";
-import { Link } from "react-router-dom";
+            <pre class="prettyprint source linenums"><code>import "./SearchView.scss";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-
-import TopBar from "../../components/TopBar/TopBar";
-import StudyGroupView from "../../Views/Study/studyGroupView/StudyGroupView";
-import Page from "../Page";
+import SearchForm from "../../components/SearchForm/SearchForm";
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../Server/Routes/Routes";
+import Validator from "../../../../Server/Validator.js";
+import { useDispatch } from "react-redux";
+import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
+import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 
 /**
- * Renders the study page, displaying all the study groups the user is a member of.
- * @author Ethan Cannelongo
- * @date   11/20/2021
+ * A view for inputting search terms and filters for searching study groups
+ * The results of this search will be displayed on the SearchResults.js View
+ * @author ???
  */
-const Study = () => {
-    const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
-    const user = useSelector((state) => state.authReducer.user);
-    const studyGroups = useSelector((state) => state.studyGroupsReducer.studyGroups);
+const SearchView = () => {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [subject, setSubject] = useState("");
+    const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
+    const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
+    const [type, setType] = useState("Group");
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        async function getGroups() {
-            await getStudyGroups();
-        }
-        getGroups();
-    }, []);
-
     /**
-     * Retrieves all study groups the user is a member of from the server
-     * @author Ethan Cannelongo
-     * @date   11/20/2021
+     * Retrieves study groups from search query by sending a request to the server
+     * @author ???
      */
-    const getStudyGroups = async () => {
+    const submitSearch = async (e) => {
+        // SUBMIT THE SEARCH REQUEST.
+        e.preventDefault();
+        e.stopPropagation();
         let response;
         try {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-
-            response = await axios.get(Routes.StudyGroup.GetUserStudyGroups);
-        } catch (e) {
-            console.log(e);
+            //Send Search Request -  TODO: change the value that is sent if isAssociatedWithSchool is true to the school of the logged in user
+            response = await axios.post(Routes.Search.GetSearchResults, {
+                searchTerm,
+                subject,
+                school: isAssociatedWithSchool ? "Liberty University" : null,
+                meetingFormat,
+                type
+            });
+        } catch (error) {
+            console.log(error);
+            dispatch(showErrorNotification("Cannot search... Sorry"));
         } finally {
             const responseIsDefined = Validator.isDefined(response);
 
             if (responseIsDefined) {
-                const studyGroupCreationWasValid =
+                console.log(response.data);
+                const studyGroupsRetrivalWasValid =
                     ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
 
-                if (studyGroupCreationWasValid) {
-                    const studyGroups = response.data.studyGroups;
-                    if (studyGroups) {
-                        studyGroups.map((s) => {
-                            dispatch(addStudyGroup(s, true));
-                        });
-                    }
+                if (studyGroupsRetrivalWasValid) {
+                    dispatch(populateStudyGroupSearch(response.data.studyGroups));
+                    console.log(response.data.studyGroups);
                 } else {
-                    console.log("That didn't work");
+                    dispatch(showErrorNotification("Cannot search... Sorry"));
                 }
             } else {
-                console.log("That didn't work");
+                dispatch(showErrorNotification("Cannot search... Sorry"));
             }
         }
     };
 
-    return (
-        &lt;div>
-            &lt;TopBar currentPage="study" />
+    /**
+     * Used to update the search term field in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateSearchTerm = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
-            &lt;Page>
-                &lt;div className="study">
-                    &lt;div className="page-title">
-                        &lt;h1>Study&lt;/h1>
-                    &lt;/div>
-                    {isLoggedIn ? (
-                        &lt;div>
-                            &lt;Button onClick={() => dispatch(signOut())}>Log out&lt;/Button>
-                            &lt;button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}>&lt;/button>
-                            &lt;div className="study-groups-container">
-                                {Validator.isDefined(studyGroups) &amp;&amp;
-                                    studyGroups.map((studyGroup) => &lt;StudyGroupView title={studyGroup.name} />)}
-                            &lt;/div>
-                        &lt;/div>
-                    ) : (
-                        &lt;div>
-                            &lt;p>You are currently a guest!&lt;/p>
-                            &lt;Link to="/">Log In&lt;/Link>
-                        &lt;/div>
-                    )}
-                &lt;/div>
-            &lt;/Page>
+    /**
+     * Used to update the subject dropdown field in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateSubject = (e) => {
+        setSubject(e.target.value);
+    };
+
+    /**
+     * Used to update the proximity dropdown field in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    // const updateProximity = (e) => {
+    //     setProximity(e.target.value);
+    // };
+
+    /**
+     * Used to update the "show only groups associated with school" checkbox in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateIsAssociatedWithSchool = (e) => {
+        setIsAssociatedWithSchool(e.target.checked);
+    };
+
+    /**
+     * Used to update the chosen meeting format from the dropdown menu in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateMeetingFormat = (e) => {
+        setMeetingFormat(e.target.options[e.target.selectedIndex].value);
+    };
+
+    /**
+     * Used to update the chosen type from the dropdown menu in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    const updateType = (e) => {
+        setType(e.target.options[e.target.selectedIndex].value);
+    };
+    return (
+        &lt;div className="search-view">
+            &lt;SearchForm
+                searchTerm={searchTerm}
+                subject={subject}
+                isAssociatedWithSchool={isAssociatedWithSchool}
+                meetingFormat={meetingFormat}
+                type={type}
+                updateSearchTerm={updateSearchTerm}
+                updateSubject={updateSubject}
+                updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
+                updateMeetingFormat={updateMeetingFormat}
+                updateType={updateType}
+                submitSearch={submitSearch}
+            />
         &lt;/div>
     );
 };
 
-export default Study;
+export default SearchView;
 </code></pre>
         </article>
     </section>

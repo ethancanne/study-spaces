@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Post</title>
+    <title>JSDoc: Class: Meeting</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Post</h1>
+    <h1 class="page-title">Class: Meeting</h1>
 
     
 
@@ -28,7 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Post<span class="signature">(PostSchema)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Meeting<span class="signature">(date, day, details<span class="signature-attributes">opt</span>, frequency, location<span class="signature-attributes">opt</span>, roomNumber<span class="signature-attributes">opt</span>, time)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Provides an interface for working with meetings.</div>
         
     
 </header>
@@ -39,9 +41,11 @@
         
 
     
+    <h2>Constructor</h2>
+    
 
     
-    <h4 class="name" id="Post"><span class="type-signature"></span>new Post<span class="signature">(PostSchema)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Meeting"><span class="type-signature"></span>new Meeting<span class="signature">(date, day, details<span class="signature-attributes">opt</span>, frequency, location<span class="signature-attributes">opt</span>, roomNumber<span class="signature-attributes">opt</span>, time)</span><span class="type-signature"></span></h4>
     
 
     
@@ -49,7 +53,7 @@
 
 
 <div class="description">
-    Initializes the post passed in from the database.
+    Initializes the meeting passed in from the database.
 </div>
 
 
@@ -73,6 +77,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -85,23 +91,223 @@
 
         <tr>
             
-                <td class="name"><code>PostSchema</code></td>
+                <td class="name"><code>date</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Mongoose.Schema</span>
+<span class="param-type">Date</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">The database record for a given post.</td>
+            <td class="description last">The date a one-time meeting will occur.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>day</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Day</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The day a meeting occurs on.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>details</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Notes about the meeting.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>frequency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The frequency of a recurring meeting.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>location</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The location where a meeting is to occur.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>roomNumber</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The room number where the meeting will occur.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The meeting time.</td>
         </tr>
 
     
@@ -149,7 +355,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line55">line 55</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -205,7 +411,7 @@
     
 
     
-    <h4 class="name" id=".create"><span class="type-signature">(async, static) </span>create<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Post.html">Post</a>}</span></h4>
+    <h4 class="name" id=".create"><span class="type-signature">(async, static) </span>create<span class="signature">()</span><span class="type-signature"> &rarr; {meeting}</span></h4>
     
 
     
@@ -213,767 +419,7 @@
 
 
 <div class="description">
-    Creates a post.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line77">line 77</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The post created.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Post.html">Post</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".createResponse"><span class="type-signature">(async, static) </span>createResponse<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Creates a post response.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line86">line 86</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The post response created.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="addResponse"><span class="type-signature"></span>addResponse<span class="signature">(response)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Adds the Responses array.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The response to add.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line241">line 241</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the response array was set, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="delete"><span class="type-signature">(async) </span>delete<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Deletes the post.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line93">line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the post was deleted, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="deleteResponse"><span class="type-signature"></span>deleteResponse<span class="signature">(responseID)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Deletes a response.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>responseID</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The response to be deleted.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line249">line 249</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the response was deleted, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getAttachment"><span class="type-signature"></span>getAttachment<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Gets the attachment.
+    Creates a meeting.
 </div>
 
 
@@ -1010,7 +456,7 @@
     <dt class="tag-author">Author:</dt>
     <dd class="tag-author">
         <ul>
-            <li>Stacey Popenfoose</li>
+            <li>Cliff Croom</li>
         </ul>
     </dd>
     
@@ -1024,7 +470,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line163">line 163</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -1053,7 +499,7 @@
 
         
 <div class="param-desc">
-    The attachment of the post.
+    The meeting created.
 </div>
 
 
@@ -1064,7 +510,7 @@
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">meeting</span>
 
 
     </dd>
@@ -1082,7 +528,7 @@
     
 
     
-    <h4 class="name" id="getCreator"><span class="type-signature"></span>getCreator<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getDate"><span class="type-signature"></span>getDate<span class="signature">()</span><span class="type-signature"> &rarr; {Date}</span></h4>
     
 
     
@@ -1090,7 +536,7 @@
 
 
 <div class="description">
-    Gets the Creator's DocumentID.
+    Gets the meeting's date.
 </div>
 
 
@@ -1124,13 +570,6 @@
     
 
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
 
     
 
@@ -1141,7 +580,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line153">line 153</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line156">line 156</a>
     </li></ul></dd>
     
 
@@ -1170,7 +609,7 @@
 
         
 <div class="param-desc">
-    The Creator's DocumentID.
+    The meeting's date.
 </div>
 
 
@@ -1181,7 +620,7 @@
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type">Date</span>
 
 
     </dd>
@@ -1199,7 +638,7 @@
     
 
     
-    <h4 class="name" id="getMessage"><span class="type-signature"></span>getMessage<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getDetails"><span class="type-signature"></span>getDetails<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -1207,7 +646,7 @@
 
 
 <div class="description">
-    Gets the message.
+    Gets the meeting's details.
 </div>
 
 
@@ -1241,13 +680,6 @@
     
 
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
 
     
 
@@ -1258,7 +690,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line133">line 133</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -1287,7 +719,7 @@
 
         
 <div class="param-desc">
-    The message of the post.
+    The meeting's details.
 </div>
 
 
@@ -1316,7 +748,7 @@
     
 
     
-    <h4 class="name" id="getResponses"><span class="type-signature"></span>getResponses<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getFrequency"><span class="type-signature"></span>getFrequency<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -1324,7 +756,7 @@
 
 
 <div class="description">
-    Gets the Responses array.
+    Gets the meeting's frequency.
 </div>
 
 
@@ -1358,13 +790,6 @@
     
 
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
 
     
 
@@ -1375,7 +800,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line183">line 183</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line172">line 172</a>
     </li></ul></dd>
     
 
@@ -1404,7 +829,7 @@
 
         
 <div class="param-desc">
-    The responses to the post.
+    The meeting's frequency.
 </div>
 
 
@@ -1433,7 +858,7 @@
     
 
     
-    <h4 class="name" id="getTimestamp"><span class="type-signature"></span>getTimestamp<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getLocation"><span class="type-signature"></span>getLocation<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -1441,7 +866,7 @@
 
 
 <div class="description">
-    Gets the timestamp.
+    Gets the meeting's location.
 </div>
 
 
@@ -1475,13 +900,6 @@
     
 
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
 
     
 
@@ -1492,7 +910,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line173">line 173</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -1521,7 +939,7 @@
 
         
 <div class="param-desc">
-    The timestamp of the post.
+    The meeting's location.
 </div>
 
 
@@ -1550,7 +968,7 @@
     
 
     
-    <h4 class="name" id="getTitle"><span class="type-signature"></span>getTitle<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getRoomNumber"><span class="type-signature"></span>getRoomNumber<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -1558,7 +976,7 @@
 
 
 <div class="description">
-    Gets the title.
+    Gets the meeting's room number.
 </div>
 
 
@@ -1592,13 +1010,6 @@
     
 
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
 
     
 
@@ -1609,7 +1020,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line123">line 123</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -1638,7 +1049,7 @@
 
         
 <div class="param-desc">
-    The title of the post.
+    The meeting's room number.
 </div>
 
 
@@ -1667,7 +1078,7 @@
     
 
     
-    <h4 class="name" id="getType"><span class="type-signature"></span>getType<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id="getTime"><span class="type-signature"></span>getTime<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -1675,7 +1086,7 @@
 
 
 <div class="description">
-    Gets the Type.
+    Gets the meeting time.
 </div>
 
 
@@ -1709,13 +1120,6 @@
     
 
     
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
 
     
 
@@ -1726,7 +1130,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line143">line 143</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line196">line 196</a>
     </li></ul></dd>
     
 
@@ -1755,7 +1159,7 @@
 
         
 <div class="param-desc">
-    The type of the post.
+    The meeting time.
 </div>
 
 
@@ -1784,7 +1188,7 @@
     
 
     
-    <h4 class="name" id="save"><span class="type-signature">(async) </span>save<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="setDate"><span class="type-signature"></span>setDate<span class="signature">(date)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -1792,124 +1196,7 @@
 
 
 <div class="description">
-    Saves the post.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Stacey Popenfoose</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line102">line 102</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the post was saved, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="setAttachment"><span class="type-signature"></span>setAttachment<span class="signature">(attachment)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Sets the attachment.
+    Sets the date.
 </div>
 
 
@@ -1945,7 +1232,7 @@
 
         <tr>
             
-                <td class="name"><code>attachment</code></td>
+                <td class="name"><code>date</code></td>
             
 
             <td class="type">
@@ -1961,7 +1248,7 @@
 
             
 
-            <td class="description last">The attachment to set.</td>
+            <td class="description last">The date to set.</td>
         </tr>
 
     
@@ -2002,7 +1289,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line225">line 225</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line205">line 205</a>
     </li></ul></dd>
     
 
@@ -2031,7 +1318,7 @@
 
         
 <div class="param-desc">
-    True if the attachment was set, false otherwise.
+    True if the date was set, false otherwise.
 </div>
 
 
@@ -2060,7 +1347,7 @@
     
 
     
-    <h4 class="name" id="setCreator"><span class="type-signature"></span>setCreator<span class="signature">(creator)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="setDetails"><span class="type-signature"></span>setDetails<span class="signature">(details)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -2068,7 +1355,7 @@
 
 
 <div class="description">
-    Sets the Creator's DocumentID.
+    Sets the details.
 </div>
 
 
@@ -2104,7 +1391,7 @@
 
         <tr>
             
-                <td class="name"><code>creator</code></td>
+                <td class="name"><code>details</code></td>
             
 
             <td class="type">
@@ -2120,7 +1407,7 @@
 
             
 
-            <td class="description last">The type to set.</td>
+            <td class="description last">The details to set.</td>
         </tr>
 
     
@@ -2161,7 +1448,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line217">line 217</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line216">line 216</a>
     </li></ul></dd>
     
 
@@ -2190,7 +1477,7 @@
 
         
 <div class="param-desc">
-    True if the Creator's DocumentID was set, false otherwise.
+    True if the details was set, false otherwise.
 </div>
 
 
@@ -2219,7 +1506,7 @@
     
 
     
-    <h4 class="name" id="setMessage"><span class="type-signature"></span>setMessage<span class="signature">(message)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="setFrequency"><span class="type-signature"></span>setFrequency<span class="signature">(frequency)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -2227,7 +1514,7 @@
 
 
 <div class="description">
-    Sets the message.
+    Sets the frequency.
 </div>
 
 
@@ -2263,7 +1550,7 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>frequency</code></td>
             
 
             <td class="type">
@@ -2279,7 +1566,7 @@
 
             
 
-            <td class="description last">The message to set.</td>
+            <td class="description last">The frequency to set.</td>
         </tr>
 
     
@@ -2320,7 +1607,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line201">line 201</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line227">line 227</a>
     </li></ul></dd>
     
 
@@ -2349,7 +1636,7 @@
 
         
 <div class="param-desc">
-    True if the message was set, false otherwise.
+    True if the frequency was set, false otherwise.
 </div>
 
 
@@ -2378,7 +1665,7 @@
     
 
     
-    <h4 class="name" id="setTimestamp"><span class="type-signature"></span>setTimestamp<span class="signature">(timestamp)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="setLocation"><span class="type-signature"></span>setLocation<span class="signature">(location)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -2386,7 +1673,7 @@
 
 
 <div class="description">
-    Sets the timestamp.
+    Sets the location.
 </div>
 
 
@@ -2422,7 +1709,7 @@
 
         <tr>
             
-                <td class="name"><code>timestamp</code></td>
+                <td class="name"><code>location</code></td>
             
 
             <td class="type">
@@ -2438,7 +1725,7 @@
 
             
 
-            <td class="description last">The timestamp to set.</td>
+            <td class="description last">The location to set.</td>
         </tr>
 
     
@@ -2479,7 +1766,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line233">line 233</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line238">line 238</a>
     </li></ul></dd>
     
 
@@ -2508,7 +1795,7 @@
 
         
 <div class="param-desc">
-    True if the timestamp was set, false otherwise.
+    True if the location was set, false otherwise.
 </div>
 
 
@@ -2537,7 +1824,7 @@
     
 
     
-    <h4 class="name" id="setTitle"><span class="type-signature"></span>setTitle<span class="signature">(title)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="setRoomNumber"><span class="type-signature"></span>setRoomNumber<span class="signature">(roomNumber)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -2545,7 +1832,7 @@
 
 
 <div class="description">
-    Sets the title.
+    Sets the room number.
 </div>
 
 
@@ -2581,7 +1868,7 @@
 
         <tr>
             
-                <td class="name"><code>title</code></td>
+                <td class="name"><code>roomNumber</code></td>
             
 
             <td class="type">
@@ -2597,7 +1884,7 @@
 
             
 
-            <td class="description last">The title to set.</td>
+            <td class="description last">The room number to set.</td>
         </tr>
 
     
@@ -2638,7 +1925,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line193">line 193</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line249">line 249</a>
     </li></ul></dd>
     
 
@@ -2667,7 +1954,7 @@
 
         
 <div class="param-desc">
-    True if the title was set, false otherwise.
+    True if the room number was set, false otherwise.
 </div>
 
 
@@ -2696,7 +1983,7 @@
     
 
     
-    <h4 class="name" id="setType"><span class="type-signature"></span>setType<span class="signature">(type)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="setTime"><span class="type-signature"></span>setTime<span class="signature">(time)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -2704,7 +1991,7 @@
 
 
 <div class="description">
-    Sets the Type.
+    Sets the time.
 </div>
 
 
@@ -2740,7 +2027,7 @@
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>time</code></td>
             
 
             <td class="type">
@@ -2756,7 +2043,7 @@
 
             
 
-            <td class="description last">The type to set.</td>
+            <td class="description last">The time to set.</td>
         </tr>
 
     
@@ -2797,7 +2084,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Post.js.html">Server/Models/Post.js</a>, <a href="Server_Models_Post.js.html#line209">line 209</a>
+        <a href="Server_Models_Meeting.js.html">Server/Models/Meeting.js</a>, <a href="Server_Models_Meeting.js.html#line260">line 260</a>
     </li></ul></dd>
     
 
@@ -2826,7 +2113,7 @@
 
         
 <div class="param-desc">
-    True if the type was set, false otherwise.
+    True if the time was set, false otherwise.
 </div>
 
 

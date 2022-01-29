@@ -26,22 +26,20 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import "./CreateAccountView.scss";
-
-import React from "react";
+            <pre class="prettyprint source linenums"><code>import React from "react";
 import axios from "axios";
 import Validator from "../../../../../Server/Validator";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { createAccount, showErrorNotification } from "../../../state/actions";
 import CreateAccountForm from "../../../components/CreateAccountForm/CreateAccountForm";
 import Routes from "../../../../../Server/Routes/Routes.js";
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages.js";
 import Button from "../../../core/Button/Button.js";
-import Label from "../../../core/Label/Label.js";
 import Views from "../../Views.js";
 
-import { createAccount } from "../../../state/actions";
+import AuthView from "../AuthView";
 
 /**
  * This view presents the create account form on the home page
@@ -54,7 +52,6 @@ const CreateAccountView = (props) => {
     const [email, setEmail] = useState(BLANK);
     const [password, setPassword] = useState(BLANK);
     const [confirmPassword, setConfirmPassword] = useState(BLANK);
-    const [accountCreationErrorMsg, setAccountCreationErrorMsg] = useState(BLANK);
 
     const dispatch = useDispatch();
 
@@ -71,7 +68,7 @@ const CreateAccountView = (props) => {
 
         // FIRST, COMPARE THE PASSWORD AND CONFIRM PASSWORD FIELDS
         if (password !== confirmPassword) {
-            setAccountCreationErrorMsg("Passwords don't match!");
+            dispatch(showErrorNotification("Passwords don't match"));
             return;
         }
 
@@ -85,7 +82,7 @@ const CreateAccountView = (props) => {
             });
         } catch (error) {
             console.log(error);
-            setAccountCreationErrorMsg("error");
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
         } finally {
             // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
             const responseIsDefined = Validator.isDefined(response);
@@ -102,8 +99,13 @@ const CreateAccountView = (props) => {
                     const unverifiedUser = response.data.unverifiedUser;
 
                     dispatch(createAccount(unverifiedUser));
+
                     props.setHomeView(Views.Home.VerificationEmailConfirmation);
+                } else {
+                    dispatch(showErrorNotification(response.data.message));
                 }
+            } else {
+                dispatch(showErrorNotification("There was an error"));
             }
         }
     };
@@ -116,7 +118,6 @@ const CreateAccountView = (props) => {
      */
     const updateEmailField = (event) => {
         setEmail(event.target.value);
-        setAccountCreationErrorMsg(BLANK);
     };
 
     /**
@@ -127,7 +128,6 @@ const CreateAccountView = (props) => {
      */
     const updatePasswordField = (event) => {
         setPassword(event.target.value);
-        setAccountCreationErrorMsg(BLANK);
     };
 
     /**
@@ -138,7 +138,6 @@ const CreateAccountView = (props) => {
      */
     const updateConfirmPasswordField = (event) => {
         setConfirmPassword(event.target.value);
-        setAccountCreationErrorMsg(BLANK);
     };
 
     /**
@@ -152,8 +151,8 @@ const CreateAccountView = (props) => {
     };
 
     return (
-        &lt;div className="create-account-view">
-            &lt;h1>Study Spaces&lt;/h1>
+        &lt;AuthView>
+            &lt;p>Create Your Account&lt;/p>
             &lt;CreateAccountForm
                 email={email}
                 password={password}
@@ -162,17 +161,15 @@ const CreateAccountView = (props) => {
                 updateEmailField={updateEmailField}
                 updatePasswordField={updatePasswordField}
                 updateConfirmPasswordField={updateConfirmPasswordField}
-                accountCreationErrorMsg={accountCreationErrorMsg}
             />
-            &lt;p className="error-message">{accountCreationErrorMsg}&lt;/p>
 
             &lt;div className="other-options">
-                &lt;Label>Already have an account?&lt;/Label>
+                &lt;p>Already have an account?&lt;/p>
                 &lt;Button type={ButtonTypes.Primary} onClick={signInClicked}>
                     Sign In
                 &lt;/Button>
             &lt;/div>
-        &lt;/div>
+        &lt;/AuthView>
     );
 };
 
@@ -187,13 +184,13 @@ export default CreateAccountView;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailibility.html">MeetingAvailibility</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jan 19 2022 15:12:44 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 28 2022 23:08:15 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
