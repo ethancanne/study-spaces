@@ -113,9 +113,7 @@ class Authenticator {
         const emailAddress = user.getEmail();
 
         // SEND THE EMAIL.
-
         // Generate test SMTP service account from ethereal.email
-
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
             service: "gmail",
@@ -136,8 +134,6 @@ class Authenticator {
                 text: body, // plain text body
                 html: "<h1>" + body + "</h1>" // html body
             });
-            Log.write("Sending email worked");
-
             return true;
         } catch {
             Log.write("Sending email failed.");

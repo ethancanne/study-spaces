@@ -68,6 +68,7 @@ class AccountRouter {
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
+
         // This is used to allow users to upload profile pictures.
         const fileFilter = (req, file, cb) => {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -77,12 +78,15 @@ class AccountRouter {
                 cb(new Error("File format not supported."), false);
             }
         };
+
+        //Limit the file size
         const upload = multer({
             limits: {
                 fileSize: 2000000
             },
             fileFilter: fileFilter
         });
+
         // This is used to complete the account setup process.
         server.post(Routes.Account.SetupAccount, upload.single("profilePicture"), AccountRouter.setupAccount);
     }
@@ -123,49 +127,56 @@ class AccountRouter {
      * @static
      */
     static async createAccount(request, response) {
-        // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
-        const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
-        const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
-        if (unverifiedUserAlreadyExists) {
-            return response.json({ message: ResponseMessages.Account.userAlreadyExists });
-        }
-
-        // CHECK FOR AN EXISTING ACCOUNT.
-        const existingUser = await User.getByEmail(request.body.email);
-        const userAlreadyExists = Validator.isDefined(existingUser);
-        if (userAlreadyExists) {
-            return response.json({ message: ResponseMessages.Account.userAlreadyExists });
-        }
-
-        // CREATE THE UNVERIFIED ACCOUNT.
-        const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
-        const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
-        if (accountWasNotCreated) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-
-        // EMAIL THE VERIFICATION LINK TO THE USER.
-        const verificationToken = unverifiedUser.verificationToken;
-        let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
-        const emailSubject = "Your Study Spaces Verification Link";
-        const emailBody = "Click this: " + verificationLink;
-        let emailWasSent = false;
         try {
-            emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
-        } catch (error) {
-            Log.write("An error occurred while sending an email during the account creation process.");
-            Log.writeError(error);
-        }
-        if (!emailWasSent &amp;&amp; Configuration.isSetToProduction()) {
+            // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
+            const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
+            const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
+            if (unverifiedUserAlreadyExists) {
+                return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+            }
+
+            // CHECK FOR AN EXISTING ACCOUNT.
+            const existingUser = await User.getByEmail(request.body.email);
+            const userAlreadyExists = Validator.isDefined(existingUser);
+            if (userAlreadyExists) {
+                return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+            }
+
+            // CREATE THE UNVERIFIED ACCOUNT.
+            const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
+            const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
+            if (accountWasNotCreated) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+
+            // EMAIL THE VERIFICATION LINK TO THE USER.
+            const verificationToken = unverifiedUser.verificationToken;
+            let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+            const emailSubject = "Your Study Spaces Verification Link";
+            const emailBody = "Click this: " + verificationLink;
+
+            //Send the Verification
+            let emailWasSent = false;
+            try {
+                emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
+            } catch (error) {
+                Log.write("An error occurred while sending an email during the account creation process.");
+                Log.writeError(error);
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+            if (!emailWasSent &amp;&amp; Configuration.isSetToProduction()) {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+
+            // SEND THE RESPONSE.
+            unverifiedUser.removeSensitiveAttributes();
+            response.json({
+                message: ResponseMessages.Account.SuccessAccountCreated,
+                unverifiedUser: unverifiedUser
+            });
+        } catch {
             return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
-
-        // SEND THE RESPONSE.
-        unverifiedUser.removeSensitiveAttributes();
-        response.json({
-            message: ResponseMessages.Account.SuccessAccountCreated,
-            unverifiedUser: unverifiedUser
-        });
     }
 
     /**
@@ -224,56 +235,53 @@ class AccountRouter {
             return response.json({ message: ResponseMessages.Account.NotOver18 });
         }
 
-        // GET THE USER BEING SET UP.
-        const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
-        const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
-        if (unverifiedUserWasNotFound) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-
-        // VERIFY THE USER.
-        const verificationToken = unverifiedUser.getVerificationToken();
-        const verifiedUser = await UnverifiedUser.verify(verificationToken);
-
-        // SET THE APPROPRIATE USER FIELDS.
-        const areaCodeSet = verifiedUser.setAreaCode(request.body.areaCode);
-        if (areaCodeSet == false) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-        const nameSet = verifiedUser.setName(request.body.name);
-        if (nameSet == false) {
-            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-        }
-
-        if (Validator.isDefined(request.file)) {
-            //Resize the profile picture and convert it to a png
-            const profilePicture = await sharp(request.file.buffer)
-                .resize({ height: 200, width: 200 })
-                .png()
-                .toBuffer();
-            //Encode the picture to base64 and store it in db
-            const encoded = profilePicture.toString("base64");
-            const profilePictureSet = verifiedUser.setProfilePicture(encoded);
-            if (profilePictureSet == false) {
+        try {
+            // GET THE USER BEING SET UP.
+            const unverifiedUser = await UnverifiedUser.getByVerificationToken(request.body.verificationToken);
+            const unverifiedUserWasNotFound = !Validator.isDefined(unverifiedUser);
+            if (unverifiedUserWasNotFound) {
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
             }
-        }
 
-        // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
-        const userWasSaved = await verifiedUser.save();
-        if (userWasSaved) {
-            const authentication = Authenticator.issueAuthenticationToken(verifiedUser);
-            const authenticationToken = authentication.token;
-            const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
-            verifiedUser.removeSensitiveAttributes();
-            response.json({
-                authenticationToken: authenticationToken,
-                authenticationTokenExpirationDate: authenticationTokenExpirationDate,
-                message: ResponseMessages.Account.SuccessAccountSetup,
-                user: verifiedUser
-            });
-        } else {
-            response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            // DETERMINE IF A PROFILE PICTURE HAS BEEN PROVIDED.
+            let encoded = undefined;
+            if (Validator.isDefined(request.file)) {
+                // Resize the profile picture and convert it to a png
+                const profilePicture = await sharp(request.file.buffer)
+                    .resize({ height: 200, width: 200 })
+                    .png()
+                    .toBuffer();
+                // Encode the picture to base64 and store it in db
+                encoded = profilePicture.toString("base64");
+            }
+
+            // VERIFY THE USER.
+            const verificationToken = unverifiedUser.getVerificationToken();
+            const verifiedUser = await UnverifiedUser.verify(
+                verificationToken,
+                request.body.areaCode,
+                request.body.name,
+                encoded
+            );
+
+            // SAVE THE UPDATED ACCOUNT TO THE DATABSE.
+            const userWasSaved = await verifiedUser.save();
+            if (userWasSaved) {
+                const authentication = Authenticator.issueAuthenticationToken(verifiedUser);
+                const authenticationToken = authentication.token;
+                const authenticationTokenExpirationDate = new Date(Date.now() + authentication.expires).toDateString();
+                verifiedUser.removeSensitiveAttributes();
+                response.json({
+                    authenticationToken: authenticationToken,
+                    authenticationTokenExpirationDate: authenticationTokenExpirationDate,
+                    message: ResponseMessages.Account.SuccessAccountSetup,
+                    user: verifiedUser
+                });
+            } else {
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+        } catch {
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         }
     }
 
@@ -295,16 +303,18 @@ class AccountRouter {
             unverifiedUser = await UnverifiedUser.getByVerificationToken(verificationToken);
         } catch (error) {
             Log.writeError(error);
+            console.log(error);
+            return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
         } finally {
             const unverifiedUserWasFound = Validator.isDefined(unverifiedUser);
             if (unverifiedUserWasFound) {
                 unverifiedUser.removeSensitiveAttributes();
-                response.json({
+                return response.json({
                     message: ResponseMessages.Account.UnverifiedUserWasFound,
                     unverifiedUser: unverifiedUser
                 });
             } else {
-                response.json({ message: ResponseMessages.Account.UserNotFound });
+                return response.json({ message: ResponseMessages.Account.UserNotFound });
             }
         }
     }
@@ -321,13 +331,13 @@ module.exports = AccountRouter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jan 19 2022 15:12:44 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jan 29 2022 12:41:29 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

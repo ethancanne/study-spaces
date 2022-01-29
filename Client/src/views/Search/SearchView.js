@@ -51,6 +51,7 @@ const SearchView = () => {
             const responseIsDefined = Validator.isDefined(response);
 
             if (responseIsDefined) {
+                console.log(response.data);
                 const studyGroupsRetrivalWasValid =
                     ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
 

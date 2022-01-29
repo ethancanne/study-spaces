@@ -30,10 +30,14 @@
 const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
-const Log = require("../Log.js");
-const PrivacySettings = require("./PrivacySettings.js");
-const Validator = require("../Validator.js");
 const Feed = require("./Feed");
+const Log = require("../Log.js");
+const { Meeting, MeetingAvailability } = require("./Meeting.js");
+const MeetingFormats = require("./MeetingFormats.js");
+const PrivacySettings = require("./PrivacySettings.js");
+const Subjects = require("./Subjects.js");
+const User = require("./User.js");
+const Validator = require("../Validator.js");
 
 /**
  * Used to define the database schema for storing study groups.
@@ -153,7 +157,9 @@ class StudyGroup {
      *
      * @async
      */
-    async addMeeting(newMeeting) {}
+    async addMeeting(newMeeting) {
+        //!!!!!
+    }
 
     /**
      * Adds a member to the study group.
@@ -414,7 +420,9 @@ class StudyGroup {
      *
      * @async
      */
-    async removeMeeting(meeting) {}
+    async removeMeeting(meeting) {
+        //!!!!!
+    }
 
     /**
      * Removes a member from the study group.
@@ -433,6 +441,117 @@ class StudyGroup {
      * @async
      */
     async save() {}
+
+    /**
+    * Returns study groups matching the user's search criteria.
+    * @param {Object} filters The filters that define search criteria for a study group.
+        These can be passed directly from the client to the server, as this method accounts
+        for case differences in the search terms.
+    * @return {StudyGroup[]} The list of study groups found matching the search criteria.
+    * @author Cameron Burkholder
+    * @date   01/25/2022
+    */
+    static async search(filters) {
+        // CONVERT THE FILTERS QUERY INTO A MONGOOSE-READABLE FORMAT.
+        // Since the filters query was defined to make more domain-level sense,
+        // it must be converted to a form that Mongoose can parse to generate the search.
+        // Additionally, using regex on the search term allows us to find all names, courses,
+        // and subjects similar to the search term using the like operator from Mongoose.
+        const searchTerm = new RegExp(`${filters.searchTerm}`, "i");
+
+        let searchFilter = {
+            $or: [{ name: searchTerm }, { course: searchTerm }]
+        };
+
+        // ADD OPTIONAL PARAMETERS TO THE SEARCH.
+        const schoolFilteringIsEnabled = Validator.isDefined(filters.school);
+        if (schoolFilteringIsEnabled) {
+            // Using the regex format allows us to search for all school names
+            // like the one entered.
+            const schoolRegex = new RegExp(`${filters.school}`, "i");
+            searchFilter.school = schoolRegex;
+        }
+        const subjectFilteringIsEnabled = Subjects.Any !== filters.subject;
+        if (subjectFilteringIsEnabled) {
+            searchFilter.subject = filters.subject;
+        }
+
+        // DETERMINE IF THE SEARCH SHOULD BE FOR TUTOR GROUPS.
+        switch (filters.type) {
+            case "Tutor":
+                searchFilter.isTutorGroup = true;
+                break;
+            case "Group":
+                searchFilter.isTutorGroup = false;
+            case "Mixed":
+            default:
+                // If the user is searching for study groups that are tutor groups
+                // or normal groups, then that is the same as performing a search without
+                // specifying what the isTutorGroup attribute should be.
+                break;
+        }
+
+        // DETERMINE THE TYPE OF GROUP BEING SEARCHED FOR.
+        // The type of the group determines if the user is interested in seeing
+        // groups that meet in-person, online, or both.
+        switch (filters.meetingFormat) {
+            case MeetingFormats.InPerson:
+                searchFilter.isOnlineGroup = false;
+                break;
+            case MeetingFormats.Online:
+                searchFilter.isOnlineGroup = true;
+                break;
+            case MeetingFormats.Mixed:
+            default:
+                // If the user is searching for study groups that are in person
+                // or online, then that is the same as performing a search without
+                // specifying what the isOnlineGroup attribute should be.
+                break;
+        }
+
+        // FIND ALL STUDY GROUPS MATCHING THE SEARCH CONDITIONS.
+        let studyGroups = undefined;
+        try {
+            studyGroups = await StudyGroupModel.find(searchFilter);
+        } catch (error) {
+            Log.write(
+                `An error occurred while attempting to search for study groups matching the search filter: ${searchFilter}`
+            );
+            Log.writeError(error);
+        }
+
+        // FILTER STUDY GROUPS BASED ON PROXIMITY.
+        // Since all requirements involving this element of the search
+        // are marked as optional, this filter won't be applied in our current iteration.
+
+        // FILL IN THE OWNER AND RECURRING MEETING ATTRIBUTES OF EACH STUDY GROUP.
+        /** @todo this */
+        let studyGroupIndex = 0;
+        while (studyGroupIndex &lt; studyGroups.length) {
+            const studyGroup = studyGroups[studyGroupIndex];
+            await studyGroup.populate("owner");
+            studyGroup.owner.passwordHash = undefined;
+            await studyGroup.populate("recurringMeeting");
+            studyGroupIndex++;
+        }
+
+        // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
+        const meetingFilteringIsEnabled = Validator.isDefined(filters.days);
+        if (meetingFilteringIsEnabled) {
+            const meetingAvailability = new MeetingAvailability(filters.days);
+            studyGroups = studyGroups.filter((studyGroup) => {
+                if (Validator.isDefined(studyGroup.recurringMeeting)) {
+                    const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
+                    return meetingAvailability.matchAvailability(recurringMeeting);
+                } else {
+                    return true;
+                }
+            });
+        }
+
+        // RETURN THE STUDY GROUPS FOUND.
+        return studyGroups;
+    }
 
     /**
      * Sets the study group's area code.
@@ -509,13 +628,13 @@ module.exports = StudyGroup;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Jan 19 2022 15:12:44 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jan 29 2022 12:41:29 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

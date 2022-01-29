@@ -106,28 +106,32 @@ class User {
     /**
      * Creates a user.
      * @param {UnverifiedUser} unverifiedUser The unverified user to create from.
+     * @param {String} areaCode The user's area code.
+     * @param {String} name The user's name.
+     * @param {Buffer=} profilePicture The user's profile picture.
      * @return {User} The created user.
      * @author Cameron Burkholder
      * @date   11/15/2021
      * @async
      * @static
      */
-    static async create(unverifiedUser) {
+    static async create(unverifiedUser, areaCode, name, profilePicture) {
         // CREATE THE USER IN THE DATABASE.
-        const BLANK = "BLANK";
         const EMPTY = [];
         const userModel = new UserModel({
-            areaCode: BLANK,
+            areaCode: areaCode,
             conversations: EMPTY,
             email: unverifiedUser.getEmail(),
-            name: BLANK,
+            name: name,
             passwordHash: unverifiedUser.getPasswordHash(),
-            studyGroups: EMPTY
+            studyGroups: EMPTY,
+            profilePicture: profilePicture
         });
         try {
             await userModel.save();
         } catch (error) {
-            console.log(error);
+            Log.write("An error occurred while attempting to create a user.");
+            Log.writeError(error);
         }
 
         // RETURN THE CREATED INSTANCE.
@@ -250,9 +254,7 @@ class User {
      * @async
      */
     async getStudyGroups() {
-        // ID -> Conversation;
-
-        // LOOP THROUGH EACH CONVERSATION ID.
+        // LOOP THROUGH EACH STUDY GROUP ID.
         let studyGroups = [];
         await Promise.all(
             this.studyGroups.map(async (studyGroupId) => {
@@ -427,5 +429,4 @@ class User {
      */
     async updatePassword(newPassword) {}
 }
-
 module.exports = User;
