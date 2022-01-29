@@ -12,7 +12,7 @@ import Dropdown from "../../core/Dropdown/Dropdown.js";
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 import TimeRange from "../../core/Range/TimeRange";
 import MultipleDropdown from "../../core/Dropdown/MultipleDropdown";
-import { Days } from "../../../../Server/Models/Time";
+import { Days, MeetingFrequencies } from "../../../../Server/Models/Time";
 
 /**
  * Renders a search form for searching study groups
@@ -27,6 +27,7 @@ const SearchForm = ({
     type,
     timeRange,
     days,
+    meetingFrequencies,
     updateSearchTerm,
     updateSubject,
     updateIsAssociatedWithSchool,
@@ -34,6 +35,7 @@ const SearchForm = ({
     updateType,
     updateTimeRange,
     updateDays,
+    updateMeetingFrequencies,
     submitSearch
 }) => {
     return (
@@ -48,7 +50,14 @@ const SearchForm = ({
                     <Dropdown options={["This", "That"]} value={subject} onChange={updateSubject} />
                 </InputField>
                 <InputField>
-                    <Label>Days</Label>
+                    <Label>Meeting Frequency</Label>
+                    <MultipleDropdown
+                        items={[...Object.values(MeetingFrequencies)]}
+                        setItems={updateMeetingFrequencies}
+                    />
+                </InputField>
+                <InputField>
+                    <Label>Meeting Days</Label>
                     <MultipleDropdown items={[...Object.values(Days)]} setItems={updateDays} />
                 </InputField>
                 <InputField>
