@@ -75,10 +75,10 @@ class Time {
 
     /**
      * Checks whether a given meeting time is between the start and ending
-     * of a user's availibility times.
+     * of a user's availability times.
      * @param {Time} meetingTime The time of the meeting.
-     * @param {Time} startTime The time availibility starts.
-     * @param {Time} endTime The time availibility ends.
+     * @param {Time} startTime The time availability starts.
+     * @param {Time} endTime The time availability ends.
      * @return {Boolean} True if the meeting time is between the two times, false otherwise.
      * @author Cameron Burkholder
      * @date   01/28/2022

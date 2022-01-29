@@ -8,7 +8,7 @@ const Validator = require("../Validator.js");
 
 /**
 * Provides an interface for representing the days and times a user is available for a meeting.
-* @property {Object[]} days Each day of the week alongwith a start and end time for the availibility for that day.
+* @property {Object[]} days Each day of the week alongwith a start and end time for the availability for that day.
   Example)
     [
       {
@@ -25,19 +25,19 @@ const Validator = require("../Validator.js");
 * @author Cameron Burkholder
 * @date   01/28/2022
 */
-class MeetingAvailibility {
+class MeetingAvailability {
     constructor(days) {
         this.days = days;
     }
 
     /**
-     * Checks if a given meeting matches the availibility a user has.
+     * Checks if a given meeting matches the availability a user has.
      * @param {Meeting} meeting The meeting to check.
      * @return {Boolean} True if the meeting matches, false otherwise.
      * @author Cameron Burkholder
      * @date   01/28/2022
      */
-    matchAvailibility(meeting) {
+    matchAvailability(meeting) {
         this.days.map((day) => {
             if (day === meeting.day) {
                 const meetingTime = Time.parseTimeString(meeting.time);
@@ -263,4 +263,4 @@ class Meeting {
         return timeSet;
     }
 }
-module.exports = { Meeting, MeetingAvailibility };
+module.exports = { Meeting, MeetingAvailability };

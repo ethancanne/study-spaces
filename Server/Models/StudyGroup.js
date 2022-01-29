@@ -4,7 +4,7 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Feed = require("./Feed");
 const Log = require("../Log.js");
-const { Meeting, MeetingAvailibility } = require("./Meeting.js");
+const { Meeting, MeetingAvailability } = require("./Meeting.js");
 const MeetingFormats = require("./MeetingFormats.js");
 const PrivacySettings = require("./PrivacySettings.js");
 const Subjects = require("./Subjects.js");
@@ -510,11 +510,11 @@ class StudyGroup {
         // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
         const meetingFilteringIsEnabled = Validator.isDefined(filters.days);
         if (meetingFilteringIsEnabled) {
-            const meetingAvailibility = new MeetingAvailibility(filters.days);
+            const meetingAvailability = new MeetingAvailability(filters.days);
             studyGroups = studyGroups.filter((studyGroup) => {
                 if (Validator.isDefined(studyGroup.recurringMeeting)) {
                     const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
-                    return meetingAvailibility.matchAvailibility(recurringMeeting);
+                    return meetingAvailability.matchAvailability(recurringMeeting);
                 } else {
                     return true;
                 }
