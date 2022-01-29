@@ -4,6 +4,7 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Feed = require("./Feed");
 const Log = require("../Log.js");
+const { Meeting, MeetingAvailibility } = require("./Meeting.js");
 const MeetingFormats = require("./MeetingFormats.js");
 const PrivacySettings = require("./PrivacySettings.js");
 const Subjects = require("./Subjects.js");
@@ -495,17 +496,29 @@ class StudyGroup {
         // Since all requirements involving this element of the search
         // are marked as optional, this filter won't be applied in our current iteration.
 
-        // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
-        /** @todo this */
-
-        // FILL IN THE OWNER ATTRIBUTE OF EACH STUDY GROUP.
+        // FILL IN THE OWNER AND RECURRING MEETING ATTRIBUTES OF EACH STUDY GROUP.
         /** @todo this */
         let studyGroupIndex = 0;
         while (studyGroupIndex < studyGroups.length) {
-          const studyGroup = studyGroups[studyGroupIndex];
-          await studyGroup.populate("owner");
-          studyGroup.owner.passwordHash = undefined;
-          studyGroupIndex++;
+            const studyGroup = studyGroups[studyGroupIndex];
+            await studyGroup.populate("owner");
+            studyGroup.owner.passwordHash = undefined;
+            await studyGroup.populate("recurringMeeting");
+            studyGroupIndex++;
+        }
+
+        // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
+        const meetingFilteringIsEnabled = Validator.isDefined(filters.days);
+        if (meetingFilteringIsEnabled) {
+            const meetingAvailibility = new MeetingAvailibility(filters.days);
+            studyGroups = studyGroups.filter((studyGroup) => {
+                if (Validator.isDefined(studyGroup.recurringMeeting)) {
+                    const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
+                    return meetingAvailibility.matchAvailibility(recurringMeeting);
+                } else {
+                    return true;
+                }
+            });
         }
 
         // RETURN THE STUDY GROUPS FOUND.

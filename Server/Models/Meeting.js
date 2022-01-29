@@ -3,7 +3,51 @@ const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
+const { Days, Minutes, PartOfDay, Time, Times } = require("./Time.js");
 const Validator = require("../Validator.js");
+
+/**
+* Provides an interface for representing the days and times a user is available for a meeting.
+* @property {Object[]} days Each day of the week alongwith a start and end time for the availibility for that day.
+  Example)
+    [
+      {
+        day: Day
+        startTime: Time,
+        endTime: Time
+      },
+      {
+        day: Day
+        startTime: Time,
+        endTime: Time
+      }, etc.
+    ]
+* @author Cameron Burkholder
+* @date   01/28/2022
+*/
+class MeetingAvailibility {
+    constructor(days) {
+        this.days = days;
+    }
+
+    /**
+     * Checks if a given meeting matches the availibility a user has.
+     * @param {Meeting} meeting The meeting to check.
+     * @return {Boolean} True if the meeting matches, false otherwise.
+     * @author Cameron Burkholder
+     * @date   01/28/2022
+     */
+    matchAvailibility(meeting) {
+        this.days.map((day) => {
+            if (day === meeting.day) {
+                const meetingTime = Time.parseTimeString(meeting.time);
+                return Time.isBetween(meetingTime, day.startTime, day.endTime);
+            }
+        });
+
+        return false;
+    }
+}
 
 /**
  * Used to define the database schema for storing meetings.
@@ -13,6 +57,10 @@ const Validator = require("../Validator.js");
 const MeetingSchema = new Schema({
     date: {
         type: Date,
+        required: true
+    },
+    day: {
+        type: String,
         required: true
     },
     details: {
@@ -47,7 +95,14 @@ const MeetingCollectionName = Configuration.getMeetingCollectionName();
 const MeetingModel = Mongoose.model(MeetingCollectionName, MeetingSchema);
 
 /**
- *
+ * Provides an interface for working with meetings.
+ * @param {Date} date The date a one-time meeting will occur.
+ * @param {Day} day The day a meeting occurs on.
+ * @param {String=} details Notes about the meeting.
+ * @param {String} frequency The frequency of a recurring meeting.
+ * @param {String=} location The location where a meeting is to occur.
+ * @param {String=} roomNumber The room number where the meeting will occur.
+ * @param {String} time The meeting time.
  * @author Cliff Croom
  * @date   01/11/2021
  */
@@ -62,8 +117,8 @@ class Meeting {
         // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
         // In order to maximize the usability of this class, the attributes stored in the database
         // record are copied to the instance of this class so they can be properly editied.
-        // The post schema is converted to a regular object to sanitize it of wrapper methods and properties.
-        Object.assign(this, PostSchema.toObject());
+        // The meeting schema is converted to a regular object to sanitize it of wrapper methods and properties.
+        Object.assign(this, MeetingSchema.toObject());
     }
 
     /**
@@ -75,7 +130,6 @@ class Meeting {
      */
     static async create(date, details, frequency, location, roomNumber, time) {
         // CREATE MEETING IN THE DATABASE.
-
         const meetingModel = new MeetingModel({
             date: date,
             details: details,
@@ -94,8 +148,6 @@ class Meeting {
         const meeting = new Meeting(meetingModel);
         return meeting;
     }
-
-    //GETTERS
 
     /**
      * Gets the meeting's date.
@@ -144,8 +196,6 @@ class Meeting {
     getTime() {
         return String(this.time);
     }
-
-    //SETTERS
 
     /**
      * Sets the date.
@@ -213,4 +263,4 @@ class Meeting {
         return timeSet;
     }
 }
-module.exports = Meeting;
+module.exports = { Meeting, MeetingAvailibility };

@@ -80,9 +80,9 @@ class User {
         // record are copied to the instance of this class so they can be properly editied.
         // The user schema is converted to a regular object to sanitize it of wrapper methods and properties.
         if (typeof userSchema === "object") {
-          Object.assign(this, userSchema);
+            Object.assign(this, userSchema);
         } else {
-          Object.assign(this, userSchema.toObject());
+            Object.assign(this, userSchema.toObject());
         }
     }
 
