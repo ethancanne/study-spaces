@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Study with excellence.",
     "main": "./Server/Server.js",
+    "pre-commit": ["format", "build", "doc"],
     "scripts": {
         "build": "webpack --mode production",
         "debug": "node inspect Server/Server.js",
@@ -68,6 +69,7 @@
         "jsdoc": "^3.6.7",
         "node-sass": "^6.0.1",
         "nodemon": "^2.0.15",
+        "pre-commit": "^1.2.2",
         "prettier": "2.5.0",
         "sass-loader": "^12.3.0",
         "style-loader": "^3.3.1",
