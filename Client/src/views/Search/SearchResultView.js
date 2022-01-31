@@ -14,9 +14,9 @@ const SearchResultView = () => {
             {/* Render groups from search using search listing found within state */}
             {search.map((group) => (
                 <SearchListing
-                    title={group.title}
+                    title={group.name}
                     school={group.school}
-                    owner={group.owner}
+                    owner={group.owner.name}
                     subject={group.subject}
                     courseCode={group.courseCode}
                     isTutor={group.isTutor}

@@ -265,13 +265,16 @@ class UnverifiedUser {
      * Verifies a user's account. This process involves creating a normal user document and deleting
      *    the unverified user document.
      * @param {String} verificationToken The verification token to identify the user being verified.
+     * @param {String} areaCode The user's area code.
+     * @param {String} name The user's name.
+     * @param {Buffer=} profilePicture The user's profile picture.
      * @return {User} The verified user.
      * @author Cameron Burkholder
      * @date   11/15/2021
      * @async
      * @static
      */
-    static async verify(verificationToken) {
+    static async verify(verificationToken, areaCode, name, profilePicture) {
         // GET THE UNVERIFIED USER ASSOCIATED WITH THE VERIFICATION TOKEN.
         let unverifiedUser = undefined;
         try {
@@ -282,7 +285,7 @@ class UnverifiedUser {
             const unverifiedUserExists = Validator.isDefined(unverifiedUser);
             if (unverifiedUserExists) {
                 // CREATE THE VERIFIED USER.
-                const user = await User.create(unverifiedUser);
+                const user = await User.create(unverifiedUser, areaCode, name, profilePicture);
 
                 // DELETE THE UNVERIFIED USER.
                 const userWasCreated = Validator.isDefined(user);

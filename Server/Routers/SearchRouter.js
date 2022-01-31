@@ -45,7 +45,6 @@ class SearchRouter {
                     message: ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
                     studyGroups: studyGroups
                 });
-                // Send error message.
             } else {
                 response.json({ message: ResponseMessages.StudyGroup.ErrorGettingSearchResults });
             }

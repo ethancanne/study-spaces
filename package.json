@@ -9,6 +9,7 @@
         "dev": "concurrently --kill-others \"nodemon --watch Server Server/Server.js\" \"webpack server --mode development\"",
         "doc": "jsdoc -c jsdoc.config.json",
         "format": "prettier --write . --loglevel silent",
+        "heroku-prebuild": "npm i -f",
         "heroku-postbuild": "npm prune --production",
         "start": "node Server/Server.js"
     },
@@ -27,6 +28,9 @@
     },
     "homepage": "https://github.com/LU-CS-Capstone/SS-21-22#readme",
     "dependencies": {
+        "@emotion/react": "^11.7.1",
+        "@emotion/styled": "^11.6.0",
+        "@mui/material": "^5.3.1",
         "axios": "^0.23.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
@@ -70,5 +74,8 @@
         "webpack": "^5.64.1",
         "webpack-cli": "^4.9.1",
         "webpack-dev-server": "^4.5.0"
+    },
+    "optionalDependencies": {
+        "fsevents": "2.1.2"
     }
 }

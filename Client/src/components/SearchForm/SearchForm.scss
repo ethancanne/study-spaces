@@ -1,14 +1,5 @@
 .search-form {
-    height: 100%;
-    .Form {
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: space-between;
-        > * {
-            // width: 100%;
-            // padding-right: 40px;
-        }
-    }
-
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
