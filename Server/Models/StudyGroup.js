@@ -8,6 +8,7 @@ const MeetingFormats = require("./MeetingFormats.js");
 const Subjects = require("./Subjects.js");
 const Validator = require("../Validator.js");
 const Feed = require("./Feed");
+const Meeting = require("./Meeting.js");
 
 /**
  * Used to define the database schema for storing study groups.
@@ -127,8 +128,15 @@ class StudyGroup {
      *
      * @async
      */
-    async addMeeting(newMeeting) {
-        //!!!!!
+    async addMeeting(date, details, frequency, location, roomNumber, time) {
+        var meetingAdded = false;
+        length = this.meetings.length;
+        newMeeting = new Meeting.create(date, details, frequency, location, roomNumber, time);
+        this.meetings.push(newMeeting)
+        if(this.meetings.length == (length + 1)) {
+            meetingAdded = true;
+        }
+        return meetingAdded;
     }
 
     /**
@@ -269,7 +277,9 @@ class StudyGroup {
      *
      * @async
      */
-    async getMeetings() {}
+    async getMeetings() {
+
+    }
 
     /**
      * Gets the study group's members.
