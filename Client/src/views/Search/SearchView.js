@@ -54,6 +54,7 @@ const SearchView = () => {
                 subject,
                 school: isAssociatedWithSchool ? "Liberty University" : null,
                 meetingFormat,
+                meetingFrequencies,
                 type,
                 startTime: timeRange[0],
                 endTime: timeRange[1],
