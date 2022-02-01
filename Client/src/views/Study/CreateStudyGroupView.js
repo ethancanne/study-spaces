@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CreateStudyGroupForm from "../../components/CreateStudyGroupForm/CreateStudyGroupForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { addStudyGroup } from "../../state/actions/index";
 import { closePopup } from "../../state/actions";
@@ -17,6 +17,7 @@ import Routes from "../../../../Server/Routes/Routes";
  */
 const CreateStudyGroupView = () => {
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.authReducer.user);
 
     const BLANK = "";
     const [name, setName] = useState(BLANK); //TextInput tag
@@ -54,8 +55,8 @@ const CreateStudyGroupView = () => {
                 description,
                 subject,
                 privacySetting: privacy,
-                courseCode,
-                isAssociatedWithSchool,
+                course: courseCode,
+                school: user.school || "Liberty University",
                 isTutorGroup,
                 isOnlineGroup
             });

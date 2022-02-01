@@ -13,18 +13,7 @@ const SearchResultView = () => {
         <div className="search-results">
             {/* Render groups from search using search listing found within state */}
             {search.map((group) => (
-                <SearchListing
-                    title={group.name}
-                    school={group.school}
-                    owner={group.owner.name}
-                    subject={group.subject}
-                    courseCode={group.courseCode}
-                    isTutor={group.isTutor}
-                    isOnline={group.isOnline}
-                    schedule={group.schedule}
-                    groupColor={group.groupColor}
-                    key={group.title}
-                />
+                <SearchListing group={group} key={group._id} />
             ))}
         </div>
     );

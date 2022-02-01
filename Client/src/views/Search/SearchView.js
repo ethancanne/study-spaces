@@ -12,7 +12,7 @@ import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 /**
  * A view for inputting search terms and filters for searching study groups
  * The results of this search will be displayed on the SearchResults.js View
- * @author ???
+ * @author Ethan Cannelongo
  */
 const SearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -20,7 +20,7 @@ const SearchView = () => {
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
-    const [timeRange, setTimeRange] = useState(["00:00", "24:00"]);
+    const [timeRange, setTimeRange] = useState(["12:00AM", "12:00PM"]);
     const [days, setDays] = useState([]);
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 

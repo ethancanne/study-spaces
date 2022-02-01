@@ -11,18 +11,7 @@ import { studyGroupsConstants } from "../constants/constants";
 const studyGroupsReducer = (
     state = {
         studyGroups: [],
-        search: [
-            {
-                title: "Hello Group",
-                owner: "Ethan Cannelongo",
-                subject: "Computer Science",
-                school: "Liberty University",
-                courseCode: "CSIS 215",
-                isOnline: true,
-                groupColor: "#8a593b7c",
-                schedule: "Mondays at 8:00pm"
-            }
-        ]
+        search: []
     },
     action
 ) => {

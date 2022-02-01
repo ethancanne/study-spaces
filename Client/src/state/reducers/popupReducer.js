@@ -7,13 +7,15 @@ import popupTypes from "../../Views/Popup/PopupTypes.Js";
  * @author Ethan Cannelongo
  * @date   11/18/2021
  */
-const popupReducer = (state = { view: "", isShowing: false }, action) => {
+const popupReducer = (state = { view: "", isShowing: false, payload: {} }, action) => {
     switch (action.type) {
-        case popupConstants.SHOW_STUDY_GROUP_POPUP:
-            return { ...state, view: popupTypes.StudyGroup.Create, isShowing: true };
+        case popupConstants.SHOW_CREATE_STUDY_GROUP_POPUP:
+            return { ...state, view: popupTypes.StudyGroup.Create, isShowing: true, payload: {} };
+        case popupConstants.SHOW_JOIN_STUDY_GROUP_POPUP:
+            return { ...state, view: popupTypes.StudyGroup.Join, isShowing: true, payload: action.payload };
 
         case popupConstants.CLOSE_POPUP:
-            return { ...state, view: "popups.StudyGroup.Create", isShowing: false };
+            return { ...state, isShowing: false };
         default:
             return state;
     }

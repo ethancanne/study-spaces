@@ -1,7 +1,7 @@
 import "./Study.scss";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signOut, showStudyGroupPopup, addStudyGroup } from "../../state/actions";
+import { signOut, showCreateStudyGroupPopup, addStudyGroup } from "../../state/actions";
 import Validator from "../../../../Server/Validator";
 import Routes from "../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
@@ -82,7 +82,10 @@ const Study = () => {
                     {isLoggedIn ? (
                         <div>
                             <Button onClick={() => dispatch(signOut())}>Log out</Button>
-                            <button className="add-button" onClick={() => dispatch(showStudyGroupPopup())}></button>
+                            <button
+                                className="add-button"
+                                onClick={() => dispatch(showCreateStudyGroupPopup())}
+                            ></button>
                             <div className="study-groups-container">
                                 {Validator.isDefined(studyGroups) &&
                                     studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}

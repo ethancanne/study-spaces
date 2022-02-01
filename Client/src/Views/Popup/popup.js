@@ -1,10 +1,11 @@
 import "./Popup.scss";
 
-import React, { useState } from "react";
-import popupTypes from "./PopupTypes";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { closePopup } from "../../state/actions";
+import { closePopup, showJoinStudyGroupPopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
+import JoinStudyGroupView from "../Study/JoinStudyGroupView";
+import popupTypes from "./PopupTypes";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -15,7 +16,8 @@ import CreateStudyGroupView from "../Study/CreateStudyGroupView";
  * @date   11/25/2021
  */
 const Popup = (props) => {
-    const view = useSelector((state) => state.popupReducer.view);
+    const { view, payload } = useSelector((state) => state.popupReducer);
+
     const dispatch = useDispatch();
     let popupView = <></>;
 
@@ -23,6 +25,11 @@ const Popup = (props) => {
         case popupTypes.StudyGroup.Create:
             popupView = <CreateStudyGroupView />;
             break;
+        case popupTypes.StudyGroup.Join:
+            popupView = <JoinStudyGroupView group={payload} />;
+            break;
+        default:
+            console.log(popupTypes.StudyGroup.Join, view, popupTypes.StudyGroup.Join === view);
     }
 
     return (

@@ -10,8 +10,6 @@ const PrivacySettings = require("./PrivacySettings.js");
 const Subjects = require("./Subjects.js");
 const User = require("./User.js");
 const Validator = require("../Validator.js");
-const Feed = require("./Feed");
-const Meeting = require("./Meeting.js");
 
 /**
  * Used to define the database schema for storing study groups.
@@ -79,6 +77,10 @@ const StudyGroupSchema = new Schema({
     subject: {
         type: String,
         required: true
+    },
+    description: {
+        type: String,
+        required: false
     }
 });
 StudyGroupSchema.set("toObject", {
@@ -135,8 +137,8 @@ class StudyGroup {
         var meetingAdded = false;
         length = this.meetings.length;
         newMeeting = new Meeting.create(date, details, frequency, location, roomNumber, time);
-        this.meetings.push(newMeeting)
-        if(this.meetings.length == (length + 1)) {
+        this.meetings.push(newMeeting);
+        if (this.meetings.length == length + 1) {
             meetingAdded = true;
         }
         return meetingAdded;
@@ -162,7 +164,18 @@ class StudyGroup {
      * @async
      * @static
      */
-    static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
+    static async create(
+        name,
+        owner,
+        subject,
+        areaCode,
+        isOnlineGroup,
+        isTutorGroup,
+        course,
+        school,
+        groupColor,
+        description
+    ) {
         // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
         const newFeed = await Feed.create();
         const newFeedId = Mongoose.Types.ObjectId(newFeed);
@@ -184,7 +197,8 @@ class StudyGroup {
             privacySetting: PrivacySettings.Open,
             school: school,
             subject: subject,
-            groupColor
+            groupColor,
+            description
         });
 
         // SAVE THE STUDY GROUP.
@@ -280,9 +294,7 @@ class StudyGroup {
      *
      * @async
      */
-    async getMeetings() {
-
-    }
+    async getMeetings() {}
 
     /**
      * Gets the study group's members.
