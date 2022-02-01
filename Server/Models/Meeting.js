@@ -7,27 +7,20 @@ const { Days, Minutes, PartOfDay, Time, Times } = require("./Time.js");
 const Validator = require("../Validator.js");
 
 /**
-* Provides an interface for representing the days and times a user is available for a meeting.
-* @property {Object[]} days Each day of the week alongwith a start and end time for the availability for that day.
-  Example)
-    [
-      {
-        day: Day
-        startTime: Time,
-        endTime: Time
-      },
-      {
-        day: Day
-        startTime: Time,
-        endTime: Time
-      }, etc.
-    ]
-* @author Cameron Burkholder
-* @date   01/28/2022
-*/
+ * Provides an interface for representing the days and times a user is available for a meeting.
+ * @property {String[]} days Each day of the week a user is available.
+ * @property {String[]} meetingFrequencies The frequencies of meeting a user is available for.
+ * @property {Time} startTime The starting time in the day of a user's availability.
+ * @property {Time} endTime The ending time in the day of a user's availability.
+ * @author Cameron Burkholder
+ * @date   01/28/2022
+ */
 class MeetingAvailability {
-    constructor(days) {
+    constructor(days, meetingFrequencies, startTime, endTime) {
         this.days = days;
+        this.meetingFrequencies = meetingFrequencies;
+        this.startTime = new Time(startTime.hour, startTime.minute, startTime.partOfDay);
+        this.endTime = new Time(endTime.hour, endTime.minute, endTime.partOfDay);
     }
 
     /**
@@ -38,14 +31,12 @@ class MeetingAvailability {
      * @date   01/28/2022
      */
     matchAvailability(meeting) {
-        this.days.map((day) => {
-            if (day === meeting.day) {
-                const meetingTime = Time.parseTimeString(meeting.time);
-                return Time.isBetween(meetingTime, day.startTime, day.endTime);
-            }
-        });
-
-        return false;
+        const NOT_FOUND_INDEX = -1;
+        const daysMatch = NOT_FOUND_INDEX !== this.days.indexOf(meeting.day);
+        const frequenciesMatch = NOT_FOUND_INDEX !== this.meetingFrequencies.indexOf(meeting.frequency);
+        const meetingTime = Time.parseTimeString(meeting.time);
+        const timesMatch = meetingTime.isBetween(this.startTime, this.endTime);
+        return daysMatch && frequenciesMatch && timesMatch;
     }
 }
 
@@ -57,7 +48,7 @@ class MeetingAvailability {
 const MeetingSchema = new Schema({
     date: {
         type: Date,
-        required: true
+        required: false
     },
     day: {
         type: String,
