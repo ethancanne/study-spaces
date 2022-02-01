@@ -3,7 +3,11 @@
     "version": "1.0.0",
     "description": "Study with excellence.",
     "main": "./Server/Server.js",
-    "pre-commit": ["format", "build", "doc"],
+    "pre-commit": [
+        "format",
+        "build",
+        "doc"
+    ],
     "scripts": {
         "build": "webpack --mode production",
         "debug": "node inspect Server/Server.js",
