@@ -1,12 +1,15 @@
+import "./JoinStudyGroupView.scss";
 import React from "react";
-import Button from "../../core/Button/Button";
-import ButtonTypes from "../../core/Button/ButtonTypes";
-import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
-import { useDispatch } from "react-redux";
-import { addStudyGroup, showErrorNotification } from "../../state/actions";
+import Button from "../../../core/Button/Button";
+import ButtonTypes from "../../../core/Button/ButtonTypes";
+import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+import { useDispatch, useSelector } from "react-redux";
+import { addStudyGroup, showErrorNotification } from "../../../state/actions";
 
 const JoinStudyGroupView = ({ group }) => {
     const { name, school, owner, subject, courseCode, isTutor, isOnline, groupColor, description, _id } = group;
+
+    const user = useSelector((state) => state.authReducer.user);
 
     const dispatch = useDispatch();
 
@@ -18,7 +21,7 @@ const JoinStudyGroupView = ({ group }) => {
         try {
             response = await axios.post(Routes.Search.GetSearchResults, {
                 studyGroupId: _id,
-                ownerId: owner.id
+                userId: user._id
             });
         } catch (error) {
             // console.log(error);

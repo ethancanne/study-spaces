@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { closePopup, showJoinStudyGroupPopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
-import JoinStudyGroupView from "../Study/JoinStudyGroupView";
+import JoinStudyGroupView from "../Study/joinStudyGroupView/JoinStudyGroupView";
 import popupTypes from "./PopupTypes";
 
 /**
