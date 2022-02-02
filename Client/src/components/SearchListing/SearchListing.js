@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { showJoinStudyGroupPopup } from "../../state/actions";
 /**
  * A view for displaying a single study group listing resulting from a search query
- * @author ???
+ * @author Ethan Cannelongo
  */
 const SearchListing = ({ group }) => {
     const dispatch = useDispatch();
