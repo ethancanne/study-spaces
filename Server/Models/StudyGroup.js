@@ -130,28 +130,47 @@ class StudyGroup {
      * Adds a one-time meeting.
      * @param {Meeting} newMeeting The meeting to add.
      * @return {Boolean} True if the meeting was added, false otherwise.
-     *
+     * @author Clifton Croom
+     * @date 02/01/2022
      * @async
      */
-    async addMeeting(date, details, frequency, location, roomNumber, time) {
-        var meetingAdded = false;
-        length = this.meetings.length;
-        newMeeting = new Meeting.create(date, details, frequency, location, roomNumber, time);
-        this.meetings.push(newMeeting);
-        if (this.meetings.length == length + 1) {
-            meetingAdded = true;
+    async addMeeting(newMeeting) {
+        // ADD THE MEETING TO THE STUDY GROUP'S LIST OF MEMBERS.
+        this.meetings.push(Mongoose.Types.ObjectId(newMeeting.getId()));
+
+        // SAVE THE CHANGE.
+        let meetingWasAdded = true;
+        try {
+            await this.save();
+        } catch (error) {
+            meetingWasAdded = false;
+            Log.writeError(error);
         }
-        return meetingAdded;
+        return meetingWasAdded;
     }
 
     /**
      * Adds a member to the study group.
      * @param {User} newMember The member to add to the group.
      * @return {Boolean} True if the member was added, false otherwise.
-     *
+     * @author Clifton Croom
+     * @date 02/01/2022
      * @async
      */
-    async addMember(newMember) {}
+    async addMember(newMember) {
+        // ADD THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
+        this.members.push(Mongoose.Types.ObjectId(newMember.getId()));
+
+        // SAVE THE CHANGE.
+        let memberWasAdded = true;
+        try {
+            await this.save();
+        } catch (error) {
+            memberWasAdded = false;
+            Log.writeError(error);
+        }
+        return memberWasAdded;
+    }
 
     /**
      * Creates a study group.

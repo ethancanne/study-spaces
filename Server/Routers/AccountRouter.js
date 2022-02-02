@@ -152,6 +152,21 @@ class AccountRouter {
     }
 
     /**
+     * 
+     * @param {String} request.body.email
+     * @param {String} request.body.password
+     * @param {String} request.body.confirmPassword
+     * @author Clifton Croom
+     * @date 02/01/2022 
+     * @async
+     * @static
+     */
+    static async changePassword(request, response) {
+
+    }
+    
+
+    /**
      * This allows the user to log in.
      * @param {String} request.body.email The email address of the user.
      * @param {String} request.body.password The password of the user.
