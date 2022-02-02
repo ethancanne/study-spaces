@@ -4,7 +4,6 @@ import axios from "axios";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import Routes from "../../../../Server/Routes/Routes";
-import { Time } from "../../../../Server/Models/Time.js";
 import Validator from "../../../../Server/Validator.js";
 import { useDispatch } from "react-redux";
 import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
@@ -21,11 +20,7 @@ const SearchView = () => {
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
-<<<<<<< HEAD
     const [timeRange, setTimeRange] = useState(["12:00AM", "12:00PM"]);
-=======
-    const [timeRange, setTimeRange] = useState(["00:00", "23:45"]);
->>>>>>> e678fc466c57111845910770e5464eb2832b5018
     const [days, setDays] = useState([]);
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 
@@ -54,9 +49,6 @@ const SearchView = () => {
         let response;
         try {
             //Send Search Request -  TODO: change the value that is sent if isAssociatedWithSchool is true to the school of the logged in user
-            // Convert the 24-hour format to 12-hour format.
-            const startTime12Hour = Time.parse24HourTimeString(timeRange[0]);
-            const endTime12Hour = Time.parse24HourTimeString(timeRange[1]);
             response = await axios.post(Routes.Search.GetSearchResults, {
                 searchTerm,
                 subject,
@@ -64,8 +56,8 @@ const SearchView = () => {
                 meetingFormat,
                 meetingFrequencies,
                 type,
-                startTime: startTime12Hour,
-                endTime: endTime12Hour,
+                startTime: timeRange[0],
+                endTime: timeRange[1],
                 days
             });
         } catch (error) {

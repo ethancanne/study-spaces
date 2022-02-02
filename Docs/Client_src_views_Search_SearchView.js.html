@@ -32,7 +32,6 @@ import axios from "axios";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import Routes from "../../../../Server/Routes/Routes";
-import { Time } from "../../../../Server/Models/Time.js";
 import Validator from "../../../../Server/Validator.js";
 import { useDispatch } from "react-redux";
 import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
@@ -49,48 +48,26 @@ const SearchView = () => {
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
-    const [timeRange, setTimeRange] = useState(["00:00", "23:45"]);
-    const [days, setDays] = useState([]);
-    const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 
     const dispatch = useDispatch();
 
     /**
      * Retrieves study groups from search query by sending a request to the server
-     * @author Ethan Cannelongo
-     * @date 01/29/22
+     * @author ???
      */
     const submitSearch = async (e) => {
-        console.log({
-            searchTerm,
-            subject,
-            school: isAssociatedWithSchool ? "Liberty University" : null,
-            meetingFormat,
-            type,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
-            days,
-            meetingFrequencies
-        });
         // SUBMIT THE SEARCH REQUEST.
         e.preventDefault();
         e.stopPropagation();
         let response;
         try {
             //Send Search Request -  TODO: change the value that is sent if isAssociatedWithSchool is true to the school of the logged in user
-            // Convert the 24-hour format to 12-hour format.
-            const startTime12Hour = Time.parse24HourTimeString(timeRange[0]);
-            const endTime12Hour = Time.parse24HourTimeString(timeRange[1]);
             response = await axios.post(Routes.Search.GetSearchResults, {
                 searchTerm,
                 subject,
                 school: isAssociatedWithSchool ? "Liberty University" : null,
                 meetingFormat,
-                meetingFrequencies,
-                type,
-                startTime: startTime12Hour,
-                endTime: endTime12Hour,
-                days
+                type
             });
         } catch (error) {
             console.log(error);
@@ -118,8 +95,8 @@ const SearchView = () => {
     /**
      * Used to update the search term field in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author Ethan Cannelongo
-     * @date  01/26/22
+     * @author ???
+     * @date  ?/??/22
      */
     const updateSearchTerm = (e) => {
         setSearchTerm(e.target.value);
@@ -128,18 +105,28 @@ const SearchView = () => {
     /**
      * Used to update the subject dropdown field in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author Ethan Cannelongo
-     * @date  01/26/22
+     * @author ???
+     * @date  ?/??/22
      */
     const updateSubject = (e) => {
         setSubject(e.target.value);
     };
 
     /**
+     * Used to update the proximity dropdown field in the search form.
+     * @param {Event} e The change event to update the field with.
+     * @author ???
+     * @date  ?/??/22
+     */
+    // const updateProximity = (e) => {
+    //     setProximity(e.target.value);
+    // };
+
+    /**
      * Used to update the "show only groups associated with school" checkbox in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author Ethan Cannelongo
-     * @date  01/26/22
+     * @author ???
+     * @date  ?/??/22
      */
     const updateIsAssociatedWithSchool = (e) => {
         setIsAssociatedWithSchool(e.target.checked);
@@ -148,8 +135,8 @@ const SearchView = () => {
     /**
      * Used to update the chosen meeting format from the dropdown menu in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author Ethan Cannelongo
-     * @date  01/26/22
+     * @author ???
+     * @date  ?/??/22
      */
     const updateMeetingFormat = (e) => {
         setMeetingFormat(e.target.options[e.target.selectedIndex].value);
@@ -158,41 +145,11 @@ const SearchView = () => {
     /**
      * Used to update the chosen type from the dropdown menu in the search form.
      * @param {Event} e The change event to update the field with.
-     * @author Ethan Cannelongo
-     * @date  01/26/22
+     * @author ???
+     * @date  ?/??/22
      */
     const updateType = (e) => {
         setType(e.target.options[e.target.selectedIndex].value);
-    };
-
-    /**
-     * Used to update the chosen time range in the search form.
-     * @param {Array} value The [startTime, endTime]
-     * @author Ethan Cannelongo
-     * @date  01/29/22
-     */
-    const updateTimeRange = (value) => {
-        setTimeRange(value);
-    };
-
-    /**
-     * Used to update the chosen time range in the search form.
-     * @param {Array} value An array of chosen days
-     * @author Ethan Cannelongo
-     * @date  01/29/22
-     */
-    const updateDays = (value) => {
-        setDays(value);
-    };
-
-    /**
-     * Used to update the chosen time range in the search form.
-     * @param {Array} value An array of chosen meeting frequencies
-     * @author Ethan Cannelongo
-     * @date  01/29/22
-     */
-    const updateMeetingFrequencies = (value) => {
-        setMeetingFrequencies(value);
     };
     return (
         &lt;div className="search-view">
@@ -202,17 +159,11 @@ const SearchView = () => {
                 isAssociatedWithSchool={isAssociatedWithSchool}
                 meetingFormat={meetingFormat}
                 type={type}
-                timeRange={timeRange}
-                days={days}
-                meetingFrequencies={meetingFrequencies}
                 updateSearchTerm={updateSearchTerm}
                 updateSubject={updateSubject}
                 updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
                 updateMeetingFormat={updateMeetingFormat}
                 updateType={updateType}
-                updateTimeRange={updateTimeRange}
-                updateDays={updateDays}
-                updateMeetingFrequencies={updateMeetingFrequencies}
                 submitSearch={submitSearch}
             />
         &lt;/div>
@@ -230,13 +181,13 @@ export default SearchView;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Feb 01 2022 13:18:51 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Sat Jan 29 2022 12:41:29 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
