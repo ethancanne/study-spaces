@@ -550,18 +550,20 @@ class StudyGroup {
         }
 
         // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
-        const meetingFilteringIsEnabled = Validator.isDefined(filters.days);
-        if (meetingFilteringIsEnabled) {
-            const meetingAvailability = new MeetingAvailability(filters.days);
-            studyGroups = studyGroups.filter((studyGroup) => {
-                if (Validator.isDefined(studyGroup.recurringMeeting)) {
-                    const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
-                    return meetingAvailability.matchAvailability(recurringMeeting);
-                } else {
-                    return true;
-                }
-            });
-        }
+        const meetingAvailability = new MeetingAvailability(
+            filters.days,
+            filters.meetingFrequencies,
+            filters.startTime,
+            filters.endTime
+        );
+        studyGroups = studyGroups.filter((studyGroup) => {
+            if (Validator.isDefined(studyGroup.recurringMeeting)) {
+                const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
+                return meetingAvailability.matchAvailability(recurringMeeting);
+            } else {
+                return true;
+            }
+        });
 
         // RETURN THE STUDY GROUPS FOUND.
         return studyGroups;

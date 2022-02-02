@@ -26,18 +26,21 @@ const TimeRange = ({ updateTimeRange }) => {
         if (rminutes2 < 10) rminutes2 = rminutes2 + "0";
 
         //Convert to 12 hour
-        var AmOrPm1 = rhours >= 12 ? "pm" : "am";
-        var AmOrPm2 = rhours2 >= 12 ? "pm" : "am";
+        var AmOrPm1 = rhours >= 12 ? "PM" : "AM";
+        var AmOrPm2 = rhours2 >= 12 ? "PM" : "AM";
 
         rhours = rhours % 12 || 12;
         rhours2 = rhours2 % 12 || 12;
 
         //Format time into a string
-        var time1 = rhours + ":" + rminutes + " " + AmOrPm1;
+        var time1 = rhours + ":" + rminutes + AmOrPm1;
 
-        var time2 = rhours2 + ":" + rminutes2 + " " + AmOrPm2;
+        var time2 = rhours2 + ":" + rminutes2 + AmOrPm2;
 
         //Update the time range with the string
+        if (time2 === "12:00PM") {
+          time2 = "11:45PM";
+        }
         updateTimeRange([time1, time2]);
         setValues(newNum);
     };

@@ -4,6 +4,7 @@ import axios from "axios";
 import SearchForm from "../../components/SearchForm/SearchForm";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import Routes from "../../../../Server/Routes/Routes";
+import { Time } from "../../../../Server/Models/Time.js";
 import Validator from "../../../../Server/Validator.js";
 import { useDispatch } from "react-redux";
 import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
@@ -20,7 +21,7 @@ const SearchView = () => {
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
-    const [timeRange, setTimeRange] = useState(["12:00AM", "12:00AM"]);
+    const [timeRange, setTimeRange] = useState(["12:00AM", "11:45PM"]);
     const [days, setDays] = useState([]);
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 
@@ -56,8 +57,8 @@ const SearchView = () => {
                 meetingFormat,
                 meetingFrequencies,
                 type,
-                startTime: timeRange[0],
-                endTime: timeRange[1],
+                startTime: Time.parseTimeString(timeRange[0]),
+                endTime: Time.parseTimeString(timeRange[1]),
                 days
             });
         } catch (error) {
