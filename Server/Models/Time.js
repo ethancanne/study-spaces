@@ -85,9 +85,7 @@ class Time {
      */
      isBetween(startTime, endTime) {
          const startTimeIsValid = this.isAfter(startTime);
-         console.log(startTimeIsValid);
          const endTimeIsValid = endTime.isAfter(this);
-         console.log(endTimeIsValid);
          return startTimeIsValid && endTimeIsValid;
      }
 
