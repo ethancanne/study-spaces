@@ -39,7 +39,7 @@ const TimeRange = ({ updateTimeRange }) => {
 
         //Update the time range with the string
         if (time2 === "12:00PM") {
-          time2 = "11:45PM";
+            time2 = "11:45PM";
         }
         updateTimeRange([time1, time2]);
         setValues(newNum);

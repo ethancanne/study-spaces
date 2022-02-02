@@ -83,37 +83,37 @@ class Time {
      * @author Cameron Burkholder
      * @date   01/28/2022
      */
-     isBetween(startTime, endTime) {
-         const startTimeIsValid = this.isAfter(startTime);
-         const endTimeIsValid = endTime.isAfter(this);
-         return startTimeIsValid && endTimeIsValid;
-     }
+    isBetween(startTime, endTime) {
+        const startTimeIsValid = this.isAfter(startTime);
+        const endTimeIsValid = endTime.isAfter(this);
+        return startTimeIsValid && endTimeIsValid;
+    }
 
-     /**
-      * Parses the time from a 24-hour format time string.
-      * @param {String} timeString The time string to parse.
-      * @return {Time} The time object.
-      * @author Cameron Burkholder
-      * @date   02/01/2022
-      * @static
-      */
-     static parse24HourTimeString(timeString) {
-         // The time string will be in a predictable format.
-         const COLON = ":";
-         const colonIndex = timeString.indexOf(COLON);
-         const beginningOfTimeString = 0;
-         let hour = parseInt(timeString.slice(beginningOfTimeString, colonIndex));
-         const partOfDayIndex = timeString.length;
-         let minute = parseInt(timeString.slice(colonIndex + 1, partOfDayIndex));
-         let partOfDay = undefined;
-         // Convert 24-hour format to 12-hour format.
-         if (hour < 12) {
-             partOfDay = PartOfDay.Am;
-             if (hour == 0) {
-                 hour = 12;
-             }
-         } else {
-           partOfDay = PartOfDay.Pm;
+    /**
+     * Parses the time from a 24-hour format time string.
+     * @param {String} timeString The time string to parse.
+     * @return {Time} The time object.
+     * @author Cameron Burkholder
+     * @date   02/01/2022
+     * @static
+     */
+    static parse24HourTimeString(timeString) {
+        // The time string will be in a predictable format.
+        const COLON = ":";
+        const colonIndex = timeString.indexOf(COLON);
+        const beginningOfTimeString = 0;
+        let hour = parseInt(timeString.slice(beginningOfTimeString, colonIndex));
+        const partOfDayIndex = timeString.length;
+        let minute = parseInt(timeString.slice(colonIndex + 1, partOfDayIndex));
+        let partOfDay = undefined;
+        // Convert 24-hour format to 12-hour format.
+        if (hour < 12) {
+            partOfDay = PartOfDay.Am;
+            if (hour == 0) {
+                hour = 12;
+            }
+        } else {
+            partOfDay = PartOfDay.Pm;
             if (hour > 12) {
                 if (hour == 24) {
                     hour = 11;

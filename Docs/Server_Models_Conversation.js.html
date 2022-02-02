@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Server/Models/Conversation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Server/Models/Conversation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Mongoose = require("mongoose");
+const Schema = Mongoose.Schema;
+
+const Configuration = require("../../Configuration.js");
+const Log = require("../Log.js");
+const Validator = require("../Validator.js");
+
+/**
+ * Used to define the database schema for storing conversations.
+ * @author Cameron Burkholder
+ * @date   10/29/2021
+ */
+const ConversationSchema = new Schema({
+    messages: {
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getMessageCollectionName(),
+        required: true
+    },
+    participants: {
+        type: [Mongoose.Schema.Types.ObjectId],
+        ref: Configuration.getUserCollectionName(),
+        required: true
+    }
+});
+ConversationSchema.set("toObject", {
+    versionKey: false,
+    transform: (document, object) => {
+        delete object.__v;
+        return object;
+    }
+});
+const conversationCollectionName = Configuration.getConversationCollectionName();
+const ConversationModel = Mongoose.model(conversationCollectionName, ConversationSchema);
+
+/**
+ * Provides an interface for working with conversations in the database.
+ * @property {Mongoose.Schema.Types.ObjectId[]} messages The messages in the conversation.
+ * @property {Mongoose.Schema.Types.ObjectId[]} participants The people in the conversation.
+ * @author Cameron Burkholder
+ * @date   10/29/2021
+ */
+class Conversation {
+    /**
+     * Initializes the conversation passed in from the database.
+     * @param  {Mongoose.Schema} conversationSchema The database record for a given conversation.
+     * @author Cameron Burkholder
+     * @date   10/29/2021
+     */
+    constructor(conversationSchema) {
+        // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
+        // In order to maximize the usability of this class, the attributes stored in the database
+        // record are copied to the instance of this class so they can be properly editied.
+        // The conversation schema is converted to a regular object to sanitize it of wrapper methods and properties.
+        Object.assign(this, conversationSchema.toObject());
+    }
+
+    /**
+     * Creates a conversation between two participants.
+     * @param {User} sender The user sending the first message in the conversation.
+     * @param {User} receiver The user receiving the first message in the conversation.
+     * @return {Conversation} The conversation created.
+     *
+     * @async
+     * @static
+     */
+    static async create(sender, receiver) {}
+
+    /**
+     * Deletes the conversation.
+     * @return {Boolean} True if the conversation was deleted, false otherwise.
+     *
+     * @async
+     */
+    async delete() {}
+
+    /**
+     * Gets a conversation based on the participants that it includes.
+     * @param {String[]} participants The list of participants for the conversation.
+     * @return {Conversation} The conversation between the participants.
+     *
+     * @async
+     * @static
+     */
+    static async getByParticipants(participants) {}
+
+    /**
+     * Gets the other participant in the conversation.
+     * @param {User} participant The first participant in the conversation.
+     * @return {User} The other participant in the conversation.
+     *
+     */
+    getOtherParticipant(participant) {}
+
+    /**
+     * Gets the messages of a conversation.
+     * @return {Message[]} A list of messages between the two participants.
+     *
+     * @async
+     */
+    async getMessages() {}
+
+    /**
+     * Updates the conversation in the database.
+     * @return {Boolean} True if the conversation was saved, false otherwise.
+     *
+     * @async
+     */
+    async save() {}
+
+    /**
+     * Sends a message.
+     * @param {Message} message The message to send.
+     * @return {Boolean} True if the message was sent, false otherwise.
+     *
+     * @async
+     */
+    async sendMessage(message) {}
+}
+
+module.exports = Conversation;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Feb 02 2022 16:12:40 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
