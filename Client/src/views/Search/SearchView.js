@@ -20,7 +20,7 @@ const SearchView = () => {
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
-    const [timeRange, setTimeRange] = useState(["12:00AM", "12:00PM"]);
+    const [timeRange, setTimeRange] = useState(["12:00AM", "12:00AM"]);
     const [days, setDays] = useState([]);
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 
