@@ -3,11 +3,13 @@ import React from "react";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../../Server/Routes/Routes";
+import Label from "../../../core/Label/Label";
 import { useDispatch, useSelector } from "react-redux";
 import { addStudyGroup, showErrorNotification } from "../../../state/actions";
 
 const JoinStudyGroupView = ({ group }) => {
-    const { name, school, owner, subject, courseCode, isTutor, isOnline, groupColor, description, _id } = group;
+    const { name, school, owner, subject, course, isTutor, isOnline, groupColor, description, _id } = group;
 
     const user = useSelector((state) => state.authReducer.user);
 
@@ -45,26 +47,30 @@ const JoinStudyGroupView = ({ group }) => {
     };
     return (
         <div>
-            <h1>{name}</h1>
+            <div className="group-popup-title" style={{ backgroundColor: `${groupColor}` }}>
+                <h1>{name}</h1>
+            </div>
             <div className="info">
                 <Label>Description</Label>
                 <p>{description}</p>
             </div>
-            <div className="info">
-                <Label>Owner</Label>
-                <p>{owner}</p>
-            </div>
-            <div className="info">
-                <Label>Course Code</Label>
-                <p>{courseCode}</p>
-            </div>
-            <div className="info">
-                <Label>Subject</Label>
-                <p>{subject}</p>
-            </div>
-            <div className="info">
-                <Label>Associated With</Label>
-                <p>{school}</p>
+            <div className="sub-info">
+                <div className="info">
+                    <Label>Owner</Label>
+                    <p>{owner.name}</p>
+                </div>
+                <div className="info">
+                    <Label>Course Code</Label>
+                    <p>{course}</p>
+                </div>
+                <div className="info">
+                    <Label>Subject</Label>
+                    <p>{subject}</p>
+                </div>
+                <div className="info">
+                    <Label>Associated With</Label>
+                    <p>{school}</p>
+                </div>
             </div>
             <Button type={ButtonTypes.Creation} onClick={submitJoin}>
                 Join
