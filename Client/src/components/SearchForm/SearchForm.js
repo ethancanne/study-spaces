@@ -12,7 +12,7 @@ import Dropdown from "../../core/Dropdown/Dropdown.js";
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 import TimeRange from "../../core/Range/TimeRange";
 import MultipleDropdown from "../../core/Dropdown/MultipleDropdown";
-import { Days, MeetingFrequencies, Time } from "../../../../Server/Models/Time";
+import { Days, MeetingFrequencies } from "../../../../Server/Models/Time";
 
 /**
  * Renders a search form for searching study groups
@@ -63,8 +63,7 @@ const SearchForm = ({
                 <InputField>
                     <Label>Meeting Time Range</Label>
                     <h4>
-                        {Time.parse24HourTimeString(timeRange[0]).toString()} to{" "}
-                        {Time.parse24HourTimeString(timeRange[1]).toString()}
+                        {timeRange[0]} to {timeRange[1]}
                     </h4>
                     <TimeRange updateTimeRange={updateTimeRange} />
                 </InputField>
