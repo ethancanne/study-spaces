@@ -65,7 +65,8 @@ class StudyGroupRouter {
                 request.body.isTutorGroup,
                 request.body.course,
                 request.body.school,
-                request.body.groupColor
+                request.body.groupColor,
+                request.body.description
             );
         } catch (error) {
             Log.writeError(error);

@@ -11,7 +11,6 @@ const Subjects = require("./Subjects.js");
 const User = require("./User.js");
 const Validator = require("../Validator.js");
 
-
 /**
  * Used to define the database schema for storing study groups.
  * @author Cliff Croom
@@ -78,6 +77,10 @@ const StudyGroupSchema = new Schema({
     subject: {
         type: String,
         required: true
+    },
+    description: {
+        type: String,
+        required: false
     }
 });
 StudyGroupSchema.set("toObject", {
@@ -180,7 +183,18 @@ class StudyGroup {
      * @async
      * @static
      */
-    static async create(name, owner, subject, areaCode, isOnlineGroup, isTutorGroup, course, school, groupColor) {
+    static async create(
+        name,
+        owner,
+        subject,
+        areaCode,
+        isOnlineGroup,
+        isTutorGroup,
+        course,
+        school,
+        groupColor,
+        description
+    ) {
         // CREATE THE FEED ASSOCIATED WITH THE STUDY GROUP.
         const newFeed = await Feed.create();
         const newFeedId = Mongoose.Types.ObjectId(newFeed);
@@ -202,7 +216,8 @@ class StudyGroup {
             privacySetting: PrivacySettings.Open,
             school: school,
             subject: subject,
-            groupColor
+            groupColor,
+            description
         });
 
         // SAVE THE STUDY GROUP.
@@ -298,9 +313,7 @@ class StudyGroup {
      *
      * @async
      */
-    async getMeetings() {
-
-    }
+    async getMeetings() {}
 
     /**
      * Gets the study group's members.
@@ -526,7 +539,6 @@ class StudyGroup {
         // are marked as optional, this filter won't be applied in our current iteration.
 
         // FILL IN THE OWNER AND RECURRING MEETING ATTRIBUTES OF EACH STUDY GROUP.
-        /** @todo this */
         let studyGroupIndex = 0;
         while (studyGroupIndex < studyGroups.length) {
             const studyGroup = studyGroups[studyGroupIndex];
@@ -537,18 +549,20 @@ class StudyGroup {
         }
 
         // FILTER STUDY GROUPS BASED ON MEETING TIME AVAILABILITY.
-        const meetingFilteringIsEnabled = Validator.isDefined(filters.days);
-        if (meetingFilteringIsEnabled) {
-            const meetingAvailability = new MeetingAvailability(filters.days);
-            studyGroups = studyGroups.filter((studyGroup) => {
-                if (Validator.isDefined(studyGroup.recurringMeeting)) {
-                    const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
-                    return meetingAvailability.matchAvailability(recurringMeeting);
-                } else {
-                    return true;
-                }
-            });
-        }
+        const meetingAvailability = new MeetingAvailability(
+            filters.days,
+            filters.meetingFrequencies,
+            filters.startTime,
+            filters.endTime
+        );
+        studyGroups = studyGroups.filter((studyGroup) => {
+            if (Validator.isDefined(studyGroup.recurringMeeting)) {
+                const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
+                return meetingAvailability.matchAvailability(recurringMeeting);
+            } else {
+                return true;
+            }
+        });
 
         // RETURN THE STUDY GROUPS FOUND.
         return studyGroups;

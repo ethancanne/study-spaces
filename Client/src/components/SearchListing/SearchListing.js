@@ -1,28 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./SearchListing.scss";
+import { useDispatch } from "react-redux";
+import { showJoinStudyGroupPopup } from "../../state/actions";
 /**
  * A view for displaying a single study group listing resulting from a search query
  * @author ???
  */
-const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isOnline, schedule, groupColor }) => {
+const SearchListing = ({ group }) => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        console.log(group);
+    }, []);
+
     return (
         <div
             className="listing-container"
             style={{
-                border: `${groupColor} 5px solid`
+                border: `${group.groupColor} 5px solid`
             }}
+            onClick={() => dispatch(showJoinStudyGroupPopup(group))}
         >
             <div
                 className="title-photo-container"
                 style={{
-                    backgroundColor: groupColor
+                    backgroundColor: group.groupColor
                 }}
             >
-                <h1 className="group-title">{title}</h1>
+                <h1 className="group-title">{group.name}</h1>
             </div>
             <div className="group-info-container">
                 <div className="group-info-item" id="owner-info">
-                    {isTutor ? (
+                    {group.isTutor ? (
                         <p>
                             <strong>Tutor:</strong>
                         </p>
@@ -31,22 +39,22 @@ const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isO
                             <strong>Owner:</strong>
                         </p>
                     )}
-                    <h2>{owner}</h2>
+                    <h2>{group.owner.name}</h2>
                 </div>
                 <div className="group-info-item" id="school-info">
                     <p>School:</p>
-                    <h2>{school ? school : "None"}</h2>
+                    <h2>{group.school ? group.school : "None"}</h2>
                 </div>
                 <div className="group-info-item" id="subject-info">
                     <p>Subject:</p>
-                    <h2>{subject}</h2>
+                    <h2>{group.subject}</h2>
                 </div>
                 <div className="group-info-item" id="courseCode-info">
                     <p>Course Code:</p>
-                    <h2>{courseCode ? courseCode : "None"}</h2>
+                    <h2>{group.course ? group.course : "None"}</h2>
                 </div>
                 <div className="group-info-item" id="schedule-info">
-                    {isOnline ? (
+                    {group.isOnline ? (
                         <p>
                             Meets <strong>Online</strong> Every:
                         </p>
@@ -55,7 +63,7 @@ const SearchListing = ({ title, school, owner, subject, courseCode, isTutor, isO
                             Meets <strong>In-Person</strong> Every:
                         </p>
                     )}
-                    <h2>{schedule}</h2>
+                    <h2>{group.schedule}</h2>
                 </div>
             </div>
         </div>

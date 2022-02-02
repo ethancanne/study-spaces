@@ -10,6 +10,7 @@ const TimeRange = ({ updateTimeRange }) => {
     }
 
     const handleChange = (event, newNum) => {
+        //Convert minutes to 24 hr time
         var hours = newNum[0] / 60;
         var rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
@@ -20,13 +21,24 @@ const TimeRange = ({ updateTimeRange }) => {
         var minutes2 = (hours2 - rhours2) * 60;
         var rminutes2 = Math.round(minutes2);
 
-        if (rhours < 10) rhours = "0" + rhours;
-        if (rhours2 < 10) rhours2 = "0" + rhours2;
-
+        //Add a zero if needed
         if (rminutes < 10) rminutes = rminutes + "0";
         if (rminutes2 < 10) rminutes2 = rminutes2 + "0";
 
-        updateTimeRange([rhours + ":" + rminutes, rhours2 + ":" + rminutes2]);
+        //Convert to 12 hour
+        var AmOrPm1 = rhours >= 12 ? "pm" : "am";
+        var AmOrPm2 = rhours2 >= 12 ? "pm" : "am";
+
+        rhours = rhours % 12 || 12;
+        rhours2 = rhours2 % 12 || 12;
+
+        //Format time into a string
+        var time1 = rhours + ":" + rminutes + " " + AmOrPm1;
+
+        var time2 = rhours2 + ":" + rminutes2 + " " + AmOrPm2;
+
+        //Update the time range with the string
+        updateTimeRange([time1, time2]);
         setValues(newNum);
     };
     return (

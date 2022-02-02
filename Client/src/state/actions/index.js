@@ -23,9 +23,16 @@ export const createAccount = (unverifiedUser) => {
 };
 
 //POPUP REDUCER
-export const showStudyGroupPopup = () => {
+export const showCreateStudyGroupPopup = () => {
     return {
-        type: popupConstants.SHOW_STUDY_GROUP_POPUP
+        type: popupConstants.SHOW_CREATE_STUDY_GROUP_POPUP
+    };
+};
+
+export const showJoinStudyGroupPopup = (group) => {
+    return {
+        type: popupConstants.SHOW_JOIN_STUDY_GROUP_POPUP,
+        payload: group
     };
 };
 

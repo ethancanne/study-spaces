@@ -45,28 +45,27 @@ class Time {
     /**
      * Checks if one time is after another.
      * @param {Time} laterTime The time to compare against.
-     * @return {Boolean} True if the second time comes after the first, false otherwise.
+     * @return {Boolean} True if the second time comes before the first, false otherwise.
      * @author Cameron Burkholder
      * @date   01/28/2022
      */
-    isAfter(laterTime) {
+    isAfter(firstTime) {
         let isAfter = false;
         // If the times are both AM or both PM.
-        if (this.partOfDay === laterTime.partOfDay) {
-            // If the later hour comes after this hour.
-            if (this.hour < laterTime.hour) {
+        if (this.partOfDay === firstTime.partOfDay) {
+            // If this hour comes after the first hour.
+            if (this.hour > firstTime.hour) {
                 isAfter = true;
-                // If the later hour comes before this hour.
-            } else if (this.hour > laterTime.hour) {
+                // If this hour comes before the first hour.
+            } else if (this.hour < firstTime.hour) {
                 isAfter = false;
-                // If the times have the same hour.
+                // If the hours are equal.
             } else {
-                isAfter = this.minute < laterTime.minute;
+                isAfter = this.minute > firstTime.minute;
             }
-            // If the later time is PM while this time is AM.
-        } else if (this.partOfDay < laterTime.partOfDay) {
+            // If this time of day comes after the first time of day.
+        } else if (this.partOfDay > firstTime.partOfDay) {
             isAfter = true;
-            // If the later time is AM while this time is PM.
         } else {
             isAfter = false;
         }
@@ -83,11 +82,52 @@ class Time {
      * @author Cameron Burkholder
      * @date   01/28/2022
      */
-    static isBetween(meetingTime, startTime, endTime) {
-        const startTimeIsValid = meetingTime.isAfter(startTime);
-        const endTimeIsValid = endTime.isAfter(meetingTime);
+    isBetween(startTime, endTime) {
+        const startTimeIsValid = this.isAfter(startTime);
+        const endTimeIsValid = endTime.isAfter(this);
 
         return startTimeIsValid && endTimeIsValid;
+    }
+
+    /**
+     * Parses the time from a 24-hour format time string.
+     * @param {String} timeString The time string to parse.
+     * @return {Time} The time object.
+     * @author Cameron Burkholder
+     * @date   02/01/2022
+     * @static
+     */
+    static parse24HourTimeString(timeString) {
+        // The time string will be in a predictable format.
+        const COLON = ":";
+        const colonIndex = timeString.indexOf(COLON);
+        const beginningOfTimeString = 0;
+        let hour = parseInt(timeString.slice(beginningOfTimeString, colonIndex));
+        const partOfDayIndex = timeString.length;
+        let minute = parseInt(timeString.slice(colonIndex + 1, partOfDayIndex));
+        let partOfDay = undefined;
+        // Convert 24-hour format to 12-hour format.
+        if (hour < 12) {
+            partOfDay = PartOfDay.Am;
+            if (hour == 0) {
+                hour = 12;
+            }
+        } else {
+            partOfDay = PartOfDay.Pm;
+            if (hour > 12) {
+                if (hour == 24) {
+                    hour = 11;
+                    minute = 45;
+                } else {
+                    hour -= 12;
+                }
+            }
+        }
+        // Pad numbers with zeroes.
+        hour = hour < 10 ? `0${hour}` : `${hour}`;
+        minute = minute < 10 ? `0${minute}` : `${minute}`;
+        const time = new Time(hour, minute, partOfDay);
+        return time;
     }
 
     /**
@@ -96,6 +136,7 @@ class Time {
      * @return {Time} The time object.
      * @author Cameron Burkholder
      * @date   01/28/2022
+     * @static
      */
     static parseTimeString(timeString) {
         // The time string will be in a predictable format.
@@ -108,6 +149,16 @@ class Time {
         const partOfDay = timeString.slice(partOfDayIndex, timeString.length);
         const time = new Time(hour, minute, partOfDay);
         return time;
+    }
+
+    /**
+     * Convers the object to standard time string syntax.
+     * @return {String} The time as a string.
+     * @author Cameron Burkholder
+     * @date   02/01/2022
+     */
+    toString() {
+        return `${this.hour}:${this.minute}${this.partOfDay}`;
     }
 }
 
