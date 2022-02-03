@@ -18,9 +18,12 @@ const ResponseMessages = {
     },
     StudyGroup: {
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
+        ErrorJoinStudyGroup: "An error occurred while attempting to join a study group.",
         SuccessStudyGroupCreated: "The study group was created sucessfully.",
+        SuccessStudyGroupJoined: "The study group was joined successfully.",
         SuccessStudyGroupsRetrieved: "The study groups were retrieved sucessfully.",
-        ErrorGettingSearchResults: "An error ocurred while attempting to get search results."
+        ErrorGettingSearchResults: "An error ocurred while attempting to get search results.",
+        UserAlreadyJoined: "The study group cannot be joined again."
     }
 };
 module.exports = ResponseMessages;

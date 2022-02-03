@@ -159,7 +159,9 @@ class StudyGroup {
      */
     async addMember(newMember) {
         // ADD THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
-        this.members.push(Mongoose.Types.ObjectId(newMember.getId()));
+        console.log(newMember.getId());
+        this.members.push(newMember.getId());
+        console.log(this.members);
 
         // SAVE THE CHANGE.
         let memberWasAdded = true;
@@ -169,6 +171,7 @@ class StudyGroup {
             memberWasAdded = false;
             Log.writeError(error);
         }
+        console.log(this.members);
         return memberWasAdded;
     }
 
@@ -451,10 +454,29 @@ class StudyGroup {
      * This saves the associated user document in the database with the current properties
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
-     *
+     * @author Cameron Burkholder
+     * @date  02/03/2022
      * @async
      */
-    async save() {}
+    async save() {
+        let studyGroupWasSaved = false;
+        try {
+            // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+            let studyGroupModel = await StudyGroupModel.findOne({ _id: this._id }).exec();
+
+            // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
+            Object.assign(studyGroupModel, this);
+
+            // SAVE THE UPDATED DATABASE INSTANCE.
+            await studyGroupModel.save();
+            studyGroupWasSaved = true;
+        } catch (error) {
+            Log.write("An error occurred while attempting to retrieve the study group to save.");
+            Log.writeError(error);
+        } finally {
+            return studyGroupWasSaved;
+        }
+    }
 
     /**
     * Returns study groups matching the user's search criteria.
@@ -539,7 +561,6 @@ class StudyGroup {
         // are marked as optional, this filter won't be applied in our current iteration.
 
         // FILL IN THE OWNER AND RECURRING MEETING ATTRIBUTES OF EACH STUDY GROUP.
-        /** @todo this */
         let studyGroupIndex = 0;
         while (studyGroupIndex < studyGroups.length) {
             const studyGroup = studyGroups[studyGroupIndex];
@@ -627,10 +648,27 @@ class StudyGroup {
      * Checks if the user is a member of the study group.
      * @param {User} user The user to check for study group membership.
      * @return {Boolean} True if the user is a member of the study group, false otherwise.
-     *
-     * @async
+     * @author Cameron Burkholder
+     * @date    02/03/2022
      */
-    async userIsAMember(user) {}
+    userIsAMember(user) {
+        // CHECK IF THE STUDY GROUP'S MEMBER LIST CONTAINS THE USER.
+        const userId = String(user.getId());
+        // Converting the Object ID to a string ensures consistency in using the indexOf method.
+        const studyGroupMemberIds = this.members.map((memberId) => String(memberId));
+        const NOT_FOUND_INDEX = -1;
+        const studyGroupHasUser = NOT_FOUND_INDEX !== studyGroupMemberIds.indexOf(userId);
+
+        // CHECK IF THE USER'S STUDY GROUP LIST HAS THE STUDY GROUP.
+        const userStudyGroupIds = user.studyGroups.map((studyGroupId) => String(studyGroupId));
+        const studyGroupId = String(this.getId());
+        const userHasStudyGroup = NOT_FOUND_INDEX !== userStudyGroupIds.indexOf(studyGroupId);
+
+        // CHECK IF THE USER IS A MEMBER.
+        // If the user is a valid member of the study group, both above conditions should be true.
+        const userIsAMember = studyGroupHasUser && userHasStudyGroup;
+        return userIsAMember;
+    }
 }
 
 module.exports = StudyGroup;
