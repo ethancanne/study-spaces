@@ -40,6 +40,8 @@ class AccountRouter {
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
+        // This is used to delete an account.
+        server.delete(Routes.Account.Delete, authenticator.protectRoute(), AccountRouter.deleteAccount);
 
         // This is used to allow users to upload profile pictures.
         const fileFilter = (req, file, cb) => {
@@ -301,6 +303,33 @@ class AccountRouter {
                 return response.json({ message: ResponseMessages.Account.UserNotFound });
             }
         }
+    }
+
+    /**
+    * Deletes a user's account.
+    * @author Cameron Burkholder
+    * @date   02/04/2022
+    * @async
+    * @static
+    */
+    static async deleteAccount(request, response) {
+        // GET THE USER.
+        let userWasDeleted = false;
+        try {
+            userWasDeleted = await user.delete();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete an account.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorDeleteAccount });
+        }
+        if (!userWasDeleted) {
+            return response.json({ message: ResponseMessages.Account.ErrorDeleteAccount });
+        }
+
+        // SEND THE RESPONSE.
+        // If the execution reaches this point, then the account was been deleted.
+        return response.json({ message: ResponseMessages.Account.SuccessAccountDeleted });
     }
 }
 
