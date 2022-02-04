@@ -27,7 +27,6 @@ const AccountSetupView = (props) => {
     const [areaCode, setAreaCode] = useState(BLANK);
     const [is18OrOver, setIs18OrOver] = useState(false);
     const [profilePicture, setProfilePicture] = useState(BLANK);
-    const [accountSetupErrorMsg, setAccountSetupErrorMsg] = useState(BLANK);
     const [user, setUser] = useState({});
     const verificationToken = props.verificationToken;
 
@@ -50,8 +49,8 @@ const AccountSetupView = (props) => {
             response = await axios.post(Routes.Account.GetUnverifiedUser, {
                 verificationToken: verificationToken
             });
-        } catch (error) {
-            console.log(error);
+        } catch (e) {
+            dispatch(showErrorNotification("Verification failed: " + error.message));
         } finally {
             const responseIsDefined = Validator.isDefined(response);
             if (responseIsDefined) {
@@ -62,7 +61,11 @@ const AccountSetupView = (props) => {
                     setUser(response.data.unverifiedUser);
                     dispatch(showSuccessNotification("You have been successfully verified"));
                     setUserIsVerified(true);
+                } else {
+                    dispatch(showErrorNotification("Verification failed: " + response.data.message));
                 }
+            } else {
+                dispatch(showErrorNotification("Verification failed: Undefined response."));
             }
         }
     };
@@ -189,7 +192,6 @@ const AccountSetupView = (props) => {
                         updateProfilePicture={updateProfilePicture}
                         submitAccountSetup={submitAccountSetup}
                     />
-                    <p className="error-message">{accountSetupErrorMsg}</p>
                 </div>
             ) : (
                 <h1>You shouldn't be here!</h1>
