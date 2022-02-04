@@ -44,6 +44,25 @@ class Validator {
         const undefinedType = "undefined";
         return undefinedType === typeof variable;
     }
+
+    /**
+    * Validates the form input for creating a study group before a study group gets created.
+    * @author Cameron Burkholder
+    * @date   02/04/2022
+    * @static
+    */
+    static validateCreateStudyGroupInput(request, response, nextMiddlewareFunction) {
+        // GET THE FORM INPUT DATA.
+        // The data will all be in the request.body object as attributes according to each's name.
+
+        // VALIDATE THE INPUT.
+
+        // GENERATE THE RESPONSE.
+        // If the data is invalid, then a response should be returned with the appropriate message indicating such.
+
+        // If the data is valid, then the next function in the middleware chain can be called.
+        nextMiddlewareFunction();
+    }
 }
 
 module.exports = Validator;

@@ -31,6 +31,7 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.CreateStudyGroup,
             authenticator.protectRoute(),
+            Validator.validateCreateStudyGroupInput,
             StudyGroupRouter.createStudyGroup
         );
         server.get(
