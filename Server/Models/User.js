@@ -284,6 +284,19 @@ class User {
             }
         }
 
+        // POPULATE ALL THE STUDY GROUPS WITH THEIR OWNER ATTRIBUTES.
+        let studyGroupIndex = 0;
+        while (studyGroupIndex < studyGroups.length) {
+            let ownerWasPopulated = false;
+            try {
+                await studyGroups[studyGroupIndex].populate("owner");
+            } catch (error) {
+                Log.write("An error occurred while attempting to get a user's study groups.");
+                Log.writeError(error);
+            }
+            studyGroupIndex++;
+        }
+
         // CONVERT THE STUDY GROUP DATABASE INSTANCES TO STUDY GROUP MODELS.
         studyGroups = studyGroups.map((studyGroup) => new StudyGroup(studyGroup));
         return studyGroups;

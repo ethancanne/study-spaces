@@ -1,4 +1,4 @@
 export default {
-  ERROR: "ERROR",
-  SUCCESS: "SUCCESS",
+    ERROR: "ERROR",
+    SUCCESS: "SUCCESS"
 };
