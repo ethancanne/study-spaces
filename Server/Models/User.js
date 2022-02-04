@@ -90,8 +90,6 @@ class User {
      */
     async addStudyGroup(studyGroup) {
         // ADD THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
-        console.log(studyGroup);
-        console.log(studyGroup.getId());
         this.studyGroups.push(studyGroup.getId());
 
         // SAVE THE CHANGE.
