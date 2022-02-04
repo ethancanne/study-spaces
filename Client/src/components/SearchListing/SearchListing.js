@@ -30,7 +30,7 @@ const SearchListing = ({ group }) => {
             </div>
             <div className="group-info-container">
                 <div className="group-info-item" id="owner-info">
-                    {group.isTutor ? (
+                    {group.isTutorGroup ? (
                         <p>
                             <strong>Tutor:</strong>
                         </p>
@@ -54,7 +54,7 @@ const SearchListing = ({ group }) => {
                     <h2>{group.course ? group.course : "None"}</h2>
                 </div>
                 <div className="group-info-item" id="schedule-info">
-                    {group.isOnline ? (
+                    {group.isOnlineGroup ? (
                         <p>
                             Meets <strong>Online</strong> Every:
                         </p>

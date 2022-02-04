@@ -1,11 +1,69 @@
 .study-group-view {
-    width: 200px;
-    height: 190px;
-    background-color: white;
-    h1 {
-        font-size: 30px;
-        text-align: center;
-    }
+    min-width: 200px;
+    min-height: 200px;
+    padding: 30px 20px 80px 20px;
+    overflow: none;
     box-shadow: 0px 10px 10px #0000000a;
     margin: 30px;
+    position: relative;
+    animation: float-in-group 0.3s ease-out;
+
+    box-shadow: rgba(0, 0, 0, 0.173) 5px 5px 20px;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .group-title {
+        color: rgb(255, 255, 255);
+        font-size: 30px;
+        text-shadow: rgba(0, 0, 0, 0.705) 3px 5px 5px 10px;
+        text-align: center;
+    }
+    .group-view-sub-details {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        p {
+            background-color: rgba(255, 255, 255, 0.349);
+            backdrop-filter: blur(5px);
+            color: rgb(255, 255, 255);
+            border-radius: 7px;
+            font-size: 10px;
+            padding: 3px;
+            margin-left: 5px;
+            text-shadow: rgba(0, 0, 0, 0.705) 3px 5px 5px 10px;
+        }
+    }
+    .group-view-details {
+        display: flex;
+        flex-wrap: wrap;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.982);
+        box-shadow: -10px 0px 20px rgba(0, 0, 0, 0.139);
+        border-top: rgb(227, 227, 227) solid 3px;
+
+        p {
+            font-size: 10px;
+            color: rgb(84, 84, 84);
+            margin: 0px 10px 0 10px;
+        }
+    }
+}
+
+@keyframes float-in-group {
+    0% {
+        margin-top: 50px;
+        opacity: 0;
+    }
+    100% {
+        margin-top: 30px;
+        opacity: 1;
+    }
 }

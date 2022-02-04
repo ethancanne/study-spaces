@@ -43,10 +43,17 @@ export const closePopup = () => {
 };
 
 //STUDY GROUP REDUCERS
-export const addStudyGroup = (group, reset = false) => {
+export const addStudyGroup = (group) => {
     return {
         type: studyGroupsConstants.ADD_STUDY_GROUP,
-        payload: { group, reset }
+        payload: { group }
+    };
+};
+
+export const loadStudyGroup = (groups) => {
+    return {
+        type: studyGroupsConstants.LOAD_STUDY_GROUPS,
+        payload: { groups }
     };
 };
 
@@ -61,6 +68,13 @@ export const populateStudyGroupSearch = (groups) => {
 export const showErrorNotification = (message) => {
     return {
         type: notificationConstants.SHOW_ERROR_NOTIFICATION,
+        payload: { message }
+    };
+};
+
+export const showSuccessNotification = (message) => {
+    return {
+        type: notificationConstants.SHOW_SUCCESS_NOTIFICATION,
         payload: { message }
     };
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { signIn, signOut, showErrorNotification } from "../../../state/actions";
+import { signIn, signOut, showErrorNotification, showSuccessNotification } from "../../../state/actions";
 
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
 import Button from "../../../core/Button/Button.js";
@@ -57,6 +57,7 @@ const LoginView = (props) => {
                 if (loginWasValid) {
                     const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
                     dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
+                    dispatch(showSuccessNotification("Successfully signed in: " + user.name));
                 } else {
                     dispatch(showErrorNotification(response.data.message));
                     dispatch(signOut);

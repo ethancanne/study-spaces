@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import CreateStudyGroupForm from "../../components/CreateStudyGroupForm/CreateStudyGroupForm";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { addStudyGroup } from "../../state/actions/index";
-import { closePopup } from "../../state/actions";
+import { addStudyGroup, closePopup, showSuccessNotification, showErrorNotification } from "../../state/actions/index";
 
 // are these needed?
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
@@ -30,8 +29,6 @@ const CreateStudyGroupView = () => {
     const [isOnlineGroup, setIsOnlineGroup] = useState(false); //Toggle tag
     const [groupColor, setGroupColor] = useState("#000000"); //TextInput tag for now
     const [groupPhoto, setGroupPhoto] = useState(BLANK); //TextInput tag for now
-
-    const [studyGroupCreationErrorMsg, setStudyGroupCreationErrorMsg] = useState(BLANK); //Toggle tag
 
     /**
      * Makes an api call to the Create study group route, passing in the information entered in the form and rendering the client according to the response received
@@ -60,11 +57,8 @@ const CreateStudyGroupView = () => {
                 isTutorGroup,
                 isOnlineGroup
             });
-            //Wrap the axios call in a try-catch block, using the catch block to call "setErrorMessage();" passing in "e.message"
         } catch (e) {
-            console.log(e);
-            setStudyGroupCreationErrorMsg(e.message);
-            //In the finally block, use if statements to validate the following:
+            dispatch(showErrorNotification("There's been an error while creating your study group: " + e.message));
         } finally {
             //check if the response is valid, using Validator.isDefined(response),
             const responseIsDefined = Validator.isDefined(response);
@@ -78,11 +72,16 @@ const CreateStudyGroupView = () => {
                     //If all the conditions are satisfied, then use the dispatch function, passing in the "response.data" object.  This will dispatch an action to redux, which saves the study group to the global state of the app.
                     dispatch(addStudyGroup(response.data.newStudyGroup));
                     dispatch(closePopup());
+                    dispatch(showSuccessNotification("Your study group: " + name + " has been successfully created"));
                 } else {
-                    setStudyGroupCreationErrorMsg(response.data.message);
+                    dispatch(
+                        showErrorNotification(
+                            "There's been an error while creating your study group: " + response.data.message
+                        )
+                    );
                 }
             } else {
-                setStudyGroupCreationErrorMsg("There's been a problem with the server");
+                dispatch(showErrorNotification("There's been a server error while creating your study group"));
             }
         }
     };
@@ -95,7 +94,6 @@ const CreateStudyGroupView = () => {
      */
     const updateNameField = (event) => {
         setName(event.target.value);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -106,7 +104,6 @@ const CreateStudyGroupView = () => {
      */
     const updateGroupColor = (event) => {
         setGroupColor(event.target.value);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -117,7 +114,6 @@ const CreateStudyGroupView = () => {
      */
     const updateDescriptionField = (event) => {
         setDescription(event.target.value);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -128,7 +124,6 @@ const CreateStudyGroupView = () => {
      */
     const updateSubjectField = (event) => {
         setSubject(event.target.options[event.target.selectedIndex].value);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -139,7 +134,6 @@ const CreateStudyGroupView = () => {
      */
     const updatePrivacy = (event) => {
         setPrivacy(event.target.options[event.target.selectedIndex].value);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -150,7 +144,6 @@ const CreateStudyGroupView = () => {
      */
     const updateCourseCodeField = (event) => {
         setCourseCode(event.target.value);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -161,7 +154,6 @@ const CreateStudyGroupView = () => {
      */
     const updateIsOnlineGroup = (event) => {
         setIsOnlineGroup(event.target.checked);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -172,7 +164,6 @@ const CreateStudyGroupView = () => {
      */
     const updateIsAssociatedWithSchool = (event) => {
         setIsAssociatedWithSchool(event.target.checked);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     /**
@@ -183,7 +174,6 @@ const CreateStudyGroupView = () => {
      */
     const updateIsTutorGroup = (event) => {
         setIsTutorGroup(event.target.checked);
-        setStudyGroupCreationErrorMsg(BLANK);
     };
 
     return (
@@ -209,9 +199,7 @@ const CreateStudyGroupView = () => {
                 updateIsOnlineGroup={updateIsOnlineGroup}
                 updateGroupColor={updateGroupColor}
                 submitCreateStudyGroup={submitCreateStudyGroup}
-                studyGroupCreationErrorMsg={studyGroupCreationErrorMsg}
             />
-            <p className="error-message">{studyGroupCreationErrorMsg}</p>
         </div>
     );
 };

@@ -17,9 +17,9 @@ const studyGroupsReducer = (
 ) => {
     switch (action.type) {
         case studyGroupsConstants.ADD_STUDY_GROUP:
-            if (!action.payload.reset) return { ...state, studyGroups: [...state.studyGroups, action.payload.group] };
-
-            return { ...state, studyGroups: [action.payload.group] };
+            return { ...state, studyGroups: [...state.studyGroups, action.payload.group] };
+        case studyGroupsConstants.LOAD_STUDY_GROUPS:
+            return { ...state, studyGroups: action.payload.groups };
 
         case studyGroupsConstants.POPULATE_SEARCH:
             return { ...state, search: [...action.payload.groups] };

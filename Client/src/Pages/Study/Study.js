@@ -1,7 +1,7 @@
 import "./Study.scss";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signOut, showCreateStudyGroupPopup, addStudyGroup } from "../../state/actions";
+import { signOut, showCreateStudyGroupPopup, loadStudyGroup, showErrorNotification } from "../../state/actions";
 import Validator from "../../../../Server/Validator";
 import Routes from "../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
@@ -46,7 +46,11 @@ const Study = () => {
 
             response = await axios.get(Routes.StudyGroup.GetUserStudyGroups);
         } catch (e) {
-            console.log(e);
+            dispatch(
+                showErrorNotification(
+                    "There's been an error loading your study groups.  Please try again later. " + e.message
+                )
+            );
         } finally {
             const responseIsDefined = Validator.isDefined(response);
 
@@ -58,14 +62,20 @@ const Study = () => {
                     const studyGroups = response.data.studyGroups;
                     if (studyGroups) {
                         studyGroups.map((s) => {
-                            dispatch(addStudyGroup(s, true));
+                            dispatch(loadStudyGroup(studyGroups));
                         });
                     }
                 } else {
-                    console.log("That didn't work");
+                    dispatch(
+                        showErrorNotification(
+                            "There's been an error loading your study groups.  Please try again later."
+                        )
+                    );
                 }
             } else {
-                console.log("That didn't work");
+                dispatch(
+                    showErrorNotification("There's been an error loading your study groups.  Please try again later.")
+                );
             }
         }
     };
@@ -75,20 +85,19 @@ const Study = () => {
             <TopBar currentPage="study" />
 
             <Page>
-                <div className="study">
+                <div className="study-page">
                     <div className="page-title">
                         <h1>Study</h1>
                     </div>
                     {isLoggedIn ? (
                         <div>
-                            <Button onClick={() => dispatch(signOut())}>Log out</Button>
                             <button
                                 className="add-button"
                                 onClick={() => dispatch(showCreateStudyGroupPopup())}
                             ></button>
                             <div className="study-groups-container">
                                 {Validator.isDefined(studyGroups) &&
-                                    studyGroups.map((studyGroup) => <StudyGroupView title={studyGroup.name} />)}
+                                    studyGroups.map((studyGroup) => <StudyGroupView group={studyGroup} />)}
                             </div>
                         </div>
                     ) : (

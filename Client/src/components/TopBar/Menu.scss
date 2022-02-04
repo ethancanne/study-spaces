@@ -11,7 +11,7 @@
     transition: all 0.5s ease-in-out;
     pointer-events: none;
     position: absolute;
-    top: -3.5em;
+    top: -7.5em;
     right: 0px;
     z-index: 10;
     box-shadow: inset 0px 10px 20px rgba(0, 0, 0, 0.151);
@@ -19,23 +19,5 @@
         top: 3em;
         pointer-events: all;
         overflow: visible;
-    }
-}
-
-.background {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    z-index: 20;
-    background-color: #ffffff70;
-    backdrop-filter: blur(5px);
-    pointer-events: none;
-    transition: all 0.5s;
-    opacity: 0;
-
-    &.active {
-        pointer-events: all;
-        opacity: 1;
     }
 }

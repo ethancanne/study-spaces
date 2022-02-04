@@ -7,7 +7,7 @@ import { Redirect } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signIn, signOut } from "./state/actions";
 import Popup from "./Views/Popup/Popup";
-import Notification from "./Views/Notifications/Notification";
+import Notification from "./Views/Notification/Notification";
 
 import ResponseMessages from "../../Server/Responses/ResponseMessages.js";
 import Routes from "../../Server/Routes/Routes.js";

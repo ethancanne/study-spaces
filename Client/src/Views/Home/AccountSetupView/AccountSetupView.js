@@ -6,7 +6,7 @@ import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { signIn, showErrorNotification } from "../../../state/actions";
+import { signIn, showErrorNotification, showSuccessNotification } from "../../../state/actions";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
 import Validator from "../../../../../Server/Validator";
@@ -60,6 +60,7 @@ const AccountSetupView = (props) => {
 
                 if (verificationWasValid) {
                     setUser(response.data.unverifiedUser);
+                    dispatch(showSuccessNotification("You have been successfully verified"));
                     setUserIsVerified(true);
                 }
             }
@@ -109,7 +110,9 @@ const AccountSetupView = (props) => {
                 const accountSetupWasValid = ResponseMessages.Account.SuccessAccountSetup === response.data.message;
 
                 if (accountSetupWasValid) {
-                    dispatch(signIn(response.data));
+                    const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
+                    dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
+                    dispatch(showSuccessNotification("Successfully signed in: " + response.user.name));
                 } else {
                     dispatch(showErrorNotification(response.data.message));
                 }

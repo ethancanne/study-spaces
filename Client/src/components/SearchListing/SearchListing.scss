@@ -5,18 +5,19 @@
     box-shadow: rgba(120, 120, 120, 0.249) 3px 5px 5px 1px;
     display: flex;
     height: 80px;
-    margin: 5px 10px 10px 10px;
     border-radius: 10px;
     cursor: pointer;
+
+    animation: float-in-listing 0.3s ease-out forwards;
 
     .title-photo-container {
         display: flex;
         align-items: center;
         border-left: #ffffff7c 5px solid;
-        color: white;
         box-shadow: rgba(48, 48, 48, 0.153) 10px 10px 20px;
         overflow: hidden;
         padding: 20px;
+        color: white;
         font-size: 10px;
     }
     .group-info-container {
@@ -45,5 +46,16 @@
             padding: 5px 15px 5px 15px;
             border-left: rgba(125, 125, 125, 0.345) 2px solid;
         }
+    }
+}
+
+@keyframes float-in-listing {
+    0% {
+        margin: 50px 10px 10px 10px;
+        opacity: 0;
+    }
+    100% {
+        margin: 5px 10px 10px 10px;
+        opacity: 1;
     }
 }

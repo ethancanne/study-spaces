@@ -3,7 +3,7 @@ import axios from "axios";
 import Validator from "../../../../../Server/Validator";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { createAccount, showErrorNotification } from "../../../state/actions";
+import { createAccount, showErrorNotification, showSuccessNotification } from "../../../state/actions";
 import CreateAccountForm from "../../../components/CreateAccountForm/CreateAccountForm";
 import Routes from "../../../../../Server/Routes/Routes.js";
 import ButtonTypes from "../../../core/Button/ButtonTypes.js";
@@ -71,6 +71,7 @@ const CreateAccountView = (props) => {
                     const unverifiedUser = response.data.unverifiedUser;
 
                     dispatch(createAccount(unverifiedUser));
+                    dispatch(showSuccessNotification("Successfully sent verification email"));
 
                     props.setHomeView(Views.Home.VerificationEmailConfirmation);
                 } else {

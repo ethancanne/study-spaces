@@ -17,7 +17,7 @@ import MeetingFormats from "../../../../Server/Models/MeetingFormats";
  */
 const SearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [subject, setSubject] = useState("");
+    const [subject, setSubject] = useState("This");
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
     const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
     const [type, setType] = useState("Group");
