@@ -6,14 +6,14 @@ import { signOut, showSuccessNotification } from "../../state/actions";
 
 const Menu = ({ isShowing }) => {
     const dispatch = useDispatch();
-    const signOut = () => {
+    const signOutUser = () => {
         dispatch(signOut());
         dispatch(showSuccessNotification("You have been successfully signed out."));
     };
     return (
         <>
             <div className={isShowing ? "isShowing menu" : "menu"}>
-                <Button onClick={signOut}>Log out</Button>
+                <Button onClick={signOutUser}>Log out</Button>
             </div>
             {/* <div className={isShowing ? "isShowing background" : "background"}></div> */}
         </>
