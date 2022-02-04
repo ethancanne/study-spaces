@@ -31,6 +31,7 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.CreateStudyGroup,
             authenticator.protectRoute(),
+            Validator.validateCreateStudyGroupInput,
             StudyGroupRouter.createStudyGroup
         );
         server.get(
@@ -158,7 +159,7 @@ class StudyGroupRouter {
         }
 
         // CHECK IF THE USER IS THE OWNER OF THE STUDY GROUP.
-        const userIsOwnerOfStudyGroup = request.user.getId() === studyGroup.owner;
+        const userIsOwnerOfStudyGroup = (String(request.user.getId()) === String(studyGroup.owner));
         if (userIsOwnerOfStudyGroup) {
             return response.json({ message: ResponseMessages.StudyGroup.UserAlreadyJoined });
         }
