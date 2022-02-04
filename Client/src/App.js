@@ -17,6 +17,7 @@ import Home from "./Pages/Home/Home.js";
 import Study from "./Pages/Study/Study.js";
 import Views from "./Views/Views";
 import Search from "./Pages/Search/Search";
+import StudyGroup from "./Pages/StudyGroup/StudyGroup";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -104,6 +105,12 @@ const App = (props) => {
                         <Search />
                     </Route>
                     <Route path="/message" render={(props) => {}} />
+                    <Route
+                        path="/group/:id"
+                        render={(props) => {
+                            return <StudyGroup {...props} />;
+                        }}
+                    />
                 </Switch>
             </div>
         </Router>
