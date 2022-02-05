@@ -20,18 +20,22 @@ const Account = () => {
                 <div className="page-title">
                     <h1>Account</h1>
                 </div>
-                <Name className="user-info">
-                    <h1>Name</h1>
-                </Name>
-                <Email className="user-info">
-                    <h1>Email</h1>
-                </Email>
-                <AreaCode className="user-info">
-                    <h1>Area Code</h1>
-                </AreaCode>  
-                <ProfilePicture className="user-info">
-                    <h1>Profile Picture</h1>
-                </ProfilePicture>
+                <div className="user-info">
+                    <p className="name">{user.name}</p>
+                </div>
+                <div className="user-info">
+                    <p className="email">{user.email}</p>
+                </div>
+                <div className="user-info">
+                    <p className="areaCode">{user.areaCode}</p>>
+                </div>  
+                <div className="user-info">
+                    <img
+                                className="profile-picture"
+                                src={" data:image/png;charset=utf-8;base64," + user.profilePicture}
+                                alt=""
+                            />
+                </div>
             </div>
         </Page>
         </>
