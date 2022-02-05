@@ -3,6 +3,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
+import Button from "../../core/Button/Button";
+import ButtonTypes from "../../core/Button/ButtonTypes";
 
 /**
  * Renders the Account page
