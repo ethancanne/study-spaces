@@ -177,7 +177,7 @@ class AccountRouter {
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
         const user = await User.getByEmail(request.body.email);
-        
+
 
 
         // CHECK IF A USER WITH THE EMAIL ADDRESS EXISTS.
@@ -208,7 +208,7 @@ class AccountRouter {
                 user: user
             });
 
-        
+
 
         } else {
             // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
@@ -326,7 +326,7 @@ class AccountRouter {
         // GET THE USER.
         let userWasDeleted = false;
         try {
-            userWasDeleted = await user.delete();
+            userWasDeleted = await request.user.delete();
         } catch (error) {
             Log.write("An error occurred while attempting to delete an account.");
             Log.writeError(error);
