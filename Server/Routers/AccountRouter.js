@@ -177,11 +177,18 @@ class AccountRouter {
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
         const user = await User.getByEmail(request.body.email);
+        
+
 
         // CHECK IF A USER WITH THE EMAIL ADDRESS EXISTS.
         const userWasNotFound = Validator.isUndefined(user);
         if (userWasNotFound) {
             return response.json({ message: ResponseMessages.Account.UserNotFound });
+        }
+
+        // CHECK IF THE USER IS ACTIVE
+        if (user.active == false){
+            return response.json({ message: ResponseMessages.Account.InactiveAccount })
         }
 
         // CHECK IF THE PASSWORD IS CORRECT.
@@ -200,6 +207,9 @@ class AccountRouter {
                 message: ResponseMessages.Account.SuccessLogin,
                 user: user
             });
+
+        
+
         } else {
             // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
             return response.json({ message: ResponseMessages.Account.IncorrectPassword });

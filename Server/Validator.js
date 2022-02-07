@@ -54,14 +54,21 @@ class Validator {
     static validateCreateStudyGroupInput(request, response, nextMiddlewareFunction) {
         // GET THE FORM INPUT DATA.
         // The data will all be in the request.body object as attributes according to each's name.
-
+        let studyGroupIsValid = false;
         // VALIDATE THE INPUT.
-
+        if(request.body.name && request.user) {
+            studyGroupIsValid = true;
+        }
         // GENERATE THE RESPONSE.
         // If the data is invalid, then a response should be returned with the appropriate message indicating such.
-
+        if(!studyGroupIsValid) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
+        }
         // If the data is valid, then the next function in the middleware chain can be called.
-        nextMiddlewareFunction();
+        else {
+            return nextMiddlewareFunction();
+        }
+      
     }
 }
 

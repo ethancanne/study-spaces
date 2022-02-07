@@ -16,7 +16,8 @@ const ResponseMessages = {
         SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",
         UnverifiedUserWasFound: "The unverified user was found.",
         UserAlreadyExists: "A user with that email address already exists.",
-        UserNotFound: "The user was not found."
+        UserNotFound: "The user was not found.",
+        InactiveAccount: "The account requested is not active."
     },
     StudyGroup: {
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
@@ -25,7 +26,8 @@ const ResponseMessages = {
         SuccessStudyGroupJoined: "The study group was joined successfully.",
         SuccessStudyGroupsRetrieved: "The study groups were retrieved sucessfully.",
         ErrorGettingSearchResults: "An error ocurred while attempting to get search results.",
-        UserAlreadyJoined: "The study group cannot be joined again."
+        UserAlreadyJoined: "The study group cannot be joined again.",
+        ErrorNullStudyGroupInput: "Error: Empty input was received for either the study group name or the user."
     }
 };
 module.exports = ResponseMessages;
