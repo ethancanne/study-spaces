@@ -12,13 +12,19 @@ import ButtonTypes from "../../core/Button/ButtonTypes";
  * @date   2/05/2022
  */
 const Account = () => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const { user, isLoggedIn } = useSelector((state) => state.authReducer);
+
+    const deleteAccount = async ()=>{
+        response = await axios.delete(Routes.Account.Delete);
+
+    }
     return (
         <>
         <TopBar currentPage="account" />
         <Page>
             <div className="account-page">
+
                 <div className="page-title">
                     <h1>Account</h1>
                 </div>
@@ -38,6 +44,9 @@ const Account = () => {
                                 alt=""
                             />
                 </div>
+                <Button>Change Email</Button>
+                <Button>Change Password</Button>
+
             </div>
         </Page>
         </>

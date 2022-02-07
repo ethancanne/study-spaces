@@ -18,6 +18,7 @@ import Study from "./Pages/Study/Study.js";
 import Views from "./Views/Views";
 import Search from "./Pages/Search/Search";
 import StudyGroup from "./Pages/StudyGroup/StudyGroup";
+import Account from "./Pages/Account/Account";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -111,6 +112,9 @@ const App = (props) => {
                             return <StudyGroup {...props} />;
                         }}
                     />
+                    <Route exact path="/account" render={(props) => {
+                        return <Account/>
+                    }} />
                 </Switch>
             </div>
         </Router>
