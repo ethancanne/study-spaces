@@ -34,11 +34,13 @@ class StudyGroupRouter {
             Validator.validateCreateStudyGroupInput,
             StudyGroupRouter.createStudyGroup
         );
+        // This is used to get a user's study groups.
         server.get(
             Routes.StudyGroup.GetUserStudyGroups,
             authenticator.protectRoute(),
             StudyGroupRouter.getUserStudyGroups
         );
+        // This is used to join a study group.
         server.post(Routes.StudyGroup.JoinStudyGroup, authenticator.protectRoute(), StudyGroupRouter.joinStudyGroup);
     }
 
