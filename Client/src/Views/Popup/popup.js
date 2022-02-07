@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { closePopup, showJoinStudyGroupPopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
 import JoinStudyGroupView from "../Study/joinStudyGroupView/JoinStudyGroupView";
-import popupTypes from "./PopupTypes";
+import InputView from "../Input/InputView";
+
+import views from "../Views";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -22,14 +24,18 @@ const Popup = (props) => {
     let popupView = <></>;
 
     switch (view) {
-        case popupTypes.StudyGroup.Create:
+        case views.Popup.StudyGroup.Create:
             popupView = <CreateStudyGroupView />;
             break;
-        case popupTypes.StudyGroup.Join:
+        case views.Popup.StudyGroup.Join:
             popupView = <JoinStudyGroupView group={payload} />;
             break;
-        default:
-            console.log(popupTypes.StudyGroup.Join, view, popupTypes.StudyGroup.Join === view);
+
+        case views.Popup.Input:
+            popupView = (
+                <InputView label={payload.label} defaultInput={payload.defaultInput} callback={payload.callback} />
+            );
+            break;
     }
 
     return (
@@ -40,7 +46,7 @@ const Popup = (props) => {
             ></div>
             <div className={"popup " + (props.isShowing ? "active" : "")}>
                 <div className="popup-top">
-                    <h1>{view}</h1>
+                    <h1>{payload.title || view}</h1>
                     <button onClick={() => dispatch(closePopup())}>X</button>
                 </div>
                 <div className="popup-body">{!props.children ? popupView : props.children}</div>

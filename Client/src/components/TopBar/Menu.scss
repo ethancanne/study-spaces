@@ -3,15 +3,14 @@
 .menu {
     background-color: white;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     padding: 20px;
     width: 340px;
     border-bottom: $border-color 5px solid;
     transition: all 0.5s ease-in-out;
     pointer-events: none;
     position: absolute;
-    top: -7.5em;
+    top: -10.5em;
     right: 0px;
     z-index: 10;
     box-shadow: inset 0px 10px 20px rgba(0, 0, 0, 0.151);

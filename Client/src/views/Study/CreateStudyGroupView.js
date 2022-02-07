@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { addStudyGroup, closePopup, showSuccessNotification, showErrorNotification } from "../../state/actions/index";
 
-// are these needed?
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
 import Validator from "../../../../Server/Validator";
 import Routes from "../../../../Server/Routes/Routes";
