@@ -14,11 +14,15 @@ const StudyGroup = require("./StudyGroup.js");
 const UserSchema = new Schema({
     areaCode: {
         type: String,
-        required: true
+        required: false
     },
     conversations: {
         type: [Mongoose.Schema.Types.ObjectId],
         ref: Configuration.getConversationCollectionName(),
+        required: true
+    },
+    active: {
+        type: Boolean,
         required: true
     },
     email: {
@@ -141,11 +145,39 @@ class User {
 
     /**
      * Deletes a user.
-     * @return {Boolean} True if the user was deleted, false otherwise.
+     * @return {Boolean} True if the user was deactivated, false otherwise.
      *
      * @async
      */
-    async delete() {}
+    async delete() {
+        // Deactivate the user.
+        let userDeactivated = false;
+        this.active = false;
+        // Unnecessary validation
+        if(this.active == false) {
+           userDeactivated = true;     
+        }
+        return userDeactivated;
+    }
+
+    /**
+     * Reactivates a user.
+     * @return {Boolean} True if the user was reactivated, false otherwise.
+     *
+     * @async
+     */
+     async reactivate() {
+        // Activate the user.
+        let userReactivated = false;
+        this.active = true;
+        // Unnecessary validation
+        if(this.active == true) {
+            userReactivated = true;
+        }
+        return userReactivated;
+    }
+
+
 
     /**
      * Gets the user's area code.
