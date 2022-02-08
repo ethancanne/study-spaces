@@ -154,8 +154,6 @@ class AccountRouter {
     }
 
     /**
-     *
-     * @param {String} request.body.email
      * @param {String} request.body.password
      * @param {String} request.body.confirmPassword
      * @author Clifton Croom
@@ -163,7 +161,27 @@ class AccountRouter {
      * @async
      * @static
      */
-    static async changePassword(request, response) {}
+    static async changePassword(request, response) {
+        
+        const passwordIsCorrect = Authenticator.verifyPassword(request.body.confirmPassword, User);
+        
+        if(passwordIsCorrect) {
+            try {
+                newPassHash = Authenticator.hashPassword(request.body.password);
+                passwordChanged= await User.updatePassword(newPassHash);
+            }
+            catch(error) {
+                Log.write("An error occurred while attempting to change user's password.");
+            }
+        } 
+        if(passwordChanged) {
+            return response.json({ message: ResponseMessages.Account.SuccessPasswordChanged})
+        }
+        else {
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword});
+        }
+        
+    }
 
     /**
      * This allows the user to log in.
@@ -177,7 +195,7 @@ class AccountRouter {
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
         const user = await User.getByEmail(request.body.email);
-
+        
 
 
         // CHECK IF A USER WITH THE EMAIL ADDRESS EXISTS.
@@ -208,7 +226,7 @@ class AccountRouter {
                 user: user
             });
 
-
+        
 
         } else {
             // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
@@ -326,7 +344,7 @@ class AccountRouter {
         // GET THE USER.
         let userWasDeleted = false;
         try {
-            userWasDeleted = await request.user.delete();
+            userWasDeleted = await user.delete();
         } catch (error) {
             Log.write("An error occurred while attempting to delete an account.");
             Log.writeError(error);
