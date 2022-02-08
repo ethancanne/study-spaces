@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Button/ButtonTypes.js</title>
+    <title>JSDoc: Source: Client/src/views/Input/InputView.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Button/ButtonTypes.js</h1>
+    <h1 class="page-title">Source: Client/src/views/Input/InputView.js</h1>
 
     
 
@@ -26,18 +26,50 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Defines the types of buttons that can be used.
- * @author Cameron Burkholder
- * @date   10/21/2021
- */
-const ButtonTypes = {
-    Primary: "Primary",
-    Creation: "Creation",
-    Destrucive: "Destructive"
+            <pre class="prettyprint source linenums"><code>import "./InputView.scss";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { closePopup } from "../../state/actions";
+import Form from "../../core/Form/Form";
+import Button from "../../core/Button/Button";
+import ButtonTypes from "../../core/Button/ButtonTypes";
+import InputField from "../../core/InputField/InputField";
+import TextInput from "../../core/Inputs/TextInput/TextInput";
+import Label from "../../core/Label/Label";
+
+const InputView = ({ label, defaultInput = "", callback }) => {
+    const dispatch = useDispatch();
+    const [input, setInput] = useState(defaultInput);
+    /**
+     * Used to update the input field in the input popup
+     * @param {Event} e The change event to update the field with.
+     * @author Ethan Cannelongo
+     * @date   02/07/2022
+     */
+    const updateInput = (e) => {
+        setInput(e.target.value);
+    };
+
+    return (
+        &lt;Form
+            onSubmit={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dispatch(closePopup());
+                callback(input);
+                setInput("");
+            }}
+        >
+            &lt;InputField>
+                &lt;Label>{label}&lt;/Label>
+                &lt;TextInput onChange={updateInput} value={input} />
+            &lt;/InputField>
+            &lt;Button type={ButtonTypes.Creation}>Done&lt;/Button>
+        &lt;/Form>
+    );
 };
 
-export default ButtonTypes;
+export default InputView;
 </code></pre>
         </article>
     </section>

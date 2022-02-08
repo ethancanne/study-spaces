@@ -46,29 +46,54 @@ class Validator {
     }
 
     /**
-    * Validates the form input for creating a study group before a study group gets created.
-    * @author Cameron Burkholder
-    * @date   02/04/2022
-    * @static
-    */
+     * Validates the form input for creating a study group before a study group gets created.
+     * @author Cameron Burkholder
+     * @date   02/04/2022
+     * @static
+     */
     static validateCreateStudyGroupInput(request, response, nextMiddlewareFunction) {
         // GET THE FORM INPUT DATA.
         // The data will all be in the request.body object as attributes according to each's name.
         let studyGroupIsValid = false;
         // VALIDATE THE INPUT.
-        if(request.body.name && request.user) {
+        if (request.body.name && request.user) {
             studyGroupIsValid = true;
         }
         // GENERATE THE RESPONSE.
         // If the data is invalid, then a response should be returned with the appropriate message indicating such.
-        if(!studyGroupIsValid) {
-            return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
+        if (!studyGroupIsValid) {
+            response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
+            return response.end();
         }
         // If the data is valid, then the next function in the middleware chain can be called.
         else {
             return nextMiddlewareFunction();
         }
-      
+    }
+
+    /**
+     * Validates the input for changing a password.
+     * @author Cameron Burkholder
+     * @date   02/08/2022
+     * @static
+     */
+    static validatePasswordInput(request, response, nextMiddlewareFunction) {
+        // GET THE FORM INPUT DATA.
+        const currentPassword = request.body.currentPassword;
+        const newPassword = request.body.newPassword;
+
+        // CHECK THAT NEITHER INPUT IS EMPTY.
+        const EMPTY_STRING = "";
+        const currentPasswordIsEmpty = EMPTY_STRING === currentPassword;
+        const newPasswordIsEmpty = EMPTY_STRING === newPassword;
+        const passwordsAreEmpty = currentPasswordIsEmpty && newPasswordIsEmpty;
+        if (passwordsAreEmpty) {
+            response.json({ message: ResponseMessages.Account.ErrorInvalidPasswordInput });
+            return response.end();
+        }
+
+        // CONTINUE WITH THE PASSWORD CHANGING PROCESS.
+        return nextMiddlewareFunction();
     }
 }
 

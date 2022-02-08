@@ -156,7 +156,7 @@ class User {
         this.active = false;
         // Unnecessary validation
         try {
-          userDeactivated = await this.save();
+            userDeactivated = await this.save();
         } catch (error) {
             Log.write("An error occurred while attempting to delete a user.");
             Log.writeError(error);
@@ -171,18 +171,16 @@ class User {
      *
      * @async
      */
-     async reactivate() {
+    async reactivate() {
         // Activate the user.
         let userReactivated = false;
         this.active = true;
         // Unnecessary validation
-        if(this.active == true) {
+        if (this.active == true) {
             userReactivated = true;
         }
         return userReactivated;
     }
-
-
 
     /**
      * Gets the user's area code.

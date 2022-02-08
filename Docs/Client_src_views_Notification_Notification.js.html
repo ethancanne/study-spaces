@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Button/ButtonTypes.js</title>
+    <title>JSDoc: Source: Client/src/views/Notification/Notification.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Button/ButtonTypes.js</h1>
+    <h1 class="page-title">Source: Client/src/views/Notification/Notification.js</h1>
 
     
 
@@ -26,18 +26,57 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Defines the types of buttons that can be used.
- * @author Cameron Burkholder
- * @date   10/21/2021
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import "./Notification.scss";
+import notificationTypes from "./notificationTypes";
+
+//Redux
+import { useSelector, useDispatch } from "react-redux";
+import { hideNotification } from "../../state/actions";
+
+/**
+ * Renders a notification view, which will be shown whenever the
+ * showNotification action is dispatched to the NotificationReducer.
+ * @param {Boolean} props.isShowing true if the notification is currently being
+ * shown
+ * @author Ethan Cannelongo
+ * @date   01/30/2022
  */
-const ButtonTypes = {
-    Primary: "Primary",
-    Creation: "Creation",
-    Destrucive: "Destructive"
+const Notification = (props) => {
+    const type = useSelector((state) => state.notificationReducer.type);
+    const message = useSelector((state) => state.notificationReducer.message);
+    const dispatch = useDispatch();
+
+    var className = "";
+    var timeout;
+
+    const configureTimeout = () => {
+        clearTimeout(timeout);
+        className = "error";
+        timeout = setTimeout(function () {
+            dispatch(hideNotification());
+        }, 5000);
+    };
+    switch (type) {
+        case notificationTypes.ERROR:
+            configureTimeout();
+            className = "error";
+            break;
+        case notificationTypes.SUCCESS:
+            configureTimeout();
+            className = "success";
+
+            break;
+    }
+
+    return (
+        &lt;div className={"notification " + className + " " + (props.isShowing ? "active" : "")}>
+            &lt;h1>{message || "No Message"}&lt;/h1>
+        &lt;/div>
+    );
 };
 
-export default ButtonTypes;
+export default Notification;
 </code></pre>
         </article>
     </section>

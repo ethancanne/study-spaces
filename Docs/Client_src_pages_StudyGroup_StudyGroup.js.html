@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Button/ButtonTypes.js</title>
+    <title>JSDoc: Source: Client/src/pages/StudyGroup/StudyGroup.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Button/ButtonTypes.js</h1>
+    <h1 class="page-title">Source: Client/src/pages/StudyGroup/StudyGroup.js</h1>
 
     
 
@@ -26,18 +26,87 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Defines the types of buttons that can be used.
- * @author Cameron Burkholder
- * @date   10/21/2021
- */
-const ButtonTypes = {
-    Primary: "Primary",
-    Creation: "Creation",
-    Destrucive: "Destructive"
+            <pre class="prettyprint source linenums"><code>import React, { useEffect } from "react";
+import Button from "../../core/Button/Button";
+import { Link } from "react-router-dom";
+import TopBar from "../../components/TopBar/TopBar";
+import Page from "../Page";
+
+const StudyGroup = (props) => {
+    const {
+        group,
+        match: {
+            params: { id }
+        }
+    } = props;
+
+    useEffect(() => {
+        async function getGroups() {
+            await getStudyGroup();
+        }
+        getGroups();
+    }, []);
+
+    /**
+     * Retrieves all study groups the user is a member of from the server
+     * @author Ethan Cannelongo
+     * @date   11/20/2021
+     */
+    const getStudyGroup = async () => {
+        let response;
+        try {
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+            response = await axios.get(Routes.StudyGroup.GetStudyGroup, {
+                id
+            });
+        } catch (e) {
+            dispatch(
+                showErrorNotification(
+                    "There's been an error loading your study group.  Please try again later. " + e.message
+                )
+            );
+        } finally {
+            const responseIsDefined = Validator.isDefined(response);
+
+            if (responseIsDefined) {
+                const studyGroupCreationWasValid =
+                    ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved === response.data.message;
+
+                if (studyGroupCreationWasValid) {
+                    //Load study group into state
+                } else {
+                    dispatch(
+                        showErrorNotification(
+                            "There's been an error loading your study group.  Please try again later."
+                        )
+                    );
+                }
+            } else {
+                dispatch(
+                    showErrorNotification("There's been an error loading your study group.  Please try again later.")
+                );
+            }
+        }
+    };
+    return (
+        &lt;div>
+            &lt;TopBar currentPage="study" />
+
+            &lt;Page>
+                &lt;div className="study-page">
+                    &lt;div className="page-title">
+                        &lt;Link to="/">
+                            &lt;Button>{"&lt;"}&lt;/Button>
+                        &lt;/Link>
+                        &lt;h1>{id}&lt;/h1>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/Page>
+        &lt;/div>
+    );
 };
 
-export default ButtonTypes;
+export default StudyGroup;
 </code></pre>
         </article>
     </section>

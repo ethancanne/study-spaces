@@ -34,6 +34,12 @@ class AccountRouter {
             authenticator.protectRoute(),
             AccountRouter.updateAuthenticationToken
         );
+        server.post(
+            Routes.Account.ChangePassword,
+            authenticator.protectRoute(),
+            Validator.validatePasswordInput,
+            AccountRouter.changePassword
+        );
         // This is used to create accounts.
         server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
         // Gets the unverified user to complete the verification process.
@@ -90,6 +96,38 @@ class AccountRouter {
     }
 
     // POST ROUTES.
+    /**
+     * Allows a user to change their password.
+     * @param {String} request.body.currentPassword The current password for the user.
+     * @param {String} request.body.newPassword The password to change to.
+     * @author Cameron Burkholder
+     * @date   02/08/2022
+     * @async
+     * @static
+     */
+    static async changePassword(request, response) {
+        // CHECK THAT THE PASSWORD PROVIDED MATCHES THE CURRENT PASSWORD.
+        let passwordsMatch = Authenticator.verifyPassword(request.body.currentPassword, request.user);
+        if (!passwordsMatch) {
+            return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+        }
+
+        // CHANGE THE PASSWORD.
+        let passwordWasChanged = false;
+        try {
+            passwordWasChanged = await request.user.updatePassword(request.body.newPassword);
+        } catch (error) {
+            Log.write("An error occurred while attempting to change the password.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
+        }
+        if (!passwordWasChanged) {
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
+        }
+        return response.json({ message: ResponseMessages.Account.SuccessChangingPassword });
+    }
+
     /**
      * Creates an unverified account.
      * @param {String} request.body.email The email address of the user to be created.
@@ -162,25 +200,21 @@ class AccountRouter {
      * @static
      */
     static async changePassword(request, response) {
-        
         const passwordIsCorrect = Authenticator.verifyPassword(request.body.confirmPassword, User);
-        
-        if(passwordIsCorrect) {
+
+        if (passwordIsCorrect) {
             try {
                 newPassHash = Authenticator.hashPassword(request.body.password);
-                passwordChanged= await User.updatePassword(newPassHash);
-            }
-            catch(error) {
+                passwordChanged = await User.updatePassword(newPassHash);
+            } catch (error) {
                 Log.write("An error occurred while attempting to change user's password.");
             }
-        } 
-        if(passwordChanged) {
-            return response.json({ message: ResponseMessages.Account.SuccessPasswordChanged})
         }
-        else {
-            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword});
+        if (passwordChanged) {
+            return response.json({ message: ResponseMessages.Account.SuccessPasswordChanged });
+        } else {
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
         }
-        
     }
 
     /**
@@ -195,8 +229,6 @@ class AccountRouter {
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
         const user = await User.getByEmail(request.body.email);
-        
-
 
         // CHECK IF A USER WITH THE EMAIL ADDRESS EXISTS.
         const userWasNotFound = Validator.isUndefined(user);
@@ -205,8 +237,8 @@ class AccountRouter {
         }
 
         // CHECK IF THE USER IS ACTIVE
-        if (user.active == false){
-            return response.json({ message: ResponseMessages.Account.InactiveAccount })
+        if (user.active == false) {
+            return response.json({ message: ResponseMessages.Account.InactiveAccount });
         }
 
         // CHECK IF THE PASSWORD IS CORRECT.
@@ -225,9 +257,6 @@ class AccountRouter {
                 message: ResponseMessages.Account.SuccessLogin,
                 user: user
             });
-
-        
-
         } else {
             // IF THE PASSWORD IS INCORRECT, THE LOGIN ATTEMPT SHOULD FAIL.
             return response.json({ message: ResponseMessages.Account.IncorrectPassword });
@@ -334,12 +363,12 @@ class AccountRouter {
     }
 
     /**
-    * Deletes a user's account.
-    * @author Cameron Burkholder
-    * @date   02/04/2022
-    * @async
-    * @static
-    */
+     * Deletes a user's account.
+     * @author Cameron Burkholder
+     * @date   02/04/2022
+     * @async
+     * @static
+     */
     static async deleteAccount(request, response) {
         // GET THE USER.
         let userWasDeleted = false;

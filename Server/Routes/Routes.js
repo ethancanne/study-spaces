@@ -5,6 +5,7 @@
  */
 const Routes = {
     Account: {
+        ChangePassword: "/api/account/change-password",
         CreateAccount: "/api/account/create",
         Delete: "/api/account/delete",
         GetUnverifiedUser: "/api/account/get-unverified-user",

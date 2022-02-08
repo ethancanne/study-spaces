@@ -161,7 +161,7 @@ class StudyGroupRouter {
         }
 
         // CHECK IF THE USER IS THE OWNER OF THE STUDY GROUP.
-        const userIsOwnerOfStudyGroup = (String(request.user.getId()) === String(studyGroup.owner));
+        const userIsOwnerOfStudyGroup = String(request.user.getId()) === String(studyGroup.owner);
         if (userIsOwnerOfStudyGroup) {
             return response.json({ message: ResponseMessages.StudyGroup.UserAlreadyJoined });
         }

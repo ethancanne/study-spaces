@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Button/ButtonTypes.js</title>
+    <title>JSDoc: Source: Client/src/pages/Account/Account.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Button/ButtonTypes.js</h1>
+    <h1 class="page-title">Source: Client/src/pages/Account/Account.js</h1>
 
     
 
@@ -26,18 +26,130 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Defines the types of buttons that can be used.
- * @author Cameron Burkholder
- * @date   10/21/2021
+            <pre class="prettyprint source linenums"><code>import "./Account.scss";
+import React, { useState } from "react";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { showInputPopup } from "../../state/actions";
+import TopBar from "../../components/TopBar/TopBar";
+import Page from "../Page";
+import Button from "../../core/Button/Button";
+import ButtonTypes from "../../core/Button/ButtonTypes";
+
+/**
+ * Renders the Account page
+ * @author Stacey Popenfoose
+ * @date   2/05/2022
  */
-const ButtonTypes = {
-    Primary: "Primary",
-    Creation: "Creation",
-    Destrucive: "Destructive"
+const Account = () => {
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.authReducer);
+
+    const [newEmail, setNewEmail] = useState(user.email);
+    const [newPassword, setNewPassword] = useState("");
+
+    /**
+     * Used to submit the new email request
+     * @author Ethan Cannelongo
+     * @date   02/07/2022
+     * @async
+     */
+    const submitNewEmail = async (newEmail) => {
+        // response = await axios.delete(Routes.Account.Delete);
+        console.log(newEmail);
+    };
+
+    /**
+     * Used to submit the new password request
+     * @author Ethan Cannelongo
+     * @date   02/07/2022
+     * @async
+     */
+    const submitNewPassword = async (newPassword) => {
+        // response = await axios.delete(Routes.Account.Delete);
+        console.log(newPassword);
+    };
+
+    /**
+     * Used to submit the delete account request and sign the user out
+     * @author Ethan Cannelongo
+     * @date   02/07/2022
+     * @async
+     */
+    const submitDeleteAccount = async () => {
+        response = await axios.delete(Routes.Account.Delete);
+    };
+    return (
+        &lt;>
+            &lt;TopBar currentPage="account" />
+            &lt;Page>
+                &lt;div className="page-title">
+                    &lt;h1>Account&lt;/h1>
+                &lt;/div>
+                &lt;div className="account-page">
+                    &lt;div className="infos">
+                        &lt;div className="user-info">
+                            &lt;h1>Full Name:&lt;/h1>
+                            &lt;p className="name">{user.name}&lt;/p>
+                        &lt;/div>
+                        &lt;div className="user-info">
+                            &lt;h1>Email:&lt;/h1>
+                            &lt;p className="email">{user.email}&lt;/p>
+                        &lt;/div>
+                        &lt;div className="user-info">
+                            &lt;h1>Area Code:&lt;/h1>
+                            &lt;p className="areaCode">{user.areaCode}&lt;/p>
+                        &lt;/div>
+                        &lt;div className="user-info">
+                            &lt;h1>Profile Picture:&lt;/h1>
+                            &lt;img
+                                className="profile-picture"
+                                src={" data:image/png;charset=utf-8;base64," + user.profilePicture}
+                                alt=""
+                            />
+                        &lt;/div>
+                    &lt;/div>
+                    &lt;div className="edit-account-buttons">
+                        &lt;Button
+                            type={ButtonTypes.Primary}
+                            onClick={() =>
+                                dispatch(showInputPopup("Change Email", "New Email", user.email, submitNewEmail))
+                            }
+                        >
+                            Change Email
+                        &lt;/Button>
+                        &lt;Button
+                            type={ButtonTypes.Primary}
+                            onClick={() =>
+                                dispatch(showInputPopup("Change Password", "New Password", "", submitNewPassword))
+                            }
+                        >
+                            Change Password
+                        &lt;/Button>
+
+                        &lt;Button
+                            type={ButtonTypes.Destrucive}
+                            onClick={() =>
+                                dispatch(
+                                    showInputPopup(
+                                        "Confirm Password to Delete Account",
+                                        "Confirm your password",
+                                        "",
+                                        submitDeleteAccount
+                                    )
+                                )
+                            }
+                        >
+                            Delete Account
+                        &lt;/Button>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/Page>
+        &lt;/>
+    );
 };
 
-export default ButtonTypes;
+export default Account;
 </code></pre>
         </article>
     </section>

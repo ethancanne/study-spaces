@@ -112,9 +112,13 @@ const App = (props) => {
                             return <StudyGroup {...props} />;
                         }}
                     />
-                    <Route exact path="/account" render={(props) => {
-                        return <Account/>
-                    }} />
+                    <Route
+                        exact
+                        path="/account"
+                        render={(props) => {
+                            return <Account />;
+                        }}
+                    />
                 </Switch>
             </div>
         </Router>

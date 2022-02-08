@@ -62,12 +62,15 @@ class AccountRouter {
             authenticator.protectRoute(),
             AccountRouter.updateAuthenticationToken
         );
+        server.post(Routes.Account.ChangePassword, authenticator.protectRoute(), Validator.validatePasswordInput, AccountRouter.changePassword);
         // This is used to create accounts.
         server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
         // Gets the unverified user to complete the verification process.
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
         server.post(Routes.Account.Login, AccountRouter.login);
+        // This is used to delete an account.
+        server.delete(Routes.Account.Delete, authenticator.protectRoute(), AccountRouter.deleteAccount);
 
         // This is used to allow users to upload profile pictures.
         const fileFilter = (req, file, cb) => {
@@ -116,6 +119,38 @@ class AccountRouter {
     }
 
     // POST ROUTES.
+    /**
+     * Allows a user to change their password.
+     * @param {String} request.body.currentPassword The current password for the user.
+     * @param {String} request.body.newPassword The password to change to.
+     * @author Cameron Burkholder
+     * @date   02/08/2022
+     * @async
+     * @static
+     */
+    static async changePassword(request, response) {
+        // CHECK THAT THE PASSWORD PROVIDED MATCHES THE CURRENT PASSWORD.
+        let passwordsMatch = Authenticator.verifyPassword(request.body.currentPassword, request.user);
+        if (!passwordsMatch) {
+            return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+        }
+
+        // CHANGE THE PASSWORD.
+        let passwordWasChanged = false;
+        try {
+            passwordWasChanged = await request.user.updatePassword(request.body.newPassword);
+        } catch (error) {
+            Log.write("An error occurred while attempting to change the password.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
+        }
+        if (!passwordWasChanged) {
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
+        }
+        return response.json({ message: ResponseMessages.Account.SuccessChangingPassword });
+    }
+
     /**
      * Creates an unverified account.
      * @param {String} request.body.email The email address of the user to be created.
@@ -180,8 +215,6 @@ class AccountRouter {
     }
 
     /**
-     *
-     * @param {String} request.body.email
      * @param {String} request.body.password
      * @param {String} request.body.confirmPassword
      * @author Clifton Croom
@@ -189,7 +222,23 @@ class AccountRouter {
      * @async
      * @static
      */
-    static async changePassword(request, response) {}
+    static async changePassword(request, response) {
+        const passwordIsCorrect = Authenticator.verifyPassword(request.body.confirmPassword, User);
+
+        if (passwordIsCorrect) {
+            try {
+                newPassHash = Authenticator.hashPassword(request.body.password);
+                passwordChanged = await User.updatePassword(newPassHash);
+            } catch (error) {
+                Log.write("An error occurred while attempting to change user's password.");
+            }
+        }
+        if (passwordChanged) {
+            return response.json({ message: ResponseMessages.Account.SuccessPasswordChanged });
+        } else {
+            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
+        }
+    }
 
     /**
      * This allows the user to log in.
@@ -208,6 +257,11 @@ class AccountRouter {
         const userWasNotFound = Validator.isUndefined(user);
         if (userWasNotFound) {
             return response.json({ message: ResponseMessages.Account.UserNotFound });
+        }
+
+        // CHECK IF THE USER IS ACTIVE
+        if (user.active == false) {
+            return response.json({ message: ResponseMessages.Account.InactiveAccount });
         }
 
         // CHECK IF THE PASSWORD IS CORRECT.
@@ -330,6 +384,33 @@ class AccountRouter {
             }
         }
     }
+
+    /**
+     * Deletes a user's account.
+     * @author Cameron Burkholder
+     * @date   02/04/2022
+     * @async
+     * @static
+     */
+    static async deleteAccount(request, response) {
+        // GET THE USER.
+        let userWasDeleted = false;
+        try {
+            userWasDeleted = await user.delete();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete an account.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorDeleteAccount });
+        }
+        if (!userWasDeleted) {
+            return response.json({ message: ResponseMessages.Account.ErrorDeleteAccount });
+        }
+
+        // SEND THE RESPONSE.
+        // If the execution reaches this point, then the account was been deleted.
+        return response.json({ message: ResponseMessages.Account.SuccessAccountDeleted });
+    }
 }
 
 module.exports = AccountRouter;
@@ -343,13 +424,13 @@ module.exports = AccountRouter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Thu Feb 03 2022 13:51:14 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Feb 08 2022 14:20:57 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
