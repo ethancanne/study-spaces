@@ -451,6 +451,12 @@ class User {
     async setEmail(email) {
         this.email = email;
         const emailSet = Validator.isDefined(this.email);
+        try {
+            await this.save();
+        } catch (error) {
+            emailSet = false;
+            Log.writeError(error);
+        }
         return emailSet;
     }
 
