@@ -12,6 +12,10 @@ const StudyGroup = require("./StudyGroup.js");
  * @date   07/29/2021
  */
 const UserSchema = new Schema({
+    active: {
+        type: Boolean,
+        required: true
+    },
     areaCode: {
         type: String,
         required: false
@@ -19,10 +23,6 @@ const UserSchema = new Schema({
     conversations: {
         type: [Mongoose.Schema.Types.ObjectId],
         ref: Configuration.getConversationCollectionName(),
-        required: true
-    },
-    active: {
-        type: Boolean,
         required: true
     },
     email: {
@@ -123,6 +123,7 @@ class User {
         // CREATE THE USER IN THE DATABASE.
         const EMPTY = [];
         const userModel = new UserModel({
+            active: true,
             areaCode: areaCode,
             conversations: EMPTY,
             email: unverifiedUser.getEmail(),
@@ -154,8 +155,12 @@ class User {
         let userDeactivated = false;
         this.active = false;
         // Unnecessary validation
-        if(this.active == false) {
-           userDeactivated = true;     
+        try {
+          userDeactivated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete a user.");
+            Log.writeError(error);
+            userDeactivated = false;
         }
         return userDeactivated;
     }

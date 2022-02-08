@@ -1,5 +1,5 @@
 import { popupConstants } from "../constants/constants";
-import popupTypes from "../../Views/Popup/PopupTypes.Js";
+import views from "../../Views/Views";
 /**
  * This is the reducer for all actions relating to popus
  * @param  {object} state The inital state of the reducer
@@ -10,9 +10,12 @@ import popupTypes from "../../Views/Popup/PopupTypes.Js";
 const popupReducer = (state = { view: "", isShowing: false, payload: {} }, action) => {
     switch (action.type) {
         case popupConstants.SHOW_CREATE_STUDY_GROUP_POPUP:
-            return { ...state, view: popupTypes.StudyGroup.Create, isShowing: true, payload: {} };
+            return { ...state, view: views.Popup.StudyGroup.Create, isShowing: true, payload: {} };
         case popupConstants.SHOW_JOIN_STUDY_GROUP_POPUP:
-            return { ...state, view: popupTypes.StudyGroup.Join, isShowing: true, payload: action.payload };
+            return { ...state, view: views.Popup.StudyGroup.Join, isShowing: true, payload: action.payload };
+
+        case popupConstants.SHOW_INPUT_POPUP:
+            return { ...state, view: views.Popup.Input, isShowing: true, payload: action.payload };
 
         case popupConstants.CLOSE_POPUP:
             return { ...state, isShowing: false };

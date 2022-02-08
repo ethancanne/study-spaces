@@ -1,0 +1,43 @@
+@import "../../globals.scss";
+.account-page {
+    .infos {
+        display: flex;
+        flex-direction: column;
+
+        .user-info {
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.434);
+            backdrop-filter: blur(3px);
+            border-radius: 4px;
+
+            border-bottom: $border-color 3px solid;
+            box-shadow: rgba(6, 6, 6, 0.132) 2px 2px 10px;
+            margin: 5px 20px 5px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            h1 {
+                flex: 1;
+                font-size: 15px;
+                text-align: left;
+            }
+
+            p {
+                font-size: 17px;
+            }
+        }
+        padding-bottom: 150px;
+        padding-top: 20px;
+    }
+    .edit-account-buttons {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 5em;
+        background-color: white;
+        box-shadow: rgba(0, 0, 0, 0.151) -20px 0 20px;
+    }
+}

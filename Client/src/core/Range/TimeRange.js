@@ -47,7 +47,7 @@ const TimeRange = ({ updateTimeRange }) => {
     return (
         <Box sx={{ width: "100%", height: "90px", overflow: "hidden" }}>
             <Slider
-                sx={{ height: "40px", color: "rgba(139, 79, 11, 0.616)" }}
+                sx={{ height: "40px", color: "rgba(139, 79, 11, 0.616)", overflow: "hidden" }}
                 value={values}
                 onChange={handleChange}
                 step={15}

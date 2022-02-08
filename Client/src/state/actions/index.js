@@ -36,6 +36,13 @@ export const showJoinStudyGroupPopup = (group) => {
     };
 };
 
+export const showInputPopup = (title, label, defaultInput, callback) => {
+    return {
+        type: popupConstants.SHOW_INPUT_POPUP,
+        payload: { title, label, defaultInput, callback }
+    };
+};
+
 export const closePopup = () => {
     return {
         type: popupConstants.CLOSE_POPUP
