@@ -102,12 +102,13 @@
     margin: 20px;
     cursor: pointer;
 
-    &.ButtonPrimary {
-        background-color: $primary-button-color;
-    }
     &.ButtonDestructive {
         background-color: $destructive-button-color;
     }
+    &.ButtonPrimary {
+        background-color: $primary-button-color;
+    }
+
     &.ButtonCreation {
         background-color: $creation-button-color;
     }

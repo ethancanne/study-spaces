@@ -1,5 +1,6 @@
 import "./Account.scss";
 import React, { useState } from "react";
+import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { showInputPopup } from "../../state/actions";
 import TopBar from "../../components/TopBar/TopBar";
@@ -96,6 +97,22 @@ const Account = () => {
                             }
                         >
                             Change Password
+                        </Button>
+
+                        <Button
+                            type={ButtonTypes.Destrucive}
+                            onClick={() =>
+                                dispatch(
+                                    showInputPopup(
+                                        "Confirm Password to Delete Account",
+                                        "Confirm your password",
+                                        "",
+                                        submitDeleteAccount
+                                    )
+                                )
+                            }
+                        >
+                            Delete Account
                         </Button>
                     </div>
                 </div>

@@ -12,14 +12,16 @@ import ButtonTypes from "./ButtonTypes.js";
  */
 const Button = (props) => {
     let buttonClassName;
+
     switch (props.type) {
         case ButtonTypes.Primary:
             buttonClassName = "ButtonPrimary";
             break;
+
         case ButtonTypes.Creation:
             buttonClassName = "ButtonCreation";
             break;
-        case ButtonTypes.Destructive:
+        case ButtonTypes.Destrucive:
             buttonClassName = "ButtonDestructive";
             break;
         default:
