@@ -1,8 +1,9 @@
 import "./Account.scss";
 import React, { useState } from "react";
+import Routes from "../../../../Server/Routes/Routes";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { showInputPopup } from "../../state/actions";
+import { showInputPopup, showErrorNotification, showSuccessNotification, signOut } from "../../state/actions";
 import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
 import Button from "../../core/Button/Button";
@@ -16,9 +17,6 @@ import ButtonTypes from "../../core/Button/ButtonTypes";
 const Account = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer);
-
-    const [newEmail, setNewEmail] = useState(user.email);
-    const [newPassword, setNewPassword] = useState("");
 
     /**
      * Used to submit the new email request
@@ -48,11 +46,15 @@ const Account = () => {
      * @date   02/07/2022
      * @async
      */
-    const submitDeleteAccount = async () => {
+    const submitDeleteAccount = async (currentPassword) => {
         let response;
         try {
-            response = await axios.delete(Routes.Account.Delete);
-        } catch(error) {
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+            response = await axios.delete(Routes.Account.Delete, {
+                currentPassword
+            });
+        } catch (error) {
             console.log(error);
             dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
         } finally {
@@ -60,11 +62,17 @@ const Account = () => {
                 // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
                 const accountDeletionWasValid =
                     ResponseMessages.Account.SuccessAccountDeleted === response.data.message;
+
+                if (accountDeletionWasValid) {
+                    dispatch(showSuccessNotification(response.data.message));
+                    dispatch(signOut());
+                } else {
+                    dispatch(showErrorNotification("There was an error: " + response.data.message));
+                }
             } else {
-                dispatch(showErrorNotification("There was an error"));
+                dispatch(showErrorNotification("There was an error, the server sent undefined results"));
             }
         }
-        
     };
     return (
         <>
