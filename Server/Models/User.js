@@ -490,9 +490,21 @@ class User {
      * Update's the user's password.
      * @param {String} newPassword The new password to set.
      * @return {Boolean} True if the password was updated, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/09/2022
      * @async
      */
-    async updatePassword(newPassword) {}
+    async updatePassword(newPasswordHash) {
+        // STORE THE NEW PASSWORD.
+        this.passwordHash = newPasswordHash;
+        let passwordWasUpdated = false;
+        try {
+          passwordWasUpdated = await this.save();
+        } catch (error) {
+          Log.write("An error occurred while attempting to updated a user's password.");
+          Log.writeError(error);
+        }
+        return passwordWasUpdated;
+    }
 }
 module.exports = User;

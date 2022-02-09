@@ -97,38 +97,6 @@ class AccountRouter {
 
     // POST ROUTES.
     /**
-     * Allows a user to change their password.
-     * @param {String} request.body.currentPassword The current password for the user.
-     * @param {String} request.body.newPassword The password to change to.
-     * @author Cameron Burkholder
-     * @date   02/08/2022
-     * @async
-     * @static
-     */
-    static async changePassword(request, response) {
-        // CHECK THAT THE PASSWORD PROVIDED MATCHES THE CURRENT PASSWORD.
-        let passwordsMatch = Authenticator.verifyPassword(request.body.currentPassword, request.user);
-        if (!passwordsMatch) {
-            return response.json({ message: ResponseMessages.Account.IncorrectPassword });
-        }
-
-        // CHANGE THE PASSWORD.
-        let passwordWasChanged = false;
-        try {
-            passwordWasChanged = await request.user.updatePassword(request.body.newPassword);
-        } catch (error) {
-            Log.write("An error occurred while attempting to change the password.");
-            Log.writeError(error);
-            response.status(ResponseCodes.Error);
-            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
-        }
-        if (!passwordWasChanged) {
-            return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
-        }
-        return response.json({ message: ResponseMessages.Account.SuccessChangingPassword });
-    }
-
-    /**
      * Creates an unverified account.
      * @param {String} request.body.email The email address of the user to be created.
      * @param {String} request.body.password The password of the user to be created.
@@ -205,7 +173,7 @@ class AccountRouter {
         if (passwordIsCorrect) {
             try {
                 newPassHash = Authenticator.hashPassword(request.body.password);
-                passwordChanged = await User.updatePassword(newPassHash);
+                passwordChanged = await request.user.updatePassword(newPassHash);
             } catch (error) {
                 Log.write("An error occurred while attempting to change user's password.");
             }
@@ -370,6 +338,14 @@ class AccountRouter {
      * @static
      */
     static async deleteAccount(request, response) {
+        // CHECK THAT THE CORRECT PASSWORD HAS BEEN PROVIDED.
+        const currentPassword = request.body.currentPassword;
+        const user = request.user;
+        const passwordIsCorrect = Authenticator.verifyPassword(currentPassword, user);
+        if (!passwordIsCorrect) {
+          return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+        }
+
         // GET THE USER.
         let userWasDeleted = false;
         try {
