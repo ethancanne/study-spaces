@@ -99,6 +99,7 @@ const App = (props) => {
                             );
                         }}
                     />
+
                     <Route exact path="/study">
                         <Study />
                     </Route>

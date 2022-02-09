@@ -4,10 +4,12 @@ import Routes from "../../../../Server/Routes/Routes";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { showInputPopup, showErrorNotification, showSuccessNotification, signOut } from "../../state/actions";
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
+import Validator from "../../../../Server/Validator";
 import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
-import Button from "../../core/Button/Button";
 import ButtonTypes from "../../core/Button/ButtonTypes";
+import Button from "../../core/Button/Button";
 
 /**
  * Renders the Account page
@@ -25,7 +27,7 @@ const Account = () => {
      * @async
      */
     const submitNewEmail = async (newEmail) => {
-        // response = await axios.delete(Routes.Account.Delete);
+        response = await axios.post(Routes.Account.Delete, {});
         console.log(newEmail);
     };
 
@@ -35,9 +37,35 @@ const Account = () => {
      * @date   02/07/2022
      * @async
      */
-    const submitNewPassword = async (newPassword) => {
-        // response = await axios.delete(Routes.Account.Delete);
+    const submitNewPassword = async (currentPassword, newPassword) => {
+        let response;
         console.log(newPassword);
+        try {
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+            response = await axios.post(Routes.Account.ChangePassword, {
+                currentPassword,
+                newPassword
+            });
+        } catch (error) {
+            console.log(error);
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
+        } finally {
+            const responseIsDefined = Validator.isDefined(response.data);
+            if (responseIsDefined) {
+                const passwordChangeWasValid =
+                    ResponseMessages.Account.SuccessChangingPassword === response.data.message;
+
+                if (passwordChangeWasValid) {
+                    // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
+                    dispatch(showSuccessNotification(response.data.message));
+                } else {
+                    dispatch(showErrorNotification("There was an error: " + response.data.message));
+                }
+            } else {
+                dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+            }
+        }
     };
 
     /**
@@ -52,17 +80,16 @@ const Account = () => {
             axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
             response = await axios.delete(Routes.Account.Delete, {
-                currentPassword
+                data: { currentPassword }
             });
         } catch (error) {
             console.log(error);
             dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
         } finally {
-            if (responseIsDefined) {
-                // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const accountDeletionWasValid =
-                    ResponseMessages.Account.SuccessAccountDeleted === response.data.message;
+            const accountDeletionWasValid = ResponseMessages.Account.SuccessAccountDeleted === response.data.message;
 
+            if (accountDeletionWasValid) {
+                // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
                 if (accountDeletionWasValid) {
                     dispatch(showSuccessNotification(response.data.message));
                     dispatch(signOut());
@@ -108,7 +135,15 @@ const Account = () => {
                         <Button
                             type={ButtonTypes.Primary}
                             onClick={() =>
-                                dispatch(showInputPopup("Change Email", "New Email", user.email, submitNewEmail))
+                                dispatch(
+                                    showInputPopup(
+                                        "Change Email",
+                                        "New Email",
+                                        user.email,
+                                        submitNewEmail,
+                                        "Current Password"
+                                    )
+                                )
                             }
                         >
                             Change Email
@@ -116,7 +151,15 @@ const Account = () => {
                         <Button
                             type={ButtonTypes.Primary}
                             onClick={() =>
-                                dispatch(showInputPopup("Change Password", "New Password", "", submitNewPassword))
+                                dispatch(
+                                    showInputPopup(
+                                        "Change Password",
+                                        "New Password",
+                                        "",
+                                        submitNewPassword,
+                                        "Current Password"
+                                    )
+                                )
                             }
                         >
                             Change Password

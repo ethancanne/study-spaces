@@ -33,7 +33,12 @@ const Popup = (props) => {
 
         case views.Popup.Input:
             popupView = (
-                <InputView label={payload.label} defaultInput={payload.defaultInput} callback={payload.callback} />
+                <InputView
+                    label={payload.label}
+                    defaultInput={payload.defaultInput}
+                    callback={payload.callback}
+                    label2={payload.label2}
+                />
             );
             break;
     }
