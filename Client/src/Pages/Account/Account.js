@@ -49,7 +49,22 @@ const Account = () => {
      * @async
      */
     const submitDeleteAccount = async () => {
-        response = await axios.delete(Routes.Account.Delete);
+        let response;
+        try {
+            response = await axios.delete(Routes.Account.Delete);
+        } catch(error) {
+            console.log(error);
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
+        } finally {
+            if (responseIsDefined) {
+                // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
+                const accountDeletionWasValid =
+                    ResponseMessages.Account.SuccessAccountDeleted === response.data.message;
+            } else {
+                dispatch(showErrorNotification("There was an error"));
+            }
+        }
+        
     };
     return (
         <>
