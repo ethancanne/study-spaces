@@ -20,7 +20,7 @@ import Page from "../Page";
  * @author Ethan Cannelongo
  * @date   11/20/2021
  */
-const Study = () => {
+const Study = (props) => {
     const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
     const user = useSelector((state) => state.authReducer.user);
     const studyGroups = useSelector((state) => state.studyGroupsReducer.studyGroups);
@@ -32,6 +32,11 @@ const Study = () => {
             await getStudyGroups();
         }
         getGroups();
+
+        async function verifyUserEmail() {
+            await verifyEmail(props.verificationToken);
+        }
+        if (props.verificationToken) verifyUserEmail();
     }, []);
 
     /**
@@ -76,6 +81,40 @@ const Study = () => {
                 dispatch(
                     showErrorNotification("There's been an error loading your study groups.  Please try again later.")
                 );
+            }
+        }
+    };
+
+    /**
+     * Used to verify the email, if a user changed their email, from a
+     * token that was received from the link
+     * @author Ethan Cannelongo
+     * @param {String} verificationToken The verification token
+     * @date   02/09/22
+     */
+    const verifyEmail = async (verificationToken) => {
+        // SUBMIT THE VERIFY USER REQUEST.
+        let response;
+        try {
+            response = await axios.post(Routes.Account.PUTVERIFYEMAILROUTEHERE, {
+                verificationToken: verificationToken
+            });
+        } catch (e) {
+            dispatch(showErrorNotification("Verification failed: " + error.message));
+        } finally {
+            const responseIsDefined = Validator.isDefined(response);
+            if (responseIsDefined) {
+                // IF THE USER VERIFICATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
+                const verificationWasValid =
+                    ResponseMessages.Account.PUTEMAILVERIFICATIONWASVAILIDMESSAGEHERE === response.data.message;
+
+                if (verificationWasValid) {
+                    dispatch(showSuccessNotification("Your email has been successfully verified!"));
+                } else {
+                    dispatch(showErrorNotification("Email verification failed: " + response.data.message));
+                }
+            } else {
+                dispatch(showErrorNotification("Email verification failed: Undefined response."));
             }
         }
     };

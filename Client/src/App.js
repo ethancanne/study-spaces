@@ -100,6 +100,20 @@ const App = (props) => {
                         }}
                     />
 
+                    <Route
+                        path="/verifyEmail/:verificationToken"
+                        render={(props) => {
+                            const accountLoginView = Views.Home.Login;
+                            return isLoggedIn ? (
+                                <>
+                                    <Study {...props} />
+                                </>
+                            ) : (
+                                <Home {...props} homeView={accountLoginView} />
+                            );
+                        }}
+                    />
+
                     <Route exact path="/study">
                         <Study />
                     </Route>
