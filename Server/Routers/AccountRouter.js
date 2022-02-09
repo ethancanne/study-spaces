@@ -168,18 +168,21 @@ class AccountRouter {
      * @static
      */
     static async changePassword(request, response) {
-        const passwordIsCorrect = Authenticator.verifyPassword(request.body.confirmPassword, User);
-
+        const passwordIsCorrect = Authenticator.verifyPassword(request.body.currentPassword, request.user);
+        let passwordChanged = false;
         if (passwordIsCorrect) {
             try {
-                newPassHash = Authenticator.hashPassword(request.body.password);
+                let newPassHash = Authenticator.hashPassword(request.body.newPassword);
                 passwordChanged = await request.user.updatePassword(newPassHash);
             } catch (error) {
                 Log.write("An error occurred while attempting to change user's password.");
+                Log.writeError(error);
             }
+        } else {
+          return response.json({ message: ResponseMessages.Account.IncorrectPassword });
         }
         if (passwordChanged) {
-            return response.json({ message: ResponseMessages.Account.SuccessPasswordChanged });
+            return response.json({ message: ResponseMessages.Account.SuccessChangingPassword });
         } else {
             return response.json({ message: ResponseMessages.Account.ErrorChangingPassword });
         }
