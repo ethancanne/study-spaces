@@ -160,6 +160,75 @@ class AccountRouter {
     }
 
     /**
+     * Route to process the request for changing email and generate verification link.
+     * @param {String} request.body.newEmail 
+     * @param {String} request.body.currentPassword
+     * @author Clifton Croom
+     * @date 02/09/2022
+     * @async
+     * @static
+     */
+     static async changeEmail(request, response) {
+        //GENERATE VERIFICATION TOKEN
+        const passwordIsCorrect = Authenticator.verifyPassword(request.body.currentPassword, request.user);
+
+        if(!passwordIsCorrect) {
+            return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+        }
+        else {
+            let tokenIsNotUnique = true;
+            let verificationToken = undefined;
+
+            // GENERATE A RANDOM TOKEN.
+            while (tokenIsNotUnique) {
+                
+                verificationToken = RandomWords({ exactly: 5, join: "-" });
+
+                // CHECK THE USERS LIST TO SEE IF THE TOKEN IS ALREADY IN USE.
+                let existingUser = undefined;
+                try {
+                    existingUser = await User.getByVerificationToken(verificationToken); // NTDT
+                } catch (error) {
+                    Log.writeError(error);
+                    throw error;
+                }
+                tokenIsNotUnique = Validator.isDefined(existingUser);
+            }
+            
+            // EMAIL THE VERIFICATION LINK TO THE USER.
+            let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+            const emailSubject = "Your Study Spaces Verification Link";
+            const emailBody = "Click this: " + verificationLink;
+
+            let emailWasSent = false;
+            try {
+                emailWasSent = await Authenticator.sendEmail(request.user, emailSubject, emailBody);
+            } catch (error) {
+                Log.write("An error occurred while sending an email during the account creation process.");
+                Log.writeError(error);
+                return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
+            }
+
+            //Might need this
+            // if (!emailWasSent && Configuration.isSetToProduction()) { 
+            //    return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            //}
+
+            //ADD VERIFICATION TOKEN TO USER
+            
+            const tokenSet = await request.user.setVerificationToken(verificationToken);
+            const emailSet = await request.user.setTemporaryEmail(newEmail)
+            if (emailWasSent && tokenSet && emailSet) {
+                return response.json({ message: ResponseMessages.Account.EmailSent})
+            } else {
+                return response.json({ message: ResponseMessages.Account.ErrorSettingToken})
+            }
+            
+        }
+
+     }
+
+    /**
      * @param {String} request.body.password
      * @param {String} request.body.confirmPassword
      * @author Clifton Croom

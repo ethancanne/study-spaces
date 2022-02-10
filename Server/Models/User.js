@@ -45,6 +45,14 @@ const UserSchema = new Schema({
         type: [Mongoose.Schema.Types.ObjectId],
         ref: Configuration.getStudyGroupCollectionName(),
         required: true
+    },
+    temporaryEmail: {
+        type: String,
+        required: false
+    },
+    verificationToken: {
+        type: String,
+        required: false
     }
 });
 UserSchema.set("toObject", {
@@ -486,6 +494,33 @@ class User {
         return profilePictureSet;
     }
 
+    /**
+     * Sets the user's temporary email
+     * @param {String} temporaryEmail
+     * @returns {Boolean} True if the temporary email is set.
+     * @author Clifton Croom
+     * @date 02/09/2022
+     * @async
+     */
+     async setTemporaryEmail(temporaryEmail){
+        this.temporaryEmail = temporaryEmail;
+        const temporaryEmailSet = Validator.isDefined(this.temporaryEmail);
+        return temporaryEmailSet;
+    }
+
+    /**
+     * Sets the user's verification token
+     * @param {String} newVerificationToken
+     * @returns {Boolean} True if the verification token is set.
+     * @author Clifton Croom
+     * @date 02/09/2022
+     * @async
+     */
+    async setVerificationToken(newVerificationToken){
+        this.verificationToken = newVerificationToken;
+        const tokenSet = Validator.isDefined(this.verificationToken);
+        return tokenSet;
+    }
     /**
      * Update's the user's password.
      * @param {String} newPassword The new password to set.
