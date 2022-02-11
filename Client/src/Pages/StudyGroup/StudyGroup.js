@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
 import Routes from "../../../../Server/Routes/Routes";
+import { sendGetRequest } from "../../../Helper";
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 
 const StudyGroup = (props) => {
     const {
@@ -26,40 +28,16 @@ const StudyGroup = (props) => {
      * @date   11/20/2021
      */
     const getStudyGroup = async () => {
-        let response;
-        try {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-            response = await axios.get(Routes.StudyGroup.GetStudyGroup, {
-                id
-            });
-        } catch (e) {
-            dispatch(
-                showErrorNotification(
-                    "There's been an error loading your study group.  Please try again later. " + e.message
-                )
-            );
-        } finally {
-            const responseIsDefined = Validator.isDefined(response);
-
-            if (responseIsDefined) {
-                const studyGroupCreationWasValid =
-                    ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved === response.data.message;
-
-                if (studyGroupCreationWasValid) {
-                    //Load study group into state
-                } else {
-                    dispatch(
-                        showErrorNotification(
-                            "There's been an error loading your study group.  Please try again later."
-                        )
-                    );
-                }
-            } else {
-                dispatch(
-                    showErrorNotification("There's been an error loading your study group.  Please try again later.")
-                );
+        sendGetRequest(
+            Routes.StudyGroup.GetStudyGroup,
+            ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
+            "There was an error retriving your study group",
+            true,
+            (data, error) => {
+                if (error) return;
+                //Load study group into state
             }
-        }
+        );
     };
     return (
         <div>

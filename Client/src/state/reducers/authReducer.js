@@ -32,6 +32,9 @@ const authReducer = (state = initialState, action) => {
             // localStorage.setItem("unverifiedUser", JSON.stringify(action.payload.unverifiedUser));
             return { ...state, unverifiedUser: action.payload.unverifiedUser };
 
+        case authConstants.SET_USER:
+            return { ...state, user: action.payload.user };
+
         default:
             return state;
     }

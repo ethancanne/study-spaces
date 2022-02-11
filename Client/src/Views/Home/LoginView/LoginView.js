@@ -12,6 +12,7 @@ import Validator from "../../../../../Server/Validator.js";
 import Views from "../../Views.js";
 import Label from "../../../core/Label/Label";
 import AuthView from "../AuthView";
+import { sendPostRequest } from "../../../../Helper";
 
 /**
  * Used to display the login form and log the user in.
@@ -38,32 +39,21 @@ const LoginView = (props) => {
         event.preventDefault();
         event.stopPropagation();
 
-        // SUBMIT THE LOGIN REQUEST.
-        let response;
-        try {
-            response = await axios.post(Routes.Account.Login, {
+        sendPostRequest(
+            Routes.Account.Login,
+            {
                 email,
                 password
-            });
-        } catch (error) {
-            console.log(error);
-            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
-        } finally {
-            // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
-            const responseIsDefined = Validator.isDefined(response);
-            if (responseIsDefined) {
-                // IF THE USER HAS LOGGED IN, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const loginWasValid = ResponseMessages.Account.SuccessLogin === response.data.message;
-                if (loginWasValid) {
-                    const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
-                    dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
-                    dispatch(showSuccessNotification("Successfully signed in: " + user.name));
-                } else {
-                    dispatch(showErrorNotification(response.data.message));
-                    dispatch(signOut);
-                }
+            },
+            ResponseMessages.Account.SuccessLogin,
+            "Error logging in: Cannot connect to the server",
+            false,
+            (data, error) => {
+                if (error) return;
+                const { authenticationToken, authenticationTokenExpirationDate, user } = data;
+                dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
             }
-        }
+        );
     };
 
     /**

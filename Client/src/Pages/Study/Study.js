@@ -1,8 +1,14 @@
 import "./Study.scss";
 import React, { useEffect } from "react";
-import { sendPostRequest } from "../../../Helper";
+import { sendGetRequest, sendPostRequest } from "../../../Helper";
 import { useSelector, useDispatch } from "react-redux";
-import { signOut, showCreateStudyGroupPopup, loadStudyGroup, showErrorNotification } from "../../state/actions";
+import {
+    signOut,
+    showCreateStudyGroupPopup,
+    loadStudyGroup,
+    showErrorNotification,
+    setUser
+} from "../../state/actions";
 import Validator from "../../../../Server/Validator";
 import Routes from "../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
@@ -46,44 +52,21 @@ const Study = (props) => {
      * @date   11/20/2021
      */
     const getStudyGroups = async () => {
-        let response;
-        try {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-
-            response = await axios.get(Routes.StudyGroup.GetUserStudyGroups);
-        } catch (e) {
-            dispatch(
-                showErrorNotification(
-                    "There's been an error loading your study groups.  Please try again later. " + e.message
-                )
-            );
-        } finally {
-            const responseIsDefined = Validator.isDefined(response);
-
-            if (responseIsDefined) {
-                const studyGroupCreationWasValid =
-                    ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
-
-                if (studyGroupCreationWasValid) {
-                    const studyGroups = response.data.studyGroups;
-                    if (studyGroups) {
-                        studyGroups.map((s) => {
-                            dispatch(loadStudyGroup(studyGroups));
-                        });
-                    }
-                } else {
-                    dispatch(
-                        showErrorNotification(
-                            "There's been an error loading your study groups.  Please try again later."
-                        )
-                    );
+        sendGetRequest(
+            Routes.StudyGroup.GetUserStudyGroups,
+            ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
+            "There's been an error loading your study groups.  Please try again later. ",
+            true,
+            (data, error) => {
+                if (error) return;
+                const { studyGroups } = data;
+                if (studyGroups) {
+                    studyGroups.map((s) => {
+                        dispatch(loadStudyGroup(studyGroups));
+                    });
                 }
-            } else {
-                dispatch(
-                    showErrorNotification("There's been an error loading your study groups.  Please try again later.")
-                );
             }
-        }
+        );
     };
 
     /**
@@ -100,7 +83,12 @@ const Study = (props) => {
             Routes.Account.VerifyEmailChange,
             { verificationToken },
             ResponseMessages.Account.SuccessChangingEmail,
-            false
+            null,
+            false,
+            (data, error) => {
+                if (error) return;
+                dispatch(setUser(data.user));
+            }
         );
     };
 

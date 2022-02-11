@@ -13,6 +13,7 @@ import Validator from "../../../../../Server/Validator";
 import Views from "../../Views";
 import InputField from "../../../core/InputField/InputField";
 import AuthView from "../AuthView";
+import { sendPostRequest } from "../../../../Helper";
 
 /**
  * Once the user has verified their account and clicked the link, this view is used to present the acount setup form so they can offically create their account on the home page
@@ -44,30 +45,18 @@ const AccountSetupView = (props) => {
      */
     const verifyUser = async (verificationToken) => {
         // SUBMIT THE VERIFY USER REQUEST.
-        let response;
-        try {
-            response = await axios.post(Routes.Account.GetUnverifiedUser, {
-                verificationToken: verificationToken
-            });
-        } catch (e) {
-            dispatch(showErrorNotification("Verification failed: " + error.message));
-        } finally {
-            const responseIsDefined = Validator.isDefined(response);
-            if (responseIsDefined) {
-                // IF THE USER VERIFICATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const verificationWasValid = ResponseMessages.Account.UnverifiedUserWasFound === response.data.message;
-
-                if (verificationWasValid) {
-                    setUser(response.data.unverifiedUser);
-                    dispatch(showSuccessNotification("You have been successfully verified"));
-                    setUserIsVerified(true);
-                } else {
-                    dispatch(showErrorNotification("Verification failed: " + response.data.message));
-                }
-            } else {
-                dispatch(showErrorNotification("Verification failed: Undefined response."));
+        sendPostRequest(
+            Routes.Account.GetUnverifiedUser,
+            { verificationToken: verificationToken },
+            ResponseMessages.Account.UnverifiedUserWasFound,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                setUser(data.unverifiedUser);
+                setUserIsVerified(true);
             }
-        }
+        );
     };
 
     /**

@@ -7,6 +7,7 @@ import { addStudyGroup, closePopup, showSuccessNotification, showErrorNotificati
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
 import Validator from "../../../../Server/Validator";
 import Routes from "../../../../Server/Routes/Routes";
+import { sendPostRequest } from "../../../Helper";
 
 /**
  * This is a specific view that is used in a popup to allow a user to create a study group
@@ -40,12 +41,9 @@ const CreateStudyGroupView = () => {
         event.preventDefault();
         event.stopPropagation();
 
-        //Use axios to assign a variable called "response" to the response received when awaiting an API call to "Routes.Study.CreateStudyGroup," passing in an object with all of the values entered into the form.
-        let response;
-        try {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-
-            response = await axios.post(Routes.StudyGroup.CreateStudyGroup, {
+        sendPostRequest(
+            Routes.StudyGroup.CreateStudyGroup,
+            {
                 name,
                 groupColor,
                 description,
@@ -55,34 +53,16 @@ const CreateStudyGroupView = () => {
                 school: user.school || "Liberty University",
                 isTutorGroup,
                 isOnlineGroup
-            });
-        } catch (e) {
-            dispatch(showErrorNotification("There's been an error while creating your study group: " + e.message));
-        } finally {
-            //check if the response is valid, using Validator.isDefined(response),
-            const responseIsDefined = Validator.isDefined(response);
-
-            //if so, check if the response is successful
-            if (responseIsDefined) {
-                const studyGroupCreationWasValid =
-                    ResponseMessages.StudyGroup.SuccessStudyGroupCreated === response.data.message;
-
-                if (studyGroupCreationWasValid) {
-                    //If all the conditions are satisfied, then use the dispatch function, passing in the "response.data" object.  This will dispatch an action to redux, which saves the study group to the global state of the app.
-                    dispatch(addStudyGroup(response.data.newStudyGroup));
-                    dispatch(closePopup());
-                    dispatch(showSuccessNotification("Your study group: " + name + " has been successfully created"));
-                } else {
-                    dispatch(
-                        showErrorNotification(
-                            "There's been an error while creating your study group: " + response.data.message
-                        )
-                    );
-                }
-            } else {
-                dispatch(showErrorNotification("There's been a server error while creating your study group"));
+            },
+            ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
+            ResponseMessages.StudyGroup.ErrorCreateStudyGroup,
+            true,
+            (data, error) => {
+                if (error) return;
+                dispatch(addStudyGroup(data.newStudyGroup));
+                dispatch(closePopup());
             }
-        }
+        );
     };
 
     /**

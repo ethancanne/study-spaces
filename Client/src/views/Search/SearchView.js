@@ -9,6 +9,7 @@ import Validator from "../../../../Server/Validator.js";
 import { useDispatch } from "react-redux";
 import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
+import { sendPostRequest } from "../../../Helper";
 
 /**
  * A view for inputting search terms and filters for searching study groups
@@ -47,10 +48,10 @@ const SearchView = () => {
         // SUBMIT THE SEARCH REQUEST.
         e.preventDefault();
         e.stopPropagation();
-        let response;
-        try {
-            //Send Search Request -  TODO: change the value that is sent if isAssociatedWithSchool is true to the school of the logged in user
-            response = await axios.post(Routes.Search.GetSearchResults, {
+
+        sendPostRequest(
+            Routes.Search.GetSearchResults,
+            {
                 searchTerm,
                 subject,
                 school: isAssociatedWithSchool ? "Liberty University" : null,
@@ -60,28 +61,15 @@ const SearchView = () => {
                 startTime: Time.parseTimeString(timeRange[0]),
                 endTime: Time.parseTimeString(timeRange[1]),
                 days
-            });
-        } catch (error) {
-            console.log(error);
-            dispatch(showErrorNotification("Cannot search... Sorry"));
-        } finally {
-            const responseIsDefined = Validator.isDefined(response);
-
-            if (responseIsDefined) {
-                console.log(response.data);
-                const studyGroupsRetrivalWasValid =
-                    ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved === response.data.message;
-
-                if (studyGroupsRetrivalWasValid) {
-                    dispatch(populateStudyGroupSearch(response.data.studyGroups));
-                    console.log(response.data.studyGroups);
-                } else {
-                    dispatch(showErrorNotification("Cannot search... Sorry"));
-                }
-            } else {
-                dispatch(showErrorNotification("Cannot search... Sorry"));
+            },
+            ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                dispatch(populateStudyGroupSearch(data.studyGroups));
             }
-        }
+        );
     };
 
     /**

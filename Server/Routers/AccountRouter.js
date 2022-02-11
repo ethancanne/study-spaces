@@ -35,11 +35,7 @@ class AccountRouter {
             authenticator.protectRoute(),
             AccountRouter.updateAuthenticationToken
         );
-        server.post(
-            Routes.Account.ChangeEmail,
-            authenticator.protectRoute(),
-            AccountRouter.changeEmail
-        );
+        server.post(Routes.Account.ChangeEmail, authenticator.protectRoute(), AccountRouter.changeEmail);
         server.post(
             Routes.Account.ChangePassword,
             authenticator.protectRoute(),
@@ -176,14 +172,13 @@ class AccountRouter {
      * @async
      * @static
      */
-     static async changeEmail(request, response) {
+    static async changeEmail(request, response) {
         //GENERATE VERIFICATION TOKEN
         const passwordIsCorrect = Authenticator.verifyPassword(request.body.currentPassword, request.user);
 
-        if(!passwordIsCorrect) {
+        if (!passwordIsCorrect) {
             return response.json({ message: ResponseMessages.Account.IncorrectPassword });
-        }
-        else {
+        } else {
             let tokenIsNotUnique = true;
             let verificationToken = undefined;
 
@@ -231,8 +226,7 @@ class AccountRouter {
             }
             return response.json({ message: ResponseMessages.Account.EmailSent });
         }
-
-     }
+    }
 
     /**
      * @param {String} request.body.password
@@ -254,7 +248,7 @@ class AccountRouter {
                 Log.writeError(error);
             }
         } else {
-          return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+            return response.json({ message: ResponseMessages.Account.IncorrectPassword });
         }
         if (passwordChanged) {
             return response.json({ message: ResponseMessages.Account.SuccessChangingPassword });
@@ -421,7 +415,7 @@ class AccountRouter {
         const user = request.user;
         const passwordIsCorrect = Authenticator.verifyPassword(currentPassword, user);
         if (!passwordIsCorrect) {
-          return response.json({ message: ResponseMessages.Account.IncorrectPassword });
+            return response.json({ message: ResponseMessages.Account.IncorrectPassword });
         }
 
         // GET THE USER.
@@ -444,14 +438,14 @@ class AccountRouter {
     }
 
     /**
-    * Completes the email change process.
-    * @param {String} request.body.verificationToken The token used to identify
-    *   the user account to complete the email change process for.
-    * @author Cameron Burkholder
-    * @date   02/11/2022
-    * @async
-    * @static
-    */
+     * Completes the email change process.
+     * @param {String} request.body.verificationToken The token used to identify
+     *   the user account to complete the email change process for.
+     * @author Cameron Burkholder
+     * @date   02/11/2022
+     * @async
+     * @static
+     */
     static async verifyEmailChange(request, response) {
         // GET THE VERIFICATION TOKEN.
         const verificationToken = request.body.verificationToken;
@@ -463,7 +457,7 @@ class AccountRouter {
         // FIND THE USER ACCOUNT ASSOCIATED WITH THE TOKEN.
         let user = undefined;
         try {
-           user = await User.getByVerificationToken(verificationToken);
+            user = await User.getByVerificationToken(verificationToken);
         } catch (error) {
             Log.write("An error occurred while attempting to get the user by verification token.");
             Log.writeError(error);
@@ -490,8 +484,12 @@ class AccountRouter {
             // DELETE THE TEMPORARY EMAIL AND VERIFICATION TOKEN ATTRIBUTES.
             const userWasSaved = await user.removeTemporaryEmail();
             if (userWasSaved) {
-                Authenticator.sendEmail(user, "Email Successfully Updated", `Your email has been successfully changed to ${newEmail}. If you did not initiate this action, please change your password immediately.`);
-                return response.json({ message: ResponseMessages.Account.SuccessChangingEmail });
+                Authenticator.sendEmail(
+                    user.removeSensitiveAttributes(),
+                    "Email Successfully Updated",
+                    `Your email has been successfully changed to ${newEmail}. If you did not initiate this action, please change your password immediately.`
+                );
+                return response.json({ user, message: ResponseMessages.Account.SuccessChangingEmail });
             }
         }
         // INDICATE AN ERROR HAS OCCURRED.

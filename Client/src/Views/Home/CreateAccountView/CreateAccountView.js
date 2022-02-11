@@ -12,6 +12,7 @@ import Button from "../../../core/Button/Button.js";
 import Views from "../../Views.js";
 
 import AuthView from "../AuthView";
+import { sendPostRequest } from "../../../../Helper";
 
 /**
  * This view presents the create account form on the home page
@@ -44,43 +45,25 @@ const CreateAccountView = (props) => {
             return;
         }
 
-        // SUBMIT THE CREATE ACCOUNT REQUEST. (Test in Postman)
-        let response;
-        try {
-            response = await axios.post(Routes.Account.CreateAccount, {
+        sendPostRequest(
+            Routes.Account.CreateAccount,
+            {
                 email,
                 password,
                 password_confirmation: confirmPassword
-            });
-        } catch (error) {
-            console.log(error);
-            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
-        } finally {
-            // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
-            const responseIsDefined = Validator.isDefined(response);
+            },
+            ResponseMessages.Account.SuccessAccountCreated,
+            null,
+            false,
+            (data, error) => {
+                if (error) return;
+                const { unverifiedUser } = data;
 
-            if (responseIsDefined) {
-                // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const accountCreationWasValid =
-                    ResponseMessages.Account.SuccessAccountCreated === response.data.message;
+                dispatch(createAccount(unverifiedUser));
 
-                if (accountCreationWasValid) {
-                    // save the unverified user in state (using dispatch)
-                    // set the home view to the check email screen
-
-                    const unverifiedUser = response.data.unverifiedUser;
-
-                    dispatch(createAccount(unverifiedUser));
-                    dispatch(showSuccessNotification("Successfully sent verification email"));
-
-                    props.setHomeView(Views.Home.VerificationEmailConfirmation);
-                } else {
-                    dispatch(showErrorNotification(response.data.message));
-                }
-            } else {
-                dispatch(showErrorNotification("There was an error"));
+                props.setHomeView(Views.Home.VerificationEmailConfirmation);
             }
-        }
+        );
     };
 
     /**

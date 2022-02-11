@@ -2,6 +2,7 @@ import "./JoinStudyGroupView.scss";
 import React from "react";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/ButtonTypes";
+import { sendPostRequest } from "../../../../Helper";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import Routes from "../../../../../Server/Routes/Routes";
 import Label from "../../../core/Label/Label";
@@ -23,33 +24,20 @@ const JoinStudyGroupView = ({ group }) => {
         e.stopPropagation();
 
         console.log("Submitting");
-        let response;
-        try {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
-            response = await axios.post(Routes.StudyGroup.JoinStudyGroup, {
-                studyGroupId: _id
-            });
-        } catch (e) {
-            dispatch(showErrorNotification("Cannot Join... Sorry: " + e.message));
-        } finally {
-            const responseIsDefined = Validator.isDefined(response);
-
-            if (responseIsDefined) {
-                const studyGroupJoinWasValid =
-                    ResponseMessages.StudyGroup.SuccessStudyGroupJoined === response.data.message;
-
-                if (studyGroupJoinWasValid) {
-                    dispatch(addStudyGroup(group));
-                    dispatch(closePopup());
-                    dispatch(showSuccessNotification(ResponseMessages.StudyGroup.SuccessStudyGroupJoined));
-                } else {
-                    dispatch(showErrorNotification("Cannot Join... Sorry: The server sent some weird results."));
-                }
-            } else {
-                dispatch(showErrorNotification("Cannot join... Sorry: Undefined response"));
+        sendPostRequest(
+            Routes.StudyGroup.JoinStudyGroup,
+            { studyGroupId: _id },
+            ResponseMessages.StudyGroup.SuccessStudyGroupJoined,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                dispatch(addStudyGroup(group));
+                dispatch(closePopup());
+                dispatch(showSuccessNotification(ResponseMessages.StudyGroup.SuccessStudyGroupJoined));
             }
-        }
+        );
     };
     return (
         <div className="join-group-container">

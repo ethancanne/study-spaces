@@ -22,6 +22,15 @@ export const createAccount = (unverifiedUser) => {
     };
 };
 
+export const setUser = (user) => {
+    return {
+        type: authConstants.SET_USER,
+        payload: {
+            user
+        }
+    };
+};
+
 //POPUP REDUCER
 export const showCreateStudyGroupPopup = () => {
     return {

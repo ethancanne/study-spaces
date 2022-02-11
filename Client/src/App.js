@@ -19,6 +19,7 @@ import Views from "./Views/Views";
 import Search from "./Pages/Search/Search";
 import StudyGroup from "./Pages/StudyGroup/StudyGroup";
 import Account from "./Pages/Account/Account";
+import { sendGetRequest } from "../Helper";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -48,33 +49,28 @@ const App = (props) => {
     }, []);
 
     /**
-     * Updates the user"s authentication token for persistent logins.
-     * @author Cameron Burkholder
+     * Updates the user's authentication token for persistent logins.
+     * @author Ethan Cannelongo
      * @date   10/22/2021
      */
     const updateAuthenticationToken = async () => {
         if (isLoggedIn) {
-            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-            let response = undefined;
-            try {
-                response = await axios.get(Routes.Account.UpdateAuthenticationToken);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                const authenticationTokenWasUpdated =
-                    ResponseMessages.Account.SuccessUpdateAuthenticationToken === response.data.message;
-                if (authenticationTokenWasUpdated) {
-                    const { authenticationToken, authenticationTokenExpirationDate, user } = response.data;
+            sendGetRequest(
+                Routes.Account.UpdateAuthenticationToken,
+                ResponseMessages.Account.SuccessUpdateAuthenticationToken,
+                null,
+                true,
+                (data, error) => {
+                    if (error) {
+                        dispatch(signOut());
+                        return;
+                    }
+                    const { authenticationToken, authenticationTokenExpirationDate, user } = data;
                     dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
-                } else {
-                    dispatch(signOut());
                 }
-                setHasNotMounted(false);
-            }
+            );
         }
     };
-
-    const verifyUser = (verificationToken) => {};
 
     return (
         <Router>

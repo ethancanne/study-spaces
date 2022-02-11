@@ -102,7 +102,7 @@ class StudyGroupRouter {
     }
 
     /**
-     * Gets the study groups a user is a part of.
+     * Gets the study groups a user have joined.
      * @param
      * @author Ethan Cannelongo
      * @date   01/14/2022
