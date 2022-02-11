@@ -455,17 +455,15 @@ class AccountRouter {
     static async verifyEmailChange(request, response) {
         // GET THE VERIFICATION TOKEN.
         const verificationToken = request.body.verificationToken;
-        console.log("here");
-        console.log(request.body);
-
-        console.log(verificationToken);
+        const verificationTokenExists = Validator.isDefined(verificationToken);
+        if (!verificationTokenExists) {
+            return response.json({ message: ResponseMessages.Account.UserNotFound });
+        }
 
         // FIND THE USER ACCOUNT ASSOCIATED WITH THE TOKEN.
         let user = undefined;
         try {
            user = await User.getByVerificationToken(verificationToken);
-           console.log("retrieved");
-           console.log(user);
         } catch (error) {
             Log.write("An error occurred while attempting to get the user by verification token.");
             Log.writeError(error);
@@ -479,7 +477,6 @@ class AccountRouter {
 
         // CHANGE THE USER'S EMAIL TO THE NEW EMAIL.
         let emailWasChanged = false;
-        console.log(user);
         const newEmail = user.temporaryEmail;
         try {
             emailWasChanged = await user.setEmail(newEmail);
@@ -490,12 +487,17 @@ class AccountRouter {
             return response.json({ message: ResponseMessages.Account.ErrorChangingEmail });
         }
         if (emailWasChanged) {
-            Authenticator.sendEmail(user, "Email Successfully Updated", `Your email has been successfully changed to ${newEmail}. If you did not initiate this action, please change your password immediately.`);
-            return response.json({ message: ResponseMessages.Account.SuccessChangingEmail });
-        } else {
-            response.status(ResponseCodes.Error);
-            return response.json({ message: ResponseMessages.Account.ErrorChangingEmail });
+            // DELETE THE TEMPORARY EMAIL AND VERIFICATION TOKEN ATTRIBUTES.
+            const userWasSaved = await user.removeTemporaryEmail();
+            if (userWasSaved) {
+                Authenticator.sendEmail(user, "Email Successfully Updated", `Your email has been successfully changed to ${newEmail}. If you did not initiate this action, please change your password immediately.`);
+                return response.json({ message: ResponseMessages.Account.SuccessChangingEmail });
+            }
         }
+        // INDICATE AN ERROR HAS OCCURRED.
+        // If execution reaches this point, an error has occurred.
+        response.status(ResponseCodes.Error);
+        return response.json({ message: ResponseMessages.Account.ErrorChangingEmail });
     }
 }
 

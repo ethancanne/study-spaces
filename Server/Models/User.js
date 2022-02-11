@@ -439,6 +439,26 @@ class User {
     }
 
     /**
+    * Removes the temporary email and verification token associated with changing an email.
+    * @return {Boolean} True if the attributes were removed, false otherwise.
+    * @author Cameron Burkholder
+    * @date   02/11/2022
+    * @async
+    */
+    async removeTemporaryEmail() {
+        this.temporaryEmail = undefined;
+        this.verificationToken = undefined;
+        let temporaryEmailWasRemoved = false;
+        try {
+            temporaryEmailWasRemoved = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to remove the temporary email.");
+            Log.writeError(error);
+        }
+        return temporaryEmailWasRemoved;
+    }
+
+    /**
      * This saves the associated user document in the database with the current properties
      * stored in this object.
      * @return {bool} True if the user was saved, false if the user wasn't saved.
