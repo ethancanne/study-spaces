@@ -1,5 +1,6 @@
 import "./Study.scss";
 import React, { useEffect } from "react";
+import { sendPostRequest } from "../../../Helper";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut, showCreateStudyGroupPopup, loadStudyGroup, showErrorNotification } from "../../state/actions";
 import Validator from "../../../../Server/Validator";
@@ -34,7 +35,7 @@ const Study = (props) => {
         getGroups();
 
         async function verifyUserEmail() {
-            await verifyEmail(props.verificationToken);
+            await verifyEmail(props.match.params.verificationToken);
         }
         if (props.isVerifyingEmail) verifyUserEmail();
     }, []);
@@ -91,31 +92,16 @@ const Study = (props) => {
      * @author Ethan Cannelongo
      * @param {String} verificationToken The verification token
      * @date   02/09/22
+     * @async
      */
     const verifyEmail = async (verificationToken) => {
         // SUBMIT THE VERIFY USER REQUEST.
-        let response;
-        try {
-            response = await axios.post(Routes.Account.VerifyEmailChange, {
-                verificationToken: verificationToken
-            });
-        } catch (error) {
-            dispatch(showErrorNotification("Verification failed: " + error.message));
-        } finally {
-            const responseIsDefined = Validator.isDefined(response);
-            if (responseIsDefined) {
-                // IF THE USER VERIFICATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const verificationWasValid = ResponseMessages.Account.SuccessChangingEmail === response.data.message;
-
-                if (verificationWasValid) {
-                    dispatch(showSuccessNotification("Your email has been successfully verified!"));
-                } else {
-                    dispatch(showErrorNotification("Email verification failed: " + response.data.message));
-                }
-            } else {
-                dispatch(showErrorNotification("Email verification failed: Undefined response."));
-            }
-        }
+        await sendPostRequest(
+            Routes.Account.VerifyEmailChange,
+            { verificationToken },
+            ResponseMessages.Account.SuccessChangingEmail,
+            false
+        );
     };
 
     return (

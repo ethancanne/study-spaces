@@ -34,35 +34,9 @@ const Account = () => {
                 newEmail,
                 currentPassword
             },
-            Routes.Account.ChangeEmail,
+            ResponseMessages.Account.EmailSent,
             true
         );
-
-        // let response;
-        // try {
-        //     axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
-        //     response = await axios.post(Routes.Account.ChangeEmail, {
-        //         newEmail,
-        //         currentPassword
-        //     });
-        // } catch (error) {
-        //     console.log(error);
-        //     dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
-        // } finally {
-        //     const responseIsDefined = Validator.isDefined(response.data);
-        //     if (responseIsDefined) {
-        //         const emailSentWasValid = ResponseMessages.Account.EmailSent === response.data.message;
-
-        //         if (emailSentWasValid) {
-        //             // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-        //             dispatch(showSuccessNotification(response.data.message));
-        //         } else {
-        //             dispatch(showErrorNotification("There was an error: " + response.data.message));
-        //         }
-        //     } else {
-        //         dispatch(showErrorNotification("There was an error, the server sent undefined results"));
-        //     }
-        // }
     };
 
     /**
@@ -188,10 +162,10 @@ const Account = () => {
                                 dispatch(
                                     showInputPopup(
                                         "Change Password",
-                                        "New Password",
+                                        "Current Password",
                                         "",
                                         submitNewPassword,
-                                        "Current Password"
+                                        "New Password"
                                     )
                                 )
                             }
