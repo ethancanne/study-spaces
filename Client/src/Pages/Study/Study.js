@@ -96,7 +96,7 @@ const Study = (props) => {
         // SUBMIT THE VERIFY USER REQUEST.
         let response;
         try {
-            response = await axios.post(Routes.Account.PUTVERIFYEMAILROUTEHERE, {
+            response = await axios.post(Routes.Account.VerifyEmailChange, {
                 verificationToken: verificationToken
             });
         } catch (e) {
@@ -105,8 +105,7 @@ const Study = (props) => {
             const responseIsDefined = Validator.isDefined(response);
             if (responseIsDefined) {
                 // IF THE USER VERIFICATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const verificationWasValid =
-                    ResponseMessages.Account.PUTEMAILVERIFICATIONWASVAILIDMESSAGEHERE === response.data.message;
+                const verificationWasValid = ResponseMessages.Account.SuccessChangingEmail === response.data.message;
 
                 if (verificationWasValid) {
                     dispatch(showSuccessNotification("Your email has been successfully verified!"));

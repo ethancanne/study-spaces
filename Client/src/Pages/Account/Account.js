@@ -23,12 +23,35 @@ const Account = () => {
     /**
      * Used to submit the new email request
      * @author Ethan Cannelongo
-     * @date   02/07/2022
+     * @date   02/11/2022
      * @async
      */
-    const submitNewEmail = async (newEmail) => {
-        response = await axios.post(Routes.Account.Delete, {});
-        console.log(newEmail);
+    const submitNewEmail = async (newEmail, currentPassword) => {
+        let response;
+        try {
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+            response = await axios.post(Routes.Account.ChangeEmail, {
+                newEmail,
+                currentPassword
+            });
+        } catch (error) {
+            console.log(error);
+            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
+        } finally {
+            const responseIsDefined = Validator.isDefined(response.data);
+            if (responseIsDefined) {
+                const emailSentWasValid = ResponseMessages.Account.EmailSent === response.data.message;
+
+                if (emailSentWasValid) {
+                    // IF THE ACCOUNT DELETION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
+                    dispatch(showSuccessNotification(response.data.message));
+                } else {
+                    dispatch(showErrorNotification("There was an error: " + response.data.message));
+                }
+            } else {
+                dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+            }
+        }
     };
 
     /**
