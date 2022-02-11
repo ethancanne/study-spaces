@@ -275,6 +275,7 @@ class User {
     static async getByVerificationToken(verificationToken) {
         // GET THE USER BASED ON THE GIVEN VERIFICATION TOKEN.
         let userRecord = false;
+        console.log("getting");
         try {
             userRecord = await UserModel.findOne({ verificationToken: verificationToken }).exec();
         } catch (error) {
@@ -288,6 +289,8 @@ class User {
             let userWasFound = Validator.isDefined(userRecord);
             if (userWasFound) {
                 // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+                console.log("user record");
+                console.log(userRecord);
                 user = new User(userRecord);
             }
             return user;
@@ -487,6 +490,8 @@ class User {
      */
     async setEmail(email) {
         this.email = email;
+        console.log('setting');
+        console.log(this);
         const emailSet = Validator.isDefined(this.email);
         try {
             await this.save();
@@ -529,13 +534,19 @@ class User {
      * Sets the user's temporary email
      * @param {String} temporaryEmail
      * @returns {Boolean} True if the temporary email is set.
-     * @author Clifton Croom
-     * @date 02/09/2022
+     * @author Cameron Burkholder
+     * @date    02/11/2022
      * @async
      */
      async setTemporaryEmail(temporaryEmail){
         this.temporaryEmail = temporaryEmail;
-        const temporaryEmailSet = Validator.isDefined(this.temporaryEmail);
+        let temporaryEmailSet = false;
+        try {
+            temporaryEmailSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to save the temporary email.");
+            Log.writeError(error)
+        }
         return temporaryEmailSet;
     }
 
@@ -547,10 +558,16 @@ class User {
      * @date 02/09/2022
      * @async
      */
-    async setVerificationToken(newVerificationToken){
-        this.verificationToken = newVerificationToken;
-        const tokenSet = Validator.isDefined(this.verificationToken);
-        return tokenSet;
+    async setVerificationToken(verificationToken){
+        this.verificationToken = verificationToken;
+        let verificationTokenSet = false;
+        try {
+            verificationTokenSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to save the temporary email.");
+            Log.writeError(error)
+        }
+        return verificationTokenSet;
     }
     /**
      * Update's the user's password.

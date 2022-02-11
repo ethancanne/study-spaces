@@ -189,7 +189,6 @@ class AccountRouter {
 
             // GENERATE A RANDOM TOKEN.
             while (tokenIsNotUnique) {
-
                 verificationToken = RandomWords({ exactly: 5, join: "-" });
 
                 // CHECK THE USERS LIST TO SEE IF THE TOKEN IS ALREADY IN USE.
@@ -203,13 +202,22 @@ class AccountRouter {
                 tokenIsNotUnique = Validator.isDefined(existingUser);
             }
 
-            const emailSet = await request.user.setTemporaryEmail(request.body.newEmail)
+            // SET THE VERIFICATION TOKEN.
+            const tokenSet = await request.user.setVerificationToken(verificationToken);
+            if (!tokenSet) {
+                return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
+            }
+
+            // SET THE TEMPORARY EMAIL.
+            const emailSet = await request.user.setTemporaryEmail(request.body.newEmail);
+            if (!emailSet) {
+                return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
+            }
 
             // EMAIL THE VERIFICATION LINK TO THE USER.
             let verificationLink = `http://${request.hostname}:3000/verifyEmail/${verificationToken}`;
             const emailSubject = "Your Study Spaces Verification Link";
             const emailBody = "Click this: " + verificationLink;
-
             let emailWasSent = false;
             try {
                 emailWasSent = await Authenticator.sendEmail(request.user, emailSubject, emailBody);
@@ -218,22 +226,10 @@ class AccountRouter {
                 Log.writeError(error);
                 return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
             }
-
-            //Might need this
-            // if (!emailWasSent && Configuration.isSetToProduction()) {
-            //    return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
-            //}
-
-            //ADD VERIFICATION TOKEN TO USER
-
-            const tokenSet = await request.user.setVerificationToken(verificationToken);
-
-            if (emailWasSent && tokenSet && emailSet) {
-                return response.json({ message: ResponseMessages.Account.EmailSent });
-            } else {
-                return response.json({ message: ResponseMessages.Account.ErrorSettingToken});
+            if (!emailWasSent) {
+                return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
             }
-
+            return response.json({ message: ResponseMessages.Account.EmailSent });
         }
 
      }
@@ -459,11 +455,17 @@ class AccountRouter {
     static async verifyEmailChange(request, response) {
         // GET THE VERIFICATION TOKEN.
         const verificationToken = request.body.verificationToken;
+        console.log("here");
+        console.log(request.body);
+
+        console.log(verificationToken);
 
         // FIND THE USER ACCOUNT ASSOCIATED WITH THE TOKEN.
         let user = undefined;
         try {
            user = await User.getByVerificationToken(verificationToken);
+           console.log("retrieved");
+           console.log(user);
         } catch (error) {
             Log.write("An error occurred while attempting to get the user by verification token.");
             Log.writeError(error);
@@ -477,6 +479,7 @@ class AccountRouter {
 
         // CHANGE THE USER'S EMAIL TO THE NEW EMAIL.
         let emailWasChanged = false;
+        console.log(user);
         const newEmail = user.temporaryEmail;
         try {
             emailWasChanged = await user.setEmail(newEmail);
