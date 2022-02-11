@@ -1,5 +1,6 @@
 const multer = require("multer");
 const Path = require("path");
+const RandomWords = require("random-words");
 const sharp = require("sharp");
 
 const Authenticator = require("../Authenticator.js");
@@ -202,6 +203,8 @@ class AccountRouter {
                 tokenIsNotUnique = Validator.isDefined(existingUser);
             }
 
+            const emailSet = await request.user.setTemporaryEmail(request.body.newEmail)
+
             // EMAIL THE VERIFICATION LINK TO THE USER.
             let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
             const emailSubject = "Your Study Spaces Verification Link";
@@ -224,11 +227,11 @@ class AccountRouter {
             //ADD VERIFICATION TOKEN TO USER
 
             const tokenSet = await request.user.setVerificationToken(verificationToken);
-            const emailSet = await request.user.setTemporaryEmail(newEmail)
+
             if (emailWasSent && tokenSet && emailSet) {
-                return response.json({ message: ResponseMessages.Account.EmailSent})
+                return response.json({ message: ResponseMessages.Account.EmailSent });
             } else {
-                return response.json({ message: ResponseMessages.Account.ErrorSettingToken})
+                return response.json({ message: ResponseMessages.Account.ErrorSettingToken});
             }
 
         }

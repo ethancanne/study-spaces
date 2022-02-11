@@ -110,7 +110,13 @@ class Authenticator {
      */
     static async sendEmail(user, subject, body) {
         // GET THE USERS EMAIL ADDRESS.
-        const emailAddress = user.getEmail();
+        const temporaryEmailExists = Validator.isDefined(user.temporaryEmail);
+        let emailAddress;
+        if (temporaryEmailExists) {
+            emailAddress = user.temporaryEmail;
+        } else {
+            emailAddress = user.getEmail();
+        }
 
         // SEND THE EMAIL.
         // Generate test SMTP service account from ethereal.email
