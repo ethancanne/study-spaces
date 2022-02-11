@@ -5,6 +5,7 @@
  */
 const ResponseMessages = {
     Account: {
+        ErrorChangingEmail: "An error occurred while attempting to change the email.",
         ErrorChangingPassword: "An error occurred while attempting to change the password.",
         ErrorCreateAccount: "An error occurred while attempting to create an account.",
         ErrorDeleteAccount: "An error occurred while attempting to delete an account.",
@@ -17,6 +18,7 @@ const ResponseMessages = {
         SuccessAccountCreated: "The account was created successfully.",
         SuccessAccountDeleted: "The account was deleted successfully",
         SuccessAccountSetup: "The account was setup successfully.",
+        SuccessChangingEmail: "The email was changed successfully",
         SuccessChangingPassword: "The password was changed successfully",
         SuccessLogin: "The login was successful.",
         SuccessUpdateAuthenticationToken: "The authentication token has been successfully updated.",

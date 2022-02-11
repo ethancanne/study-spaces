@@ -69,6 +69,8 @@ class AccountRouter {
 
         // This is used to complete the account setup process.
         server.post(Routes.Account.SetupAccount, upload.single("profilePicture"), AccountRouter.setupAccount);
+        // This is used to complete the email change process.
+        server.post(Routes.Account.VerifyEmailChange, AccountRouter.verifyEmailChange);
     }
 
     // GET ROUTES.
@@ -161,7 +163,7 @@ class AccountRouter {
 
     /**
      * Route to process the request for changing email and generate verification link.
-     * @param {String} request.body.newEmail 
+     * @param {String} request.body.newEmail
      * @param {String} request.body.currentPassword
      * @author Clifton Croom
      * @date 02/09/2022
@@ -181,7 +183,7 @@ class AccountRouter {
 
             // GENERATE A RANDOM TOKEN.
             while (tokenIsNotUnique) {
-                
+
                 verificationToken = RandomWords({ exactly: 5, join: "-" });
 
                 // CHECK THE USERS LIST TO SEE IF THE TOKEN IS ALREADY IN USE.
@@ -194,7 +196,7 @@ class AccountRouter {
                 }
                 tokenIsNotUnique = Validator.isDefined(existingUser);
             }
-            
+
             // EMAIL THE VERIFICATION LINK TO THE USER.
             let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
             const emailSubject = "Your Study Spaces Verification Link";
@@ -210,12 +212,12 @@ class AccountRouter {
             }
 
             //Might need this
-            // if (!emailWasSent && Configuration.isSetToProduction()) { 
+            // if (!emailWasSent && Configuration.isSetToProduction()) {
             //    return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
             //}
 
             //ADD VERIFICATION TOKEN TO USER
-            
+
             const tokenSet = await request.user.setVerificationToken(verificationToken);
             const emailSet = await request.user.setTemporaryEmail(newEmail)
             if (emailWasSent && tokenSet && emailSet) {
@@ -223,7 +225,7 @@ class AccountRouter {
             } else {
                 return response.json({ message: ResponseMessages.Account.ErrorSettingToken})
             }
-            
+
         }
 
      }
@@ -435,6 +437,54 @@ class AccountRouter {
         // SEND THE RESPONSE.
         // If the execution reaches this point, then the account was been deleted.
         return response.json({ message: ResponseMessages.Account.SuccessAccountDeleted });
+    }
+
+    /**
+    * Completes the email change process.
+    * @param {String} request.body.verificationToken The token used to identify
+    *   the user account to complete the email change process for.
+    * @author Cameron Burkholder
+    * @date   02/11/2022
+    * @async
+    * @static
+    */
+    static async verifyEmailChange(request, response) {
+        // GET THE VERIFICATION TOKEN.
+        const verificationToken = request.body.verificationToken;
+
+        // FIND THE USER ACCOUNT ASSOCIATED WITH THE TOKEN.
+        let user = undefined;
+        try {
+           user = await User.getByVerificationToken(verificationToken);
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the user by verification token.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorChangingEmail });
+        }
+        const userWasNotFound = Validator.isUndefined(user);
+        if (userWasNotFound) {
+            return response.json({ message: ResponseMessages.Account.UserNotFound });
+        }
+
+        // CHANGE THE USER'S EMAIL TO THE NEW EMAIL.
+        let emailWasChanged = false;
+        const newEmail = user.temporaryEmail;
+        try {
+            emailWasChanged = await user.setEmail(newEmail);
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the email to the new email.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorChangingEmail });
+        }
+        if (emailWasChanged) {
+            Authenticator.sendEmail(user, "Email Successfully Updated", `Your email has been successfully changed to ${newEmail}. If you did not initiate this action, please change your password immediately.`);
+            return response.json({ message: ResponseMessages.Account.SuccessChangingEmail });
+        } else {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.Account.ErrorChangingEmail });
+        }
     }
 }
 

@@ -264,6 +264,37 @@ class User {
     }
 
     /**
+     * Gets the user record from the database using the user's verification token.
+     * @param  {String} verificationToken The verification token used to search for a user.
+     * @return {User} The user instance, if found; otherwise undefined.
+     * @author Cameron Burkholder
+     * @date   02/11/2021
+     * @async
+     * @static
+     */
+    static async getByVerificationToken(verificationToken) {
+        // GET THE USER BASED ON THE GIVEN VERIFICATION TOKEN.
+        let userRecord = false;
+        try {
+            userRecord = await UserModel.findOne({ verificationToken: verificationToken }).exec();
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a user by verification token.");
+            Log.writeError(error);
+            // If an error occurs, it should be returned.
+            return error;
+        } finally {
+            // If the user wasn't able to be found in the database, this routine should return undefined.
+            let user = undefined;
+            let userWasFound = Validator.isDefined(userRecord);
+            if (userWasFound) {
+                // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+                user = new User(userRecord);
+            }
+            return user;
+        }
+    }
+
+    /**
      * Gets the user's conversations.
      * @return {Conversation[]} The user's conversations.
      */
