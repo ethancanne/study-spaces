@@ -36,7 +36,7 @@ const Study = (props) => {
         async function verifyUserEmail() {
             await verifyEmail(props.verificationToken);
         }
-        if (props.verificationToken) verifyUserEmail();
+        if (props.match.params.verificationToken) verifyUserEmail();
     }, []);
 
     /**
@@ -96,10 +96,12 @@ const Study = (props) => {
         // SUBMIT THE VERIFY USER REQUEST.
         let response;
         try {
+            axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
             response = await axios.post(Routes.Account.VerifyEmailChange, {
                 verificationToken: verificationToken
             });
-        } catch (e) {
+        } catch (error) {
             dispatch(showErrorNotification("Verification failed: " + error.message));
         } finally {
             const responseIsDefined = Validator.isDefined(response);

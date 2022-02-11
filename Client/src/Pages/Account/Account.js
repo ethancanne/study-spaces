@@ -2,6 +2,7 @@ import "./Account.scss";
 import React, { useState } from "react";
 import Routes from "../../../../Server/Routes/Routes";
 import axios from "axios";
+import { sendPostRequest } from "../../../Helper";
 import { useSelector, useDispatch } from "react-redux";
 import { showInputPopup, showErrorNotification, showSuccessNotification, signOut } from "../../state/actions";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
@@ -27,6 +28,16 @@ const Account = () => {
      * @async
      */
     const submitNewEmail = async (newEmail, currentPassword) => {
+        // await sendPostRequest(
+        //     Routes.Account.ChangeEmail,
+        //     {
+        //         newEmail,
+        //         currentPassword
+        //     },
+        //     Routes.Account.ChangeEmail,
+        //     true
+        // );
+
         let response;
         try {
             axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
