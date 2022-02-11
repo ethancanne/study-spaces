@@ -35,6 +35,11 @@ class AccountRouter {
             AccountRouter.updateAuthenticationToken
         );
         server.post(
+            Routes.Account.ChangeEmail,
+            authenticator.protectRoute(),
+            AccountRouter.changeEmail
+        );
+        server.post(
             Routes.Account.ChangePassword,
             authenticator.protectRoute(),
             Validator.validatePasswordInput,
