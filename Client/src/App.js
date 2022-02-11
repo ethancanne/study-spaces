@@ -106,7 +106,7 @@ const App = (props) => {
                             const accountLoginView = Views.Home.Login;
                             return isLoggedIn ? (
                                 <>
-                                    <Study {...props} />
+                                    <Study {...props} isVerifyingEmail={true} />
                                 </>
                             ) : (
                                 <Home {...props} homeView={accountLoginView} />
