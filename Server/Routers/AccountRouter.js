@@ -206,7 +206,7 @@ class AccountRouter {
             const emailSet = await request.user.setTemporaryEmail(request.body.newEmail)
 
             // EMAIL THE VERIFICATION LINK TO THE USER.
-            let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+            let verificationLink = `http://${request.hostname}:3000/verifyEmail/${verificationToken}`;
             const emailSubject = "Your Study Spaces Verification Link";
             const emailBody = "Click this: " + verificationLink;
 
