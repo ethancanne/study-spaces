@@ -275,7 +275,6 @@ class User {
     static async getByVerificationToken(verificationToken) {
         // GET THE USER BASED ON THE GIVEN VERIFICATION TOKEN.
         let userRecord = false;
-        console.log("getting");
         try {
             userRecord = await UserModel.findOne({ verificationToken: verificationToken }).exec();
         } catch (error) {
@@ -289,8 +288,6 @@ class User {
             let userWasFound = Validator.isDefined(userRecord);
             if (userWasFound) {
                 // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
-                console.log("user record");
-                console.log(userRecord);
                 user = new User(userRecord);
             }
             return user;
@@ -510,8 +507,6 @@ class User {
      */
     async setEmail(email) {
         this.email = email;
-        console.log('setting');
-        console.log(this);
         const emailSet = Validator.isDefined(this.email);
         try {
             await this.save();
