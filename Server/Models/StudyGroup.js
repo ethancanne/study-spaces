@@ -17,6 +17,10 @@ const Validator = require("../Validator.js");
  * @date   10/29/2021
  */
 const StudyGroupSchema = new Schema({
+    active: {
+        type: Boolean,
+        required: false
+    },
     areaCode: {
         type: String,
         required: false
@@ -159,9 +163,7 @@ class StudyGroup {
      */
     async addMember(newMember) {
         // ADD THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
-        console.log(newMember.getId());
         this.members.push(newMember.getId());
-        console.log(this.members);
 
         // SAVE THE CHANGE.
         let memberWasAdded = true;
@@ -171,7 +173,6 @@ class StudyGroup {
             memberWasAdded = false;
             Log.writeError(error);
         }
-        console.log(this.members);
         return memberWasAdded;
     }
 
@@ -207,6 +208,7 @@ class StudyGroup {
         const EMPTY_LIST_OF_MEMBERS = [];
         const ownerId = owner.getId();
         const newStudyGroup = new StudyGroupModel({
+            active: true,
             areaCode: areaCode,
             course: course,
             feed: newFeedId,
@@ -238,10 +240,22 @@ class StudyGroup {
     /**
      * Deletes a study group.
      * @return {Boolean} True if the study group was deleted, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/12/2022
      * @async
      */
-    async delete() {}
+    async delete() {
+        // DEACTIVE THE STUDY GROUP.
+        let studyGroupDeleted = false;
+        this.active = false;
+        try {
+            studyGroupDeleted = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete a study group.");
+            Log.writeError(error);
+        }
+        return studyGroupDeleted;
+    }
 
     /**
      * Gets the study group's area code.
@@ -380,6 +394,15 @@ class StudyGroup {
      */
     getSubject() {
         return this.subject;
+    }
+
+    /**
+    * Checks if a study group is active.
+    * @return {Boolean} True if the group is active, false otherwise.
+    */
+    isActive() {
+        const studyGroupIsActive = this.active ? true : false;
+        return studyGroupIsActive;
     }
 
     /**
@@ -667,7 +690,28 @@ class StudyGroup {
         // CHECK IF THE USER IS A MEMBER.
         // If the user is a valid member of the study group, both above conditions should be true.
         const userIsAMember = studyGroupHasUser && userHasStudyGroup;
-        return userIsAMember;
+
+        // CHECK IF THE USER IS THE OWNER OF THE GROUP.
+        const userIsOwner = this.userIsOwner(user);
+
+        // CHECK IF THE USER IS IN THE STUDY GROUP.
+        const userIsInStudyGroup = (userIsAMember || userIsOwner);
+        return userIsInStudyGroup;
+    }
+
+    /**
+    * Checks if the user is the owner of the study group.
+    * @param {User} user The user to check for study group ownership.
+    * @return {Boolean} True if the user is the owner of the group, false otherwise.
+    * @author Cameron Burkholder
+    * @date   02/12/2022
+    */
+    userIsOwner(user) {
+        // CHECK IF THE USER IS THE OWNER OF THE GROUP.
+        const userId = String(user.getId());
+        const studyGroupOwnerId = String(this.owner);
+        const userIsOwner = studyGroupOwnerId === userId;
+        return userIsOwner;
     }
 }
 

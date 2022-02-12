@@ -34,6 +34,18 @@ class StudyGroupRouter {
             Validator.validateCreateStudyGroupInput,
             StudyGroupRouter.createStudyGroup
         );
+        // Used to delete a study group.
+        server.delete(
+            Routes.StudyGroup.DeleteStudyGroup,
+            authenticator.protectRoute(),
+            StudyGroupRouter.deleteStudyGroup
+        )
+        // This is used to get a specific study group.
+        server.get(
+            Routes.StudyGroup.GetStudyGroup,
+            authenticator.protectRoute(),
+            StudyGroupRouter.getStudyGroup
+        );
         // This is used to get a user's study groups.
         server.get(
             Routes.StudyGroup.GetUserStudyGroups,
@@ -98,6 +110,100 @@ class StudyGroupRouter {
         response.json({
             message: ResponseMessages.StudyGroup.SuccessStudyGroupCreated,
             newStudyGroup: newStudyGroup
+        });
+    }
+
+    /**
+    * Deletes a study group.
+    * @param {String} request.body.studyGroupId
+    * @author Cameron Burkholder
+    * @date   02/12/2022
+    * @async
+    * @static
+    */
+    static async deleteStudyGroup(request, response) {
+        // GET THE STUDY GROUP.
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = undefined;
+        try {
+            studyGroup = await StudyGroup.getById(studyGroupId);
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteStudyGroup });
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
+        if (studyGroupWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
+        }
+
+        // CHECK THAT THE REQUESTING USER IS AN OWNER OF THE STUDY GROUP.
+        const userIsOwner = studyGroup.userIsOwner(request.user);
+        if (!userIsOwner) {
+            response.status(ResponseCodes.Unauthorized);
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // DELETE THE STUDY GROUP.
+        let studyGroupDeleted = false;
+        try {
+            studyGroupDeleted = await studyGroup.delete();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete the study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteStudyGroup });
+        }
+        if (!studyGroupDeleted) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteStudyGroup });
+        }
+        return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupDeleted });
+    }
+
+    /**
+    * Gets the study group with a given study group ID.
+    * @param {String} request.query.studyGroupId The study group ID.
+    * @author Cameron Burkholder
+    * @date   02/12/2022
+    * @async
+    * @static
+    */
+    static async getStudyGroup(request, response) {
+        // GET THE STUDY GROUP.
+        const studyGroupId = request.query.studyGroupId;
+        let studyGroup = undefined;
+        try {
+            studyGroup = await StudyGroup.getById(studyGroupId);
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
+        if (studyGroupWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
+        }
+
+        // CHECK THAT THE REQUESTING USER IS ON THE STUDY GROUP.
+        const userIsAMember = studyGroup.userIsAMember(request.user);
+        if (!userIsAMember) {
+            response.status(ResponseCodes.Unauthorized);
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotInStudyGroup });
+        }
+
+        // CHECK THAT THE STUDY GROUP IS ACTIVE.
+        const studyGroupIsActive = studyGroup.isActive();
+        if (!studyGroupIsActive) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupIsNotActive });
+        }
+
+        // RETURN THE STUDY GROUP.
+        return response.json({
+            message: ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved,
+            studyGroup: studyGroup
         });
     }
 

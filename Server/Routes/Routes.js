@@ -23,6 +23,7 @@ const Routes = {
     },
     StudyGroup: {
         CreateStudyGroup: "/api/study-group/create",
+        DeleteStudyGroup: "/api/study-group/delete",
         GetUserStudyGroups: "/api/study-group/get-all",
         GetStudyGroup: "/api/study-group/get",
         JoinStudyGroup: "/api/study-group/join"

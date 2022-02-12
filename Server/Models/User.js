@@ -356,6 +356,9 @@ class User {
             }
         }
 
+        // FILTER OUT INACTIVE STUDY GROUPS.
+        studyGroups = studyGroups.filter((studyGroup) => { studyGroup.isActive() });
+
         // POPULATE ALL THE STUDY GROUPS WITH THEIR OWNER ATTRIBUTES.
         let studyGroupIndex = 0;
         while (studyGroupIndex < studyGroups.length) {
