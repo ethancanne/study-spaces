@@ -41,7 +41,7 @@ const CreateStudyGroupView = () => {
         event.preventDefault();
         event.stopPropagation();
 
-        sendPostRequest(
+        await sendPostRequest(
             Routes.StudyGroup.CreateStudyGroup,
             {
                 name,

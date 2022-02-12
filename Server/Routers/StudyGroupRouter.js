@@ -39,13 +39,9 @@ class StudyGroupRouter {
             Routes.StudyGroup.DeleteStudyGroup,
             authenticator.protectRoute(),
             StudyGroupRouter.deleteStudyGroup
-        )
-        // This is used to get a specific study group.
-        server.get(
-            Routes.StudyGroup.GetStudyGroup,
-            authenticator.protectRoute(),
-            StudyGroupRouter.getStudyGroup
         );
+        // This is used to get a specific study group.
+        server.get(Routes.StudyGroup.GetStudyGroup, authenticator.protectRoute(), StudyGroupRouter.getStudyGroup);
         // This is used to get a user's study groups.
         server.get(
             Routes.StudyGroup.GetUserStudyGroups,
@@ -114,13 +110,13 @@ class StudyGroupRouter {
     }
 
     /**
-    * Deletes a study group.
-    * @param {String} request.body.studyGroupId
-    * @author Cameron Burkholder
-    * @date   02/12/2022
-    * @async
-    * @static
-    */
+     * Deletes a study group.
+     * @param {String} request.body.studyGroupId
+     * @author Cameron Burkholder
+     * @date   02/12/2022
+     * @async
+     * @static
+     */
     static async deleteStudyGroup(request, response) {
         // GET THE STUDY GROUP.
         const studyGroupId = request.body.studyGroupId;
@@ -163,13 +159,13 @@ class StudyGroupRouter {
     }
 
     /**
-    * Gets the study group with a given study group ID.
-    * @param {String} request.query.studyGroupId The study group ID.
-    * @author Cameron Burkholder
-    * @date   02/12/2022
-    * @async
-    * @static
-    */
+     * Gets the study group with a given study group ID.
+     * @param {String} request.query.studyGroupId The study group ID.
+     * @author Cameron Burkholder
+     * @date   02/12/2022
+     * @async
+     * @static
+     */
     static async getStudyGroup(request, response) {
         // GET THE STUDY GROUP.
         const studyGroupId = request.query.studyGroupId;
@@ -208,7 +204,7 @@ class StudyGroupRouter {
     }
 
     /**
-     * Gets the study groups a user have joined.
+     * Gets the study groups a user has joined.
      * @param
      * @author Ethan Cannelongo
      * @date   01/14/2022

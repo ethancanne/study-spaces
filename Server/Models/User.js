@@ -357,7 +357,8 @@ class User {
         }
 
         // FILTER OUT INACTIVE STUDY GROUPS.
-        studyGroups = studyGroups.filter((studyGroup) => { studyGroup.isActive() });
+        studyGroups = studyGroups.filter((studyGroup) => studyGroup.active);
+        //studyGroups array DOES NOT INCLUDE CLASS INSTANCES, so we can't use .isActive()
 
         // POPULATE ALL THE STUDY GROUPS WITH THEIR OWNER ATTRIBUTES.
         let studyGroupIndex = 0;
@@ -439,12 +440,12 @@ class User {
     }
 
     /**
-    * Removes the temporary email and verification token associated with changing an email.
-    * @return {Boolean} True if the attributes were removed, false otherwise.
-    * @author Cameron Burkholder
-    * @date   02/11/2022
-    * @async
-    */
+     * Removes the temporary email and verification token associated with changing an email.
+     * @return {Boolean} True if the attributes were removed, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/11/2022
+     * @async
+     */
     async removeTemporaryEmail() {
         this.temporaryEmail = undefined;
         this.verificationToken = undefined;
@@ -556,14 +557,14 @@ class User {
      * @date    02/11/2022
      * @async
      */
-     async setTemporaryEmail(temporaryEmail){
+    async setTemporaryEmail(temporaryEmail) {
         this.temporaryEmail = temporaryEmail;
         let temporaryEmailSet = false;
         try {
             temporaryEmailSet = await this.save();
         } catch (error) {
             Log.write("An error occurred while attempting to save the temporary email.");
-            Log.writeError(error)
+            Log.writeError(error);
         }
         return temporaryEmailSet;
     }
@@ -576,14 +577,14 @@ class User {
      * @date 02/09/2022
      * @async
      */
-    async setVerificationToken(verificationToken){
+    async setVerificationToken(verificationToken) {
         this.verificationToken = verificationToken;
         let verificationTokenSet = false;
         try {
             verificationTokenSet = await this.save();
         } catch (error) {
             Log.write("An error occurred while attempting to save the temporary email.");
-            Log.writeError(error)
+            Log.writeError(error);
         }
         return verificationTokenSet;
     }
@@ -600,10 +601,10 @@ class User {
         this.passwordHash = newPasswordHash;
         let passwordWasUpdated = false;
         try {
-          passwordWasUpdated = await this.save();
+            passwordWasUpdated = await this.save();
         } catch (error) {
-          Log.write("An error occurred while attempting to updated a user's password.");
-          Log.writeError(error);
+            Log.write("An error occurred while attempting to updated a user's password.");
+            Log.writeError(error);
         }
         return passwordWasUpdated;
     }

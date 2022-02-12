@@ -55,7 +55,7 @@ const App = (props) => {
      */
     const updateAuthenticationToken = async () => {
         if (isLoggedIn) {
-            sendGetRequest(
+            await sendGetRequest(
                 Routes.Account.UpdateAuthenticationToken,
                 ResponseMessages.Account.SuccessUpdateAuthenticationToken,
                 null,

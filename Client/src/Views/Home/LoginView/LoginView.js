@@ -39,7 +39,7 @@ const LoginView = (props) => {
         event.preventDefault();
         event.stopPropagation();
 
-        sendPostRequest(
+        await sendPostRequest(
             Routes.Account.Login,
             {
                 email,

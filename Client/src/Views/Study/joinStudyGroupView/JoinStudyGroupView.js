@@ -25,7 +25,7 @@ const JoinStudyGroupView = ({ group }) => {
 
         console.log("Submitting");
 
-        sendPostRequest(
+        await sendPostRequest(
             Routes.StudyGroup.JoinStudyGroup,
             { studyGroupId: _id },
             ResponseMessages.StudyGroup.SuccessStudyGroupJoined,

@@ -52,13 +52,15 @@ const Study = (props) => {
      * @date   11/20/2021
      */
     const getStudyGroups = async () => {
-        sendGetRequest(
+        await sendGetRequest(
             Routes.StudyGroup.GetUserStudyGroups,
             ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
             "There's been an error loading your study groups.  Please try again later. ",
             true,
             (data, error) => {
-                if (error) return;
+                if (error) {
+                    console.log(error);
+                }
                 const { studyGroups } = data;
                 if (studyGroups) {
                     studyGroups.map((s) => {

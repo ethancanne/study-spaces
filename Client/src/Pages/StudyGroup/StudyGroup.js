@@ -1,19 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../core/Button/Button";
 import { Link } from "react-router-dom";
 import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
 import Routes from "../../../../Server/Routes/Routes";
-import { sendGetRequest } from "../../../Helper";
+import { sendGetRequest, sendPostRequest } from "../../../Helper";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 
 const StudyGroup = (props) => {
     const {
-        group,
         match: {
             params: { id }
         }
     } = props;
+
+    const [group, setGroup] = useState({});
 
     useEffect(() => {
         async function getGroups() {
@@ -28,14 +29,15 @@ const StudyGroup = (props) => {
      * @date   11/20/2021
      */
     const getStudyGroup = async () => {
-        sendGetRequest(
-            Routes.StudyGroup.GetStudyGroup,
-            ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
-            "There was an error retriving your study group",
+        await sendGetRequest(
+            Routes.StudyGroup.GetStudyGroup + "?studyGroupId=" + id,
+            ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved,
+            ResponseMessages.StudyGroup.ErrorGetStudyGroup,
             true,
             (data, error) => {
                 if (error) return;
                 //Load study group into state
+                setGroup(data.studyGroup);
             }
         );
     };
@@ -49,8 +51,9 @@ const StudyGroup = (props) => {
                         <Link to="/">
                             <Button>{"<"}</Button>
                         </Link>
-                        <h1>{id}</h1>
+                        <h1>{group.name}</h1>
                     </div>
+                    {JSON.stringify(group)}
                 </div>
             </Page>
         </div>

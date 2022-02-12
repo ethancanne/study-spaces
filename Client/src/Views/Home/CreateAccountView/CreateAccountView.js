@@ -45,7 +45,7 @@ const CreateAccountView = (props) => {
             return;
         }
 
-        sendPostRequest(
+        await sendPostRequest(
             Routes.Account.CreateAccount,
             {
                 email,

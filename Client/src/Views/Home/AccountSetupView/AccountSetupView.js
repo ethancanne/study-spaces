@@ -13,7 +13,7 @@ import Validator from "../../../../../Server/Validator";
 import Views from "../../Views";
 import InputField from "../../../core/InputField/InputField";
 import AuthView from "../AuthView";
-import { sendPostRequest } from "../../../../Helper";
+import { sendPostRequest, sendPostRequestWithFormData } from "../../../../Helper";
 
 /**
  * Once the user has verified their account and clicked the link, this view is used to present the acount setup form so they can offically create their account on the home page
@@ -45,7 +45,7 @@ const AccountSetupView = (props) => {
      */
     const verifyUser = async (verificationToken) => {
         // SUBMIT THE VERIFY USER REQUEST.
-        sendPostRequest(
+        await sendPostRequest(
             Routes.Account.GetUnverifiedUser,
             { verificationToken: verificationToken },
             ResponseMessages.Account.UnverifiedUserWasFound,
@@ -69,49 +69,33 @@ const AccountSetupView = (props) => {
         event.preventDefault();
         event.stopPropagation();
 
+        const formData = new FormData();
+        formData.append("profilePicture", profilePicture);
+        formData.append("verificationToken", verificationToken);
+        formData.append("user", user);
+        formData.append("name", name);
+        formData.append("areaCode", areaCode);
+        formData.append("is18OrOver", is18OrOver);
+
         if (!is18OrOver) {
             console.log("NOT 18");
             dispatch(showErrorNotification("You need to be 18 or older to sign up"));
             return;
         }
 
-        let response;
-        try {
-            const formData = new FormData();
-            formData.append("profilePicture", profilePicture);
-            formData.append("verificationToken", verificationToken);
-            formData.append("user", user);
-            formData.append("name", name);
-            formData.append("areaCode", areaCode);
-            formData.append("is18OrOver", is18OrOver);
-
-            response = await axios.post(Routes.Account.SetupAccount, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-        } catch (error) {
-            console.log(error);
-            dispatch(showErrorNotification("There was a problem connecting to the server:" + error));
-        } finally {
-            // IF THE LOGIN REQUEST HAS RECEIVED A RESPONSE, CHECK IF THE USER HAS BEEN LOGGED IN.
-            const responseIsDefined = Validator.isDefined(response);
-
-            if (responseIsDefined) {
-                // IF THE ACCOUNT CREATION WAS SUCCESSFUL, CONFIGURE THE CLIENT TO REFLECT THIS.
-                const accountSetupWasValid = ResponseMessages.Account.SuccessAccountSetup === response.data.message;
-
-                if (accountSetupWasValid) {
-                    const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = response.data;
-                    dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
-                    dispatch(showSuccessNotification("Successfully signed in: " + response.user.name));
-                } else {
-                    dispatch(showErrorNotification(response.data.message));
-                }
-            } else {
-                dispatch(showErrorNotification("There was a problem creating your account"));
+        await sendPostRequestWithFormData(
+            Routes.Account.SetupAccount,
+            formData,
+            ResponseMessages.Account.SuccessAccountSetup,
+            null,
+            false,
+            (data, error) => {
+                if (error) return;
+                const { authenticationToken, authenticationTokenExpirationDate, user, studyGroups } = data;
+                dispatch(signIn({ authenticationToken, authenticationTokenExpirationDate, user }));
+                dispatch(showSuccessNotification("Successfully signed in: " + user.name));
             }
-        }
+        );
     };
 
     /**

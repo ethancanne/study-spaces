@@ -66,7 +66,7 @@ const Account = () => {
      * @async
      */
     const submitDeleteAccount = async (currentPassword) => {
-        sendDeleteRequest(
+        await sendDeleteRequest(
             Routes.Account.Delete,
             { currentPassword },
             ResponseMessages.Account.SuccessAccountDeleted,

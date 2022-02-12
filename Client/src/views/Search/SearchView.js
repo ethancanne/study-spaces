@@ -49,7 +49,7 @@ const SearchView = () => {
         e.preventDefault();
         e.stopPropagation();
 
-        sendPostRequest(
+        await sendPostRequest(
             Routes.Search.GetSearchResults,
             {
                 searchTerm,
