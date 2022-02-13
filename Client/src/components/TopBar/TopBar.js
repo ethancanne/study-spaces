@@ -38,7 +38,7 @@ const TopBar = ({ currentPage }) => {
                                 console.log(menuIsShowing);
                             }}
                         >
-                            <p className="school">Liberty University</p>
+                            <p className="school">{user.school}</p>
                             <p className="name">{user.name}</p>
                             <img
                                 className="profile-picture"

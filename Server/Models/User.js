@@ -41,6 +41,10 @@ const UserSchema = new Schema({
         type: String,
         required: false
     },
+    school: {
+        type: String,
+        required: false
+    },
     studyGroups: {
         type: [Mongoose.Schema.Types.ObjectId],
         ref: Configuration.getStudyGroupCollectionName(),
@@ -137,6 +141,7 @@ class User {
             email: unverifiedUser.getEmail(),
             name: name,
             passwordHash: unverifiedUser.getPasswordHash(),
+            school: unverifiedUser.getSchool(),
             studyGroups: EMPTY,
             profilePicture: profilePicture
         });
@@ -402,10 +407,20 @@ class User {
      * Gets the user's name.
      * @return {String} The user's name.
      * @author Cameron Burkholder
-     * @date   11/14/2022
+     * @date   11/14/2021
      */
     getName() {
         return String(this.name);
+    }
+
+    /**
+     * Gets the user's school.
+     * @return {String} The user's school.
+     * @author Ethan Cannelongo
+     * @date   02/12/2022
+     */
+    getSchool() {
+        return String(this.school);
     }
 
     /**

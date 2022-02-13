@@ -397,9 +397,9 @@ class StudyGroup {
     }
 
     /**
-    * Checks if a study group is active.
-    * @return {Boolean} True if the group is active, false otherwise.
-    */
+     * Checks if a study group is active.
+     * @return {Boolean} True if the group is active, false otherwise.
+     */
     isActive() {
         const studyGroupIsActive = this.active ? true : false;
         return studyGroupIsActive;
@@ -523,13 +523,14 @@ class StudyGroup {
         };
 
         // ADD OPTIONAL PARAMETERS TO THE SEARCH.
-        const schoolFilteringIsEnabled = Validator.isDefined(filters.school);
+        const schoolFilteringIsEnabled = Validator.isDefined(filters.school) && filters.school !== "";
         if (schoolFilteringIsEnabled) {
             // Using the regex format allows us to search for all school names
             // like the one entered.
             const schoolRegex = new RegExp(`${filters.school}`, "i");
             searchFilter.school = schoolRegex;
         }
+
         const subjectFilteringIsEnabled = Subjects.Any !== filters.subject;
         if (subjectFilteringIsEnabled) {
             searchFilter.subject = filters.subject;
@@ -695,17 +696,17 @@ class StudyGroup {
         const userIsOwner = this.userIsOwner(user);
 
         // CHECK IF THE USER IS IN THE STUDY GROUP.
-        const userIsInStudyGroup = (userIsAMember || userIsOwner);
+        const userIsInStudyGroup = userIsAMember || userIsOwner;
         return userIsInStudyGroup;
     }
 
     /**
-    * Checks if the user is the owner of the study group.
-    * @param {User} user The user to check for study group ownership.
-    * @return {Boolean} True if the user is the owner of the group, false otherwise.
-    * @author Cameron Burkholder
-    * @date   02/12/2022
-    */
+     * Checks if the user is the owner of the study group.
+     * @param {User} user The user to check for study group ownership.
+     * @return {Boolean} True if the user is the owner of the group, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/12/2022
+     */
     userIsOwner(user) {
         // CHECK IF THE USER IS THE OWNER OF THE GROUP.
         const userId = String(user.getId());

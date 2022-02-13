@@ -268,6 +268,13 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.UserAlreadyJoined });
         }
 
+        // CHECK IF THE USER IS ASSOCIATED WITH THE SAME SCHOOL AS THE STUDY GROUP
+        const userIsNotAssociatedWithSameSchool = request.user.getSchool() !== studyGroup.school;
+        console.log(userIsNotAssociatedWithSameSchool);
+        if (userIsNotAssociatedWithSameSchool) {
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotAssociatedWithSchoolOfStudyGroup });
+        }
+
         // CHECK IF THE STUDY GROUP HAS ITS PRIVACY SETTING SET TO OPEN OR PRIVATE.
         // Since we elected to make the private study group an optional feature,
         // checking this is merely done to provide flexibility for future teams.

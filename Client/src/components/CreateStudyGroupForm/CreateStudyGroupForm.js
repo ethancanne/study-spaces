@@ -82,10 +82,13 @@ const CreateStudyGroupForm = (props) => {
 
                 {/* toggles */}
                 <div className="side-by-side">
-                    <ToggleField>
-                        <Label>Is this group associated with your school?</Label>
-                        <Toggle onChange={props.updateIsAssociatedWithSchool} />
-                    </ToggleField>
+                    {props.userSchool !== "" && (
+                        <ToggleField>
+                            <Label>Is this group associated with {props.userSchool}?</Label>
+                            <Toggle onChange={props.updateIsAssociatedWithSchool} />
+                        </ToggleField>
+                    )}
+
                     <ToggleField>
                         <Label>Is this an online group?</Label>
                         <Toggle onChange={props.updateIsOnlineGroup} />

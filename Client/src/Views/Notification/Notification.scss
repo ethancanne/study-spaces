@@ -3,6 +3,7 @@
     position: fixed;
     bottom: -100px;
     right: 20px;
+    margin-left: 20px;
     backdrop-filter: blur(10px);
     padding: 20px 80px 20px 80px;
     transition: all 0.4s ease-in-out;
@@ -14,6 +15,7 @@
     display: flex;
     align-items: start;
     justify-content: start;
+    font-size: 15px;
     &.error {
         background-color: rgba(139, 0, 0, 0.413);
         color: white;

@@ -36,7 +36,8 @@ const SearchForm = ({
     updateTimeRange,
     updateDays,
     updateMeetingFrequencies,
-    submitSearch
+    submitSearch,
+    userSchool
 }) => {
     return (
         <div>
@@ -81,10 +82,17 @@ const SearchForm = ({
                         <Dropdown options={["Group", "Tutor", "Mixed"]} onChange={updateType} value={type} />
                     </InputField>
                 </div>
-                <ToggleField>
-                    <Label>Show Only Groups Associated with Your School</Label>
-                    <Toggle value={isAssociatedWithSchool} onChange={updateIsAssociatedWithSchool} type="checkbox" />
-                </ToggleField>
+                {userSchool !== "" && (
+                    <ToggleField>
+                        <Label>Show Only Groups Associated with {userSchool}?</Label>
+                        <Toggle
+                            value={isAssociatedWithSchool}
+                            onChange={updateIsAssociatedWithSchool}
+                            type="checkbox"
+                        />
+                    </ToggleField>
+                )}
+
                 <Button type={ButtonTypes.Primary}>Search</Button>
             </Form>
         </div>

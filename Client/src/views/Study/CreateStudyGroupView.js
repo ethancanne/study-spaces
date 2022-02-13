@@ -21,7 +21,7 @@ const CreateStudyGroupView = () => {
     const BLANK = "";
     const [name, setName] = useState(BLANK); //TextInput tag
     const [description, setDescription] = useState(BLANK); //TextInput tag
-    const [subject, setSubject] = useState("That"); //select tag, filled with option tags
+    const [subject, setSubject] = useState("This"); //select tag, filled with option tags
     const [privacy, setPrivacy] = useState("Public"); //select tag, filled with option tags
     const [courseCode, setCourseCode] = useState(BLANK); //TextInput tag
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false); //Input tag with type "checkbox"
@@ -50,7 +50,7 @@ const CreateStudyGroupView = () => {
                 subject,
                 privacySetting: privacy,
                 course: courseCode,
-                school: user.school || "Liberty University",
+                school: isAssociatedWithSchool ? user.school : "",
                 isTutorGroup,
                 isOnlineGroup
             },
@@ -178,6 +178,7 @@ const CreateStudyGroupView = () => {
                 updateIsOnlineGroup={updateIsOnlineGroup}
                 updateGroupColor={updateGroupColor}
                 submitCreateStudyGroup={submitCreateStudyGroup}
+                userSchool={user.school}
             />
         </div>
     );

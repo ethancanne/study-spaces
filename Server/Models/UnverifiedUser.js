@@ -22,6 +22,11 @@ const UnverifiedUserSchema = new Schema({
         type: String,
         required: true
     },
+    school: {
+        type: String,
+        default: "",
+        required: false
+    },
     verificationToken: {
         type: String,
         required: true
@@ -69,7 +74,7 @@ class UnverifiedUser {
      * @async
      * @static
      */
-    static async create(email, password) {
+    static async create(email, password, school) {
         // GENERATE THE USER'S HASHED PASSWORD.
         const hashedPassword = Authenticator.hashPassword(password);
 
@@ -92,12 +97,24 @@ class UnverifiedUser {
             tokenIsNotUnique = Validator.isDefined(existingUnverifiedUser);
         }
 
-        // CREATE THE UNVERIFIED USER ACCOUNT.
-        const newUnverifiedUser = new UnverifiedUserModel({
-            email: email,
-            passwordHash: hashedPassword,
-            verificationToken: verificationToken
-        });
+        var newUnverifiedUser = undefined;
+        //CONFIRM THAT THE USER IS ASSOCIATED WITH A SCHOOL
+        if (school !== false && school !== true && school) {
+            // CREATE THE UNVERIFIED USER ACCOUNT WITH A SCHOOL
+            newUnverifiedUser = new UnverifiedUserModel({
+                email,
+                passwordHash: hashedPassword,
+                school,
+                verificationToken
+            });
+        } else {
+            // CREATE THE UNVERIFIED USER ACCOUNT WITHOUT A SCHOOL
+            newUnverifiedUser = new UnverifiedUserModel({
+                email,
+                passwordHash: hashedPassword,
+                verificationToken
+            });
+        }
 
         // SAVE THE USER ACCOUNT.
         try {
@@ -211,6 +228,16 @@ class UnverifiedUser {
      */
     getPasswordHash() {
         return this.passwordHash;
+    }
+
+    /**
+     * Gets the unverified user's school.
+     * @return {String} The unverified user's hashed school.
+     * @author Ethan Cannelongo
+     * @date   02/12/2022
+     */
+    getSchool() {
+        return this.school;
     }
 
     /**

@@ -2,6 +2,7 @@ const multer = require("multer");
 const Path = require("path");
 const RandomWords = require("random-words");
 const sharp = require("sharp");
+const swot = require("swot-node");
 
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
@@ -126,8 +127,19 @@ class AccountRouter {
                 return response.json({ message: ResponseMessages.Account.userAlreadyExists });
             }
 
+            //SET SCHOOL PROPERTY
+            var school = undefined;
+            try {
+                school = await swot.getSchoolName(request.body.email);
+            } catch (e) {
+                Log.write(
+                    "An error occurred while attempting to find a school associated with the provided email address."
+                );
+                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            }
+
             // CREATE THE UNVERIFIED ACCOUNT.
-            const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password);
+            const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password, school);
             const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
             if (accountWasNotCreated) {
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });

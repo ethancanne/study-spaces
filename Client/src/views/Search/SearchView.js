@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { populateStudyGroupSearch, showErrorNotification } from "../../state/actions";
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 import { sendPostRequest } from "../../../Helper";
+import { useSelector } from "react-redux";
 
 /**
  * A view for inputting search terms and filters for searching study groups
@@ -27,6 +28,7 @@ const SearchView = () => {
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 
     const dispatch = useDispatch();
+    const user = useSelector((state) => state.authReducer.user);
 
     /**
      * Retrieves study groups from search query by sending a request to the server
@@ -54,7 +56,7 @@ const SearchView = () => {
             {
                 searchTerm,
                 subject,
-                school: isAssociatedWithSchool ? "Liberty University" : null,
+                school: isAssociatedWithSchool ? user.school : "",
                 meetingFormat,
                 meetingFrequencies,
                 type,
@@ -171,6 +173,7 @@ const SearchView = () => {
                 updateDays={updateDays}
                 updateMeetingFrequencies={updateMeetingFrequencies}
                 submitSearch={submitSearch}
+                userSchool={user.school}
             />
         </div>
     );
