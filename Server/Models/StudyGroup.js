@@ -276,11 +276,39 @@ class StudyGroup {
 
     /**
      * Gets the study group feed.
-     * @return {Feed} The study group's feed.
-     *
+     * @return {Boolean} True if the feed was found, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/14/2022
      * @async
      */
-    async getFeed() {}
+    async getFeed() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S FEED.
+        let feedWasFound = false;
+        try {
+            feedWasFound = await studyGroupModel.populate("feed");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's feed.");
+            Log.writeError(error);
+        } finally {
+            if (feedWasFound) {
+                this.feed = studyGroupModel.feed;
+            }
+            return feedWasFound;
+        }
+    }
 
     /**
      * Gets the study group record from the database using the document ID.
@@ -334,11 +362,42 @@ class StudyGroup {
 
     /**
      * Gets the study group's members.
-     * @return {User[]} The study group's members.
-     *
+     * @return {Boolean} True if the members were found, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/14/2022
      * @async
      */
-    async getMembers() {}
+    async getMembers() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S MEMBERS.
+        let membersWereFound = false;
+        try {
+            membersWereFound = await studyGroupModel.populate("members");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's members.");
+            Log.writeError(error);
+        } finally {
+            if (membersWereFound) {
+                this.members = studyGroupModel.members.map((memberModel) => {
+                    memberModel.passwordHash = undefined;
+                    return memberModel;
+                });
+            }
+            return membersWereFound;
+        }
+    }
 
     /**
      * Gets the study group's name.

@@ -196,6 +196,22 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.StudyGroupIsNotActive });
         }
 
+        // POPULATE THE STUDY GROUP'S MEMBERS.
+        let membersWereFound = false;
+        membersWereFound = await studyGroup.getMembers();
+        if (!membersWereFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        // POPULATE THE STUDY GROUP'S FEED.
+        let feedWasPopulated = false;
+        feedWasPopulated = await studyGroup.getFeed();
+        if (!feedWasPopulated) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
         // RETURN THE STUDY GROUP.
         return response.json({
             message: ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved,
