@@ -8,6 +8,7 @@ import JoinStudyGroupView from "../Study/joinStudyGroupView/JoinStudyGroupView";
 import InputView from "../Input/InputView";
 
 import views from "../Views";
+import EditStudyGroup from "../../Views/StudyGroup/EditStudyGroup/EditStudyGroupView";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -29,6 +30,10 @@ const Popup = (props) => {
             break;
         case views.Popup.StudyGroup.Join:
             popupView = <JoinStudyGroupView group={payload} />;
+            break;
+
+        case views.Popup.StudyGroup.Edit:
+            popupView = <EditStudyGroup group={payload} />;
             break;
 
         case views.Popup.Input:

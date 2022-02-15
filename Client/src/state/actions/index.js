@@ -45,6 +45,13 @@ export const showJoinStudyGroupPopup = (group) => {
     };
 };
 
+export const showEditStudyGroupPopup = (group) => {
+    return {
+        type: popupConstants.SHOW_EDIT_STUDY_GROUP_POPUP,
+        payload: group
+    };
+};
+
 export const showInputPopup = (title, label, defaultInput, callback, label2) => {
     return {
         type: popupConstants.SHOW_INPUT_POPUP,

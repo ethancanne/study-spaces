@@ -14,7 +14,8 @@ const Views = {
     Popup: {
         StudyGroup: {
             Join: "Join Study Group",
-            Create: "Create Study Group"
+            Create: "Create Study Group",
+            Edit: "Edit Study Group"
         },
         Input: "Input Information"
     }

@@ -51,12 +51,12 @@ const Home = (props) => {
     }
 
     return (
-        <Page>
+        <Page topBar={false}>
             <div className="HomePage">
                 <h1 className="subtitle">
                     Study <br /> with <br /> excellence.
                 </h1>
-                <Page>{!props.children ? homeView : props.children}</Page>
+                <div>{!props.children ? homeView : props.children}</div>
             </div>
         </Page>
     );

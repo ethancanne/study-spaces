@@ -14,8 +14,7 @@ import Page from "../Page";
 const Search = () => {
     return (
         <>
-            <TopBar currentPage="search" />
-            <Page>
+            <Page topBar={true} currentPage="search">
                 <div className="search-page">
                     <div className="page-title">
                         <h1>Search</h1>

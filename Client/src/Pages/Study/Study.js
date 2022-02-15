@@ -96,9 +96,7 @@ const Study = (props) => {
 
     return (
         <div>
-            <TopBar currentPage="study" />
-
-            <Page>
+            <Page topBar={true} currentPage="study">
                 <div className="study-page">
                     <div className="page-title">
                         <h1>Study</h1>

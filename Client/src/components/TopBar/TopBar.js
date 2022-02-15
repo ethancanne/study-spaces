@@ -6,7 +6,7 @@ import Button from "../../core/Button/Button";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 
 import Menu from "./Menu";
-const TopBar = ({ currentPage }) => {
+const TopBar = ({ currentPage, color }) => {
     const dispatch = useDispatch();
     const { user, isLoggedIn } = useSelector((state) => state.authReducer);
     // const { name, profilePicture } = user;
@@ -15,7 +15,7 @@ const TopBar = ({ currentPage }) => {
     return (
         <>
             <div className="top-bar">
-                <div className="wrapper">
+                <div className="wrapper" style={{ borderColor: color }}>
                     <div className="left">
                         <Link to="/" style={{ textDecoration: "none" }}>
                             <h1>Study Spaces</h1>
@@ -44,6 +44,7 @@ const TopBar = ({ currentPage }) => {
                                 className="profile-picture"
                                 src={" data:image/png;charset=utf-8;base64," + user.profilePicture}
                                 alt=""
+                                style={{ borderColor: color }}
                             />
                         </div>
                     ) : (
@@ -53,7 +54,7 @@ const TopBar = ({ currentPage }) => {
                     )}
                 </div>
             </div>
-            <div className="border">
+            <div className="border" style={{ borderColor: color }}>
                 <Menu isShowing={menuIsShowing} />
             </div>
         </>

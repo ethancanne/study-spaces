@@ -1,4 +1,5 @@
 import React from "react";
+import TopBar from "../components/TopBar/TopBar";
 import "./Page.scss";
 
 /**
@@ -8,8 +9,12 @@ import "./Page.scss";
  */
 const Page = (props) => {
     return (
-        <div className="page" {...props}>
-            {props.children}
+        <div>
+            {props.topBar && <TopBar currentPage={props.currentPage} color={props.color} />}
+
+            <div className="page" {...props} style={{ borderColor: props.color }}>
+                {props.children}
+            </div>
         </div>
     );
 };

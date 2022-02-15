@@ -40,6 +40,11 @@ const CreateAccountView = (props) => {
         event.stopPropagation();
 
         // FIRST, COMPARE THE PASSWORD AND CONFIRM PASSWORD FIELDS
+        if (password === BLANK && confirmPassword === BLANK && email === BLANK) {
+            dispatch(showErrorNotification("Please fill in the information"));
+            return;
+        }
+
         if (password !== confirmPassword) {
             dispatch(showErrorNotification("Passwords don't match"));
             return;

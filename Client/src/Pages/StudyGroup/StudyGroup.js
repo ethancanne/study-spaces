@@ -1,13 +1,20 @@
+import "./StudyGroup.scss";
 import React, { useEffect, useState } from "react";
 import Button from "../../core/Button/Button";
 import { Link } from "react-router-dom";
 import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
+import MembersView from "../../Views/StudyGroup/Members/MembersView";
+import DetailsView from "../../Views/StudyGroup/DetailsView/DetailsView";
 import Routes from "../../../../Server/Routes/Routes";
 import { sendGetRequest, sendPostRequest } from "../../../Helper";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
+import { useDispatch, useSelector } from "react-redux";
+import { showEditStudyGroupPopup } from "../../state/actions";
 
 const StudyGroup = (props) => {
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.authReducer.user);
     const {
         match: {
             params: { id }
@@ -21,12 +28,13 @@ const StudyGroup = (props) => {
             await getStudyGroup();
         }
         getGroups();
+        console.log(group);
     }, []);
 
     /**
-     * Retrieves all study groups the user is a member of from the server
+     * Retrieves the study group associated with the id from the url
      * @author Ethan Cannelongo
-     * @date   11/20/2021
+     * @date 02/10/2022
      */
     const getStudyGroup = async () => {
         await sendGetRequest(
@@ -43,17 +51,19 @@ const StudyGroup = (props) => {
     };
     return (
         <div>
-            <TopBar currentPage="study" />
-
-            <Page>
-                <div className="study-page">
+            <Page topBar={true} currentPage="study" color={group.groupColor}>
+                <div className="study-group-page">
                     <div className="page-title">
                         <Link to="/">
                             <Button>{"<"}</Button>
                         </Link>
                         <h1>{group.name}</h1>
                     </div>
-                    {JSON.stringify(group)}
+
+                    <div className="main-view">
+                        <MembersView group={group} />
+                        <DetailsView group={group} />
+                    </div>
                 </div>
             </Page>
         </div>

@@ -33,10 +33,6 @@ const CreateStudyGroupForm = (props) => {
     return (
         <div>
             <Form onSubmit={props.submitCreateStudyGroup} className="create-study-group-form">
-                {/* Add the appropriate inputs, toggles and dropdown fields, each accompanied by a Label, for each of the fields (declared in CreateStudyGroupView File) that are required to create a study group */}
-                {/* Don't forget a final submit button at the end of the form */}
-
-                {/* user text input */}
                 <div className="side-by-side">
                     <InputField>
                         <Label>Study Group Name</Label>
@@ -50,7 +46,6 @@ const CreateStudyGroupForm = (props) => {
 
                 <InputField>
                     <Label>Description</Label>
-                    {/* not sure about what the props. thing should say */}
                     <TextInput
                         value={props.description}
                         onChange={props.updateDescriptionField}
@@ -78,25 +73,27 @@ const CreateStudyGroupForm = (props) => {
                     </InputField>
                 </div>
 
-                {/* class code */}
-
                 {/* toggles */}
                 <div className="side-by-side">
-                    {props.userSchool !== "" && (
+                    {props.userSchool !== "" && props.userSchool && (
                         <ToggleField>
                             <Label>Is this group associated with {props.userSchool}?</Label>
-                            <Toggle onChange={props.updateIsAssociatedWithSchool} />
+                            <Toggle
+                                onChange={props.updateIsAssociatedWithSchool}
+                                value={props.isAssociatedWithSchool}
+                            />
                         </ToggleField>
                     )}
 
                     <ToggleField>
                         <Label>Is this an online group?</Label>
-                        <Toggle onChange={props.updateIsOnlineGroup} />
+                        {console.log("Is Online?", props.isOnlineGroup)}
+                        <Toggle onChange={props.updateIsOnlineGroup} value={props.isOnlineGroup} />
                     </ToggleField>
 
                     <ToggleField>
                         <Label>Is this a tutor group?</Label>
-                        <Toggle onChange={props.updateIsTutorGroup} />
+                        <Toggle onChange={props.updateIsTutorGroup} value={props.isTutorGroup} />
                     </ToggleField>
                 </div>
 

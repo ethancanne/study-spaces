@@ -4,6 +4,7 @@
     overflow-y: visible;
     display: flex;
     flex-direction: column;
+    height: 100%;
 }
 
 .add-button {
@@ -47,7 +48,7 @@
     padding: 10px;
     overflow-y: auto;
 
-    height: 74vh;
+    // height: 74vh;
     @include mobile {
         display: block;
     }

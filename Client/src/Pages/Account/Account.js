@@ -82,8 +82,7 @@ const Account = () => {
     };
     return (
         <>
-            <TopBar currentPage="account" />
-            <Page>
+            <Page topBar={true} currentPage={""}>
                 <div className="page-title">
                     <h1>Account</h1>
                 </div>

@@ -1,0 +1,36 @@
+@import "../../../globals.scss";
+.members-container {
+    background-color: rgba(255, 255, 255, 0.199);
+    backdrop-filter: blur(3px);
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.249);
+    margin: 20px;
+    overflow-y: scroll;
+    flex: 1;
+
+    .member {
+        padding: 20px;
+        // margin: 10px 0 10px 0;
+        background-color: rgb(255, 255, 255);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .profile-picture {
+            width: 50px;
+            height: 50px;
+            border-radius: 27px;
+            object-fit: cover;
+            border: $border-color 4px solid;
+        }
+        p {
+            padding-left: 20px;
+        }
+
+        &:first-child {
+            background-color: rgb(244, 244, 244);
+        }
+        &:nth-child(2n + 3) {
+            background-color: rgb(244, 244, 244);
+        }
+    }
+}

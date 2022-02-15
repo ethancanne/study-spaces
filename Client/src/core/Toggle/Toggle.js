@@ -8,7 +8,13 @@ import React from "react";
 const Toggle = (props) => {
     return (
         <label className="Toggle">
-            <input type="checkbox" value={props.value} onChange={props.onChange} />
+            {console.log(props.value)}
+            <input
+                type="checkbox"
+                checked={props.value ? "checked" : ""}
+                value={props.value}
+                onChange={props.onChange}
+            />
             <span className="slider"></span>
         </label>
     );

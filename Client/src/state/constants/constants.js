@@ -10,6 +10,7 @@ export const authConstants = {
 export const popupConstants = {
     SHOW_CREATE_STUDY_GROUP_POPUP: "SHOW_CREATE_STUDY_GROUP_POPUP",
     SHOW_JOIN_STUDY_GROUP_POPUP: "SHOW_JOIN_STUDY_GROUP_POPUP",
+    SHOW_EDIT_STUDY_GROUP_POPUP: "SHOW_EDIT_STUDY_GROUP_POPUP",
     SHOW_INPUT_POPUP: "SHOW_INPUT_POPUP",
     CLOSE_POPUP: "CLOSE_POPUP"
 };
@@ -18,7 +19,6 @@ export const popupConstants = {
 export const studyGroupsConstants = {
     ADD_STUDY_GROUP: "ADD_STUDY_GROUP",
     LOAD_STUDY_GROUPS: "LOAD_STUDY_GROUPS",
-
     POPULATE_SEARCH: "POPULATE_SEARCH"
 };
 

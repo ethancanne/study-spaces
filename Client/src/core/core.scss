@@ -94,9 +94,10 @@
     font-weight: 900;
     text-align: center;
 
-    // min-width: 60%;
     min-height: 3em;
+    max-height: 3em;
     flex: 1;
+    padding: 0 20px 0 20px;
 
     margin: 20px;
     cursor: pointer;
