@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Client/Helper.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Client/Helper.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { store } from "./src";
+import axios from "axios";
+import { showErrorNotification, showSuccessNotification } from "./src/state/actions";
+import Validator from "../Server/Validator";
+
+/**
+ * Submits a general post request to the server.
+ * @param {String} route The route of which to send the request
+ * @param {Object} data The data to be sent to the server
+ * @param {String} successResponseMessage The message to indicate a successful request
+ * @param {String} catchMessage If the catch statement runs, a notification will be shown with this message
+ * @param {Boolean} isAuthenticated True if this route requires authentication
+ * @param {Function} callback the function that gets called on error or success and returns (data, error)
+ * @author Ethan Cannelongo
+ * @date   2/11/2022
+ * @async
+ */
+export const sendPostRequest = async (
+    route,
+    data,
+    successResponseMessage,
+    catchMessage,
+    isAuthenticated,
+    callback = () => {}
+) => {
+    let response;
+    try {
+        if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+        response = await axios.post(route, data);
+    } catch (e) {
+        console.log(e);
+        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        callback(null, "There was a problem connecting to the server: " + e);
+    } finally {
+        const responseIsDefined = Validator.isDefined(response.data);
+        if (responseIsDefined) {
+            const requestWasValid = successResponseMessage === response.data.message;
+
+            if (requestWasValid) {
+                store.dispatch(showSuccessNotification(response.data.message));
+                callback(response.data);
+            } else {
+                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                callback(null, response.data.message);
+            }
+        } else {
+            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+            callback(null, "There was an error, the server sent undefined results");
+        }
+    }
+};
+
+/**
+ * Submits a general get request to the server.
+ * @param {String} route The route of which to send the request
+ * @param {String} successResponseMessage The message to indicate a successful request
+ * @param {String} catchMessage If the catch statement runs, a notification will be shown with this message
+ * @param {Boolean} isAuthenticated True if this route requires authentication
+ * @param {Function} callback the function that gets called on error or success and returns (data, error)
+ * @author Ethan Cannelongo
+ * @date   2/11/2022
+ * @async
+ */
+export const sendGetRequest = async (
+    route,
+    successResponseMessage,
+    catchMessage,
+    isAuthenticated,
+    callback = () => {}
+) => {
+    let response;
+    try {
+        if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+        response = await axios.get(route);
+    } catch (e) {
+        console.log(e);
+        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        callback(null, "There was a problem connecting to the server: " + e);
+    } finally {
+        const responseIsDefined = Validator.isDefined(response.data);
+        if (responseIsDefined) {
+            const requestWasValid = successResponseMessage === response.data.message;
+
+            if (requestWasValid) {
+                store.dispatch(showSuccessNotification(response.data.message));
+                callback(response.data);
+            } else {
+                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                callback(null, response.data.message);
+            }
+        } else {
+            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+            callback(null, "There was an error, the server sent undefined results");
+        }
+    }
+};
+
+/**
+ * Submits a general delete request to the server.
+ * @param {String} route The route of which to send the request
+ * @param {Object} data The data to be sent to the server
+ * @param {String} successResponseMessage The message to indicate a successful request
+ * @param {String} catchMessage If the catch statement runs, a notification will be shown with this message
+ * @param {Boolean} isAuthenticated True if this route requires authentication
+ * @param {Function} callback the function that gets called on error or success and returns (data, error)
+ * @author Ethan Cannelongo
+ * @date   2/11/2022
+ * @async
+ */
+export const sendDeleteRequest = async (
+    route,
+    data,
+    successResponseMessage,
+    catchMessage,
+    isAuthenticated,
+    callback = () => {}
+) => {
+    let response;
+    try {
+        if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+        response = await axios.delete(route, { data });
+    } catch (e) {
+        console.log(e);
+        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        callback(null, "There was a problem connecting to the server: " + e);
+    } finally {
+        const responseIsDefined = Validator.isDefined(response.data);
+        if (responseIsDefined) {
+            const requestWasValid = successResponseMessage === response.data.message;
+
+            if (requestWasValid) {
+                store.dispatch(showSuccessNotification(response.data.message));
+                callback(response.data);
+            } else {
+                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                callback(null, response.data.message);
+            }
+        } else {
+            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+            callback(null, "There was an error, the server sent undefined results");
+        }
+    }
+};
+
+/**
+ * Submits a general delete request to the server.
+ * @param {String} route The route of which to send the request
+ * @param {Object} formData The formData to be sent to the server
+ * @param {String} successResponseMessage The message to indicate a successful request
+ * @param {String} catchMessage If the catch statement runs, a notification will be shown with this message
+ * @param {Boolean} isAuthenticated True if this route requires authentication
+ * @param {Function} callback the function that gets called on error or success and returns (data, error)
+ * @author Ethan Cannelongo
+ * @date   2/11/2022
+ * @async
+ */
+export const sendPostRequestWithFormData = async (
+    route,
+    formdata,
+    successResponseMessage,
+    catchMessage,
+    isAuthenticated,
+    callback = () => {}
+) => {
+    let response;
+    try {
+        if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+        response = await axios.post(route, formdata, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    } catch (e) {
+        console.log(e);
+        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        callback(null, "There was a problem connecting to the server: " + e);
+    } finally {
+        const responseIsDefined = Validator.isDefined(response.data);
+        if (responseIsDefined) {
+            const requestWasValid = successResponseMessage === response.data.message;
+
+            if (requestWasValid) {
+                store.dispatch(showSuccessNotification(response.data.message));
+                callback(response.data);
+            } else {
+                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                callback(null, response.data.message);
+            }
+        } else {
+            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+            callback(null, "There was an error, the server sent undefined results");
+        }
+    }
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Feb 15 2022 13:05:05 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

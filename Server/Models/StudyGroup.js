@@ -483,34 +483,78 @@ class StudyGroup {
     /**
      * Sets the group to be an in-person group.
      * @return {Boolean} True if the group was set to be in-person, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeInPerson() {}
+    async makeInPerson() {
+        this.isOnlineGroup = false;
+        let inPersonSet = false;
+        try {
+            inPersonSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group in person.");
+            Log.writeError(error);
+        }
+        return inPersonSet;
+    }
 
     /**
      * Sets the group to be an online group.
      * @return {Boolean} True if the group was set to be an online group, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeOnline() {}
+    async makeOnline() {
+        this.isOnlineGroup = true;
+        let isOnlineSet = false;
+        try {
+            isOnlineSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group online.");
+            Log.writeError(error);
+        }
+        return isOnlineSet;
+    }
 
     /**
      * Sets the group to be a regular study group.
      * @return {Boolean} True if the group was set to be a regular study group, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeStudyGroup() {}
+    async makeStudyGroup() {
+        this.isTutorGroup = false;
+        let isTutorGroupSet = false;
+        try {
+            isTutorGroupSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group a regular study group.");
+            Log.writeError(error);
+        }
+        return isTutorGroupSet;
+    }
 
     /**
      * Sets the group to be a tutor group.
      * @return {Boolean} True if the group was set to be a tutor group, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeTutorGroup() {}
+    async makeTutorGroup() {
+        this.isTutorGroup = true;
+        let isTutorGroupSet = false;
+        try {
+            isTutorGroupSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group a tutor group.");
+            Log.writeError(error);
+        }
+        return isTutorGroupSet;
+    }
 
     /**
      * Removes a meeting from the study group's one-time meeting schedule.
@@ -677,46 +721,121 @@ class StudyGroup {
      * Sets the study group's area code.
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setAreaCode(areaCode) {}
+    async setAreaCode(areaCode) {
+        this.areaCode = areaCode;
+        let areaCodeSet = false;
+        try {
+            areaCodeSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the area code.");
+            Log.writeError(error);
+        }
+        return areaCodeSet;
+    }
 
     /**
      * Sets the study group's course.
      * @param {String} courseName The course to set.
      * @return {Boolean} True if the course was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setCourse(courseName) {}
+    async setCourse(courseName) {
+        this.course = courseName;
+        let courseSet = false;
+        try {
+            courseSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the course.");
+            Log.writeError(error);
+        }
+        return courseSet;
+    }
+
+    /**
+     * Sets the study group's color.
+     * @param {String} color The color to set.
+     * @return {Boolean} True if the color was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/15/2022
+     * @async
+     */
+    async setGroupColor(color) {
+        this.groupColor = color;
+        let colorSet = false;
+        try {
+            colorSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the group color.");
+            Log.writeError(error);
+        }
+        return colorSet;
+    }
 
     /**
      * Sets the study group's name.
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setName(name) {}
+    async setName(name) {
+        this.name = name;
+        let nameSet = false;
+        try {
+            nameSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the name.");
+            Log.writeError(error);
+        }
+        return nameSet;
+    }
 
     /**
      * Sets the study group's school.
      * @param {String} school The school to set.
      * @return {Boolean} True if the school was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setSchool(school) {}
+    async setSchool(school) {
+        this.school = school;
+        let schoolSet = false;
+        try {
+            schoolSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the school.");
+            Log.writeError(error);
+        }
+        return schoolSet;
+    }
 
     /**
      * Sets the study group's subject.
      * @param {String} subject The subject to set.
      * @return {Boolean} True if the subject was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setSubject(subject) {}
+    async setSubject(subject) {
+        this.subject = subject;
+        let subjectSet = false;
+        try {
+            subjectSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the subject.");
+            Log.writeError(error);
+        }
+        return subjectSet;
+    }
 
     /**
      * Updates the study group's meeting.

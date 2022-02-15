@@ -45,6 +45,10 @@ const Validator = require("../Validator.js");
  * @date   10/29/2021
  */
 const StudyGroupSchema = new Schema({
+    active: {
+        type: Boolean,
+        required: false
+    },
     areaCode: {
         type: String,
         required: false
@@ -187,9 +191,7 @@ class StudyGroup {
      */
     async addMember(newMember) {
         // ADD THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
-        console.log(newMember.getId());
         this.members.push(newMember.getId());
-        console.log(this.members);
 
         // SAVE THE CHANGE.
         let memberWasAdded = true;
@@ -199,7 +201,6 @@ class StudyGroup {
             memberWasAdded = false;
             Log.writeError(error);
         }
-        console.log(this.members);
         return memberWasAdded;
     }
 
@@ -235,6 +236,7 @@ class StudyGroup {
         const EMPTY_LIST_OF_MEMBERS = [];
         const ownerId = owner.getId();
         const newStudyGroup = new StudyGroupModel({
+            active: true,
             areaCode: areaCode,
             course: course,
             feed: newFeedId,
@@ -266,10 +268,22 @@ class StudyGroup {
     /**
      * Deletes a study group.
      * @return {Boolean} True if the study group was deleted, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/12/2022
      * @async
      */
-    async delete() {}
+    async delete() {
+        // DEACTIVE THE STUDY GROUP.
+        let studyGroupDeleted = false;
+        this.active = false;
+        try {
+            studyGroupDeleted = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete a study group.");
+            Log.writeError(error);
+        }
+        return studyGroupDeleted;
+    }
 
     /**
      * Gets the study group's area code.
@@ -290,11 +304,39 @@ class StudyGroup {
 
     /**
      * Gets the study group feed.
-     * @return {Feed} The study group's feed.
-     *
+     * @return {Boolean} True if the feed was found, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/14/2022
      * @async
      */
-    async getFeed() {}
+    async getFeed() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S FEED.
+        let feedWasFound = false;
+        try {
+            feedWasFound = await studyGroupModel.populate("feed");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's feed.");
+            Log.writeError(error);
+        } finally {
+            if (feedWasFound) {
+                this.feed = studyGroupModel.feed;
+            }
+            return feedWasFound;
+        }
+    }
 
     /**
      * Gets the study group record from the database using the document ID.
@@ -348,11 +390,42 @@ class StudyGroup {
 
     /**
      * Gets the study group's members.
-     * @return {User[]} The study group's members.
-     *
+     * @return {Boolean} True if the members were found, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/14/2022
      * @async
      */
-    async getMembers() {}
+    async getMembers() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S MEMBERS.
+        let membersWereFound = false;
+        try {
+            membersWereFound = await studyGroupModel.populate("members");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's members.");
+            Log.writeError(error);
+        } finally {
+            if (membersWereFound) {
+                this.members = studyGroupModel.members.map((memberModel) => {
+                    memberModel.passwordHash = undefined;
+                    return memberModel;
+                });
+            }
+            return membersWereFound;
+        }
+    }
 
     /**
      * Gets the study group's name.
@@ -411,6 +484,15 @@ class StudyGroup {
     }
 
     /**
+     * Checks if a study group is active.
+     * @return {Boolean} True if the group is active, false otherwise.
+     */
+    isActive() {
+        const studyGroupIsActive = this.active ? true : false;
+        return studyGroupIsActive;
+    }
+
+    /**
      * Checks if the group is an online group.
      * @return {Boolean} True if the group is an online group, false otherwise.
      */
@@ -429,34 +511,78 @@ class StudyGroup {
     /**
      * Sets the group to be an in-person group.
      * @return {Boolean} True if the group was set to be in-person, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeInPerson() {}
+    async makeInPerson() {
+        this.isOnlineGroup = false;
+        let inPersonSet = false;
+        try {
+            inPersonSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group in person.");
+            Log.writeError(error);
+        }
+        return inPersonSet;
+    }
 
     /**
      * Sets the group to be an online group.
      * @return {Boolean} True if the group was set to be an online group, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeOnline() {}
+    async makeOnline() {
+        this.isOnlineGroup = true;
+        let isOnlineSet = false;
+        try {
+            isOnlineSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group online.");
+            Log.writeError(error);
+        }
+        return isOnlineSet;
+    }
 
     /**
      * Sets the group to be a regular study group.
      * @return {Boolean} True if the group was set to be a regular study group, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeStudyGroup() {}
+    async makeStudyGroup() {
+        this.isTutorGroup = false;
+        let isTutorGroupSet = false;
+        try {
+            isTutorGroupSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group a regular study group.");
+            Log.writeError(error);
+        }
+        return isTutorGroupSet;
+    }
 
     /**
      * Sets the group to be a tutor group.
      * @return {Boolean} True if the group was set to be a tutor group, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async makeTutorGroup() {}
+    async makeTutorGroup() {
+        this.isTutorGroup = true;
+        let isTutorGroupSet = false;
+        try {
+            isTutorGroupSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to make the study group a tutor group.");
+            Log.writeError(error);
+        }
+        return isTutorGroupSet;
+    }
 
     /**
      * Removes a meeting from the study group's one-time meeting schedule.
@@ -528,13 +654,14 @@ class StudyGroup {
         };
 
         // ADD OPTIONAL PARAMETERS TO THE SEARCH.
-        const schoolFilteringIsEnabled = Validator.isDefined(filters.school);
+        const schoolFilteringIsEnabled = Validator.isDefined(filters.school) &amp;&amp; filters.school !== "";
         if (schoolFilteringIsEnabled) {
             // Using the regex format allows us to search for all school names
             // like the one entered.
             const schoolRegex = new RegExp(`${filters.school}`, "i");
             searchFilter.school = schoolRegex;
         }
+
         const subjectFilteringIsEnabled = Subjects.Any !== filters.subject;
         if (subjectFilteringIsEnabled) {
             searchFilter.subject = filters.subject;
@@ -622,46 +749,121 @@ class StudyGroup {
      * Sets the study group's area code.
      * @param {String} areaCode The area code to set.
      * @return {Boolean} True if the area code was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setAreaCode(areaCode) {}
+    async setAreaCode(areaCode) {
+        this.areaCode = areaCode;
+        let areaCodeSet = false;
+        try {
+            areaCodeSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the area code.");
+            Log.writeError(error);
+        }
+        return areaCodeSet;
+    }
 
     /**
      * Sets the study group's course.
      * @param {String} courseName The course to set.
      * @return {Boolean} True if the course was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setCourse(courseName) {}
+    async setCourse(courseName) {
+        this.course = courseName;
+        let courseSet = false;
+        try {
+            courseSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the course.");
+            Log.writeError(error);
+        }
+        return courseSet;
+    }
+
+    /**
+     * Sets the study group's color.
+     * @param {String} color The color to set.
+     * @return {Boolean} True if the color was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/15/2022
+     * @async
+     */
+    async setGroupColor(color) {
+        this.groupColor = color;
+        let colorSet = false;
+        try {
+            colorSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the group color.");
+            Log.writeError(error);
+        }
+        return colorSet;
+    }
 
     /**
      * Sets the study group's name.
      * @param {String} name The name to set.
      * @return {Boolean} True if the name was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setName(name) {}
+    async setName(name) {
+        this.name = name;
+        let nameSet = false;
+        try {
+            nameSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the name.");
+            Log.writeError(error);
+        }
+        return nameSet;
+    }
 
     /**
      * Sets the study group's school.
      * @param {String} school The school to set.
      * @return {Boolean} True if the school was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setSchool(school) {}
+    async setSchool(school) {
+        this.school = school;
+        let schoolSet = false;
+        try {
+            schoolSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the school.");
+            Log.writeError(error);
+        }
+        return schoolSet;
+    }
 
     /**
      * Sets the study group's subject.
      * @param {String} subject The subject to set.
      * @return {Boolean} True if the subject was set, false otherwise.
-     *
+     * @author Cameron Burkholder
+     * @date   02/15/2022
      * @async
      */
-    async setSubject(subject) {}
+    async setSubject(subject) {
+        this.subject = subject;
+        let subjectSet = false;
+        try {
+            subjectSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the subject.");
+            Log.writeError(error);
+        }
+        return subjectSet;
+    }
 
     /**
      * Updates the study group's meeting.
@@ -695,7 +897,28 @@ class StudyGroup {
         // CHECK IF THE USER IS A MEMBER.
         // If the user is a valid member of the study group, both above conditions should be true.
         const userIsAMember = studyGroupHasUser &amp;&amp; userHasStudyGroup;
-        return userIsAMember;
+
+        // CHECK IF THE USER IS THE OWNER OF THE GROUP.
+        const userIsOwner = this.userIsOwner(user);
+
+        // CHECK IF THE USER IS IN THE STUDY GROUP.
+        const userIsInStudyGroup = userIsAMember || userIsOwner;
+        return userIsInStudyGroup;
+    }
+
+    /**
+     * Checks if the user is the owner of the study group.
+     * @param {User} user The user to check for study group ownership.
+     * @return {Boolean} True if the user is the owner of the group, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/12/2022
+     */
+    userIsOwner(user) {
+        // CHECK IF THE USER IS THE OWNER OF THE GROUP.
+        const userId = String(user.getId());
+        const studyGroupOwnerId = String(this.owner);
+        const userIsOwner = studyGroupOwnerId === userId;
+        return userIsOwner;
     }
 }
 
@@ -710,13 +933,13 @@ module.exports = StudyGroup;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Feb 08 2022 14:20:57 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Feb 15 2022 13:05:05 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
