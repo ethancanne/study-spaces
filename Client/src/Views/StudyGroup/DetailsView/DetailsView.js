@@ -10,7 +10,8 @@ const DetailsView = ({ group }) => {
 
     return (
         <div className="details-container">
-            <p>{group.description}</p>
+            <p className="details-description">{group.description}</p>
+
             {group.owner === user._id && <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>}
         </div>
     );

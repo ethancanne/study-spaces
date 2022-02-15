@@ -285,7 +285,8 @@ class StudyGroupRouter {
         }
 
         // CHECK IF THE USER IS ASSOCIATED WITH THE SAME SCHOOL AS THE STUDY GROUP
-        const userIsNotAssociatedWithSameSchool = request.user.getSchool() !== studyGroup.school;
+        const userIsNotAssociatedWithSameSchool =
+            request.user.getSchool() !== studyGroup.school && studyGroup.school !== "";
         console.log(userIsNotAssociatedWithSameSchool);
         if (userIsNotAssociatedWithSameSchool) {
             return response.json({ message: ResponseMessages.StudyGroup.UserNotAssociatedWithSchoolOfStudyGroup });

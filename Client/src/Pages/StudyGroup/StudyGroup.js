@@ -11,6 +11,7 @@ import { sendGetRequest, sendPostRequest } from "../../../Helper";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import { useDispatch, useSelector } from "react-redux";
 import { showEditStudyGroupPopup } from "../../state/actions";
+import FeedView from "../../Views/StudyGroup/Feed/FeedView";
 
 const StudyGroup = (props) => {
     const dispatch = useDispatch();
@@ -62,6 +63,7 @@ const StudyGroup = (props) => {
 
                     <div className="main-view">
                         <MembersView group={group} />
+                        <FeedView group={group} />
                         <DetailsView group={group} />
                     </div>
                 </div>

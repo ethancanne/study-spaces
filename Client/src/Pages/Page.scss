@@ -5,7 +5,6 @@
 
     height: calc(100vh - 4em);
     flex: 1;
-    border: 10px solid $border-color;
     // border-bottom: 0px;
 
     .page-title {
@@ -36,12 +35,10 @@
 @keyframes page-load-up {
     0% {
         opacity: 0;
-        border-top: 20px solid;
+        margin-top: 20px;
     }
     100% {
         opacity: 1;
-        padding-top: 0px;
-        border-width: 10px;
-        // border-bottom: 0px;
+        margin-top: 00px;
     }
 }

@@ -12,7 +12,7 @@ const Page = (props) => {
         <div>
             {props.topBar && <TopBar currentPage={props.currentPage} color={props.color} />}
 
-            <div className="page" {...props} style={{ borderColor: props.color }}>
+            <div className="page" {...props} style={{ backgroundColor: props.color + "49" }}>
                 {props.children}
             </div>
         </div>
