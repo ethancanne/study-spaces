@@ -28,7 +28,7 @@ const SearchView = () => {
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
 
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.authReducer.user);
+    const user = useSelector((state) => state.authReducer.user || "");
 
     /**
      * Retrieves study groups from search query by sending a request to the server

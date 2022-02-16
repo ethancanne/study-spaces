@@ -8,6 +8,7 @@
     margin: 5px 10px 10px 10px;
     border-radius: 10px;
     cursor: pointer;
+    overflow: hidden;
 
     animation: float-in-listing 0.3s ease-out;
 
@@ -25,6 +26,7 @@
         display: flex;
         align-items: center;
         justify-content: space-evenly;
+        overflow: hidden;
 
         .group-info-item {
             p {
