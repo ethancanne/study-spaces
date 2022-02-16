@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import { addStudyGroup, closePopup } from "../../../state/actions/index";
 import { sendPostRequest } from "../../../../Helper";
 
@@ -15,6 +16,7 @@ import CreateStudyGroupForm from "../../../components/CreateStudyGroupForm/Creat
  */
 const EditStudyGroupView = ({ group }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [name, setName] = useState(group.name);
     const [description, setDescription] = useState(group.description);
     const [subject, setSubject] = useState(group.subject);
@@ -38,6 +40,7 @@ const EditStudyGroupView = ({ group }) => {
         await sendPostRequest(
             Routes.StudyGroup.EditStudyGroup,
             {
+                studyGroupId: group._id,
                 name,
                 groupColor,
                 description,
@@ -47,12 +50,12 @@ const EditStudyGroupView = ({ group }) => {
                 isTutorGroup,
                 isOnlineGroup
             },
-            ResponseMessages.StudyGroup.SuccessStudyGroupEdited,
+            ResponseMessages.StudyGroup.SuccessEditStudyGroup,
             ResponseMessages.StudyGroup.ErrorEditStudyGroup,
             true,
             (data, error) => {
                 if (error) return;
-                dispatch(addStudyGroup(data.newStudyGroup));
+                history.go(0);
                 dispatch(closePopup());
             }
         );

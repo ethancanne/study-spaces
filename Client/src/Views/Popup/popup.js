@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { closePopup, showJoinStudyGroupPopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
 import JoinStudyGroupView from "../Study/joinStudyGroupView/JoinStudyGroupView";
-import InputView from "../Input/InputView";
+import InputView from "../../components/Input/InputView";
+import ConfirmationForm from "../../components/ConfirmationForm/ConfirmationForm";
 
 import views from "../Views";
 import EditStudyGroup from "../../Views/StudyGroup/EditStudyGroup/EditStudyGroupView";
@@ -44,6 +45,12 @@ const Popup = (props) => {
                     callback={payload.callback}
                     label2={payload.label2}
                 />
+            );
+            break;
+
+        case views.Popup.Confirmation:
+            popupView = (
+                <ConfirmationForm callback={payload.callback} title={payload.title} message={payload.message} />
             );
             break;
     }

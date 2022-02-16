@@ -20,6 +20,9 @@ const popupReducer = (state = { view: "", isShowing: false, payload: {} }, actio
         case popupConstants.SHOW_INPUT_POPUP:
             return { ...state, view: views.Popup.Input, isShowing: true, payload: action.payload };
 
+        case popupConstants.SHOW_CONFIRMATION_POPUP:
+            return { ...state, view: views.Popup.Confirmation, isShowing: true, payload: action.payload };
+
         case popupConstants.CLOSE_POPUP:
             return { ...state, isShowing: false, view: "" };
         default:

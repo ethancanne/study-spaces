@@ -17,7 +17,8 @@ const Views = {
             Create: "Create Study Group",
             Edit: "Edit Study Group"
         },
-        Input: "Input Information"
+        Input: "Input Information",
+        Confirmation: "Confirm"
     }
 };
 

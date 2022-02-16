@@ -59,6 +59,13 @@ export const showInputPopup = (title, label, defaultInput, callback, label2) => 
     };
 };
 
+export const showConfirmationPopup = (callback, title, message) => {
+    return {
+        type: popupConstants.SHOW_CONFIRMATION_POPUP,
+        payload: { callback, title, message }
+    };
+};
+
 export const closePopup = () => {
     return {
         type: popupConstants.CLOSE_POPUP
