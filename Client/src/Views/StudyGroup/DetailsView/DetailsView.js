@@ -8,14 +8,27 @@ import { sendDeleteRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 
+/**
+ * Renders a view for a user to view details about a joined or edit an owned study group
+ * @author Ethan Cannelongo
+ * @date   02/15/2022
+ * @param {Object} group the study group
+ * */
 const DetailsView = ({ group }) => {
     const user = useSelector((state) => state.authReducer.user);
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const submitDelete = (confirmed) => {
+    /**
+     * Makes an api call to the Delete study group route, passing in the information entered in
+     * the form and rendering the client according to the response received
+     * @author Ethan Cannelongo
+     * @date   02/16/2022
+     * @async
+     * */
+    const submitDelete = async (confirmed) => {
         if (confirmed)
-            sendDeleteRequest(
+            await sendDeleteRequest(
                 Routes.StudyGroup.DeleteStudyGroup,
                 { studyGroupId: group._id },
                 ResponseMessages.StudyGroup.SuccessStudyGroupDeleted,

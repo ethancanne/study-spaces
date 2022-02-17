@@ -30,6 +30,7 @@ const EditStudyGroupView = ({ group }) => {
      * Makes an api call to the Edit study group route, passing in the information entered in the form and rendering the client according to the response received
      * @author Ethan Cannelongo
      * @date   02/14/2022
+     * @async
      * */
     const submitEditStudyGroup = async (event) => {
         //Prevent default form behavior

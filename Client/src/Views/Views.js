@@ -15,7 +15,8 @@ const Views = {
         StudyGroup: {
             Join: "Join Study Group",
             Create: "Create Study Group",
-            Edit: "Edit Study Group"
+            Edit: "Edit Study Group",
+            CreateMeeting: "Create Meeting"
         },
         Input: "Input Information",
         Confirmation: "Confirm"

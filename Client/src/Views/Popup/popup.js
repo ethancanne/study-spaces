@@ -5,11 +5,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { closePopup, showJoinStudyGroupPopup } from "../../state/actions";
 import CreateStudyGroupView from "../Study/CreateStudyGroupView";
 import JoinStudyGroupView from "../Study/joinStudyGroupView/JoinStudyGroupView";
-import InputView from "../../components/Input/InputView";
-import ConfirmationForm from "../../components/ConfirmationForm/ConfirmationForm";
+import InputView from "../Input/InputView";
+import ConfirmationForm from "../ConfirmationForm/ConfirmationForm";
 
 import views from "../Views";
 import EditStudyGroup from "../../Views/StudyGroup/EditStudyGroup/EditStudyGroupView";
+import CreateMeetingView from "../StudyGroup/CreateMeetingView/CreateMeetingView";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -35,6 +36,10 @@ const Popup = (props) => {
 
         case views.Popup.StudyGroup.Edit:
             popupView = <EditStudyGroup group={payload} />;
+            break;
+
+        case views.Popup.StudyGroup.CreateMeeting:
+            popupView = <CreateMeetingView group={payload} />;
             break;
 
         case views.Popup.Input:
