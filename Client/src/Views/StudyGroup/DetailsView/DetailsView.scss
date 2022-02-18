@@ -13,18 +13,27 @@
     flex-direction: column;
     align-items: center;
 
+    .meetinginfo-container {
+        margin: 30px;
+        font-weight: bold;
+
+        .meetinginfo-description {
+            font-weight: normal;
+        }
+    }
+
     .description-container {
         margin: 30px;
+        font-weight: bold;
 
         .details-description {
             padding: 20px;
+            font-weight: normal;
         }
     }
-     .edit-button {
-         bottom: 0;
-     }
-     .delete-button {
-         margin-bottom: 0;
+     .buttons {
+         position:absolute;
+         bottom: 20px;
      }
 
 }
