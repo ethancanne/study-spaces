@@ -42,10 +42,14 @@ const DetailsView = ({ group }) => {
     };
     return (
         <div className="details-container">
-            <p className="details-description">{group.description}</p>
-
+            <div className="description-container">
+                <label>Group Description</label>
+                <p className="details-description">{group.description}</p>
+            </div>
+            <div className="edit-button">
             {group.owner === user._id && <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>}
-
+                </div>
+            <div className="delete-button">
             {group.owner === user._id && (
                 <Button
                     onClick={() =>
@@ -61,6 +65,7 @@ const DetailsView = ({ group }) => {
                     Delete
                 </Button>
             )}
+            </div>
         </div>
     );
 };
