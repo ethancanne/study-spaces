@@ -201,13 +201,13 @@ class StudyGroupRouter {
         if (studyGroupWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
         }
-        
+
         console.log(studyGroup.getCourse())
         // CHECK FOR EDITS AND MAKE CHANGES IF NECESSARY
 
         //Check for new study group course
         if(request.body.course != studyGroup.getCourse()) {
-            studyGroup.setCourse(request.body.course);  
+            studyGroup.setCourse(request.body.course);
         }
         console.log(studyGroup.getCourse())
 
@@ -215,7 +215,7 @@ class StudyGroupRouter {
         if(request.body.description != studyGroup.getDescription()) {
             studyGroup.setDescription(request.body.description);
         }
-        
+
         //Check for new color
         if(request.body.groupColor != studyGroup.getGroupColor()) {
             studyGroup.setGroupColor(request.body.groupColor);
@@ -240,7 +240,7 @@ class StudyGroupRouter {
                 studyGroup.makeTutorGroup();
             }
         }
-        
+
         //Check for change in study group name
         if(request.body.name != studyGroup.getName()) {
             if(request.body.name == null) {
@@ -256,7 +256,7 @@ class StudyGroupRouter {
             }
             studyGroup.setSubject(request.body.subject);
         }
-        
+
         //RETURN SUCCESS MESSAGE
         return response.json({
             message: ResponseMessages.StudyGroup.SuccessStudyGroupEdited,
@@ -266,7 +266,7 @@ class StudyGroupRouter {
 
 
     }
-     
+
 
     /**
      * Gets the study group with a given study group ID.

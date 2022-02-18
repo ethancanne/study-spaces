@@ -305,7 +305,7 @@ class StudyGroup {
             return undefined;
         }
 
-        
+
 
         // GET THE STUDY GROUP'S FEED.
         let feedWasFound = false;
@@ -474,6 +474,7 @@ class StudyGroup {
         } finally {
             if (ownerWasFound) {
                 this.owner = studyGroupModel.owner;
+                this.owner.passwordHash = undefined;
             }
             return ownerWasFound;
         }
