@@ -41,6 +41,8 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             StudyGroupRouter.deleteStudyGroup
         );
+        // This is used to edit a study group.
+        server.post(Routes.StudyGroup.EditStudyGroup, authenticator.protectRoute(), StudyGroupRouter.editStudyGroup);
         // This is used to get a specific study group.
         server.get(Routes.StudyGroup.GetStudyGroup, authenticator.protectRoute(), StudyGroupRouter.getStudyGroup);
         // This is used to get a user's study groups.
@@ -164,6 +166,107 @@ class StudyGroupRouter {
         }
         return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupDeleted });
     }
+
+    /**
+     * A route to edit one or more details of a study group.
+     * @param {String} request.body.course
+     * @param {String} request.body.description
+     * @param {String} request.body.groupColor
+     * @param {Boolean} request.body.isOnlineGroup
+     * @param {Boolean} request.body.isTutorGroup
+     * @param {String} request.body.name
+     * @param {String} request.body.subject
+     * @param {Object} request.body.studyGroupId
+     * @author Clifton Croom
+     * @date 02/16/2022
+     * @async
+     * @static
+     */
+    static async editStudyGroup(request, response) {
+
+        //GET ORIGINAL STUDY GROUP
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = undefined;
+        console.log(request.body.studyGroupId);
+        try {
+            studyGroup = await StudyGroup.getById(studyGroupId);
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
+        if (studyGroupWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
+        }
+        
+        console.log(studyGroup.getCourse())
+        // CHECK FOR EDITS AND MAKE CHANGES IF NECESSARY
+
+        //Check for new study group course
+        if(request.body.course != studyGroup.getCourse()) {
+            studyGroup.setCourse(request.body.course);  
+        }
+        console.log(studyGroup.getCourse())
+
+        //Check for new study group description
+        if(request.body.description != studyGroup.getDescription()) {
+            studyGroup.setDescription(request.body.description);
+        }
+        
+        //Check for new color
+        if(request.body.groupColor != studyGroup.getGroupColor()) {
+            studyGroup.setGroupColor(request.body.groupColor);
+        }
+
+
+        //Check for change in study group mode
+        if(request.body.isOnlineGroup != studyGroup.OnlineGroup()) {
+            if(studyGroup.OnlineGroup()){
+                studyGroup.makeInPerson();
+            }
+            else {
+                studyGroup.makeOnline();
+            }
+        }
+
+        //Check for change in study group type
+        if(request.body.isTutorGroup != studyGroup.getIsTutorGroup()) {
+            if(studyGroup.getIsTutorGroup()) {
+                studyGroup.makeStudyGroup();
+            } else {
+                studyGroup.makeTutorGroup();
+            }
+        }
+        
+        //Check for change in study group name
+        if(request.body.name != studyGroup.getName()) {
+            if(request.body.name == null) {
+                return response.json({message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput})
+            }
+            studyGroup.setName(request.body.name);
+        }
+
+        //Check for change in study group subject
+        if(request.body.subject != studyGroup.getSubject()) {
+            if(request.body.subject == null) {
+                return response.json({message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput})
+            }
+            studyGroup.setSubject(request.body.subject);
+        }
+        
+        //RETURN SUCCESS MESSAGE
+        return response.json({
+            message: ResponseMessages.StudyGroup.SuccessStudyGroupEdited,
+            studyGroup: studyGroup
+        });
+
+
+
+    }
+     
 
     /**
      * Gets the study group with a given study group ID.

@@ -276,6 +276,15 @@ class StudyGroup {
     }
 
     /**
+     * Gets the study group's description.
+     * @return {String} The study group's associated description.
+     *
+     */
+     getDescription() {
+        return this.description;
+    }
+
+    /**
      * Gets the study group feed.
      * @return {Boolean} True if the feed was found, false otherwise.
      * @author Cameron Burkholder
@@ -296,6 +305,8 @@ class StudyGroup {
             return undefined;
         }
 
+        
+
         // GET THE STUDY GROUP'S FEED.
         let feedWasFound = false;
         try {
@@ -309,6 +320,15 @@ class StudyGroup {
             }
             return feedWasFound;
         }
+    }
+
+    /**
+     * Gets the study group's color.
+     * @return {String} groupColor The study group's associated color.
+     *
+     */
+     getGroupColor() {
+        return this.groupColor;
     }
 
     /**
@@ -496,7 +516,7 @@ class StudyGroup {
      * Checks if the group is an online group.
      * @return {Boolean} True if the group is an online group, false otherwise.
      */
-    isOnlineGroup() {
+    OnlineGroup() {
         return this.isOnlineGroup;
     }
 
@@ -504,7 +524,7 @@ class StudyGroup {
      * Checks if the group is a tutor group.
      * @return {Boolean} True if the group is a tutor group, false otherwise.
      */
-    isTutorGroup() {
+    getIsTutorGroup() {
         return this.isTutorGroup;
     }
 
@@ -783,6 +803,26 @@ class StudyGroup {
             Log.writeError(error);
         }
         return courseSet;
+    }
+
+    /**
+     * Sets the study group's description.
+     * @param {String} description The description to set.
+     * @return {Boolean} True if the description was set, false otherwise.
+     * @author Clifton Croom
+     * @date   02/16/2022
+     * @async
+     */
+     async setDescription(description) {
+        this.description = description;
+        let descriptionSet = false;
+        try {
+            descriptionSet = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to set the description.");
+            Log.writeError(error);
+        }
+        return descriptionSet;
     }
 
     /**

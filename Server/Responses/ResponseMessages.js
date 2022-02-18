@@ -36,13 +36,14 @@ const ResponseMessages = {
         StudyGroupNotFound: "The requested study group was not found.",
         SuccessStudyGroupCreated: "The study group was created sucessfully.",
         SuccessStudyGroupDeleted: "The study group was deleted successfully",
+        SuccessStudyGroupEdited: "The study group was edited successfully",
         SuccessStudyGroupJoined: "The study group was joined successfully.",
         SuccessStudyGroupRetrieved: "The study group was retrieved successfully.",
         SuccessStudyGroupsRetrieved: "The study groups were retrieved sucessfully.",
         ErrorGettingSearchResults: "An error ocurred while attempting to get search results.",
         UserAlreadyJoined: "The study group cannot be joined again.",
-        UserNotAssociatedWithSchoolOfStudyGroup:
-            "The study group cannot be joined because you are not a part of this school.",
+        UserNotAssociatedWithSchoolOfStudyGroup: 
+        "The study group cannot be joined because you are not a part of this school.",
         UserNotInStudyGroup: "The requesting user is not a member of the study group.",
         UserNotOwner: "The requesting user is not the owner of the study group.",
         ErrorNullStudyGroupInput: "Error: Empty input was received for either the study group name or the user.",
