@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Notification.scss";
 import notificationTypes from "./notificationTypes";
 
@@ -20,13 +20,15 @@ const Notification = (props) => {
     const dispatch = useDispatch();
 
     var className = "";
-    var timeout;
+    const timeout = useRef();
 
     const configureTimeout = () => {
-        clearTimeout(timeout);
-        className = "error";
-        timeout = setTimeout(function () {
+        clearTimeout(timeout.current);
+        console.log("TIMEOUTTTING");
+
+        timeout.current = setTimeout(() => {
             dispatch(hideNotification());
+            clearTimeout(timeout.current);
         }, 5000);
     };
     switch (type) {
@@ -37,10 +39,8 @@ const Notification = (props) => {
         case notificationTypes.SUCCESS:
             configureTimeout();
             className = "success";
-
             break;
     }
-
     return (
         <div className={"notification " + className + " " + (props.isShowing ? "active" : "")}>
             <h1>{message || "No Message"}</h1>

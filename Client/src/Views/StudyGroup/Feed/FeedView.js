@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { showCreateMeetingStudyGroupPopup } from "../../../state/actions";
+import { showCreateMeetingStudyGroupPopup, showCreatePostStudyGroupPopup } from "../../../state/actions";
 
 const FeedView = ({ group }) => {
     const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const FeedView = ({ group }) => {
         <div className="feed-container">
             <div className="posts-container"></div>
             <div className="options-container">
-                <Button>Start Post</Button>
+                <Button onClick={() => dispatch(showCreatePostStudyGroupPopup(group))}>Start Post</Button>
                 {user._id === group.owner && (
                     <Button onClick={() => dispatch(showCreateMeetingStudyGroupPopup(group))}>Schedule Meeting</Button>
                 )}

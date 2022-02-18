@@ -103,19 +103,20 @@ const Study = (props) => {
                     </div>
                     {isLoggedIn ? (
                         <div>
-                            <button
+                            <Button
                                 className="add-button"
                                 onClick={() => dispatch(showCreateStudyGroupPopup())}
-                            ></button>
+                            ></Button>
                             <div className="study-groups-container">
                                 {Validator.isDefined(studyGroups) &&
                                     studyGroups.map((studyGroup) => <StudyGroupView group={studyGroup} />)}
                             </div>
                         </div>
                     ) : (
-                        <div>
-                            <p>You are currently a guest!</p>
-                            <Link to="/">Log In</Link>
+                        <div className="guest-message">
+                            <h1>You are currently browsing Study Spaces as a guest!</h1>
+                            <p>Please sign-up or log-in to be able to join and create study groups</p>
+                            <p>Feel free to use our search tool to discover study groups in your area.</p>
                         </div>
                     )}
                 </div>

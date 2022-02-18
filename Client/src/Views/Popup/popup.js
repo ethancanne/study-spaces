@@ -11,6 +11,7 @@ import ConfirmationForm from "../ConfirmationForm/ConfirmationForm";
 import views from "../Views";
 import EditStudyGroup from "../../Views/StudyGroup/EditStudyGroup/EditStudyGroupView";
 import CreateMeetingView from "../StudyGroup/CreateMeetingView/CreateMeetingView";
+import CreatePostView from "../StudyGroup/CreatePostView/CreatePostView";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -40,6 +41,10 @@ const Popup = (props) => {
 
         case views.Popup.StudyGroup.CreateMeeting:
             popupView = <CreateMeetingView group={payload} />;
+            break;
+
+        case views.Popup.StudyGroup.CreatePost:
+            popupView = <CreatePostView group={payload} />;
             break;
 
         case views.Popup.Input:

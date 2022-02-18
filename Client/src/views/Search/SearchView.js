@@ -173,7 +173,7 @@ const SearchView = () => {
                 updateDays={updateDays}
                 updateMeetingFrequencies={updateMeetingFrequencies}
                 submitSearch={submitSearch}
-                userSchool={user.school}
+                userSchool={user !== "" ? user.school : ""}
             />
         </div>
     );

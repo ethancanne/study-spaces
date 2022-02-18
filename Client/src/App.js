@@ -62,6 +62,7 @@ const App = (props) => {
                 true,
                 (data, error) => {
                     if (error) {
+                        console.log("SIGNING OUT!!!!!");
                         dispatch(signOut());
                         return;
                     }

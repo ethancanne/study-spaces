@@ -13,6 +13,7 @@ import Views from "../../Views.js";
 import Label from "../../../core/Label/Label";
 import AuthView from "../AuthView";
 import { sendPostRequest } from "../../../../Helper";
+import { useHistory } from "react-router";
 
 /**
  * Used to display the login form and log the user in.
@@ -27,6 +28,7 @@ const LoginView = (props) => {
     const [email, setEmail] = useState(BLANK);
     const [password, setPassword] = useState(BLANK);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     /**
      * Submits the login request to the server for verification.
@@ -97,10 +99,20 @@ const LoginView = (props) => {
             />
 
             <div className="other-options">
-                <p>Don't have an account?</p>
-                <Button type={ButtonTypes.Creation} onClick={signUpClicked}>
-                    Sign Up
-                </Button>
+                <div className="side-by-side">
+                    <div>
+                        <p>Don't have an account?</p>
+                        <Button type={ButtonTypes.Creation} onClick={signUpClicked}>
+                            Sign Up
+                        </Button>
+                    </div>
+                    <div>
+                        <p>Just looking to browse</p>
+                        <Button type={ButtonTypes.Primary} onClick={() => history.push("/search")}>
+                            Search
+                        </Button>
+                    </div>
+                </div>
             </div>
         </AuthView>
     );
