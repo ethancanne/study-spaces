@@ -26,7 +26,8 @@ const Routes = {
         DeleteStudyGroup: "/api/study-group/delete",
         GetUserStudyGroups: "/api/study-group/get-all",
         GetStudyGroup: "/api/study-group/get",
-        JoinStudyGroup: "/api/study-group/join"
+        JoinStudyGroup: "/api/study-group/join",
+        SetRecurringMeeting: "/api/study-group/set-recurring-meeting"
     }
 };
 module.exports = Routes;

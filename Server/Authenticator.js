@@ -8,6 +8,7 @@ const nodemailer = require("nodemailer");
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const ResponseCodes = require("./Responses/ResponseCodes.js");
+const ResponseMessages = require("./Responses/ResponseMessages.js");
 const User = require("./Models/User.js");
 const Validator = require("./Validator.js");
 

@@ -119,9 +119,10 @@ class Meeting {
      * @async
      * @static
      */
-    static async create(date, details, frequency, location, roomNumber, time) {
+    static async create(day, frequency, time, date, details, location, roomNumber) {
         // CREATE MEETING IN THE DATABASE.
         const meetingModel = new MeetingModel({
+            day: day,
             date: date,
             details: details,
             frequency: frequency,
@@ -138,6 +139,40 @@ class Meeting {
         // RETURN THE CREATED INSTANCE.
         const meeting = new Meeting(meetingModel);
         return meeting;
+    }
+
+    /**
+     * Retrieves the meeting using the provided document ID.
+     * @param {Mongoose.Types.ObjectId} meetingId The meeting ID to use.
+     * @return {Meeting} The meeting object.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
+     * @static
+     */
+    static async getById(meetingId) {
+        // CONVERT THE ID TO THE ACCEPTABLE TYPE.
+        const convertedMeetingId = Mongoose.Types.ObjectId(meetingId);
+
+        // GET THE MEETING BASED ON THE GIVEN ID.
+        let meetingRecord = false;
+        try {
+            meetingRecord = await MeetingModel.findOne({ _id: convertedMeetingId }).exec();
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a meeting by ID.");
+            Log.writeError(error);
+            // If an error occurs, it should be returned.
+            return error;
+        } finally {
+            // If the meeting wasn't able to be found in the database, this routine should return undefined.
+            let meeting = undefined;
+            let meetingWasFound = Validator.isDefined(meetingRecord);
+            if (meetingWasFound) {
+                // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+                meeting = new Meeting(meetingRecord);
+            }
+            return meeting;
+        }
     }
 
     /**
@@ -165,6 +200,14 @@ class Meeting {
     }
 
     /**
+     * Gets the meeting's ID.
+     * @return {Mongoose.Types.ObjectId} The meeting's ID.
+     */
+    getId() {
+        return this._id;
+    }
+
+    /**
      * Gets the meeting's location.
      * @return {String} The meeting's location.
      */
@@ -189,69 +232,171 @@ class Meeting {
     }
 
     /**
+     * This saves the associated meeting document in the database with the current properties
+     * stored in this object.
+     * @return {bool} True if the meeting was saved, false if the meeting wasn't saved.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
+     */
+    async save() {
+        let meetingWasSaved = false;
+        try {
+            // GET THE DATABASE INSTANCE OF THE USER.
+            let meetingModel = await MeetingModel.findOne({ _id: this._id }).exec();
+
+            // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
+            Object.assign(meetingModel, this);
+
+            // SAVE THE UPDATED DATABASE INSTANCE.
+            await meetingModel.save();
+            meetingWasSaved = true;
+        } catch (error) {
+            Log.write("An error occurred while attempting to retrieve the meeting to save.");
+            Log.writeError(error);
+        } finally {
+            return meetingWasSaved;
+        }
+    }
+
+    /**
+     * Sets the day.
+     * @param {String} day The day to set.
+     * @return {Boolean} True if the day was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
+     */
+    async setDay(day) {
+        this.day = day;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
+    }
+
+    /**
      * Sets the date.
      * @param {String} date The date to set.
      * @return {Boolean} True if the date was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
      */
-    setDate(date) {
+    async setDate(date) {
         this.date = date;
-        const dateSet = Validator.isDefined(this.date);
-        return dateSet;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
     }
 
     /**
      * Sets the details.
      * @param {String} details The details to set.
      * @return {Boolean} True if the details was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
      */
-    setDetails(details) {
+    async setDetails(details) {
         this.details = details;
-        const detailsSet = Validator.isDefined(this.details);
-        return detailsSet;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
     }
 
     /**
      * Sets the frequency.
-     * @param {String} frequency The frequency to set.
+     * @param {String} day The frequency to set.
      * @return {Boolean} True if the frequency was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
      */
-    setFrequency(frequency) {
+    async setFrequency(frequency) {
         this.frequency = frequency;
-        const frequencySet = Validator.isDefined(this.frequency);
-        return frequencySet;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
     }
 
     /**
      * Sets the location.
      * @param {String} location The location to set.
      * @return {Boolean} True if the location was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
      */
-    setLocation(location) {
+    async setLocation(location) {
         this.location = location;
-        const locationSet = Validator.isDefined(this.location);
-        return locationSet;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
     }
 
     /**
      * Sets the room number.
      * @param {String} roomNumber The room number to set.
      * @return {Boolean} True if the room number was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
      */
-    setRoomNumber(roomNumber) {
+    async setRoomNumber(roomNumber) {
         this.roomNumber = roomNumber;
-        const roomNumberSet = Validator.isDefined(this.roomNumber);
-        return roomNumberSet;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
     }
 
     /**
      * Sets the time.
      * @param {String} time The time to set.
      * @return {Boolean} True if the time was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
      */
-    setTime(time) {
+    async setTime(time) {
         this.time = time;
-        const timeSet = Validator.isDefined(this.time);
-        return timeSet;
+        let meetingWasUpdated = false;
+        try {
+            meetingWasUpdated = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to update the meeting.");
+            Log.writeError(error);
+        }
+        return meetingWasUpdated;
     }
 }
 module.exports = { Meeting, MeetingAvailability };

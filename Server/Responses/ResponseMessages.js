@@ -45,7 +45,11 @@ const ResponseMessages = {
             "The study group cannot be joined because you are not a part of this school.",
         UserNotInStudyGroup: "The requesting user is not a member of the study group.",
         UserNotOwner: "The requesting user is not the owner of the study group.",
-        ErrorNullStudyGroupInput: "Error: Empty input was received for either the study group name or the user."
+        ErrorNullStudyGroupInput: "Error: Empty input was received for either the study group name or the user.",
+        SetRecurringMeeting: {
+            Error: "An error occurred while attempting to set the recurring meeting.",
+            Success: "The recurring meeting was set successfully."
+        }
     }
 };
 module.exports = ResponseMessages;

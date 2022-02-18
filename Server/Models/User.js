@@ -4,7 +4,7 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
-const StudyGroup = require("./StudyGroup.js");
+var StudyGroup = require("./StudyGroup.js");
 
 /**
  * Used to define the database schema for storing users.

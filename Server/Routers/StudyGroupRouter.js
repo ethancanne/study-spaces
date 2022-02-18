@@ -3,6 +3,7 @@ const Path = require("path");
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
+const { Meeting } = require("../Models/Meeting.js");
 const PrivacySettings = require("../Models/PrivacySettings.js");
 const ResponseCodes = require("../Responses/ResponseCodes.js");
 const ResponseMessages = require("../Responses/ResponseMessages.js");
@@ -50,6 +51,12 @@ class StudyGroupRouter {
         );
         // This is used to join a study group.
         server.post(Routes.StudyGroup.JoinStudyGroup, authenticator.protectRoute(), StudyGroupRouter.joinStudyGroup);
+        // Used to set recurring meetings.
+        server.post(
+            Routes.StudyGroup.SetRecurringMeeting,
+            authenticator.protectRoute(),
+            StudyGroupRouter.setRecurringMeeting
+        );
     }
 
     /**
@@ -196,6 +203,13 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.StudyGroupIsNotActive });
         }
 
+        // POPULATE THE STUDY GROUP'S OWNER.
+        let ownerWasFound = await studyGroup.getOwner();
+        if (!ownerWasFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
         // POPULATE THE STUDY GROUP'S MEMBERS.
         let membersWereFound = false;
         membersWereFound = await studyGroup.getMembers();
@@ -287,7 +301,6 @@ class StudyGroupRouter {
         // CHECK IF THE USER IS ASSOCIATED WITH THE SAME SCHOOL AS THE STUDY GROUP
         const userIsNotAssociatedWithSameSchool =
             request.user.getSchool() !== studyGroup.school && studyGroup.school !== "";
-        console.log(userIsNotAssociatedWithSameSchool);
         if (userIsNotAssociatedWithSameSchool) {
             return response.json({ message: ResponseMessages.StudyGroup.UserNotAssociatedWithSchoolOfStudyGroup });
         }
@@ -332,6 +345,77 @@ class StudyGroupRouter {
         // SEND THE RESPONSE.
         // If execution reaches this point then the user has successfully been added to the study group.
         return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupJoined });
+    }
+
+    /**
+     * Allows the study group owner to set a recurring meeting.
+     * @param {String} request.body.day The day of the meeting.
+     * @param {String} request.body.frequency How often the meeting occurs.
+     * @param {String} request.body.studyGroupId The group ID.
+     * @param {String} request.body.time The time the meeting occurs.
+     * @param {String=} request.body.date The date the meeting occurs.
+     * @param {String=} request.body.details Information about the meeting.
+     * @param {String=} request.body.location The location of the meeting.
+     * @param {String=} request.body.roomNumber The room number of the meeting location.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
+     * @static
+     */
+    static async setRecurringMeeting(request, response) {
+        // CHECK THAT THE USER IS THE OWNER OF THE STUDY GROUP.
+        const user = request.user;
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = await StudyGroup.getById(studyGroupId);
+        // Check that the study group exists.
+        const studyGroupWasFound = Validator.isDefined(studyGroup);
+        if (!studyGroupWasFound) {
+            return reponse.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // CHECK IF THE USER IS THE OWNER OF THE STUDY GROUP.
+        const userIsOwner = studyGroup.userIsOwner(user);
+        if (!userIsOwner) {
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // GET THE RECURRING MEETING.
+        // If the study group already has a recurring meeting set,
+        // that one should be changed to reflect the new data.
+        // If there isn't a recurring meeting already, one should be created.
+        const recurringMeetingExists = Validator.isDefined(studyGroup.recurringMeeting);
+        const { day, frequency, time, date, details, location, roomNumber } = request.body;
+        if (recurringMeetingExists) {
+            // GET THE RECURRING MEETING.
+            const recurringMeeting = await Meeting.getById(studyGroup.recurringMeeting);
+
+            // SET THE RECURRING MEETING ATTRIBUTES.
+            let meetingUpdated = true;
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setDay(day));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setFrequency(frequency));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setTime(time));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setDate(date));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setDetails(details));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setLocation(location));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setRoomNumber(roomNumber));
+            if (meetingUpdated) {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
+            } else {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
+            }
+        } else {
+            // CREATE THE MEETING.
+            const recurringMeeting = await Meeting.create(day, frequency, time, date, details, location, roomNumber);
+
+            // SET THE RECURRING MEETING.
+            const meetingId = recurringMeeting.getId();
+            let recurringMeetingWasSet = await studyGroup.setRecurringMeeting(meetingId);
+            if (!recurringMeetingWasSet) {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
+            } else {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
+            }
+        }
     }
 }
 module.exports = StudyGroupRouter;
