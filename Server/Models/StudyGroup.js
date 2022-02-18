@@ -7,6 +7,7 @@ const Log = require("../Log.js");
 const { Meeting, MeetingAvailability } = require("./Meeting.js");
 const MeetingFormats = require("./MeetingFormats.js");
 const PrivacySettings = require("./PrivacySettings.js");
+const ResponseMessages = require("../Responses/ResponseMessages.js");
 const Subjects = require("./Subjects.js");
 const User = require("./User.js");
 const Validator = require("../Validator.js");
@@ -304,7 +305,7 @@ class StudyGroup {
             return undefined;
         }
 
-        
+
 
         // GET THE STUDY GROUP'S FEED.
         let feedWasFound = false;
@@ -449,7 +450,35 @@ class StudyGroup {
      *
      * @async
      */
-    async getOwner() {}
+    async getOwner() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S OWNER.
+        let ownerWasFound = false;
+        try {
+            ownerWasFound = await studyGroupModel.populate("owner");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's owner.");
+            Log.writeError(error);
+        } finally {
+            if (ownerWasFound) {
+                this.owner = studyGroupModel.owner;
+                this.owner.passwordHash = undefined;
+            }
+            return ownerWasFound;
+        }
+    }
 
     /**
      * Gets the study group's recurring meeting schedule.
@@ -835,6 +864,27 @@ class StudyGroup {
             Log.writeError(error);
         }
         return nameSet;
+    }
+
+    /**
+     * Sets the study group's recurring meeting.
+     * @param {Mongoose.Types.ObjectId} meetingId The recurring meeting to set.
+     * @return {Boolean} True if the recurring meeting was set, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
+     */
+    async setRecurringMeeting(meetingId) {
+        this.recurringMeeting = meetingId;
+        let recurringMeetingWasSet = false;
+        try {
+            recurringMeetingWasSet = await this.save();
+        } catch (error) {
+            Log.write(ResponseMessages.StudyGroup.SetRecurringMeeting.Error);
+            Log.writeError(error);
+        } finally {
+            return recurringMeetingWasSet;
+        }
     }
 
     /**
