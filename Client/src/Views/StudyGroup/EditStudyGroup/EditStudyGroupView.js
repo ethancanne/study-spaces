@@ -51,11 +51,11 @@ const EditStudyGroupView = ({ group }) => {
                 isTutorGroup,
                 isOnlineGroup
             },
-            ResponseMessages.StudyGroup.SuccessEditStudyGroup,
-            ResponseMessages.StudyGroup.ErrorEditStudyGroup,
+            ResponseMessages.StudyGroup.SuccessStudyGroupEdited,
+            null,
             true,
             (data, error) => {
-                if (error) return;
+                if (error) console.log(error);
                 history.go(0);
                 dispatch(closePopup());
             }

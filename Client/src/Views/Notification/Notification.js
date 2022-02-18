@@ -24,7 +24,6 @@ const Notification = (props) => {
 
     const configureTimeout = () => {
         clearTimeout(timeout.current);
-        console.log("TIMEOUTTTING");
 
         timeout.current = setTimeout(() => {
             dispatch(hideNotification());

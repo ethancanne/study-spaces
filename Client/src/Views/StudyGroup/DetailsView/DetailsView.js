@@ -43,31 +43,32 @@ const DetailsView = ({ group }) => {
     return (
         <div className="details-container">
             <div className="meetinginfo-container">
-                <label>Next Meeting</label>
+                <h1>Next Meeting</h1>
                 <p className="meetinginfo-description">blah blah blah placeholder</p>
             </div>
             <div className="description-container">
-                <label>Group Description</label>
+                <h1>Group Description</h1>
                 <p className="details-description">{group.description}</p>
             </div>
-            <div className="buttons">
-            {group.owner === user._id && <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>}
-            {group.owner === user._id && (
-                <Button
-                    onClick={() =>
-                        dispatch(
-                            showConfirmationPopup(
-                                submitDelete,
-                                "Confirm Deletion",
-                                "Are you sure you want to delete the study group: " + group.name + "?"
+
+            {group.owner && group.owner._id === user._id && (
+                <div className="buttons">
+                    <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>
+                    <Button
+                        onClick={() =>
+                            dispatch(
+                                showConfirmationPopup(
+                                    submitDelete,
+                                    "Confirm Deletion",
+                                    "Are you sure you want to delete the study group: " + group.name + "?"
+                                )
                             )
-                        )
-                    }
-                >
-                    Delete
-                </Button>
+                        }
+                    >
+                        Delete
+                    </Button>
+                </div>
             )}
-            </div>
         </div>
     );
 };

@@ -46,17 +46,14 @@ const CreateMeetingForm = ({
                         />
                     </InputField>
                 </div>
-
                 <InputField>
                     <Label>Details</Label>
                     <TextInput value={details} onChange={updateDetailsField} isTextArea={true} />
                 </InputField>
-
                 <InputField>
                     <Label>Location</Label>
                     <TextInput value={location} onChange={updateLocationField} />
                 </InputField>
-
                 <InputField>
                     <Label>Room Number (if applicable)</Label>
                     <TextInput value={roomNumber} onChange={updateRoomNumberField} />
