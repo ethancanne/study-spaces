@@ -12,6 +12,7 @@ import views from "../Views";
 import EditStudyGroup from "../../Views/StudyGroup/EditStudyGroup/EditStudyGroupView";
 import CreateMeetingView from "../StudyGroup/CreateMeetingView/CreateMeetingView";
 import CreatePostView from "../StudyGroup/CreatePostView/CreatePostView";
+import ViewPostView from "../StudyGroup/ViewPostView/ViewPostView";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -47,6 +48,9 @@ const Popup = (props) => {
             popupView = <CreatePostView group={payload} />;
             break;
 
+        case views.Popup.StudyGroup.ViewPost:
+            popupView = <ViewPostView post={payload} />;
+            break;
         case views.Popup.Input:
             popupView = (
                 <InputView
@@ -76,6 +80,7 @@ const Popup = (props) => {
                     <h1>{payload.title || view}</h1>
                     <button onClick={() => dispatch(closePopup())}>X</button>
                 </div>
+
                 <div className="popup-body">{!props.children ? popupView : props.children}</div>
             </div>
         </div>

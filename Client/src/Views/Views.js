@@ -17,7 +17,8 @@ const Views = {
             Create: "Create Study Group",
             Edit: "Edit Study Group",
             CreateMeeting: "Create Meeting",
-            CreatePost: "Create Post"
+            CreatePost: "Create Post",
+            ViewPost: "View Post"
         },
         Input: "Input Information",
         Confirmation: "Confirm"

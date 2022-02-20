@@ -57,7 +57,7 @@ const StudyGroup = (props) => {
                 <div className="study-group-page">
                     <div className="page-title">
                         <Link to="/">
-                            <Button>{"<"}</Button>
+                            <Button style={{ marginLeft: "0px" }}>{"<"}</Button>
                         </Link>
                         <h1>{group.name}</h1>
                     </div>
