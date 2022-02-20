@@ -11,6 +11,7 @@ import TopBar from "../../components/TopBar/TopBar";
 import Page from "../Page";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 import Button from "../../core/Button/Button";
+import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 
 /**
  * Renders the Account page
@@ -102,11 +103,7 @@ const Account = () => {
                         </div>
                         <div className="user-info">
                             <h1>Profile Picture:</h1>
-                            <img
-                                className="profile-picture"
-                                src={" data:image/png;charset=utf-8;base64," + user.profilePicture}
-                                alt=""
-                            />
+                            <ProfilePicture image={user.profilePicture} />
                         </div>
                     </div>
                     <div className="edit-account-buttons">

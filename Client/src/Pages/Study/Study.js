@@ -67,7 +67,8 @@ const Study = (props) => {
                         dispatch(loadStudyGroup(studyGroups));
                     });
                 }
-            }
+            },
+            false
         );
     };
 

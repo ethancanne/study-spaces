@@ -70,7 +70,8 @@ const SearchView = () => {
             (data, error) => {
                 if (error) return;
                 dispatch(populateStudyGroupSearch(data.studyGroups));
-            }
+            },
+            false
         );
     };
 

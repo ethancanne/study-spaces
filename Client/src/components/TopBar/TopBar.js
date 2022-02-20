@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Button from "../../core/Button/Button";
 import ButtonTypes from "../../core/Button/ButtonTypes";
+import ProfilePicture from "../ProfilePicture/ProfilePicture";
 
 import Menu from "./Menu";
 const TopBar = ({ currentPage, color }) => {
@@ -40,12 +41,7 @@ const TopBar = ({ currentPage, color }) => {
                         >
                             <p className="school">{user.school}</p>
                             <p className="name">{user.name}</p>
-                            <img
-                                className="profile-picture"
-                                src={" data:image/png;charset=utf-8;base64," + user.profilePicture}
-                                alt=""
-                                style={{ borderColor: color }}
-                            />
+                            <ProfilePicture image={user.profilePicture} />
                         </div>
                     ) : (
                         <Link to="/">

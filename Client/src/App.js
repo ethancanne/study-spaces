@@ -118,17 +118,36 @@ const App = (props) => {
                         <Search />
                     </Route>
                     <Route path="/message" render={(props) => {}} />
+
                     <Route
                         path="/group/:id"
                         render={(props) => {
-                            return <StudyGroup {...props} />;
+                            return isLoggedIn ? (
+                                <>
+                                    <StudyGroup {...props} />
+                                </>
+                            ) : (
+                                <Redirect to="/" />
+                            );
                         }}
                     />
                     <Route
                         exact
                         path="/account"
                         render={(props) => {
-                            return <Account />;
+                            return isLoggedIn ? (
+                                <>
+                                    <Account />
+                                </>
+                            ) : (
+                                <Redirect to="/" />
+                            );
+                        }}
+                    />
+                    <Route
+                        path="*"
+                        render={(props) => {
+                            return <Redirect to="/" />;
                         }}
                     />
                 </Switch>

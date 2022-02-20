@@ -47,7 +47,8 @@ const StudyGroup = (props) => {
                 if (error) return;
                 //Load study group into state
                 setGroup(data.studyGroup);
-            }
+            },
+            false
         );
     };
     return (

@@ -2,18 +2,20 @@ import React from "react";
 import "./Menu.scss";
 import Button from "../../core/Button/Button";
 import ButtonTypes from "../../core/Button/ButtonTypes";
-
+import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut, showSuccessNotification, showConfirmationPopup } from "../../state/actions";
 import { Link } from "react-router-dom";
 
 const Menu = ({ isShowing, setIsShowing }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const signOutUser = (confirmed) => {
         if (confirmed) {
             dispatch(signOut());
             dispatch(showSuccessNotification("You have been successfully signed out."));
             setIsShowing(false);
+            history.push("/study");
         }
     };
     return (

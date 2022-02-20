@@ -21,7 +21,8 @@ export const sendPostRequest = async (
     successResponseMessage,
     catchMessage,
     isAuthenticated,
-    callback = () => {}
+    callback = () => {},
+    shouldShowNotification = true
 ) => {
     let response;
     try {
@@ -30,7 +31,10 @@ export const sendPostRequest = async (
         response = await axios.post(route, data);
     } catch (e) {
         console.log(e);
-        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        shouldShowNotification &&
+            store.dispatch(
+                showErrorNotification(catchMessage || "Cannot connect to the server, please try again later.")
+            );
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
         const responseIsDefined = Validator.isDefined(response.data);
@@ -38,10 +42,11 @@ export const sendPostRequest = async (
             const requestWasValid = successResponseMessage === response.data.message;
 
             if (requestWasValid) {
-                store.dispatch(showSuccessNotification(response.data.message));
+                shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
             } else {
-                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                shouldShowNotification &&
+                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
                 callback(null, response.data.message);
             }
         } else {
@@ -67,7 +72,8 @@ export const sendGetRequest = async (
     successResponseMessage,
     catchMessage,
     isAuthenticated,
-    callback = () => {}
+    callback = () => {},
+    shouldShowNotification = true
 ) => {
     let response;
     try {
@@ -76,7 +82,10 @@ export const sendGetRequest = async (
         response = await axios.get(route);
     } catch (e) {
         console.log(e);
-        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        shouldShowNotification &&
+            store.dispatch(
+                showErrorNotification(catchMessage || "Cannot connect to the server, please try again later.")
+            );
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
         const responseIsDefined = Validator.isDefined(response.data);
@@ -84,10 +93,11 @@ export const sendGetRequest = async (
             const requestWasValid = successResponseMessage === response.data.message;
 
             if (requestWasValid) {
-                store.dispatch(showSuccessNotification(response.data.message));
+                shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
             } else {
-                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                shouldShowNotification &&
+                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
                 callback(null, response.data.message);
             }
         } else {
@@ -115,7 +125,8 @@ export const sendDeleteRequest = async (
     successResponseMessage,
     catchMessage,
     isAuthenticated,
-    callback = () => {}
+    callback = () => {},
+    shouldShowNotification = true
 ) => {
     let response;
     try {
@@ -124,7 +135,10 @@ export const sendDeleteRequest = async (
         response = await axios.delete(route, { data });
     } catch (e) {
         console.log(e);
-        store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
+        shouldShowNotification &&
+            store.dispatch(
+                showErrorNotification(catchMessage || "Cannot connect to the server, please try again later.")
+            );
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
         const responseIsDefined = Validator.isDefined(response.data);
@@ -132,10 +146,11 @@ export const sendDeleteRequest = async (
             const requestWasValid = successResponseMessage === response.data.message;
 
             if (requestWasValid) {
-                store.dispatch(showSuccessNotification(response.data.message));
+                shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
             } else {
-                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                shouldShowNotification &&
+                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
                 callback(null, response.data.message);
             }
         } else {
