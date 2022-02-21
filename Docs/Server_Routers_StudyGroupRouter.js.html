@@ -31,6 +31,7 @@
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
+const { Meeting } = require("../Models/Meeting.js");
 const PrivacySettings = require("../Models/PrivacySettings.js");
 const ResponseCodes = require("../Responses/ResponseCodes.js");
 const ResponseMessages = require("../Responses/ResponseMessages.js");
@@ -55,6 +56,12 @@ class StudyGroupRouter {
      * @static
      */
     static serveRoutes(server, authenticator) {
+        // Used to add one-time meetings.
+        server.post(
+            Routes.StudyGroup.AddOneTimeMeeting,
+            authenticator.protectRoute(),
+            StudyGroupRouter.addOneTimeMeeting
+        );
         // This is used to create study groups.
         server.post(
             Routes.StudyGroup.CreateStudyGroup,
@@ -68,6 +75,8 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             StudyGroupRouter.deleteStudyGroup
         );
+        // This is used to edit a study group.
+        server.post(Routes.StudyGroup.EditStudyGroup, authenticator.protectRoute(), StudyGroupRouter.editStudyGroup);
         // This is used to get a specific study group.
         server.get(Routes.StudyGroup.GetStudyGroup, authenticator.protectRoute(), StudyGroupRouter.getStudyGroup);
         // This is used to get a user's study groups.
@@ -78,6 +87,56 @@ class StudyGroupRouter {
         );
         // This is used to join a study group.
         server.post(Routes.StudyGroup.JoinStudyGroup, authenticator.protectRoute(), StudyGroupRouter.joinStudyGroup);
+        // Used to set recurring meetings.
+        server.post(
+            Routes.StudyGroup.SetRecurringMeeting,
+            authenticator.protectRoute(),
+            StudyGroupRouter.setRecurringMeeting
+        );
+    }
+
+    /**
+     * Allows the study group owner to add a one-time meeting.
+     * @param {String} request.body.date The date the meeting occurs.
+     * @param {String} request.body.studyGroupId The group ID.
+     * @param {String} request.body.time The time the meeting occurs.
+     * @param {String=} request.body.day The day of the meeting.
+     * @param {String=} request.body.details Information about the meeting.
+     * @param {String=} request.body.location The location of the meeting.
+     * @param {String=} request.body.roomNumber The room number of the meeting location.
+     * @author Cameron Burkholder
+     * @date   02/21/2022
+     * @async
+     * @static
+     */
+    static async addOneTimeMeeting(request, response) {
+        // CHECK THAT THE USER IS THE OWNER OF THE STUDY GROUP.
+        const user = request.user;
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = await StudyGroup.getById(studyGroupId);
+        // Check that the study group exists.
+        const studyGroupWasFound = Validator.isDefined(studyGroup);
+        if (!studyGroupWasFound) {
+            return reponse.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // CHECK IF THE USER IS THE OWNER OF THE STUDY GROUP.
+        const userIsOwner = studyGroup.userIsOwner(user);
+        if (!userIsOwner) {
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // CREATE THE ONE-TIME MEETING.
+        const { day, frequency, time, date, details, location, roomNumber } = request.body;
+        const oneTimeMeeting = await Meeting.createOneTime(date, time, day, details, location, roomNumber);
+
+        // ADD THE ONE-TIME MEETING.
+        let oneTimeMeetingWasSet = await studyGroup.addMeeting(oneTimeMeeting);
+        if (oneTimeMeetingWasSet) {
+            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Success });
+        } else {
+            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Error });
+        }
     }
 
     /**
@@ -187,6 +246,100 @@ class StudyGroupRouter {
     }
 
     /**
+     * A route to edit one or more details of a study group.
+     * @param {String} request.body.course
+     * @param {String} request.body.description
+     * @param {String} request.body.groupColor
+     * @param {Boolean} request.body.isOnlineGroup
+     * @param {Boolean} request.body.isTutorGroup
+     * @param {String} request.body.name
+     * @param {String} request.body.subject
+     * @param {Object} request.body.studyGroupId
+     * @author Clifton Croom
+     * @date 02/16/2022
+     * @async
+     * @static
+     */
+    static async editStudyGroup(request, response) {
+        //GET ORIGINAL STUDY GROUP
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = undefined;
+        console.log(request.body.studyGroupId);
+        try {
+            studyGroup = await StudyGroup.getById(studyGroupId);
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
+        if (studyGroupWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
+        }
+
+        console.log(studyGroup.getCourse());
+        // CHECK FOR EDITS AND MAKE CHANGES IF NECESSARY
+
+        //Check for new study group course
+        if (request.body.course != studyGroup.getCourse()) {
+            studyGroup.setCourse(request.body.course);
+        }
+        console.log(studyGroup.getCourse());
+
+        //Check for new study group description
+        if (request.body.description != studyGroup.getDescription()) {
+            studyGroup.setDescription(request.body.description);
+        }
+
+        //Check for new color
+        if (request.body.groupColor != studyGroup.getGroupColor()) {
+            studyGroup.setGroupColor(request.body.groupColor);
+        }
+
+        //Check for change in study group mode
+        if (request.body.isOnlineGroup != studyGroup.OnlineGroup()) {
+            if (studyGroup.OnlineGroup()) {
+                studyGroup.makeInPerson();
+            } else {
+                studyGroup.makeOnline();
+            }
+        }
+
+        //Check for change in study group type
+        if (request.body.isTutorGroup != studyGroup.getIsTutorGroup()) {
+            if (studyGroup.getIsTutorGroup()) {
+                studyGroup.makeStudyGroup();
+            } else {
+                studyGroup.makeTutorGroup();
+            }
+        }
+
+        //Check for change in study group name
+        if (request.body.name != studyGroup.getName()) {
+            if (request.body.name == null) {
+                return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
+            }
+            studyGroup.setName(request.body.name);
+        }
+
+        //Check for change in study group subject
+        if (request.body.subject != studyGroup.getSubject()) {
+            if (request.body.subject == null) {
+                return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
+            }
+            studyGroup.setSubject(request.body.subject);
+        }
+
+        //RETURN SUCCESS MESSAGE
+        return response.json({
+            message: ResponseMessages.StudyGroup.SuccessStudyGroupEdited,
+            studyGroup: studyGroup
+        });
+    }
+
+    /**
      * Gets the study group with a given study group ID.
      * @param {String} request.query.studyGroupId The study group ID.
      * @author Cameron Burkholder
@@ -224,6 +377,13 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.StudyGroupIsNotActive });
         }
 
+        // POPULATE THE STUDY GROUP'S OWNER.
+        let ownerWasFound = await studyGroup.getOwner();
+        if (!ownerWasFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
         // POPULATE THE STUDY GROUP'S MEMBERS.
         let membersWereFound = false;
         membersWereFound = await studyGroup.getMembers();
@@ -236,6 +396,20 @@ class StudyGroupRouter {
         let feedWasPopulated = false;
         feedWasPopulated = await studyGroup.getFeed();
         if (!feedWasPopulated) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        // POPULATE THE STUDY GROUP'S MEETINGS.
+        let meetingsWereFound = await studyGroup.getMeetings();
+        if (!meetingsWereFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        // POPULATE THE STUDY GROUP'S RECURRING MEETING.
+        let recurringMeetingWasFound = await studyGroup.getRecurringMeeting();
+        if (!recurringMeetingWasFound) {
             response.status(ResponseCodes.Error);
             return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
         }
@@ -313,8 +487,8 @@ class StudyGroupRouter {
         }
 
         // CHECK IF THE USER IS ASSOCIATED WITH THE SAME SCHOOL AS THE STUDY GROUP
-        const userIsNotAssociatedWithSameSchool = request.user.getSchool() !== studyGroup.school;
-        console.log(userIsNotAssociatedWithSameSchool);
+        const userIsNotAssociatedWithSameSchool =
+            request.user.getSchool() !== studyGroup.school &amp;&amp; studyGroup.school !== "";
         if (userIsNotAssociatedWithSameSchool) {
             return response.json({ message: ResponseMessages.StudyGroup.UserNotAssociatedWithSchoolOfStudyGroup });
         }
@@ -360,6 +534,77 @@ class StudyGroupRouter {
         // If execution reaches this point then the user has successfully been added to the study group.
         return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupJoined });
     }
+
+    /**
+     * Allows the study group owner to set a recurring meeting.
+     * @param {String} request.body.day The day of the meeting.
+     * @param {String} request.body.frequency How often the meeting occurs.
+     * @param {String} request.body.studyGroupId The group ID.
+     * @param {String} request.body.time The time the meeting occurs.
+     * @param {String=} request.body.date The date the meeting occurs.
+     * @param {String=} request.body.details Information about the meeting.
+     * @param {String=} request.body.location The location of the meeting.
+     * @param {String=} request.body.roomNumber The room number of the meeting location.
+     * @author Cameron Burkholder
+     * @date   02/18/2022
+     * @async
+     * @static
+     */
+    static async setRecurringMeeting(request, response) {
+        // CHECK THAT THE USER IS THE OWNER OF THE STUDY GROUP.
+        const user = request.user;
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = await StudyGroup.getById(studyGroupId);
+        // Check that the study group exists.
+        const studyGroupWasFound = Validator.isDefined(studyGroup);
+        if (!studyGroupWasFound) {
+            return reponse.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // CHECK IF THE USER IS THE OWNER OF THE STUDY GROUP.
+        const userIsOwner = studyGroup.userIsOwner(user);
+        if (!userIsOwner) {
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // GET THE RECURRING MEETING.
+        // If the study group already has a recurring meeting set,
+        // that one should be changed to reflect the new data.
+        // If there isn't a recurring meeting already, one should be created.
+        const recurringMeetingExists = Validator.isDefined(studyGroup.recurringMeeting);
+        const { day, frequency, time, date, details, location, roomNumber } = request.body;
+        if (recurringMeetingExists) {
+            // GET THE RECURRING MEETING.
+            const recurringMeeting = await Meeting.getById(studyGroup.recurringMeeting);
+
+            // SET THE RECURRING MEETING ATTRIBUTES.
+            let meetingUpdated = true;
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setDay(day));
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setFrequency(frequency));
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setTime(time));
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setDate(date));
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setDetails(details));
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setLocation(location));
+            meetingUpdated = meetingUpdated &amp;&amp; (await recurringMeeting.setRoomNumber(roomNumber));
+            if (meetingUpdated) {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
+            } else {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
+            }
+        } else {
+            // CREATE THE MEETING.
+            const recurringMeeting = await Meeting.create(day, frequency, time, date, details, location, roomNumber);
+
+            // SET THE RECURRING MEETING.
+            const meetingId = recurringMeeting.getId();
+            let recurringMeetingWasSet = await studyGroup.setRecurringMeeting(meetingId);
+            if (!recurringMeetingWasSet) {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
+            } else {
+                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
+            }
+        }
+    }
 }
 module.exports = StudyGroupRouter;
 </code></pre>
@@ -372,13 +617,13 @@ module.exports = StudyGroupRouter;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateMeetingView">CreateMeetingView</a></li><li><a href="global.html#CreatePostView">CreatePostView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#DetailsView">DetailsView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Feb 15 2022 13:05:05 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Feb 21 2022 16:01:25 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

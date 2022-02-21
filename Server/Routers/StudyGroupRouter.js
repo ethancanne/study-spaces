@@ -372,6 +372,20 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
         }
 
+        // POPULATE THE STUDY GROUP'S MEETINGS.
+        let meetingsWereFound = await studyGroup.getMeetings();
+        if (!meetingsWereFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        // POPULATE THE STUDY GROUP'S RECURRING MEETING.
+        let recurringMeetingWasFound = await studyGroup.getRecurringMeeting();
+        if (!recurringMeetingWasFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
         // RETURN THE STUDY GROUP.
         return response.json({
             message: ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved,

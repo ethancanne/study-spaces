@@ -279,7 +279,7 @@ class StudyGroup {
      * @return {String} The study group's associated description.
      *
      */
-     getDescription() {
+    getDescription() {
         return this.description;
     }
 
@@ -304,8 +304,6 @@ class StudyGroup {
             return undefined;
         }
 
-
-
         // GET THE STUDY GROUP'S FEED.
         let feedWasFound = false;
         try {
@@ -326,7 +324,7 @@ class StudyGroup {
      * @return {String} groupColor The study group's associated color.
      *
      */
-     getGroupColor() {
+    getGroupColor() {
         return this.groupColor;
     }
 
@@ -374,11 +372,39 @@ class StudyGroup {
 
     /**
      * Gets the study group's meetings.
-     * @return {Meeting[]} The study group's meetings.
-     *
+     * @return {Boolean} True if the meetings were retrieved, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/21/2022
      * @async
      */
-    async getMeetings() {}
+    async getMeetings() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S MEETINGS.
+        let meetingsWereFound = false;
+        try {
+            meetingsWereFound = await studyGroupModel.populate("meetings");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's meetings.");
+            Log.writeError(error);
+        } finally {
+            if (meetingsWereFound) {
+                this.meetings = studyGroupModel.meetings;
+            }
+            return meetingsWereFound;
+        }
+    }
 
     /**
      * Gets the study group's members.
@@ -436,14 +462,6 @@ class StudyGroup {
     async getNextMeeting() {}
 
     /**
-     * Gets the study group's one-time meetings.
-     * @return {Meeting[]} The study group's one-time meetings.
-     *
-     * @async
-     */
-    async getOneTimeMeetings() {}
-
-    /**
      * Gets the study group's owner.
      * @return {User} The study group's owner.
      *
@@ -481,11 +499,39 @@ class StudyGroup {
 
     /**
      * Gets the study group's recurring meeting schedule.
-     * @return {Meeting} The recurring meeting schedule.
-     *
+     * @return {Boolean} True if the recurring meeting was found, false otherwise.
+     * @author Cameron Burkholder
+     * @date   02/21/2022
      * @async
      */
-    async getRecurringMeeting() {}
+    async getRecurringMeeting() {
+        // GET THE DATABASE INSTANCE OF THE STUDY GROUP.
+        let studyGroupModel;
+        try {
+            studyGroupModel = await StudyGroupModel.findOne({ _id: this.getId() });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the study group.");
+            Log.writeError(error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroupModel);
+        if (studyGroupWasNotFound) {
+            return undefined;
+        }
+
+        // GET THE STUDY GROUP'S MEETINGS.
+        let meetingWasFound = false;
+        try {
+            meetingWasFound = await studyGroupModel.populate("recurringMeeting");
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group's recurring meeting.");
+            Log.writeError(error);
+        } finally {
+            if (meetingWasFound) {
+                this.recurringMeeting = studyGroupModel.recurringMeeting;
+            }
+            return meetingWasFound;
+        }
+    }
 
     /**
      * Gets the study group's school.
@@ -813,7 +859,7 @@ class StudyGroup {
      * @date   02/16/2022
      * @async
      */
-     async setDescription(description) {
+    async setDescription(description) {
         this.description = description;
         let descriptionSet = false;
         try {
