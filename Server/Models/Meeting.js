@@ -3,7 +3,7 @@ const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
-const { Days, Minutes, PartOfDay, Time, Times } = require("./Time.js");
+const { Days, MeetingFrequencies, Minutes, PartOfDay, Time, Times } = require("./Time.js");
 const Validator = require("../Validator.js");
 
 /**
@@ -134,6 +134,45 @@ class Meeting {
             await meetingModel.save();
         } catch (error) {
             console.log(error);
+        }
+
+        // RETURN THE CREATED INSTANCE.
+        const meeting = new Meeting(meetingModel);
+        return meeting;
+    }
+
+    /**
+    * Creates a one-time meeting.
+    * @param {Date} date The date of the meeting.
+    * @param {Time} time The time of the meeting.
+    * @param {String=} day The day of the week of the meeting.
+    * @param {String=} details Additional notes about the meeting.
+    * @param {String=} location The location of the meeting.
+    * @param {String=} roomNumber The room where the meeting is to occur.
+    * @return {Meeting} The meeting created.
+    * @author Cameron Burkholder
+    * @date   02/21/2022
+    */
+    static async createOneTime(date, time, day, details, location, roomNumber) {
+        date = new Date(date);
+        if (!Validator.isDefined(day)) {
+            day = Object.keys(Days)[date.getDay()];
+        }
+        // CREATE MEETING IN THE DATABASE.
+        const meetingModel = new MeetingModel({
+            day: day,
+            date: date,
+            details: details,
+            frequency: MeetingFrequencies.OneTime,
+            location: location,
+            roomNumber: roomNumber,
+            time: time
+        });
+        try {
+            await meetingModel.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to create a one-time meeting.");
+            Log.writeError(error);
         }
 
         // RETURN THE CREATED INSTANCE.

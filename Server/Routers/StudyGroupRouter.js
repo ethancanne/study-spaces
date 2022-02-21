@@ -28,6 +28,10 @@ class StudyGroupRouter {
      * @static
      */
     static serveRoutes(server, authenticator) {
+        // Used to add one-time meetings.
+        server.post(Routes.StudyGroup.AddOneTimeMeeting,
+            authenticator.protectRoute(),
+            StudyGroupRouter.addOneTimeMeeting);
         // This is used to create study groups.
         server.post(
             Routes.StudyGroup.CreateStudyGroup,
@@ -59,6 +63,50 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             StudyGroupRouter.setRecurringMeeting
         );
+    }
+
+    /**
+     * Allows the study group owner to add a one-time meeting.
+     * @param {String} request.body.date The date the meeting occurs.
+     * @param {String} request.body.studyGroupId The group ID.
+     * @param {String} request.body.time The time the meeting occurs.
+     * @param {String=} request.body.day The day of the meeting.
+     * @param {String=} request.body.details Information about the meeting.
+     * @param {String=} request.body.location The location of the meeting.
+     * @param {String=} request.body.roomNumber The room number of the meeting location.
+     * @author Cameron Burkholder
+     * @date   02/21/2022
+     * @async
+     * @static
+     */
+    static async addOneTimeMeeting(request, response) {
+        // CHECK THAT THE USER IS THE OWNER OF THE STUDY GROUP.
+        const user = request.user;
+        const studyGroupId = request.body.studyGroupId;
+        let studyGroup = await StudyGroup.getById(studyGroupId);
+        // Check that the study group exists.
+        const studyGroupWasFound = Validator.isDefined(studyGroup);
+        if (!studyGroupWasFound) {
+            return reponse.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // CHECK IF THE USER IS THE OWNER OF THE STUDY GROUP.
+        const userIsOwner = studyGroup.userIsOwner(user);
+        if (!userIsOwner) {
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
+        }
+
+        // CREATE THE ONE-TIME MEETING.
+        const { day, frequency, time, date, details, location, roomNumber } = request.body;
+        const oneTimeMeeting = await Meeting.createOneTime(date, time, day, details, location, roomNumber);
+
+        // ADD THE ONE-TIME MEETING.
+        let oneTimeMeetingWasSet = await studyGroup.addMeeting(oneTimeMeeting);
+        if (oneTimeMeetingWasSet) {
+            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Success });
+        } else {
+            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Error });
+        }
     }
 
     /**

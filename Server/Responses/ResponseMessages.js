@@ -28,6 +28,10 @@ const ResponseMessages = {
         InactiveAccount: "The account requested is not active."
     },
     StudyGroup: {
+        AddOneTimeMeeting: {
+            Error: "An error occured while attempting to add a one-time meeting.",
+            Success: "The one-time meeting was added successfully."
+        },
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
         ErrorDeleteStudyGroup: "An error occurred while attempting to delete a study group.",
         ErrorGetStudyGroup: "An error occurred while attempting to get a study group.",
@@ -42,7 +46,7 @@ const ResponseMessages = {
         SuccessStudyGroupsRetrieved: "The study groups were retrieved sucessfully.",
         ErrorGettingSearchResults: "An error ocurred while attempting to get search results.",
         UserAlreadyJoined: "The study group cannot be joined again.",
-        UserNotAssociatedWithSchoolOfStudyGroup: 
+        UserNotAssociatedWithSchoolOfStudyGroup:
         "The study group cannot be joined because you are not a part of this school.",
         UserNotInStudyGroup: "The requesting user is not a member of the study group.",
         UserNotOwner: "The requesting user is not the owner of the study group.",

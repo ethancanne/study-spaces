@@ -144,11 +144,10 @@ class StudyGroup {
         this.meetings.push(Mongoose.Types.ObjectId(newMeeting.getId()));
 
         // SAVE THE CHANGE.
-        let meetingWasAdded = true;
+        let meetingWasAdded = false;
         try {
-            await this.save();
+            meetingWasAdded = await this.save();
         } catch (error) {
-            meetingWasAdded = false;
             Log.writeError(error);
         }
         return meetingWasAdded;
