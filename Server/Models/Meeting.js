@@ -47,7 +47,7 @@ class MeetingAvailability {
  */
 const MeetingSchema = new Schema({
     date: {
-        type: Date,
+        type: String,
         required: false
     },
     day: {

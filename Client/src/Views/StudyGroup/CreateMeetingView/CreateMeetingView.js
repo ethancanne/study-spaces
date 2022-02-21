@@ -5,6 +5,7 @@ import { sendPostRequest } from "../../../../Helper";
 import { useDispatch } from "react-redux";
 import { closePopup } from "../../../state/actions";
 import CreateMeetingForm from "../../../components/CreateMeetingForm/CreateMeetingForm";
+import { useHistory } from "react-router";
 
 /**
  * This is a specific view that is used in a popup
@@ -14,6 +15,7 @@ import CreateMeetingForm from "../../../components/CreateMeetingForm/CreateMeeti
  */
 const CreateMeetingView = ({ group, isRecurringMeeting }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const [date, setDate] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.date : "");
     const [time, setTime] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.time : "");
     const [frequency, setFrequency] = useState(
@@ -58,6 +60,7 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
                 (data, error) => {
                     if (error) return;
                     dispatch(closePopup());
+                    history.go(0);
                 }
             );
         else
@@ -78,6 +81,7 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
                 (data, error) => {
                     if (error) return;
                     dispatch(closePopup());
+                    history.go(0);
                 }
             );
     };
