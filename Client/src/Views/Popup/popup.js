@@ -41,7 +41,7 @@ const Popup = (props) => {
             break;
 
         case views.Popup.StudyGroup.CreateMeeting:
-            popupView = <CreateMeetingView group={payload} />;
+            popupView = <CreateMeetingView group={payload.group} isRecurringMeeting={payload.isRecurringMeeting} />;
             break;
 
         case views.Popup.StudyGroup.CreatePost:
@@ -64,7 +64,14 @@ const Popup = (props) => {
 
         case views.Popup.Confirmation:
             popupView = (
-                <ConfirmationForm callback={payload.callback} title={payload.title} message={payload.message} />
+                <ConfirmationForm
+                    callback={payload.callback}
+                    title={payload.title}
+                    message={payload.message}
+                    isConfirmation={payload.isConfirmation}
+                    firstButtonTitle={payload.firstButtonTitle}
+                    secondButtonTitle={payload.secondButtonTitle}
+                />
             );
             break;
     }

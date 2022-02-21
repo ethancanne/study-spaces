@@ -37,6 +37,7 @@ const StudyGroup = (props) => {
      * @author Ethan Cannelongo
      * @date 02/10/2022
      */
+
     const getStudyGroup = async () => {
         await sendGetRequest(
             Routes.StudyGroup.GetStudyGroup + "?studyGroupId=" + id,

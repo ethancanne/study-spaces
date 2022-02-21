@@ -5,7 +5,7 @@ import "./ConfirmationForm.scss";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 import { closePopup } from "../../state/actions";
 
-const ConfirmationForm = ({ callback, message }) => {
+const ConfirmationForm = ({ callback, message, isConfirmation, firstButtonTitle, secondButtonTitle }) => {
     const dispatch = useDispatch();
     return (
         <div className="confirmation-container">
@@ -13,21 +13,21 @@ const ConfirmationForm = ({ callback, message }) => {
             <div className="side-by-side">
                 <Button
                     onClick={() => {
-                        callback(true);
                         dispatch(closePopup());
+                        callback(true);
                     }}
-                    type={ButtonTypes.Destrucive}
+                    type={isConfirmation ? ButtonTypes.Destrucive : ButtonTypes.Primary}
                 >
-                    Yes
+                    {firstButtonTitle || "Yes"}
                 </Button>
                 <Button
                     onClick={() => {
-                        callback(false);
                         dispatch(closePopup());
+                        callback(false);
                     }}
                     type={ButtonTypes.Primary}
                 >
-                    No
+                    {secondButtonTitle || "No"}
                 </Button>
             </div>
         </div>

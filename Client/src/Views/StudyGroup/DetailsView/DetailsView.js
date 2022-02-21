@@ -44,7 +44,9 @@ const DetailsView = ({ group }) => {
         <div className="details-container">
             <div className="meetinginfo-container">
                 <h1>Next Meeting</h1>
-                <p className="meetinginfo-description">blah blah blah placeholder</p>
+                <p className="meetinginfo-description">
+                    {group.recurringMeeting ? group.recurringMeeting.day : "All clear!"}
+                </p>
             </div>
             <div className="description-container">
                 <h1>Group Description</h1>

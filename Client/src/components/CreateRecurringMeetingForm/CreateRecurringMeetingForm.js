@@ -8,21 +8,20 @@ import InputField from "../../core/InputField/InputField";
 import Dropdown from "../../core/Dropdown/Dropdown";
 import { MeetingFrequencies } from "../../../../Server/Models/Time";
 
-const CreateMeetingForm = ({
+const CreateRecurringMeetingForm = ({
     date,
-    time,
     frequency,
+    time,
     details,
     location,
     roomNumber,
     updateDateField,
-    updateTimeField,
     updateFrequencyField,
+    updateTimeField,
     updateDetailsField,
     updateLocationField,
     updateRoomNumberField,
-    submitCreateMeeting,
-    isRecurringMeeting
+    submitCreateMeeting
 }) => {
     return (
         <div className="create-meeting-form">
@@ -38,16 +37,14 @@ const CreateMeetingForm = ({
                         <TextInput value={time} onChange={updateTimeField} type="time" />
                     </InputField>
 
-                    {isRecurringMeeting && (
-                        <InputField>
-                            <Label>Frequency</Label>
-                            <Dropdown
-                                options={[...Object.values(MeetingFrequencies)]}
-                                value={frequency}
-                                onChange={updateFrequencyField}
-                            />
-                        </InputField>
-                    )}
+                    <InputField>
+                        <Label>Frequency</Label>
+                        <Dropdown
+                            options={[...Object.values(MeetingFrequencies)]}
+                            value={frequency}
+                            onChange={updateFrequencyField}
+                        />
+                    </InputField>
                 </div>
                 <InputField>
                     <Label>Details</Label>
@@ -67,4 +64,4 @@ const CreateMeetingForm = ({
     );
 };
 
-export default CreateMeetingForm;
+export default CreateRecurringMeetingForm;
