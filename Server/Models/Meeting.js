@@ -142,17 +142,17 @@ class Meeting {
     }
 
     /**
-    * Creates a one-time meeting.
-    * @param {Date} date The date of the meeting.
-    * @param {Time} time The time of the meeting.
-    * @param {String=} day The day of the week of the meeting.
-    * @param {String=} details Additional notes about the meeting.
-    * @param {String=} location The location of the meeting.
-    * @param {String=} roomNumber The room where the meeting is to occur.
-    * @return {Meeting} The meeting created.
-    * @author Cameron Burkholder
-    * @date   02/21/2022
-    */
+     * Creates a one-time meeting.
+     * @param {Date} date The date of the meeting.
+     * @param {Time} time The time of the meeting.
+     * @param {String=} day The day of the week of the meeting.
+     * @param {String=} details Additional notes about the meeting.
+     * @param {String=} location The location of the meeting.
+     * @param {String=} roomNumber The room where the meeting is to occur.
+     * @return {Meeting} The meeting created.
+     * @author Cameron Burkholder
+     * @date   02/21/2022
+     */
     static async createOneTime(date, time, day, details, location, roomNumber) {
         date = new Date(date);
         if (!Validator.isDefined(day)) {

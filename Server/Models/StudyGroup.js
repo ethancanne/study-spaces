@@ -279,7 +279,7 @@ class StudyGroup {
      * @return {String} The study group's associated description.
      *
      */
-     getDescription() {
+    getDescription() {
         return this.description;
     }
 
@@ -304,8 +304,6 @@ class StudyGroup {
             return undefined;
         }
 
-
-
         // GET THE STUDY GROUP'S FEED.
         let feedWasFound = false;
         try {
@@ -326,7 +324,7 @@ class StudyGroup {
      * @return {String} groupColor The study group's associated color.
      *
      */
-     getGroupColor() {
+    getGroupColor() {
         return this.groupColor;
     }
 
@@ -861,7 +859,7 @@ class StudyGroup {
      * @date   02/16/2022
      * @async
      */
-     async setDescription(description) {
+    async setDescription(description) {
         this.description = description;
         let descriptionSet = false;
         try {
