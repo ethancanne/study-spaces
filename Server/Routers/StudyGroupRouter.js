@@ -49,6 +49,14 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             StudyGroupRouter.deleteStudyGroup
         );
+
+        //Used to delete a meeting.
+        server.delete(
+            Routes.StudyGroup.DeleteMeeting,
+            authenticator.protectRoute(),
+            StudyGroupRouter.deleteMeeting
+        );
+
         // This is used to edit a meeting.
         server.post(Routes.StudyGroup.EditMeeting, authenticator.protectRoute(), StudyGroupRouter.editOneTimeMeeting);
         
@@ -114,6 +122,47 @@ class StudyGroupRouter {
         } else {
             return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Error });
         }
+    }
+
+    /**
+     * 
+     * @param {String} request.body.meetingId
+     * @returns 
+     */
+
+    static async deleteMeeting(request, response) {
+        let meeting = undefined;
+
+        //Get meeting to edit.
+        try {
+            meeting = await Meeting.getById(request.body.meetingId);
+        } catch (error) {
+            Log.write("An error occurred while attempting to get the meeting.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorEditMeeting });
+        }
+
+        const meetingWasNotFound = Validator.isUndefined(meeting);
+        if (meetingWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.MeetingNotFound });
+        }
+
+        // Delete the meeting
+        let meetingDeleted = false;
+        try {
+            meetingDeleted = await meeting.delete();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete the meeting.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteMeeting });
+        }
+        if (!meetingDeleted) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteMeeting });
+        }
+        return response.json({ message: ResponseMessages.StudyGroup.SuccessDeleteMeeting });
     }
 
     /**
