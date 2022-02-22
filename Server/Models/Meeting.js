@@ -223,6 +223,14 @@ class Meeting {
     }
 
     /**
+     * Gets the meeting's day.
+     * @return {Day} The meeting's day.
+     */
+    getDay() {
+        return Date(this.day);
+    }
+
+    /**
      * Gets the meeting's details.
      * @return {String} The meeting's details.
      */
