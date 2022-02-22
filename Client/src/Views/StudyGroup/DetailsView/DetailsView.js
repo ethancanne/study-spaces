@@ -44,7 +44,14 @@ const DetailsView = ({ group }) => {
         <div className="details-container">
             <div className="meetinginfo-container">
                 <h1>Next Meeting</h1>
-                <p className="meetinginfo-description">blah blah blah placeholder</p>
+                <div className="meetinginfo-description">
+                    <p>
+                        Date: <strong>{group.recurringMeeting && group.recurringMeeting.date}</strong>
+                    </p>
+                    <p>
+                        Time: <strong>{group.recurringMeeting && group.recurringMeeting.time}</strong>
+                    </p>
+                </div>
             </div>
             <div className="description-container">
                 <h1>Group Description</h1>

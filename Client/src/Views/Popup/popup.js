@@ -13,6 +13,7 @@ import EditStudyGroup from "../../Views/StudyGroup/EditStudyGroup/EditStudyGroup
 import CreateMeetingView from "../StudyGroup/CreateMeetingView/CreateMeetingView";
 import CreatePostView from "../StudyGroup/CreatePostView/CreatePostView";
 import ViewPostView from "../StudyGroup/ViewPostView/ViewPostView";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -24,6 +25,7 @@ import ViewPostView from "../StudyGroup/ViewPostView/ViewPostView";
  */
 const Popup = (props) => {
     const { view, payload } = useSelector((state) => state.popupReducer);
+    const isLoading = useSelector((state) => state.notificationReducer.loading);
 
     const dispatch = useDispatch();
     let popupView = <></>;
@@ -41,7 +43,7 @@ const Popup = (props) => {
             break;
 
         case views.Popup.StudyGroup.CreateMeeting:
-            popupView = <CreateMeetingView group={payload} />;
+            popupView = <CreateMeetingView group={payload.group} isRecurringMeeting={payload.isRecurringMeeting} />;
             break;
 
         case views.Popup.StudyGroup.CreatePost:
@@ -64,7 +66,14 @@ const Popup = (props) => {
 
         case views.Popup.Confirmation:
             popupView = (
-                <ConfirmationForm callback={payload.callback} title={payload.title} message={payload.message} />
+                <ConfirmationForm
+                    callback={payload.callback}
+                    title={payload.title}
+                    message={payload.message}
+                    isConfirmation={payload.isConfirmation}
+                    firstButtonTitle={payload.firstButtonTitle}
+                    secondButtonTitle={payload.secondButtonTitle}
+                />
             );
             break;
     }
@@ -81,7 +90,11 @@ const Popup = (props) => {
                     <button onClick={() => dispatch(closePopup())}>X</button>
                 </div>
 
-                <div className="popup-body">{!props.children ? popupView : props.children}</div>
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <div className="popup-body">{!props.children ? popupView : props.children}</div>
+                )}
             </div>
         </div>
     );

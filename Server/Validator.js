@@ -1,3 +1,5 @@
+const ResponseMessages = require("./Responses/ResponseMessages");
+
 /**
  * This is used to validate and verify data throughout the application.
  * @author Cameron Burkholder

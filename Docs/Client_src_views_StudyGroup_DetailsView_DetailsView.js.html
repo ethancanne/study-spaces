@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Server/Responses/ResponseCodes.js</title>
+    <title>JSDoc: Source: Client/src/views/StudyGroup/DetailsView/DetailsView.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Server/Responses/ResponseCodes.js</h1>
+    <h1 class="page-title">Source: Client/src/views/StudyGroup/DetailsView/DetailsView.js</h1>
 
     
 
@@ -26,17 +26,82 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Defines the response codes the server can send.
- * @author Cameron Burkholder
- * @date   10/05/2021
- */
-const ResponseCodes = {
-    Success: 200,
-    Error: 400,
-    Unauthorized: 401
+            <pre class="prettyprint source linenums"><code>import "./DetailsView.scss";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import Button from "../../../core/Button/Button";
+import { showEditStudyGroupPopup, showConfirmationPopup } from "../../../state/actions";
+import { sendDeleteRequest } from "../../../../Helper";
+import Routes from "../../../../../Server/Routes/Routes";
+import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+
+/**
+ * Renders a view for a user to view details about a joined or edit an owned study group
+ * @author Ethan Cannelongo
+ * @date   02/15/2022
+ * @param {Object} group the study group
+ * */
+const DetailsView = ({ group }) => {
+    const user = useSelector((state) => state.authReducer.user);
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    /**
+     * Makes an api call to the Delete study group route, passing in the information entered in
+     * the form and rendering the client according to the response received
+     * @author Ethan Cannelongo
+     * @date   02/16/2022
+     * @async
+     * */
+    const submitDelete = async (confirmed) => {
+        if (confirmed)
+            await sendDeleteRequest(
+                Routes.StudyGroup.DeleteStudyGroup,
+                { studyGroupId: group._id },
+                ResponseMessages.StudyGroup.SuccessStudyGroupDeleted,
+                null,
+                true,
+                (data, error) => {
+                    if (error) return;
+                    history.push("/");
+                }
+            );
+    };
+    return (
+        &lt;div className="details-container">
+            &lt;div className="meetinginfo-container">
+                &lt;h1>Next Meeting&lt;/h1>
+                &lt;p className="meetinginfo-description">blah blah blah placeholder&lt;/p>
+            &lt;/div>
+            &lt;div className="description-container">
+                &lt;h1>Group Description&lt;/h1>
+                &lt;p className="details-description">{group.description}&lt;/p>
+            &lt;/div>
+
+            {group.owner &amp;&amp; group.owner._id === user._id &amp;&amp; (
+                &lt;div className="buttons">
+                    &lt;Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT&lt;/Button>
+                    &lt;Button
+                        onClick={() =>
+                            dispatch(
+                                showConfirmationPopup(
+                                    submitDelete,
+                                    "Confirm Deletion",
+                                    "Are you sure you want to delete the study group: " + group.name + "?"
+                                )
+                            )
+                        }
+                    >
+                        Delete
+                    &lt;/Button>
+                &lt;/div>
+            )}
+        &lt;/div>
+    );
 };
-module.exports = ResponseCodes;
+
+export default DetailsView;
 </code></pre>
         </article>
     </section>

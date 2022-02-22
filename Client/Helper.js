@@ -1,6 +1,6 @@
 import { store } from "./src";
 import axios from "axios";
-import { showErrorNotification, showSuccessNotification } from "./src/state/actions";
+import { showErrorNotification, showSuccessNotification, startLoading, stopLoading } from "./src/state/actions";
 import Validator from "../Server/Validator";
 
 /**
@@ -28,7 +28,9 @@ export const sendPostRequest = async (
     try {
         if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
+        store.dispatch(startLoading());
         response = await axios.post(route, data);
+        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         shouldShowNotification &&
@@ -79,7 +81,9 @@ export const sendGetRequest = async (
     try {
         if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
+        store.dispatch(startLoading());
         response = await axios.get(route);
+        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         shouldShowNotification &&
@@ -132,7 +136,9 @@ export const sendDeleteRequest = async (
     try {
         if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
+        store.dispatch(startLoading());
         response = await axios.delete(route, { data });
+        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         shouldShowNotification &&
@@ -184,11 +190,13 @@ export const sendPostRequestWithFormData = async (
     try {
         if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
+        store.dispatch(startLoading());
         response = await axios.post(route, formdata, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
         });
+        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));

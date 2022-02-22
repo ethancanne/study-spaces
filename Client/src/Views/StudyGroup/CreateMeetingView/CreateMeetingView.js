@@ -1,5 +1,11 @@
 import React, { useState } from "react";
+import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../../Server/Routes/Routes";
+import { sendPostRequest } from "../../../../Helper";
+import { useDispatch } from "react-redux";
+import { closePopup } from "../../../state/actions";
 import CreateMeetingForm from "../../../components/CreateMeetingForm/CreateMeetingForm";
+import { useHistory } from "react-router";
 
 /**
  * This is a specific view that is used in a popup
@@ -7,13 +13,23 @@ import CreateMeetingForm from "../../../components/CreateMeetingForm/CreateMeeti
  * @author Ethan Cannelongo
  * @date   02/17/2022
  */
-const CreateMeetingView = ({ group }) => {
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
-    const [frequency, setFrequency] = useState(""); //OW
-    const [details, setDetails] = useState("");
-    const [location, setLocation] = useState("");
-    const [roomNumber, setRoomNumber] = useState("");
+const CreateMeetingView = ({ group, isRecurringMeeting }) => {
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const [date, setDate] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.date : "");
+    const [time, setTime] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.time : "");
+    const [frequency, setFrequency] = useState(
+        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.frequency : ""
+    );
+    const [details, setDetails] = useState(
+        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.details : ""
+    );
+    const [location, setLocation] = useState(
+        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.location : ""
+    );
+    const [roomNumber, setRoomNumber] = useState(
+        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.roomNumber : ""
+    );
 
     /**
      * Makes an api call to the create meeting route, passing in the information entered in the form and rendering the client according to the response received
@@ -24,9 +40,50 @@ const CreateMeetingView = ({ group }) => {
     const submitCreateMeeting = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        console.log(group, date, time, frequency, details, location, roomNumber);
 
-        //...
+        if (isRecurringMeeting)
+            sendPostRequest(
+                Routes.StudyGroup.SetRecurringMeeting,
+                {
+                    day: "I don't think we need attribute...",
+                    date,
+                    time,
+                    frequency,
+                    details,
+                    location,
+                    roomNumber,
+                    studyGroupId: group._id
+                },
+                ResponseMessages.StudyGroup.SetRecurringMeeting.Success,
+                null,
+                true,
+                (data, error) => {
+                    if (error) return;
+                    dispatch(closePopup());
+                    history.go(0);
+                }
+            );
+        else
+            sendPostRequest(
+                Routes.StudyGroup.AddOneTimeMeeting,
+                {
+                    day: "I don't think we need attribute...",
+                    date,
+                    time,
+                    details,
+                    location,
+                    roomNumber,
+                    studyGroupId: group._id
+                },
+                ResponseMessages.StudyGroup.AddOneTimeMeeting.Success,
+                null,
+                true,
+                (data, error) => {
+                    if (error) return;
+                    dispatch(closePopup());
+                    history.go(0);
+                }
+            );
     };
     /**
      * Used to update the date field in the create meeting form.
@@ -88,21 +145,24 @@ const CreateMeetingView = ({ group }) => {
         setRoomNumber(event.target.value);
     };
     return (
-        <CreateMeetingForm
-            date={date}
-            time={time}
-            frequency={frequency}
-            details={details}
-            location={location}
-            roomNumber={roomNumber}
-            updateDateField={updateDateField}
-            updateTimeField={updateTimeField}
-            updateFrequencyField={updateFrequencyField}
-            updateDetailsField={updateDetailsField}
-            updateLocationField={updateLocationField}
-            updateRoomNumberField={updateRoomNumberField}
-            submitCreateMeeting={submitCreateMeeting}
-        />
+        <>
+            <CreateMeetingForm
+                date={date}
+                time={time}
+                frequency={frequency}
+                details={details}
+                location={location}
+                roomNumber={roomNumber}
+                updateDateField={updateDateField}
+                updateTimeField={updateTimeField}
+                updateFrequencyField={updateFrequencyField}
+                updateDetailsField={updateDetailsField}
+                updateLocationField={updateLocationField}
+                updateRoomNumberField={updateRoomNumberField}
+                submitCreateMeeting={submitCreateMeeting}
+                isRecurringMeeting={isRecurringMeeting}
+            />
+        </>
     );
 };
 

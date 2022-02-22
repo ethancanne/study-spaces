@@ -4,7 +4,13 @@ import Routes from "../../../../Server/Routes/Routes";
 import axios from "axios";
 import { sendDeleteRequest, sendPostRequest } from "../../../Helper";
 import { useSelector, useDispatch } from "react-redux";
-import { showInputPopup, showErrorNotification, showSuccessNotification, signOut } from "../../state/actions";
+import {
+    showInputPopup,
+    showErrorNotification,
+    showSuccessNotification,
+    signOut,
+    closePopup
+} from "../../state/actions";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import Validator from "../../../../Server/Validator";
 import TopBar from "../../components/TopBar/TopBar";
@@ -12,6 +18,7 @@ import Page from "../Page";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 import Button from "../../core/Button/Button";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * Renders the Account page
@@ -21,6 +28,7 @@ import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 const Account = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer);
+    const isLoading = useSelector((state) => state.notificationReducer.loading);
 
     /**
      * Used to submit the new email request
@@ -37,7 +45,10 @@ const Account = () => {
             },
             ResponseMessages.Account.EmailSent,
             null,
-            true
+            true,
+            () => {
+                dispatch(closePopup());
+            }
         );
     };
 
@@ -56,7 +67,10 @@ const Account = () => {
             },
             ResponseMessages.Account.SuccessChangingPassword,
             null,
-            true
+            true,
+            () => {
+                dispatch(closePopup());
+            }
         );
     };
 
@@ -75,9 +89,8 @@ const Account = () => {
             true,
             (data, error) => {
                 if (error) return;
-                console.log("hereoeorooe");
-                dispatch(showSuccessNotification(data.message));
                 dispatch(signOut());
+                dispatch(closePopup());
             }
         );
     };
@@ -87,6 +100,7 @@ const Account = () => {
                 <div className="page-title">
                     <h1>Account</h1>
                 </div>
+
                 <div className="account-page">
                     <div className="infos">
                         <div className="user-info">

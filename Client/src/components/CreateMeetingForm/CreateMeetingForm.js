@@ -21,7 +21,8 @@ const CreateMeetingForm = ({
     updateDetailsField,
     updateLocationField,
     updateRoomNumberField,
-    submitCreateMeeting
+    submitCreateMeeting,
+    isRecurringMeeting
 }) => {
     return (
         <div className="create-meeting-form">
@@ -37,14 +38,16 @@ const CreateMeetingForm = ({
                         <TextInput value={time} onChange={updateTimeField} type="time" />
                     </InputField>
 
-                    <InputField>
-                        <Label>Frequency</Label>
-                        <Dropdown
-                            options={[...Object.values(MeetingFrequencies)]}
-                            value={frequency}
-                            onChange={updateFrequencyField}
-                        />
-                    </InputField>
+                    {isRecurringMeeting && (
+                        <InputField>
+                            <Label>Frequency</Label>
+                            <Dropdown
+                                options={[...Object.values(MeetingFrequencies)]}
+                                value={frequency}
+                                onChange={updateFrequencyField}
+                            />
+                        </InputField>
+                    )}
                 </div>
                 <InputField>
                     <Label>Details</Label>

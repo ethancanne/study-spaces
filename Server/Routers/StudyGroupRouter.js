@@ -31,9 +31,11 @@ class StudyGroupRouter {
      */
     static serveRoutes(server, authenticator) {
         // Used to add one-time meetings.
-        server.post(Routes.StudyGroup.AddOneTimeMeeting,
+        server.post(
+            Routes.StudyGroup.AddOneTimeMeeting,
             authenticator.protectRoute(),
-            StudyGroupRouter.addOneTimeMeeting);
+            StudyGroupRouter.addOneTimeMeeting
+        );
         // This is used to create study groups.
         server.post(
             Routes.StudyGroup.CreateStudyGroup,
@@ -102,7 +104,7 @@ class StudyGroupRouter {
         }
 
         // CREATE THE ONE-TIME MEETING.
-        const { day, frequency, time, date, details, location, roomNumber } = request.body;
+        const { day, time, date, details, location, roomNumber } = request.body;
         const oneTimeMeeting = await Meeting.createOneTime(date, time, day, details, location, roomNumber);
 
         // ADD THE ONE-TIME MEETING.
@@ -315,7 +317,6 @@ class StudyGroupRouter {
      * @static
      */
     static async editStudyGroup(request, response) {
-
         //GET ORIGINAL STUDY GROUP
         const studyGroupId = request.body.studyGroupId;
         let studyGroup = undefined;
@@ -334,39 +335,37 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
         }
 
-        console.log(studyGroup.getCourse())
+        console.log(studyGroup.getCourse());
         // CHECK FOR EDITS AND MAKE CHANGES IF NECESSARY
 
         //Check for new study group course
-        if(request.body.course != studyGroup.getCourse()) {
+        if (request.body.course != studyGroup.getCourse()) {
             studyGroup.setCourse(request.body.course);
         }
-        console.log(studyGroup.getCourse())
+        console.log(studyGroup.getCourse());
 
         //Check for new study group description
-        if(request.body.description != studyGroup.getDescription()) {
+        if (request.body.description != studyGroup.getDescription()) {
             studyGroup.setDescription(request.body.description);
         }
 
         //Check for new color
-        if(request.body.groupColor != studyGroup.getGroupColor()) {
+        if (request.body.groupColor != studyGroup.getGroupColor()) {
             studyGroup.setGroupColor(request.body.groupColor);
         }
 
-
         //Check for change in study group mode
-        if(request.body.isOnlineGroup != studyGroup.OnlineGroup()) {
-            if(studyGroup.OnlineGroup()){
+        if (request.body.isOnlineGroup != studyGroup.OnlineGroup()) {
+            if (studyGroup.OnlineGroup()) {
                 studyGroup.makeInPerson();
-            }
-            else {
+            } else {
                 studyGroup.makeOnline();
             }
         }
 
         //Check for change in study group type
-        if(request.body.isTutorGroup != studyGroup.getIsTutorGroup()) {
-            if(studyGroup.getIsTutorGroup()) {
+        if (request.body.isTutorGroup != studyGroup.getIsTutorGroup()) {
+            if (studyGroup.getIsTutorGroup()) {
                 studyGroup.makeStudyGroup();
             } else {
                 studyGroup.makeTutorGroup();
@@ -374,17 +373,17 @@ class StudyGroupRouter {
         }
 
         //Check for change in study group name
-        if(request.body.name != studyGroup.getName()) {
-            if(request.body.name == null) {
-                return response.json({message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput})
+        if (request.body.name != studyGroup.getName()) {
+            if (request.body.name == null) {
+                return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
             }
             studyGroup.setName(request.body.name);
         }
 
         //Check for change in study group subject
-        if(request.body.subject != studyGroup.getSubject()) {
-            if(request.body.subject == null) {
-                return response.json({message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput})
+        if (request.body.subject != studyGroup.getSubject()) {
+            if (request.body.subject == null) {
+                return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
             }
             studyGroup.setSubject(request.body.subject);
         }
@@ -394,11 +393,7 @@ class StudyGroupRouter {
             message: ResponseMessages.StudyGroup.SuccessStudyGroupEdited,
             studyGroup: studyGroup
         });
-
-
-
     }
-
 
     /**
      * Gets the study group with a given study group ID.
@@ -457,6 +452,20 @@ class StudyGroupRouter {
         let feedWasPopulated = false;
         feedWasPopulated = await studyGroup.getFeed();
         if (!feedWasPopulated) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        // POPULATE THE STUDY GROUP'S MEETINGS.
+        let meetingsWereFound = await studyGroup.getMeetings();
+        if (!meetingsWereFound) {
+            response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+
+        // POPULATE THE STUDY GROUP'S RECURRING MEETING.
+        let recurringMeetingWasFound = await studyGroup.getRecurringMeeting();
+        if (!recurringMeetingWasFound) {
             response.status(ResponseCodes.Error);
             return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
         }

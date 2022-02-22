@@ -52,10 +52,10 @@ export const showEditStudyGroupPopup = (group) => {
     };
 };
 
-export const showCreateMeetingStudyGroupPopup = (group) => {
+export const showCreateMeetingStudyGroupPopup = (group, isRecurringMeeting) => {
     return {
         type: popupConstants.SHOW_CREATE_MEETING_STUDY_GROUP_POPUP,
-        payload: group
+        payload: { group, isRecurringMeeting }
     };
 };
 
@@ -80,10 +80,17 @@ export const showInputPopup = (title, label, defaultInput, callback, label2) => 
     };
 };
 
-export const showConfirmationPopup = (callback, title, message) => {
+export const showConfirmationPopup = (
+    callback,
+    title,
+    message,
+    isConfirmation = true,
+    firstButtonTitle = "Yes",
+    secondButtonTitle = "No"
+) => {
     return {
         type: popupConstants.SHOW_CONFIRMATION_POPUP,
-        payload: { callback, title, message }
+        payload: { callback, title, message, isConfirmation, firstButtonTitle, secondButtonTitle }
     };
 };
 
@@ -133,5 +140,16 @@ export const showSuccessNotification = (message) => {
 export const hideNotification = () => {
     return {
         type: notificationConstants.HIDE_NOTIFICATION
+    };
+};
+
+export const startLoading = () => {
+    return {
+        type: notificationConstants.START_LOADING
+    };
+};
+export const stopLoading = () => {
+    return {
+        type: notificationConstants.STOP_LOADING
     };
 };

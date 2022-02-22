@@ -39,7 +39,6 @@ const InputView = ({ label, defaultInput = "", callback, label2 = "" }) => {
             onSubmit={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                dispatch(closePopup());
                 callback(input, input2);
                 setInput("");
             }}

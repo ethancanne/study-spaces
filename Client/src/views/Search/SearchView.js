@@ -29,24 +29,12 @@ const SearchView = () => {
 
     const dispatch = useDispatch();
     const user = useSelector((state) => state.authReducer.user || "");
-
     /**
      * Retrieves study groups from search query by sending a request to the server
      * @author Ethan Cannelongo
      * @date 01/29/22
      */
     const submitSearch = async (e) => {
-        console.log({
-            searchTerm,
-            subject,
-            school: isAssociatedWithSchool ? "Liberty University" : null,
-            meetingFormat,
-            type,
-            startTime: timeRange[0],
-            endTime: timeRange[1],
-            days,
-            meetingFrequencies
-        });
         // SUBMIT THE SEARCH REQUEST.
         e.preventDefault();
         e.stopPropagation();

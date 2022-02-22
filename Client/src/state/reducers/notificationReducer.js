@@ -8,7 +8,7 @@ import notificationTypes from "../../Views/Notification/notificationTypes";
  * @author Ethan Cannelongo
  * @date   1/27/2022
  */
-const notificationReducer = (state = { isShowing: false }, action) => {
+const notificationReducer = (state = { isShowing: false, loading: false }, action) => {
     switch (action.type) {
         case notificationConstants.SHOW_ERROR_NOTIFICATION:
             return { ...state, type: notificationTypes.ERROR, isShowing: true, message: action.payload.message };
@@ -22,6 +22,12 @@ const notificationReducer = (state = { isShowing: false }, action) => {
             };
         case notificationConstants.HIDE_NOTIFICATION:
             return { ...state, isShowing: false };
+
+        case notificationConstants.START_LOADING:
+            return { ...state, loading: true };
+
+        case notificationConstants.STOP_LOADING:
+            return { ...state, loading: false };
 
         default:
             return state;
