@@ -30,8 +30,7 @@ import Loading from "../../components/Loading/Loading";
  */
 const Study = (props) => {
     const isLoading = useSelector((state) => state.notificationReducer.loading);
-    const isLoggedIn = useSelector((state) => state.authReducer.user);
-    const user = useSelector((state) => state.authReducer.user);
+    const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
     const studyGroups = useSelector((state) => state.studyGroupsReducer.studyGroups);
 
     const dispatch = useDispatch();

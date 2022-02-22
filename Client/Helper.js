@@ -30,7 +30,6 @@ export const sendPostRequest = async (
 
         store.dispatch(startLoading());
         response = await axios.post(route, data);
-        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         shouldShowNotification &&
@@ -39,6 +38,8 @@ export const sendPostRequest = async (
             );
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
+        store.dispatch(stopLoading());
+
         const responseIsDefined = Validator.isDefined(response.data);
         if (responseIsDefined) {
             const requestWasValid = successResponseMessage === response.data.message;
@@ -83,7 +84,6 @@ export const sendGetRequest = async (
 
         store.dispatch(startLoading());
         response = await axios.get(route);
-        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         shouldShowNotification &&
@@ -92,6 +92,8 @@ export const sendGetRequest = async (
             );
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
+        store.dispatch(stopLoading());
+
         const responseIsDefined = Validator.isDefined(response.data);
         if (responseIsDefined) {
             const requestWasValid = successResponseMessage === response.data.message;
@@ -138,7 +140,6 @@ export const sendDeleteRequest = async (
 
         store.dispatch(startLoading());
         response = await axios.delete(route, { data });
-        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         shouldShowNotification &&
@@ -147,6 +148,8 @@ export const sendDeleteRequest = async (
             );
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
+        store.dispatch(stopLoading());
+
         const responseIsDefined = Validator.isDefined(response.data);
         if (responseIsDefined) {
             const requestWasValid = successResponseMessage === response.data.message;
@@ -196,12 +199,13 @@ export const sendPostRequestWithFormData = async (
                 "Content-Type": "multipart/form-data"
             }
         });
-        store.dispatch(stopLoading());
     } catch (e) {
         console.log(e);
         store.dispatch(showErrorNotification(catchMessage || "Cannot connect to the server, please try again later."));
         callback(null, "There was a problem connecting to the server: " + e);
     } finally {
+        store.dispatch(stopLoading());
+
         const responseIsDefined = Validator.isDefined(response.data);
         if (responseIsDefined) {
             const requestWasValid = successResponseMessage === response.data.message;
