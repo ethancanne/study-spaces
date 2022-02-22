@@ -12,10 +12,13 @@ import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import { useDispatch, useSelector } from "react-redux";
 import { showEditStudyGroupPopup } from "../../state/actions";
 import FeedView from "../../Views/StudyGroup/Feed/FeedView";
+import Loading from "../../components/Loading/Loading";
 
 const StudyGroup = (props) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.authReducer.user);
+    const isLoading = useSelector((state) => state.notificationReducer.loading);
+
     const {
         match: {
             params: { id }
@@ -64,9 +67,15 @@ const StudyGroup = (props) => {
                     </div>
 
                     <div className="main-view">
-                        <MembersView group={group} />
-                        <FeedView group={group} />
-                        <DetailsView group={group} />
+                        {isLoading ? (
+                            <Loading />
+                        ) : (
+                            <>
+                                <MembersView group={group} />
+                                <FeedView group={group} />
+                                <DetailsView group={group} />
+                            </>
+                        )}
                     </div>
                 </div>
             </Page>

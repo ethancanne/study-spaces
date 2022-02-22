@@ -21,6 +21,7 @@ import axios from "axios";
 import TopBar from "../../components/TopBar/TopBar";
 import StudyGroupView from "../../Views/Study/studyGroupView/StudyGroupView";
 import Page from "../Page";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * Renders the study page, displaying all the study groups the user is a member of.
@@ -28,7 +29,8 @@ import Page from "../Page";
  * @date   11/20/2021
  */
 const Study = (props) => {
-    const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+    const isLoading = useSelector((state) => state.notificationReducer.loading);
+    const isLoggedIn = useSelector((state) => state.authReducer.user);
     const user = useSelector((state) => state.authReducer.user);
     const studyGroups = useSelector((state) => state.studyGroupsReducer.studyGroups);
 
@@ -38,12 +40,12 @@ const Study = (props) => {
         async function getGroups() {
             await getStudyGroups();
         }
-        getGroups();
+        isLoggedIn && getGroups();
 
         async function verifyUserEmail() {
             await verifyEmail(props.match.params.verificationToken);
         }
-        if (props.isVerifyingEmail) verifyUserEmail();
+        props.isVerifyingEmail && isLoggedIn && verifyUserEmail();
     }, []);
 
     /**
@@ -108,10 +110,14 @@ const Study = (props) => {
                                 className="add-button"
                                 onClick={() => dispatch(showCreateStudyGroupPopup())}
                             ></Button>
-                            <div className="study-groups-container">
-                                {Validator.isDefined(studyGroups) &&
-                                    studyGroups.map((studyGroup) => <StudyGroupView group={studyGroup} />)}
-                            </div>
+                            {isLoading ? (
+                                <Loading />
+                            ) : (
+                                <div className="study-groups-container">
+                                    {Validator.isDefined(studyGroups) &&
+                                        studyGroups.map((studyGroup) => <StudyGroupView group={studyGroup} />)}
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="guest-message">

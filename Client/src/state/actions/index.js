@@ -142,3 +142,14 @@ export const hideNotification = () => {
         type: notificationConstants.HIDE_NOTIFICATION
     };
 };
+
+export const startLoading = () => {
+    return {
+        type: notificationConstants.START_LOADING
+    };
+};
+export const stopLoading = () => {
+    return {
+        type: notificationConstants.STOP_LOADING
+    };
+};
