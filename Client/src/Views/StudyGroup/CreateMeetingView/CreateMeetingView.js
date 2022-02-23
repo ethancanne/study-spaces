@@ -93,6 +93,7 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
      */
     const updateDateField = (event) => {
         setDate(event.target.value);
+        console.log(event.target.value);
     };
 
     /**
