@@ -74,7 +74,9 @@ class Message {
      *
      * @async
      */
-    async delete() {}
+    async delete() {
+        
+    }
 
     /**
      * Gets a message based on its document ID.

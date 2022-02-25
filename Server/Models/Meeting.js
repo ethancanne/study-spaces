@@ -181,6 +181,29 @@ class Meeting {
     }
 
     /**
+     * @return {boolean} Returns whether or not the meeting is deleted.
+     * @author Clifton Croom
+     * @date 02/23/22
+     * @async
+     * 
+     */
+    async delete() {
+        let meetingModel = await MeetingModel.findOne({ _id: this._id }).exec();
+        let meetingDeleted = false;
+        console.log(meetingDeleted);
+        try {
+            await meetingModel.remove();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete a one-time meeting.");
+            Log.writeError(error);
+            return meetingDeleted;
+        }
+        meetingDeleted = true;
+        console.log(meetingDeleted);
+        return meetingDeleted;
+    }
+
+    /**
      * Retrieves the meeting using the provided document ID.
      * @param {Mongoose.Types.ObjectId} meetingId The meeting ID to use.
      * @return {Meeting} The meeting object.

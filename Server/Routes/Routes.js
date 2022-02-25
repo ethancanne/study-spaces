@@ -24,7 +24,7 @@ const Routes = {
     StudyGroup: {
         AddOneTimeMeeting: "/api/study-group/add-one-time-meeting",
         CreateStudyGroup: "/api/study-group/create",
-        DeleteMeeting: "api/study-group/delete-meeting",
+        DeleteMeeting: "/api/study-group/delete-meeting",
         DeleteStudyGroup: "/api/study-group/delete",
         EditStudyGroup: "/api/study-group/edit-study-group",
         EditMeeting: "/api/study-group/edit-meeting",

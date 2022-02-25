@@ -124,7 +124,10 @@ class StudyGroupRouter {
     /**
      *
      * @param {String} request.body.meetingId
-     * @returns
+     * @author Clifton Croom
+     * @date 02/22/22
+     * @static
+     * @async
      */
 
     static async deleteMeeting(request, response) {
@@ -155,6 +158,7 @@ class StudyGroupRouter {
         //Get meeting to edit.
         try {
             meeting = await Meeting.getById(request.body.meetingId);
+            console.log(request.body.meetingId);
         } catch (error) {
             Log.write("An error occurred while attempting to get the meeting.");
             Log.writeError(error);
@@ -162,15 +166,21 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorEditMeeting });
         }
 
+        //Check if the meeting was found.
         const meetingWasNotFound = Validator.isUndefined(meeting);
         if (meetingWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.MeetingNotFound });
         }
 
+        //Check to make sure the user is the owner
+        // TODO
+
+
         // Delete the meeting
         let meetingDeleted = false;
         try {
             meetingDeleted = await meeting.delete();
+
         } catch (error) {
             Log.write("An error occurred while attempting to delete the meeting.");
             Log.writeError(error);
