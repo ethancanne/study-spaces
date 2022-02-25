@@ -14,6 +14,7 @@ import CreateMeetingView from "../StudyGroup/CreateMeetingView/CreateMeetingView
 import CreatePostView from "../StudyGroup/CreatePostView/CreatePostView";
 import ViewPostView from "../StudyGroup/ViewPostView/ViewPostView";
 import Loading from "../../components/Loading/Loading";
+import ViewMeetingView from "../StudyGroup/ViewMeetingView/ViewMeetingView";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -53,6 +54,11 @@ const Popup = (props) => {
         case views.Popup.StudyGroup.ViewPost:
             popupView = <ViewPostView post={payload} />;
             break;
+
+        case views.Popup.StudyGroup.ViewMeetings:
+            popupView = <ViewMeetingView group={payload} />;
+            break;
+
         case views.Popup.Input:
             popupView = (
                 <InputView

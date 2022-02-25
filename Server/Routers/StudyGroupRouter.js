@@ -14,6 +14,7 @@ const Validator = require("../Validator.js");
 const User = require("../Models/User.js");
 const { request } = require("http");
 const { getById } = require("../Models/User.js");
+const { Days } = require("../Models/Time.js");
 
 /**
  * The router used to serve account-related requests.
@@ -51,15 +52,11 @@ class StudyGroupRouter {
         );
 
         //Used to delete a meeting.
-        server.delete(
-            Routes.StudyGroup.DeleteMeeting,
-            authenticator.protectRoute(),
-            StudyGroupRouter.deleteMeeting
-        );
+        server.delete(Routes.StudyGroup.DeleteMeeting, authenticator.protectRoute(), StudyGroupRouter.deleteMeeting);
 
         // This is used to edit a meeting.
         server.post(Routes.StudyGroup.EditMeeting, authenticator.protectRoute(), StudyGroupRouter.editOneTimeMeeting);
-        
+
         // This is used to edit a study group.
         server.post(Routes.StudyGroup.EditStudyGroup, authenticator.protectRoute(), StudyGroupRouter.editStudyGroup);
         // This is used to get a specific study group.
@@ -125,17 +122,21 @@ class StudyGroupRouter {
     }
 
     /**
-     * 
+     *
      * @param {String} request.body.meetingId
-     * @returns 
+     * @author Clifton Croom
+     * @date 02/22/22
+     * @static
+     * @async
      */
 
     static async deleteMeeting(request, response) {
         let meeting = undefined;
-
+        
         //Get meeting to edit.
         try {
             meeting = await Meeting.getById(request.body.meetingId);
+            console.log(request.body.meetingId);
         } catch (error) {
             Log.write("An error occurred while attempting to get the meeting.");
             Log.writeError(error);
@@ -143,15 +144,21 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorEditMeeting });
         }
 
+        //Check if the meeting was found.
         const meetingWasNotFound = Validator.isUndefined(meeting);
         if (meetingWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.MeetingNotFound });
         }
 
+        //Check to make sure the user is the owner
+        // TODO
+
+
         // Delete the meeting
         let meetingDeleted = false;
         try {
             meetingDeleted = await meeting.delete();
+            
         } catch (error) {
             Log.write("An error occurred while attempting to delete the meeting.");
             Log.writeError(error);
@@ -166,7 +173,7 @@ class StudyGroupRouter {
     }
 
     /**
-     * 
+     *
      * @param {String} request.body.date The date the meeting occurs.
      * @param {String} request.body.time The time the meeting occurs.
      * @param {String} request.body.day The day of the meeting.
@@ -196,53 +203,51 @@ class StudyGroupRouter {
         if (meetingWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.MeetingNotFound });
         }
-        
+
         //Compare original meeting to new meeting to check for differences
-        
-        if(request.body.date != meeting.getDate()) {
-            if(request.body.date == null) {
-                return response.json({message: "Date is a required attribute."})
+
+        if (request.body.date != meeting.getDate()) {
+            if (request.body.date == null) {
+                return response.json({ message: "Date is a required attribute." });
             } else {
-            meeting.setDate(request.body.date);
+                meeting.setDate(request.body.date);
             }
         }
 
-        if(request.body.time != meeting.getTime()) { 
-            if(request.body.time == null) {
-                return response.json({message: "Time is a required attribute."})
+        if (request.body.time != meeting.getTime()) {
+            if (request.body.time == null) {
+                return response.json({ message: "Time is a required attribute." });
             } else {
                 meeting.setTime(request.body.time);
             }
         }
-        
-        if(request.body.day != meeting.getDay()) { 
-            if(request.body.day == null) {
-                return response.json({message: "Day is a required attribute."})
+
+        if (request.body.day != meeting.getDay()) {
+            if (request.body.day == null) {
+                return response.json({ message: "Day is a required attribute." });
             } else {
                 meeting.setDay(request.body.day);
             }
         }
 
-        if(request.body.details != meeting.getDetails()) {
+        if (request.body.details != meeting.getDetails()) {
             meeting.setDetails(request.body.details);
         }
 
-        if(request.body.location != meeting.getLocation()) {
+        if (request.body.location != meeting.getLocation()) {
             meeting.setLocation(request.body.location);
         }
 
-        if(request.body.roomNumber != meeting.getRoomNumber()) {
+        if (request.body.roomNumber != meeting.getRoomNumber()) {
             meeting.setRoomNumber(request.body.roomNumber);
         }
-        
+
         //Return the edited meeting
         return response.json({
             message: ResponseMessages.StudyGroup.SuccessMeetingEdited,
             meeting: meeting
         });
-
     }
-
 
     /**
      * @param {String} request.body.name The name of the study group being created.
@@ -682,9 +687,12 @@ class StudyGroupRouter {
             // GET THE RECURRING MEETING.
             const recurringMeeting = await Meeting.getById(studyGroup.recurringMeeting);
 
+            //Convert the day from a number to a string
+            const newDay = Object.keys(Days)[day];
+
             // SET THE RECURRING MEETING ATTRIBUTES.
             let meetingUpdated = true;
-            meetingUpdated = meetingUpdated && (await recurringMeeting.setDay(day));
+            meetingUpdated = meetingUpdated && (await recurringMeeting.setDay(newDay));
             meetingUpdated = meetingUpdated && (await recurringMeeting.setFrequency(frequency));
             meetingUpdated = meetingUpdated && (await recurringMeeting.setTime(time));
             meetingUpdated = meetingUpdated && (await recurringMeeting.setDate(date));

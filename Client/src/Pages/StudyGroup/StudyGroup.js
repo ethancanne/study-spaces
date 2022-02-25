@@ -26,12 +26,23 @@ const StudyGroup = (props) => {
     } = props;
 
     const [group, setGroup] = useState({});
+    const [nextMeeting, setNextMeeting] = useState("All Clear");
+    const getNextMeeting = () => {
+        var nextMeeting = { date: "All Clear" };
+
+        group.meetings.forEach((meeting) => {
+            if (new Date(meeting.date) > Date.now()) nextMeeting = meeting;
+        });
+
+        return nextMeeting;
+    };
 
     useEffect(() => {
         async function getGroups() {
             await getStudyGroup();
         }
         getGroups();
+
         console.log(group);
     }, []);
 

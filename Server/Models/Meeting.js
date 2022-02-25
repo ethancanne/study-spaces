@@ -52,7 +52,7 @@ const MeetingSchema = new Schema({
     },
     day: {
         type: String,
-        required: true
+        required: false
     },
     details: {
         type: String,
@@ -154,9 +154,9 @@ class Meeting {
      * @date   02/21/2022
      */
     static async createOneTime(date, time, day, details, location, roomNumber) {
-        date = new Date(date);
+        const newDate = new Date(date);
         if (!Validator.isDefined(day)) {
-            day = Object.keys(Days)[date.getDay()];
+            day = Object.keys(Days)[newDate.getDay()];
         }
         // CREATE MEETING IN THE DATABASE.
         const meetingModel = new MeetingModel({
@@ -178,6 +178,29 @@ class Meeting {
         // RETURN THE CREATED INSTANCE.
         const meeting = new Meeting(meetingModel);
         return meeting;
+    }
+
+    /**
+     * @return {boolean} Returns whether or not the meeting is deleted.
+     * @author Clifton Croom
+     * @date 02/23/22
+     * @async
+     * 
+     */
+    async delete() {
+        let meetingModel = await MeetingModel.findOne({ _id: this._id }).exec();
+        let meetingDeleted = false;
+        console.log(meetingDeleted);
+        try {
+            await meetingModel.remove();
+        } catch (error) {
+            Log.write("An error occurred while attempting to delete a one-time meeting.");
+            Log.writeError(error);
+            return meetingDeleted;
+        }
+        meetingDeleted = true;
+        console.log(meetingDeleted);
+        return meetingDeleted;
     }
 
     /**

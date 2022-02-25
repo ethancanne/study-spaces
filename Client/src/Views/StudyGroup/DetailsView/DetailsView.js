@@ -3,8 +3,12 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Button from "../../../core/Button/Button";
-import { showEditStudyGroupPopup, showConfirmationPopup } from "../../../state/actions";
-import { sendDeleteRequest } from "../../../../Helper";
+import {
+    showEditStudyGroupPopup,
+    showConfirmationPopup,
+    showViewMeetingsStudyGroupPopup
+} from "../../../state/actions";
+import { getNextMeeting, sendDeleteRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 
@@ -57,14 +61,14 @@ const DetailsView = ({ group }) => {
     };
     return (
         <div className="details-container">
-            <div className="meetinginfo-container">
+            <div className="meetinginfo-container" onClick={() => dispatch(showViewMeetingsStudyGroupPopup(group))}>
                 <h1>Next Meeting</h1>
                 <div className="meetinginfo-description">
                     <p>
-                        Date: <strong>{group.recurringMeeting && group.recurringMeeting.date}</strong>
+                        Date: <strong>{group && getNextMeeting(group).date}</strong>
                     </p>
                     <p>
-                        Time: <strong>{group.recurringMeeting && group.recurringMeeting.time}</strong>
+                        Time: <strong>{group && getNextMeeting(group).time}</strong>
                     </p>
                 </div>
             </div>

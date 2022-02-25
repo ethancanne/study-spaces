@@ -2,6 +2,7 @@ import { store } from "./src";
 import axios from "axios";
 import { showErrorNotification, showSuccessNotification, startLoading, stopLoading } from "./src/state/actions";
 import Validator from "../Server/Validator";
+import { Schedule } from "./rschedule";
 
 /**
  * Submits a general post request to the server.
@@ -222,4 +223,53 @@ export const sendPostRequestWithFormData = async (
             callback(null, "There was an error, the server sent undefined results");
         }
     }
+};
+
+export const getNextMeeting = (group) => {
+    var nextOneTimeMeeting = {};
+
+    if (group.meetings && group.meetings.length !== 0) {
+        nextOneTimeMeeting = group.meetings[0];
+        group.meetings.forEach((meeting) => {
+            if (new Date(meeting.date) <= new Date(nextOneTimeMeeting.date) && new Date(meeting.date) >= new Date())
+                nextOneTimeMeeting = meeting;
+            console.log(nextOneTimeMeeting);
+        });
+    }
+
+    if (group.recurringMeeting) {
+        const recurringStartDate = new Date(group.recurringMeeting.date);
+        console.log("START DATE", recurringStartDate, group.recurringMeeting);
+        const schedule = new Schedule({
+            rrules: [
+                {
+                    frequency: group.recurringMeeting.frequency.toUpperCase(),
+                    start: recurringStartDate,
+                    end: new Date(
+                        recurringStartDate.getFullYear() + 5,
+                        recurringStartDate.getMonth(),
+                        recurringStartDate.getDate()
+                    )
+                }
+            ]
+        });
+
+        var nextRecurringMeeting = {};
+        nextRecurringMeeting = schedule
+            .occurrences()
+            .toArray()
+            .filter(({ date }) => date >= new Date())
+            .map(({ date }) => new Date(date).toLocaleDateString())[0];
+
+        group.recurringMeeting.date = nextRecurringMeeting;
+
+        if (group.meetings.length !== 0) {
+            return new Date(nextRecurringMeeting) > new Date(nextOneTimeMeeting.date)
+                ? nextOneTimeMeeting
+                : group.recurringMeeting;
+        } else {
+            return group.recurringMeeting;
+        }
+    }
+    return nextOneTimeMeeting;
 };

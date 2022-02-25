@@ -46,7 +46,8 @@ const Account = () => {
             ResponseMessages.Account.EmailSent,
             null,
             true,
-            () => {
+            (date, error) => {
+                if(error) return
                 dispatch(closePopup());
             }
         );
@@ -68,7 +69,8 @@ const Account = () => {
             ResponseMessages.Account.SuccessChangingPassword,
             null,
             true,
-            () => {
+            (date, error) => {
+                if(error) return
                 dispatch(closePopup());
             }
         );
