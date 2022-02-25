@@ -126,7 +126,6 @@ class StudyGroupRouter {
      * @param {String} request.body.meetingId
      * @returns
      */
-
     static async deleteMeeting(request, response) {
         let meeting = undefined;
 
