@@ -41,7 +41,7 @@ const ResponseMessages = {
         StudyGroupIsNotActive: "The requested study group is not active.",
         MeetingNotFound: "The requested meeting was not found.",
         StudyGroupNotFound: "The requested study group was not found.",
-        SuccessMeetingDeleted: "The meeding was deleted successfully.",
+        SuccessDeleteMeeting: "The meeting was deleted successfully.",
         SuccessStudyGroupCreated: "The study group was created sucessfully.",
         SuccessStudyGroupDeleted: "The study group was deleted successfully.",
         SuccessStudyGroupEdited: "The study group was edited successfully",
