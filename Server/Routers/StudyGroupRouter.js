@@ -124,6 +124,7 @@ class StudyGroupRouter {
     /**
      *
      * @param {String} request.body.meetingId
+     * @param {String} request.body.studyGroupId
      * @author Clifton Croom
      * @date 02/22/22
      * @static
