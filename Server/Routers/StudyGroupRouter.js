@@ -168,7 +168,6 @@ class StudyGroupRouter {
         }
 
         //Check to make sure the user is the owner
-        // TODO
         const userIsOwner = studyGroup.userIsOwner(request.user);
         if (!userIsOwner) {
             response.status(ResponseCodes.Unauthorized);
