@@ -145,7 +145,6 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.studyGroup.UserNotOwner });
         }
 
-
         // CHECK THAT THE MEETING BELONGS TO THE STUDY GROUP.
         const meetingId = request.body.meetingId;
         // Converting the Object ID to a string ensures consistency in using the indexOf method.
