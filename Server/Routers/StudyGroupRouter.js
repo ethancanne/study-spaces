@@ -132,8 +132,29 @@ class StudyGroupRouter {
      */
 
     static async deleteMeeting(request, response) {
-        let meeting = undefined;
-        
+        // GET THE ASSOCIATED STUDY GROUP.
+        const studyGroup = await StudyGroup.getById(request.body.studyGroupId);
+        if (!Validator.isDefined(studyGroup)) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
+        }
+
+        // CHECK THAT THE USER OWNS THE STUDY GROUP.
+        const user = request.user;
+        const userIsOwner = studyGroup.userIsOwner(user);
+        if (!userIsOwner) {
+            return response.json({ message: ResponseMessages.studyGroup.UserNotOwner });
+        }
+
+        // CHECK THAT THE MEETING BELONGS TO THE STUDY GROUP.
+        const meetingId = request.body.meetingId;
+        // Converting the Object ID to a string ensures consistency in using the indexOf method.
+        const studyGroupMeetingIds = studyGroup.meetings.map((meeetingId) => String(meetingId));
+        const NOT_FOUND_INDEX = -1;
+        const studyGroupHasMeeting = NOT_FOUND_INDEX !== studyGroupMeetingIds.indexOf(meetingId);
+        if (!studyGroupHasMeeting) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteMeeting });
+        }
+
         //Get meeting to edit.
         try {
             meeting = await Meeting.getById(request.body.meetingId);
@@ -192,7 +213,7 @@ class StudyGroupRouter {
         let meetingDeleted = false;
         try {
             meetingDeleted = await meeting.delete();
-            
+
         } catch (error) {
             Log.write("An error occurred while attempting to delete the meeting.");
             Log.writeError(error);
@@ -201,6 +222,12 @@ class StudyGroupRouter {
         }
         if (!meetingDeleted) {
             response.status(ResponseCodes.Error);
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteMeeting });
+        }
+        const meetingIndex = studyGroupMeetingIds.indexOf(meetingId);
+        studyGroup.meetings.splice(meetingId, 1);
+        const studyGroupWasSaved = await studyGroup.save();
+        if (!studyGroupWasSaved) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteMeeting });
         }
         return response.json({ message: ResponseMessages.StudyGroup.SuccessDeleteMeeting });
