@@ -130,7 +130,6 @@ class StudyGroupRouter {
      * @static
      * @async
      */
-
     static async deleteMeeting(request, response) {
         // GET THE ASSOCIATED STUDY GROUP.
         const studyGroup = await StudyGroup.getById(request.body.studyGroupId);
@@ -170,43 +169,6 @@ class StudyGroupRouter {
         const meetingWasNotFound = Validator.isUndefined(meeting);
         if (meetingWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.MeetingNotFound });
-        }
-
-        //Get study group
-        const studyGroupId = request.body.studyGroupId;
-        let studyGroup = undefined;
-        try {
-            studyGroup = await StudyGroup.getById(studyGroupId);
-        } catch (error) {
-            Log.write("An error occurred while attempting to get the study group.");
-            Log.writeError(error);
-            response.status(ResponseCodes.Error);
-            return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteStudyGroup });
-        }
-        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
-        if (studyGroupWasNotFound) {
-            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
-        }
-
-        //Check to make sure the user is the owner
-        const userIsOwner = studyGroup.userIsOwner(request.user);
-        if (!userIsOwner) {
-            response.status(ResponseCodes.Unauthorized);
-            return response.json({ message: ResponseMessages.StudyGroup.UserNotOwner });
-        }
-
-        //Check to make sure the meeting is part of the study group
-        let meetings = studyGroup.meetings;
-        const meetingId = String(request.body.meetingId);
-
-        // CHECK IF THE STUDY GROUP'S MEETING LIST CONTAINS THE MEETING.
-        // Converting the Object ID to a string ensures consistency in using the indexOf method.
-        const StudyGroupMeetingIds = meetings.map((meetingId) => String(meetingId));
-        const NOT_FOUND_INDEX = -1;
-        const studyGroupHasMeeting = NOT_FOUND_INDEX !== StudyGroupMeetingIds.indexOf(meetingId);
-
-        if (!studyGroupHasMeeting) {
-            return response.json({ message: ResponseMessages.StudyGroup.MeetingNotFound});
         }
 
         // Delete the meeting
