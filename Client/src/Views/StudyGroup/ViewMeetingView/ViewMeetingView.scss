@@ -1,15 +1,42 @@
-.next-meeting {
-    padding: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px black solid;
+h1 {
+    font-size: 25px;
+    font-weight: 900;
 }
-.recurring-schedule {
-    padding: 20px;
-    margin-bottom: 20px;
-    border-bottom: 1px black solid;
+
+.meeting-container {
+    .meeting {
+        display: flex;
+        justify-content: space-between;
+        span {
+            font-weight: 900;
+        }
+        p {
+            padding: 10px 0px 10px 0;
+        }
+        .meeting-time {
+            padding: 10px 0px 10px 0;
+        }
+        .meeting-details {
+            padding: 10px 0px 10px 0;
+        }
+    }
+    margin: 20px 40px 40px 40px;
+    border-bottom: solid rgba(0, 0, 0, 0.315) 0.5px;
 }
-.one-time-meetings {
-    padding: 5px;
-    margin-bottom: 2px;
-    border-bottom: 1px black solid;
+.one-time-meetings-container {
+    margin: 20px 40px 40px 40px;
+    .one-time-meeting-container {
+        display: flex;
+        align-items: center;
+        border-bottom: solid rgba(0, 0, 0, 0.315) 0.5px;
+    }
+    .one-time-meeting {
+        flex: 1;
+        padding: 10px;
+        margin: 10px;
+        span {
+            font-weight: 900;
+            padding-right: 20px;
+        }
+    }
 }
