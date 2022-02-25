@@ -1,9 +1,8 @@
-h1 {
-    font-size: 25px;
-    font-weight: 900;
-}
-
 .meeting-container {
+    h1 {
+        font-size: 25px;
+        font-weight: 900;
+    }
     .meeting {
         display: flex;
         justify-content: space-between;
@@ -24,6 +23,10 @@ h1 {
     border-bottom: solid rgba(0, 0, 0, 0.315) 0.5px;
 }
 .one-time-meetings-container {
+    h1 {
+        font-size: 25px;
+        font-weight: 900;
+    }
     margin: 20px 40px 40px 40px;
     .one-time-meeting-container {
         display: flex;

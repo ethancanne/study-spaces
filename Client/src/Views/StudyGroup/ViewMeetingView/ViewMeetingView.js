@@ -45,16 +45,17 @@ const ViewMeetingView = ({ group }) => {
         dispatch(
             showConfirmationPopup(
                 async (confirmed) => {
-                    await sendDeleteRequest(
-                        Routes.StudyGroup.DeleteMeeting,
-                        { studyGroupId: group._id },
-                        ResponseMessages.StudyGroup.SuccessMeetingDeleted,
-                        null,
-                        true,
-                        (data, error) => {
-                            if (error) return;
-                        }
-                    );
+                    if (confirmed)
+                        await sendDeleteRequest(
+                            Routes.StudyGroup.DeleteMeeting,
+                            { studyGroupId: group._id },
+                            ResponseMessages.StudyGroup.SuccessMeetingDeleted,
+                            null,
+                            true,
+                            (data, error) => {
+                                if (error) return;
+                            }
+                        );
                 },
                 "Confirm Deletion",
                 "Are you sure you want to delete the meeting?"
