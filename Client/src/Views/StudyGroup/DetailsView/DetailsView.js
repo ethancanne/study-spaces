@@ -40,6 +40,21 @@ const DetailsView = ({ group }) => {
                 }
             );
     };
+    const submitLeave = async (confirmed) => {
+        if (confirmed)
+            console.log("confirmed")
+            await sendLeaveRequest(
+                Routes.StudyGroup.LeaveStudyGroup,
+                { studyGroupId: group._id },
+                ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
+                null,
+                true,
+                (data, error) => {
+                    if (error) return;
+                    history.push("/");
+                }
+            );
+    };
     return (
         <div className="details-container">
             <div className="meetinginfo-container">
@@ -75,6 +90,23 @@ const DetailsView = ({ group }) => {
                         Delete
                     </Button>
                 </div>
+            )}
+            {group.owner && group.owner._id !== user._id &&(
+                <div className="buttons">
+                    <Button
+                        onClick={() =>
+                           dispatch(
+                               showConfirmationPopup(
+                                   submitLeave,
+                                 "Confirm Leave",
+                                  "Are you sure you want to leave the study group: " + group.name + "?"
+                            )
+                        )
+                    }
+                >
+                    Leave
+                </Button>
+            </div>
             )}
         </div>
     );
