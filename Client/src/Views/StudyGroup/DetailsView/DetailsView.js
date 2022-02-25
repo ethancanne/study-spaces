@@ -8,7 +8,7 @@ import {
     showConfirmationPopup,
     showViewMeetingsStudyGroupPopup
 } from "../../../state/actions";
-import { sendDeleteRequest } from "../../../../Helper";
+import { getNextMeeting, sendDeleteRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 
@@ -50,10 +50,10 @@ const DetailsView = ({ group }) => {
                 <h1>Next Meeting</h1>
                 <div className="meetinginfo-description">
                     <p>
-                        Date: <strong>{group.recurringMeeting && group.recurringMeeting.date}</strong>
+                        Date: <strong>{group && getNextMeeting(group).date}</strong>
                     </p>
                     <p>
-                        Time: <strong>{group.recurringMeeting && group.recurringMeeting.time}</strong>
+                        Time: <strong>{group && getNextMeeting(group).time}</strong>
                     </p>
                 </div>
             </div>

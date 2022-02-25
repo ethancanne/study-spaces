@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { Days, MeetingFrequencies } from "../../../../../Server/Models/Time";
+import { getNextMeeting } from "../../../../Helper";
 import "./ViewMeetingView.scss";
 
 /**
@@ -9,29 +12,74 @@ import "./ViewMeetingView.scss";
  * @date   02/23/2022
  */
 const ViewMeetingView = ({ group }) => {
-    const getNextMeeting = () => {
-        var nextMeeting;
-        group.meetings.sort(function (a, b) {
-            return new Date(b.date) - new Date(a.date);
-        });
+    const [nextMeeting, setNextMeeting] = useState("All Clear!");
 
-        return new Date(group.meetings[0].date) < Date.now() &&
-            new Date(group.meetings[0].date) < new Date(group.recurringMeeting.date)
-            ? group.meetings[0]
-            : group.recurringMeeting;
+    useEffect(() => {
+        setNextMeeting(getNextMeeting(group));
+    }, []);
+
+    const getRecurringMeetingJSX = () => {
+        if (group.recurringMeeting) {
+            if (group.recurringMeeting.frequency === MeetingFrequencies.Daily)
+                return (
+                    <div>
+                        <p>Every day at {group.recurringMeeting.time}</p>
+                    </div>
+                );
+
+            if (group.recurringMeeting.frequency === MeetingFrequencies.Weekly)
+                return (
+                    <div>
+                        <p>Every {group.recurringMeeting && group.recurringMeeting.day}</p>
+                        <p>At {group.recurringMeeting && group.recurringMeeting.time}</p>
+                    </div>
+                );
+
+            if (group.recurringMeeting.frequency === MeetingFrequencies.Monthly)
+                return (
+                    <div>
+                        <p>
+                            On {group.recurringMeeting && new Date(group.recurringMeeting.date).getDate()} of every
+                            month
+                        </p>
+                        <p>At {group.recurringMeeting && group.recurringMeeting.time}</p>
+                    </div>
+                );
+
+            if (group.recurringMeeting.frequency === MeetingFrequencies.Yearly)
+                return (
+                    <div>
+                        <p>
+                            On {group.recurringMeeting && new Date(group.recurringMeeting.date).getDate()} of{" "}
+                            {new Date(group.recurringMeeting.date).getMonth()}
+                        </p>
+                        <p>At {group.recurringMeeting && group.recurringMeeting.time}</p>
+                    </div>
+                );
+        }
     };
 
     return (
         <div>
             <div className="next-meeting">
-                <p> Next Meeting: {getNextMeeting().date.toString()}</p>
+                <h1> Next Meeting: </h1>
+                <p>{nextMeeting.date}</p>
+                <p>{nextMeeting.time}</p>
+                <p>{nextMeeting.details}</p>
+                <p>{nextMeeting.location}</p>
+                <p>{nextMeeting.roomNumber}</p>
             </div>
-            <div className="recurring-meeting">
-                <p> Recurring Meeting:{group.recurringMeeting && group.recurringMeeting.date}</p>
+            <div className="recurring-schedule">
+                <h1>Recurring Schedule:</h1>
+                {getRecurringMeetingJSX()}
             </div>
-            <div className="one-time-meeting">
+            <div className="one-time-meetings">
+                <h1>One-time Meetings</h1>
                 {group.meetings.map((meeting) => (
-                    <p>One-time:{meeting.date}</p>
+                    <div>
+                        <p>One-time:{meeting.date}</p>
+                        <p>At {meeting.time}</p>
+                    </div>
                 ))}
             </div>
         </div>
