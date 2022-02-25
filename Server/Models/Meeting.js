@@ -185,12 +185,11 @@ class Meeting {
      * @author Clifton Croom
      * @date 02/23/22
      * @async
-     * 
+     *
      */
     async delete() {
         let meetingModel = await MeetingModel.findOne({ _id: this._id }).exec();
         let meetingDeleted = false;
-        console.log(meetingDeleted);
         try {
             await meetingModel.remove();
         } catch (error) {
@@ -199,7 +198,6 @@ class Meeting {
             return meetingDeleted;
         }
         meetingDeleted = true;
-        console.log(meetingDeleted);
         return meetingDeleted;
     }
 
