@@ -26,6 +26,9 @@ const popupReducer = (state = { view: "", isShowing: false, payload: {} }, actio
         case popupConstants.SHOW_VIEW_POST_STUDY_GROUP_POPUP:
             return { ...state, view: views.Popup.StudyGroup.ViewPost, isShowing: true, payload: action.payload };
 
+        case popupConstants.SHOW_VIEW_MEETINGS_STUDY_GROUP_POPUP:
+            return { ...state, view: views.Popup.StudyGroup.ViewMeetings, isShowing: true, payload: action.payload };
+
         case popupConstants.SHOW_INPUT_POPUP:
             return { ...state, view: views.Popup.Input, isShowing: true, payload: action.payload };
 

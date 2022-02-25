@@ -52,7 +52,7 @@ const MeetingSchema = new Schema({
     },
     day: {
         type: String,
-        required: true
+        required: false
     },
     details: {
         type: String,
@@ -154,9 +154,9 @@ class Meeting {
      * @date   02/21/2022
      */
     static async createOneTime(date, time, day, details, location, roomNumber) {
-        date = new Date(date);
+        const newDate = new Date(date);
         if (!Validator.isDefined(day)) {
-            day = Object.keys(Days)[date.getDay()];
+            day = Object.keys(Days)[newDate.getDay()];
         }
         // CREATE MEETING IN THE DATABASE.
         const meetingModel = new MeetingModel({

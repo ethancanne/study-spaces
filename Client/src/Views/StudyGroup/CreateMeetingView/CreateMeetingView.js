@@ -16,7 +16,9 @@ import { useHistory } from "react-router";
 const CreateMeetingView = ({ group, isRecurringMeeting }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const [date, setDate] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.date : "");
+    const [date, setDate] = useState(
+        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.date.replace("/", "-") : ""
+    );
     const [time, setTime] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.time : "");
     const [frequency, setFrequency] = useState(
         isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.frequency : ""
@@ -45,8 +47,8 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
             sendPostRequest(
                 Routes.StudyGroup.SetRecurringMeeting,
                 {
-                    day: "I don't think we need attribute...",
-                    date,
+                    day: new Date(date).getDay(),
+                    date: date.replace(/-/g, "/"),
                     time,
                     frequency,
                     details,
@@ -67,8 +69,8 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
             sendPostRequest(
                 Routes.StudyGroup.AddOneTimeMeeting,
                 {
-                    day: "I don't think we need attribute...",
-                    date,
+                    day: new Date(date).getDay(),
+                    date: date.replace(/-/g, "/"),
                     time,
                     details,
                     location,

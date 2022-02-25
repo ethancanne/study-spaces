@@ -73,6 +73,13 @@ export const showViewPostStudyGroupPopup = (post) => {
     };
 };
 
+export const showViewMeetingsStudyGroupPopup = (group) => {
+    return {
+        type: popupConstants.SHOW_VIEW_MEETINGS_STUDY_GROUP_POPUP,
+        payload: group
+    };
+};
+
 export const showInputPopup = (title, label, defaultInput, callback, label2) => {
     return {
         type: popupConstants.SHOW_INPUT_POPUP,

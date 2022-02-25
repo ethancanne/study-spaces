@@ -13,7 +13,7 @@ const Dropdown = (props) => {
         console.log(props.options);
     }, []);
     return (
-        <select className="dropdown" onChange={props.onChange}>
+        <select className="dropdown" onChange={props.onChange} value={props.value}>
             {props.options.map((option) => (
                 <option value={option}>{option}</option>
             ))}
