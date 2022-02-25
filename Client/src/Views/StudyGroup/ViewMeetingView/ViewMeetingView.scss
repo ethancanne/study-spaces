@@ -5,7 +5,8 @@
     }
     .meeting {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
+        align-items: start;
         span {
             font-weight: 900;
         }
@@ -14,9 +15,11 @@
         }
         .meeting-time {
             padding: 10px 0px 10px 0;
+            flex: 0.5;
         }
         .meeting-details {
             padding: 10px 0px 10px 0;
+            flex: 0.5;
         }
     }
     margin: 20px 40px 40px 40px;
@@ -35,8 +38,8 @@
     }
     .one-time-meeting {
         flex: 1;
-        padding: 10px;
-        margin: 10px;
+        padding: 10px 0 10px 0;
+        margin: 10px 0 10px 0;
         span {
             font-weight: 900;
             padding-right: 20px;

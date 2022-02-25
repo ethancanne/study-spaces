@@ -48,7 +48,7 @@ const ViewMeetingView = ({ group }) => {
                     if (confirmed)
                         await sendDeleteRequest(
                             Routes.StudyGroup.DeleteMeeting,
-                            { studyGroupId: group._id },
+                            { studyGroupId: group._id, meetingId },
                             ResponseMessages.StudyGroup.SuccessMeetingDeleted,
                             null,
                             true,

@@ -45,19 +45,18 @@ const DetailsView = ({ group }) => {
             );
     };
     const submitLeave = async (confirmed) => {
-        if (confirmed)
-            console.log("confirmed")
-            await sendLeaveRequest(
-                Routes.StudyGroup.LeaveStudyGroup,
-                { studyGroupId: group._id },
-                ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
-                null,
-                true,
-                (data, error) => {
-                    if (error) return;
-                    history.push("/");
-                }
-            );
+        if (confirmed) console.log("confirmed");
+        await sendLeaveRequest(
+            Routes.StudyGroup.LeaveStudyGroup,
+            { studyGroupId: group._id },
+            ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                history.push("/");
+            }
+        );
     };
     return (
         <div className="details-container">
@@ -77,41 +76,43 @@ const DetailsView = ({ group }) => {
                 <p className="details-description">{group.description}</p>
             </div>
 
-            {group.owner && group.owner._id === user._id && (
-                <div className="buttons">
-                    <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>
-                    <Button
-                        onClick={() =>
-                            dispatch(
-                                showConfirmationPopup(
-                                    submitDelete,
-                                    "Confirm Deletion",
-                                    "Are you sure you want to delete the study group: " + group.name + "?"
+            <div className="buttons">
+                {group.owner && group.owner._id === user._id && (
+                    <>
+                        <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>
+                        <Button
+                            onClick={() =>
+                                dispatch(
+                                    showConfirmationPopup(
+                                        submitDelete,
+                                        "Confirm Deletion",
+                                        "Are you sure you want to delete the study group: " + group.name + "?"
+                                    )
                                 )
-                            )
-                        }
-                    >
-                        Delete
-                    </Button>
-                </div>
-            )}
-            {group.owner && group.owner._id !== user._id &&(
-                <div className="buttons">
-                    <Button
-                        onClick={() =>
-                           dispatch(
-                               showConfirmationPopup(
-                                   submitLeave,
-                                 "Confirm Leave",
-                                  "Are you sure you want to leave the study group: " + group.name + "?"
-                            )
-                        )
-                    }
-                >
-                    Leave
-                </Button>
+                            }
+                        >
+                            Delete
+                        </Button>
+                    </>
+                )}
+                {group.owner && group.owner._id !== user._id && (
+                    <>
+                        <Button
+                            onClick={() =>
+                                dispatch(
+                                    showConfirmationPopup(
+                                        submitLeave,
+                                        "Confirm Leave",
+                                        "Are you sure you want to leave the study group: " + group.name + "?"
+                                    )
+                                )
+                            }
+                        >
+                            Leave Group
+                        </Button>
+                    </>
+                )}
             </div>
-            )}
         </div>
     );
 };
