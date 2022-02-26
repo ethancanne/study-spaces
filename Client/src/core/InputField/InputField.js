@@ -7,7 +7,7 @@ import "../core.scss";
  */
 const InputField = (props) => {
     return (
-        <fieldset className="InputField" {...props}>
+        <fieldset className="InputField" style={props.style} {...props}>
             {props.children}
         </fieldset>
     );

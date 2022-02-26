@@ -142,30 +142,28 @@ export const sendDeleteRequest = async (
         store.dispatch(startLoading());
         response = await axios.delete(route, { data });
     } catch (e) {
-        console.log(e);
+        callback(null, "There was a problem connecting to the server: " + e);
         shouldShowNotification &&
             store.dispatch(
                 showErrorNotification(catchMessage || "Cannot connect to the server, please try again later.")
             );
-        callback(null, "There was a problem connecting to the server: " + e);
     } finally {
         store.dispatch(stopLoading());
 
         const responseIsDefined = Validator.isDefined(response.data);
         if (responseIsDefined) {
             const requestWasValid = successResponseMessage === response.data.message;
-
             if (requestWasValid) {
-                shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
+                shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
             } else {
+                callback(null, response.data.message);
                 shouldShowNotification &&
                     store.dispatch(showErrorNotification("There was an error: " + response.data.message));
-                callback(null, response.data.message);
             }
         } else {
-            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
             callback(null, "There was an error, the server sent undefined results");
+            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
         }
     }
 };

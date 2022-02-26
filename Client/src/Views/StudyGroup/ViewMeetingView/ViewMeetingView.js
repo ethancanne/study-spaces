@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { showConfirmationPopup, showViewMeetingsStudyGroupPopup } from "../../../state/actions";
 import { Days, MeetingFrequencies } from "../../../../../Server/Models/Time";
 import { getNextMeeting, sendDeleteRequest } from "../../../../Helper";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import Button from "../../../core/Button/Button";
 import "./ViewMeetingView.scss";
 import Routes from "../../../../../Server/Routes/Routes";
@@ -20,6 +22,7 @@ const ViewMeetingView = ({ group }) => {
     const [nextMeeting, setNextMeeting] = useState("All Clear!");
     const user = useSelector((state) => state.authReducer.user);
     const dispatch = useDispatch();
+    const history = useHistory();
 
     useEffect(() => {
         setNextMeeting(getNextMeeting(group));
@@ -41,7 +44,6 @@ const ViewMeetingView = ({ group }) => {
     };
 
     const submitDeleteOneTimeMeeting = (meetingId) => {
-        console.log("PUSSHHHHSHS");
         dispatch(
             showConfirmationPopup(
                 async (confirmed) => {
@@ -49,25 +51,29 @@ const ViewMeetingView = ({ group }) => {
                         await sendDeleteRequest(
                             Routes.StudyGroup.DeleteMeeting,
                             { studyGroupId: group._id, meetingId },
-                            ResponseMessages.StudyGroup.SuccessMeetingDeleted,
+                            ResponseMessages.StudyGroup.SuccessDeleteMeeting,
                             null,
                             true,
                             (data, error) => {
                                 if (error) return;
+                                history.push(0);
                             }
                         );
+                    else dispatch(showViewMeetingsStudyGroupPopup(group));
                 },
                 "Confirm Deletion",
                 "Are you sure you want to delete the meeting?"
             )
         );
-
-        // dispatch(showViewMeetingsStudyGroupPopup(group));
     };
 
     return (
         <div>
-            <div className="meeting-container">
+            <div className="view-meeting-top">
+                <EventNoteIcon className="top-icon" style={{ color: group.groupColor }} />
+                <h1 style={{ backgroundColor: group.groupColor }}>Meeting Schedule for {group.name}</h1>
+            </div>
+            <div className="meeting-container next-meeting-container">
                 <h1>Next Meeting:</h1>
 
                 <div className="meeting">
@@ -92,6 +98,7 @@ const ViewMeetingView = ({ group }) => {
                     </div>
                 </div>
             </div>
+            <hr />
             {group.recurringMeeting && (
                 <div className="meeting-container">
                     <h1>Recurring Schedule:</h1>
@@ -119,8 +126,9 @@ const ViewMeetingView = ({ group }) => {
                     </div>
                 </div>
             )}
+            <hr />
             <div className="one-time-meetings-container">
-                <h1>One-time Meetings</h1>
+                <h1>One-time Meetings:</h1>
 
                 {group.owner &&
                     group.owner._id === user._id &&

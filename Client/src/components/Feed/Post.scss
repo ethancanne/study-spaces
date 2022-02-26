@@ -4,13 +4,25 @@
     width: 100%;
     cursor: pointer;
 
-    .post-creator {
-        width: 50px;
-        height: 50px;
-        border-radius: 27px;
-        object-fit: cover;
-        border: $border-color 4px solid;
+    .post-top {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        h1 {
+            font-size: 18px;
+            background-color: black;
+            padding: 5px;
+            color: white;
+        }
+        .top-icon {
+            font-size: 30px;
+            width: 30px;
+            margin-right: 10px;
+        }
+        padding-bottom: 20px;
+    }
 
+    .post-creator {
         position: absolute;
         bottom: 60px;
         right: 20px;
@@ -26,13 +38,6 @@
         display: flex;
         flex-direction: column;
 
-        .post-type {
-            background-color: $highlight-color;
-            padding: 5px;
-            margin: 10px;
-            width: 170px;
-            font-size: 20px;
-        }
         .post-title {
             font-size: 25px;
             padding: 10px;
@@ -40,6 +45,15 @@
         .post-body {
             padding: 5px 10px 10px 10px;
             color: rgb(38, 38, 38);
+        }
+        .post-response-count {
+            font-size: 10px;
+            text-align: right;
+            padding-right: 20px;
+
+            span {
+                font-weight: 900;
+            }
         }
     }
     .post-metainfo {

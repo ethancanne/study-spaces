@@ -25,7 +25,7 @@ import ViewMeetingView from "../StudyGroup/ViewMeetingView/ViewMeetingView";
  * @date   11/25/2021
  */
 const Popup = (props) => {
-    const { view, payload } = useSelector((state) => state.popupReducer);
+    const { view, payload, showTop } = useSelector((state) => state.popupReducer);
     const isLoading = useSelector((state) => state.notificationReducer.loading);
 
     const dispatch = useDispatch();
@@ -91,15 +91,22 @@ const Popup = (props) => {
                 onClick={() => dispatch(closePopup())}
             ></div>
             <div className={"popup " + (props.isShowing ? "active" : "")}>
-                <div className="popup-top">
-                    <h1>{payload.title || view}</h1>
-                    <button onClick={() => dispatch(closePopup())}>X</button>
-                </div>
+                {showTop && (
+                    <div className="popup-top">
+                        <h1>{payload.title || view}</h1>
+                    </div>
+                )}
 
                 {isLoading ? (
                     <Loading />
                 ) : (
-                    <div className="popup-body">{!props.children ? popupView : props.children}</div>
+                    <div className="popup-body">
+                        <button id="popup-close-button" onClick={() => dispatch(closePopup())}>
+                            X
+                        </button>
+
+                        {!props.children ? popupView : props.children}
+                    </div>
                 )}
             </div>
         </div>
