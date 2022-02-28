@@ -24,18 +24,21 @@ const FeedView = ({ group }) => {
                 {[
                     {
                         title: "Congratulations!",
-                        body: "You successfully created your group: " + group.name,
-                        creator: "Study Spaces Robot",
+                        message: "You successfully created your group: " + group.name,
+                        creator: { name: "Study Spaces Robot", profilePicture: "" },
                         date: new Date(),
-                        type: PostTypes.Announcement
+                        type: PostTypes.Announcement,
+                        responses: [{ message: "Hi", profilePicture: "" }]
                     }
                 ].map((post) => (
                     <Post
                         title={post.title}
-                        body={post.body}
+                        message={post.message}
                         creator={post.creator}
                         dateCreated={post.date}
                         type={post.type}
+                        color={group.groupColor}
+                        responses={post.responses}
                     />
                 ))}
             </div>

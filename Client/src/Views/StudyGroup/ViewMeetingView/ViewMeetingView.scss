@@ -1,7 +1,35 @@
+.view-meeting-top {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    h1 {
+        font-size: 18px;
+        background-color: black;
+        padding: 5px;
+        color: white;
+    }
+    .top-icon {
+        font-size: 30px;
+        width: 30px;
+        margin-right: 10px;
+    }
+}
+
+hr {
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 0.5px;
+    background-color: rgba(0, 0, 0, 0.283);
+    border: none;
+}
 .meeting-container {
+    &.next-meeting-container {
+        background-color: rgba(0, 0, 0, 0.036);
+        padding: 20px;
+    }
     h1 {
         font-size: 25px;
-        font-weight: 900;
+        font-weight: 100;
     }
     .meeting {
         display: flex;
@@ -11,7 +39,7 @@
             font-weight: 900;
         }
         p {
-            padding: 10px 0px 10px 0;
+            padding: 2px 0px 2px 0;
         }
         .meeting-time {
             padding: 10px 0px 10px 0;
@@ -22,19 +50,18 @@
             flex: 0.5;
         }
     }
-    margin: 20px 40px 40px 40px;
-    border-bottom: solid rgba(0, 0, 0, 0.315) 0.5px;
+    margin: 40px 40px 40px 40px;
 }
 .one-time-meetings-container {
     h1 {
         font-size: 25px;
-        font-weight: 900;
+        font-weight: 100;
     }
-    margin: 20px 40px 40px 40px;
+    margin: 40px 40px 40px 40px;
     .one-time-meeting-container {
         display: flex;
         align-items: center;
-        border-bottom: solid rgba(0, 0, 0, 0.315) 0.5px;
+        border-bottom: solid rgba(0, 0, 0, 0.144) 0.5px;
     }
     .one-time-meeting {
         flex: 1;
