@@ -142,8 +142,9 @@ class Authenticator {
                 html: "<h1>" + body + "</h1>" // html body
             });
             return true;
-        } catch {
+        } catch (error) {
             Log.write("Sending email failed.");
+            Log.writeError(error);
             return false;
         }
     }
