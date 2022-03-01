@@ -176,6 +176,29 @@ class StudyGroup {
         return memberWasAdded;
     }
 
+        /**
+     * Removes a member from the study group.
+     * @param {User} The member to remove from the group.
+     * @return {Boolean} True if the member was removed, false otherwise.
+     * @author Stacey Popenfoose
+     * @date 03/01/2022
+     * @async
+     */
+         async removeMember(studyGroupMember) {
+            // ADD THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
+            this.members.pop(studyGroupMember.getId());
+    
+            // SAVE THE CHANGE.
+            let memberWasRemoved = true;
+            try {
+                await this.save();
+            } catch (error) {
+                memberWasRemoved = false;
+                Log.writeError(error);
+            }
+            return memberWasRemoved;
+        }
+
     /**
      * Creates a study group.
      * @param {String} name The study group name.
