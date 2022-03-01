@@ -12,6 +12,7 @@ const ResponseMessages = {
         ErrorInvalidPasswordInput: "The passwords provided were invalid.",
         ErrorSendingEmail: "There was an error sending your verification email.",
         ErrorSettingToken: "There was an error setting the verification token",
+        ErrorUploadProfilePicture: "The file type selected is not supported.",
         EmailSent: "Verification email sent.",
         NotOver18: "You need to be 18 or older to create an account.",
         IncorrectPassword: "The password provided is incorrect.",
