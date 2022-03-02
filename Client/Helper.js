@@ -169,6 +169,61 @@ export const sendDeleteRequest = async (
 };
 
 /**
+ * Submits a general leave request to the server.
+ * @param {String} route The route of which to send the request
+ * @param {Object} data The data to be sent to the server
+ * @param {String} successResponseMessage The message to indicate a successful request
+ * @param {String} catchMessage If the catch statement runs, a notification will be shown with this message
+ * @param {Boolean} isAuthenticated True if this route requires authentication
+ * @param {Function} callback the function that gets called on error or success and returns (data, error)
+ * @author Stacey Popenfoose
+ * @date   3/02/2022
+ * @async
+ */
+ export const sendLeaveRequest = async (
+    route,
+    data,
+    successResponseMessage,
+    catchMessage,
+    isAuthenticated,
+    callback = () => {},
+    shouldShowNotification = true
+) => {
+    let response;
+    console.log("bees")
+    try {
+        if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+        store.dispatch(startLoading());
+        response = await axios.post(route, { data });
+    } catch (e) {
+        callback(null, "There was a problem connecting to the server: " + e);
+        shouldShowNotification &&
+            store.dispatch(
+                showErrorNotification(catchMessage || "Cannot connect to the server, please try again later.")
+            );
+    } finally {
+        store.dispatch(stopLoading());
+
+        const responseIsDefined = Validator.isDefined(response.data);
+        if (responseIsDefined) {
+            const requestWasValid = successResponseMessage === response.data.message;
+            if (requestWasValid) {
+                callback(response.data);
+                shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
+            } else {
+                callback(null, response.data.message);
+                shouldShowNotification &&
+                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+            }
+        } else {
+            callback(null, "There was an error, the server sent undefined results");
+            store.dispatch(showErrorNotification("There was an error, the server sent undefined results"));
+        }
+    }
+};
+
+/**
  * Submits a general delete request to the server.
  * @param {String} route The route of which to send the request
  * @param {Object} formData The formData to be sent to the server

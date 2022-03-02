@@ -8,7 +8,7 @@ import {
     showConfirmationPopup,
     showViewMeetingsStudyGroupPopup
 } from "../../../state/actions";
-import { getNextMeeting, sendDeleteRequest } from "../../../../Helper";
+import { getNextMeeting, sendDeleteRequest, sendLeaveRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 
