@@ -45,18 +45,19 @@ const DetailsView = ({ group }) => {
             );
     };
     const submitLeave = async (confirmed) => {
-        if (confirmed) console.log("confirmed");
-        await sendLeaveRequest(
-            Routes.StudyGroup.LeaveStudyGroup,
-            { studyGroupId: group._id },
-            ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
-            null,
-            true,
-            (data, error) => {
-                if (error) return;
-                history.push("/");
-            }
-        );
+        if (confirmed) {
+            await sendLeaveRequest(
+                Routes.StudyGroup.LeaveStudyGroup,
+                { studyGroupId: group._id },
+                ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
+                null,
+                true,
+                (data, error) => {
+                    if (error) return;
+                    history.push("/");
+                }
+            );
+        }
     };
     return (
         <div className="details-container">
