@@ -185,9 +185,10 @@ class StudyGroup {
      * @async
      */
          async removeMember(studyGroupMember) {
-            // ADD THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
+            // Remove THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
+            console.log(studyGroupMember.name);
             this.members.pop(studyGroupMember.getId());
-    
+            
             // SAVE THE CHANGE.
             let memberWasRemoved = true;
             try {
@@ -684,14 +685,7 @@ class StudyGroup {
         //!!!!!
     }
 
-    /**
-     * Removes a member from the study group.
-     * @param {User} member The member to remove from the group.
-     * @return {Boolean} True if the member was removed, false otherwise.
-     *
-     * @async
-     */
-    async removeMember(member) {}
+
 
     /**
      * This saves the associated user document in the database with the current properties

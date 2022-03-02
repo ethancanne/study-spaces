@@ -69,6 +69,10 @@ class StudyGroupRouter {
         );
         // This is used to join a study group.
         server.post(Routes.StudyGroup.JoinStudyGroup, authenticator.protectRoute(), StudyGroupRouter.joinStudyGroup);
+
+        //This is used to leave a study group.
+        server.post(Routes.StudyGroup.LeaveStudyGroup, authenticator.protectRoute(), StudyGroupRouter.leaveStudyGroup);
+
         // Used to set recurring meetings.
         server.post(
             Routes.StudyGroup.SetRecurringMeeting,
@@ -653,6 +657,69 @@ class StudyGroupRouter {
         // SEND THE RESPONSE.
         // If execution reaches this point then the user has successfully been added to the study group.
         return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupJoined });
+    }
+
+    /**
+     * Allows a user to leave a study group.
+     * @author Clifton Croom
+     * @date   03/02/2022
+     * @async
+     * @static
+     */
+     static async leaveStudyGroup(request, response) {
+        // GET THE USER LEAVING THE GROUP.
+        const user = request.user;
+
+        // GET THE STUDY GROUP BEING JOINED.
+        let studyGroup = undefined;
+        try {
+            studyGroup = await StudyGroup.getById(request.body.studyGroupId);
+        } catch (error) {
+            Log.write("An error occurred while attempting to join a study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+        }
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
+        if (studyGroupWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorLeaveStudyGroup });
+        }
+
+        //Do I need to check if they are the owner?
+
+        
+        // REMOVE THE USER TO THE STUDY GROUP.
+
+        console.log(user.name);
+        
+        let userWasRemoved = false;
+        try {
+            userWasRemoved = await studyGroup.removeMember(user);
+            console.log(userWasRemoved);
+        } catch (error) {
+            Log.write("An error occurred while attempting to remove a user from a study group.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+        }
+        if (!userWasRemoved) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorRemoveUser });
+        }
+
+        // REMOVE THE STUDY GROUP TO THE USER.
+        let studyGroupWasRemoved = false;
+        try {
+            studyGroupWasRemoved = await user.removeStudyGroup(studyGroup);
+        } catch (error) {
+            Log.write("An error ocurred while attempting to remove a study group from a user.");
+            Log.writeError(error);
+            response.status(ResponseCodes.Error);
+        }
+        if (!studyGroupWasRemoved) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorRemoveStudyGroup });
+        }
+        
+
+        // SEND THE SUCCESS MESSAGE
+        return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupLeft });
     }
 
     /**
