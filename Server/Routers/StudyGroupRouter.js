@@ -669,23 +669,22 @@ class StudyGroupRouter {
      static async leaveStudyGroup(request, response) {
         // GET THE USER LEAVING THE GROUP.
         const user = request.user;
+        console.log(request.body.studyGroupId);
 
-        // GET THE STUDY GROUP BEING JOINED.
+        // GET THE STUDY GROUP BEING LEFT.
         let studyGroup = undefined;
         try {
             studyGroup = await StudyGroup.getById(request.body.studyGroupId);
         } catch (error) {
-            Log.write("An error occurred while attempting to join a study group.");
+            Log.write("An error occurred while attempting to leave a study group.");
             Log.writeError(error);
             response.status(ResponseCodes.Error);
         }
+
         const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
         if (studyGroupWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorLeaveStudyGroup });
         }
-
-        //Do I need to check if they are the owner?
-
         
         // REMOVE THE USER TO THE STUDY GROUP.
 
