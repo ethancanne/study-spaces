@@ -669,7 +669,7 @@ class StudyGroupRouter {
      static async leaveStudyGroup(request, response) {
         // GET THE USER LEAVING THE GROUP.
         const user = request.user;
-        console.log(request.body.studyGroupId);
+
 
         // GET THE STUDY GROUP BEING LEFT.
         let studyGroup = undefined;
@@ -685,11 +685,8 @@ class StudyGroupRouter {
         if (studyGroupWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorLeaveStudyGroup });
         }
-        
-        // REMOVE THE USER TO THE STUDY GROUP.
 
-        console.log(user.name);
-        
+        // REMOVE THE USER TO THE STUDY GROUP.
         let userWasRemoved = false;
         try {
             userWasRemoved = await studyGroup.removeMember(user);
@@ -715,7 +712,7 @@ class StudyGroupRouter {
         if (!studyGroupWasRemoved) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorRemoveStudyGroup });
         }
-        
+
 
         // SEND THE SUCCESS MESSAGE
         return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupLeft });

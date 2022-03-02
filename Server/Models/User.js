@@ -127,7 +127,9 @@ class User {
      */
      async removeStudyGroup(studyGroup) {
         // REMOVE THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
-        this.studyGroups.pop(studyGroup.getId());
+        const studyGroups = this.studyGroups.map((studyGroupId) => String(studyGroupId));
+        const studyGroupIndex = studyGroups.indexOf(String(studyGroup.getId()));
+        this.studyGroups.splice(studyGroupIndex, 1);
 
         // SAVE THE CHANGE.
         let studyGroupWasRemoved = true;

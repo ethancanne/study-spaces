@@ -186,9 +186,10 @@ class StudyGroup {
      */
          async removeMember(studyGroupMember) {
             // Remove THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
-            console.log(studyGroupMember.name);
-            this.members.pop(studyGroupMember.getId());
-            
+            const members = this.members.map((memberId) => String(memberId));
+            const memberIndex = members.indexOf(String(studyGroupMember.getId()));
+            this.members.splice(memberIndex, 1);
+
             // SAVE THE CHANGE.
             let memberWasRemoved = true;
             try {
