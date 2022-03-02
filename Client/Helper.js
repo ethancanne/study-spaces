@@ -182,7 +182,7 @@ export const sendDeleteRequest = async (
  */
  export const sendLeaveRequest = async (
     route,
-    data,
+    studyGroupId,
     successResponseMessage,
     catchMessage,
     isAuthenticated,
@@ -195,7 +195,7 @@ export const sendDeleteRequest = async (
         if (isAuthenticated) axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
         store.dispatch(startLoading());
-        response = await axios.post(route, { data });
+        response = await axios.post(route, { studyGroupId });
     } catch (e) {
         callback(null, "There was a problem connecting to the server: " + e);
         shouldShowNotification &&

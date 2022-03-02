@@ -34,7 +34,7 @@ const DetailsView = ({ group }) => {
         if (confirmed)
             await sendDeleteRequest(
                 Routes.StudyGroup.DeleteStudyGroup,
-                { studyGroupId: group._id },
+                group._id ,
                 ResponseMessages.StudyGroup.SuccessStudyGroupDeleted,
                 null,
                 true,
