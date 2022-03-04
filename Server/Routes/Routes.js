@@ -23,6 +23,7 @@ const Routes = {
     },
     StudyGroup: {
         AddOneTimeMeeting: "/api/study-group/add-one-time-meeting",
+        CreatePost: "/api/study-group/create-post",
         CreateStudyGroup: "/api/study-group/create",
         DeleteMeeting: "/api/study-group/delete-meeting",
         DeleteStudyGroup: "/api/study-group/delete",
