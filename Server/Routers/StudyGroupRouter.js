@@ -126,6 +126,24 @@ class StudyGroupRouter {
     }
 
     /**
+    * @param {String} request.body.---
+    * @author Cameron Burkholder
+    * @date   03/04/2022
+    */
+    static async createPost(request, response) {
+        // GET THE STUDY GROUP.
+
+        // CHECK THAT THE USER IS IN THE STUDY GROUP.
+
+        // GET THE STUDY GROUP'S FEED.
+
+        // CREATE THE POST.
+
+        // GET THE UPDATED FEED.
+
+    }
+
+    /**
      * @param {String} request.body.meetingId
      * @param {String} request.body.studyGroupId
      * @author Clif Croom

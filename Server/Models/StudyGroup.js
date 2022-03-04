@@ -184,22 +184,22 @@ class StudyGroup {
      * @date 03/01/2022
      * @async
      */
-         async removeMember(studyGroupMember) {
-            // Remove THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
-            const members = this.members.map((memberId) => String(memberId));
-            const memberIndex = members.indexOf(String(studyGroupMember.getId()));
-            this.members.splice(memberIndex, 1);
+     async removeMember(studyGroupMember) {
+        // Remove THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
+        const members = this.members.map((memberId) => String(memberId));
+        const memberIndex = members.indexOf(String(studyGroupMember.getId()));
+        this.members.splice(memberIndex, 1);
 
-            // SAVE THE CHANGE.
-            let memberWasRemoved = true;
-            try {
-                await this.save();
-            } catch (error) {
-                memberWasRemoved = false;
-                Log.writeError(error);
-            }
-            return memberWasRemoved;
+        // SAVE THE CHANGE.
+        let memberWasRemoved = true;
+        try {
+            await this.save();
+        } catch (error) {
+            memberWasRemoved = false;
+            Log.writeError(error);
         }
+        return memberWasRemoved;
+    }
 
     /**
      * Creates a study group.
