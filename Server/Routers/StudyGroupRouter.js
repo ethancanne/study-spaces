@@ -37,6 +37,13 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             StudyGroupRouter.addOneTimeMeeting
         );
+        // Used to create posts.
+        server.post(
+            Routes.StudyGroup.CreatePost,
+            authenticator.protectRoute(),
+            StudyGroupRouter.createPost
+        )
+
         // This is used to create study groups.
         server.post(
             Routes.StudyGroup.CreateStudyGroup,
