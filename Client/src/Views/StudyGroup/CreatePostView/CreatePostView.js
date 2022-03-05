@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import CreatePostForm from "../../../components/CreatePostForm/CreatePostForm";
+import { sendPostRequest } from "../../../../Helper";
+import Routes from "../../../../../Server/Routes/Routes";
+import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+import { useHistory } from "react-router";
 
 /**
  * This is a specific view that is used in a popup
@@ -19,7 +23,7 @@ const CreatePostView = ({ group }) => {
      * @date   02/17/2022
      * @async
      * */
-    const submitCreatePost = (event) => {
+    const submitCreatePost = async (event) => {
         event.preventDefault();
         event.stopPropagation();
         console.log(group, title, body, category, attachment);

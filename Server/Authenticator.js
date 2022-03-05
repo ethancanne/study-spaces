@@ -141,6 +141,7 @@ class Authenticator {
                 text: body, // plain text body
                 html: "<h1>" + body + "</h1>" // html body
             });
+            Log.write("Sending email success", info);
             return true;
         } catch (error) {
             Log.write("Sending email failed.");
