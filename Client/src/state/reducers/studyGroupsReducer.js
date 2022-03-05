@@ -24,6 +24,9 @@ const studyGroupsReducer = (
         case studyGroupsConstants.POPULATE_SEARCH:
             return { ...state, search: [...action.payload.groups] };
 
+        case studyGroupsConstants.CLEAR_STUDY_GROUPS:
+            return { ...state, studyGroups: [] };
+
         default:
             return state;
     }

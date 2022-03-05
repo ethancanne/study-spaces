@@ -6,14 +6,14 @@ import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut, showSuccessNotification, showConfirmationPopup } from "../../state/actions";
 import { Link } from "react-router-dom";
+import { performSignOut } from "../../../Helper";
 
 const Menu = ({ isShowing, setIsShowing }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const signOutUser = (confirmed) => {
         if (confirmed) {
-            dispatch(signOut());
-            dispatch(showSuccessNotification("You have been successfully signed out."));
+            performSignOut();
             setIsShowing(false);
             history.push("/study");
         }

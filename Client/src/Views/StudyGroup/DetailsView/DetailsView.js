@@ -8,7 +8,7 @@ import {
     showConfirmationPopup,
     showViewMeetingsStudyGroupPopup
 } from "../../../state/actions";
-import { getNextMeeting, sendDeleteRequest, sendLeaveRequest } from "../../../../Helper";
+import { getNextMeeting, sendDeleteRequest, sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 
@@ -46,9 +46,9 @@ const DetailsView = ({ group }) => {
     };
     const submitLeave = async (confirmed) => {
         if (confirmed) {
-            await sendLeaveRequest(
+            await sendPostRequest(
                 Routes.StudyGroup.LeaveStudyGroup,
-                group._id ,
+                group._id,
                 ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
                 null,
                 true,

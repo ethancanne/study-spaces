@@ -129,6 +129,11 @@ export const populateStudyGroupSearch = (groups) => {
     };
 };
 
+export const clearStudyGroups = () => {
+    return {
+        type: studyGroupsConstants.CLEAR_STUDY_GROUPS
+    };
+};
 //NOTIFICATION REDUCERS
 export const showErrorNotification = (message) => {
     return {
