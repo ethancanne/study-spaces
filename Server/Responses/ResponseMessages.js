@@ -33,6 +33,10 @@ const ResponseMessages = {
             Error: "An error occured while attempting to add a one-time meeting.",
             Success: "The one-time meeting was added successfully."
         },
+        CreatePost: {
+            Error: "An error occurred while attempting to create a post.",
+            Success: "The post was created successfully."
+        },
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
         ErrorDeleteStudyGroup: "An error occurred while attempting to delete a study group.",
         ErrorDeleteMeeting: "An error occurred while attempting to delete a meeting.",

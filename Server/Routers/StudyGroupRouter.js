@@ -1,7 +1,10 @@
+const multer = require("multer");
 const Path = require("path");
+const sharp = require("sharp");
 
 const Authenticator = require("../Authenticator.js");
 const Configuration = require("../../Configuration.js");
+const Feed = require("../Models/Feed.js");
 const Log = require("../Log.js");
 const { Meeting } = require("../Models/Meeting.js");
 const PrivacySettings = require("../Models/PrivacySettings.js");
@@ -31,6 +34,26 @@ class StudyGroupRouter {
      * @static
      */
     static serveRoutes(server, authenticator) {
+        // This is used to allow users to upload profile pictures.
+        const fileFilter = (req, file, cb) => {
+            const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+            if (allowedFileTypes.includes(file.mimetype)) {
+                cb(null, true);
+            } else {
+                req.profilePictureFailed = true;
+                Log.write("The file format is not supported.");
+                cb(null, false, req.profilePictureFailed);
+            }
+        };
+
+        //Limit the file size
+        const upload = multer({
+            limits: {
+                fileSize: 2000000
+            },
+            fileFilter: fileFilter
+        });
+
         // Used to add one-time meetings.
         server.post(
             Routes.StudyGroup.AddOneTimeMeeting,
@@ -41,6 +64,7 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.CreatePost,
             authenticator.protectRoute(),
+            upload.single("attachment"),
             StudyGroupRouter.createPost
         )
 
@@ -133,21 +157,68 @@ class StudyGroupRouter {
     }
 
     /**
-    * @param {String} request.body.---
+    * @param {String} request.body.title The post title.
+    * @param {String} request.body.message The post contents.
+    * @param {String} request.body.type The type of post being created.
     * @author Cameron Burkholder
     * @date   03/04/2022
     */
     static async createPost(request, response) {
         // GET THE STUDY GROUP.
+        const studyGroupId = request.body.studyGroupId;
+        const studyGroup = await StudyGroup.getById(studyGroupId);
+        const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
+        if (studyGroupWasNotFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
+        }
 
         // CHECK THAT THE USER IS IN THE STUDY GROUP.
+        const user = request.user;
+        const userIsInStudyGroup = studyGroup.userIsAMember(user);
+        if (!userIsInStudyGroup) {
+            return response.json({ message: ResponseMessages.StudyGroup.UserNotInStudyGroup });
+        }
 
         // GET THE STUDY GROUP'S FEED.
+        const feedWasFound = await studyGroup.getFeed();
+        if (!feedWasFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
+        }
+        const feed = new Feed(studyGroup.feed);
 
         // CREATE THE POST.
+        const { title, message, type } = request.body;
+        const creator = user.getId();
+        const feedId = feed.getId();
+        // It is not required to upload an attachment, but if one has been uploaded
+        // it must be processed in order to be stored in the database.
+        let attachment = undefined;
+        const attachmentWasIncluded = Validator.isDefined(request.file);
+        if (Validator.isDefined(request.file)) {
+            const convertedAttachment = await sharp(request.file.buffer)
+                .resize({ height: 200, width: 200 })
+                .png()
+                .toBuffer();
+            attachment = convertedAttachment.toString("base64");
+        }
+        const postWasCreated = await feed.addPost(title, message, feedId, creator, type, attachment);
+        if (!postWasCreated) {
+            return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
+        }
 
         // GET THE UPDATED FEED.
-
+        const posts = feed.posts;
+        const postsWereFound = Validator.isDefined(posts);
+        if (postsWereFound) {
+            return response.json({
+                message: ResponseMessages.StudyGroup.CreatePost.Success,
+                posts: posts
+            });
+        } else {
+            return response.json({
+                message: ResponseMessages.StudyGroup.CreatePost.Error
+            });
+        }
     }
 
     /**

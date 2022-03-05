@@ -43,22 +43,22 @@ class Feed {
      * @author Cliff Croom
      * @date   01/11/2021
      */
-    constructor(PostSchema) {
+    constructor(feedSchema) {
         // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
         // In order to maximize the usability of this class, the attributes stored in the database
         // record are copied to the instance of this class so they can be properly editied.
         // The feed schema is converted to a regular object to sanitize it of wrapper methods and properties.
-        Object.assign(this, PostSchema.toObject());
+        Object.assign(this, feedSchema.toObject());
     }
 
     /**
      * Adds a post to the feed.
-     * @param {Post} post The post to add to the feed.
+     * @param {String} postTitle The title of the post to add to the feed.
      * @return {Boolean} True if the post was added, false otherwise.
      *
      * @async
      */
-    async addPost(post) {}
+    async addPost(postTitle) {}
 
     /**
      * Creates a feed.
@@ -111,6 +111,16 @@ class Feed {
      * @async
      */
     async deletePost(post) {}
+
+    /**
+    * Gets the ID of the feed.
+    * @return {Mongoose.Types.ObjectId} The feed ID.
+    * @author Cameron Burkholder
+    * @date   03/05/2022
+    */
+    getId() {
+        return this._id;
+    }
 
     /**
      * Gets the last three posts in the feed.

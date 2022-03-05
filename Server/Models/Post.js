@@ -74,7 +74,7 @@ class Post {
      * @return {Post} The post created.
      *
      */
-    static async create() {}
+    static async create(title, message, feedId, creator, type, attachment) {}
 
     /**
      * Creates a post response.
