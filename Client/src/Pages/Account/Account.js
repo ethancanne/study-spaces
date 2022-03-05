@@ -47,7 +47,7 @@ const Account = () => {
             null,
             true,
             (date, error) => {
-                if(error) return
+                if (error) return;
                 dispatch(closePopup());
             }
         );
@@ -70,7 +70,7 @@ const Account = () => {
             null,
             true,
             (date, error) => {
-                if(error) return
+                if (error) return;
                 dispatch(closePopup());
             }
         );
