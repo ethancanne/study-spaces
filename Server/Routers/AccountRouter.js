@@ -58,7 +58,9 @@ class AccountRouter {
             if (allowedFileTypes.includes(file.mimetype)) {
                 cb(null, true);
             } else {
-                cb(new Error("File format not supported."), false);
+                req.profilePictureFailed = true;
+                Log.write("The file format is not supported.");
+                cb(null, false, req.profilePictureFailed);
             }
         };
 
@@ -117,14 +119,14 @@ class AccountRouter {
             const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
             const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
             if (unverifiedUserAlreadyExists) {
-                return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+                return response.json({ message: ResponseMessages.Account.UserAlreadyExists });
             }
 
             // CHECK FOR AN EXISTING ACCOUNT.
             const existingUser = await User.getByEmail(request.body.email);
             const userAlreadyExists = Validator.isDefined(existingUser);
             if (userAlreadyExists) {
-                return response.json({ message: ResponseMessages.Account.userAlreadyExists });
+                return response.json({ message: ResponseMessages.Account.UserAlreadyExists });
             }
 
             //SET SCHOOL PROPERTY
@@ -151,7 +153,7 @@ class AccountRouter {
             const emailSubject = "Your Study Spaces Verification Link";
             const emailBody = "Click this: " + verificationLink;
 
-            //Send the Verification
+            // Send the Verification
             let emailWasSent = false;
             try {
                 emailWasSent = await Authenticator.sendEmail(unverifiedUser, emailSubject, emailBody);
@@ -160,8 +162,8 @@ class AccountRouter {
                 Log.writeError(error);
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
             }
-            if (!emailWasSent && Configuration.isSetToProduction()) {
-                return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
+            if (!emailWasSent) {
+                return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
             }
 
             // SEND THE RESPONSE.
@@ -325,6 +327,11 @@ class AccountRouter {
      * @static
      */
     static async setupAccount(request, response) {
+        // CHECK THAT THE PROFILE PICTURE (IF PROVIDED) HAS NOT FAILED.
+        if (request.profilePictureFailed) {
+            return response.json({ message: ResponseMessages.Account.ErrorUploadProfilePicture });
+        }
+
         //VERIFY THE USER IS OVER 18
         if (!request.body.is18OrOver) {
             return response.json({ message: ResponseMessages.Account.NotOver18 });

@@ -23,6 +23,7 @@ const Routes = {
     },
     StudyGroup: {
         AddOneTimeMeeting: "/api/study-group/add-one-time-meeting",
+        CreatePost: "/api/study-group/create-post",
         CreateStudyGroup: "/api/study-group/create",
         DeleteMeeting: "/api/study-group/delete-meeting",
         DeleteStudyGroup: "/api/study-group/delete",
@@ -31,7 +32,8 @@ const Routes = {
         GetUserStudyGroups: "/api/study-group/get-all",
         GetStudyGroup: "/api/study-group/get",
         JoinStudyGroup: "/api/study-group/join",
-        SetRecurringMeeting: "/api/study-group/set-recurring-meeting"
+        SetRecurringMeeting: "/api/study-group/set-recurring-meeting",
+        LeaveStudyGroup: "/api/study-group/leave"
     }
 };
 module.exports = Routes;

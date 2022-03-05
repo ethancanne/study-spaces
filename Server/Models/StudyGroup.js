@@ -176,6 +176,31 @@ class StudyGroup {
         return memberWasAdded;
     }
 
+        /**
+     * Removes a member from the study group.
+     * @param {User} The member to remove from the group.
+     * @return {Boolean} True if the member was removed, false otherwise.
+     * @author Stacey Popenfoose
+     * @date 03/01/2022
+     * @async
+     */
+     async removeMember(studyGroupMember) {
+        // Remove THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
+        const members = this.members.map((memberId) => String(memberId));
+        const memberIndex = members.indexOf(String(studyGroupMember.getId()));
+        this.members.splice(memberIndex, 1);
+
+        // SAVE THE CHANGE.
+        let memberWasRemoved = true;
+        try {
+            await this.save();
+        } catch (error) {
+            memberWasRemoved = false;
+            Log.writeError(error);
+        }
+        return memberWasRemoved;
+    }
+
     /**
      * Creates a study group.
      * @param {String} name The study group name.
@@ -661,14 +686,7 @@ class StudyGroup {
         //!!!!!
     }
 
-    /**
-     * Removes a member from the study group.
-     * @param {User} member The member to remove from the group.
-     * @return {Boolean} True if the member was removed, false otherwise.
-     *
-     * @async
-     */
-    async removeMember(member) {}
+
 
     /**
      * This saves the associated user document in the database with the current properties

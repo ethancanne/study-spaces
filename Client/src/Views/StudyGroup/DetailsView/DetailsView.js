@@ -8,7 +8,7 @@ import {
     showConfirmationPopup,
     showViewMeetingsStudyGroupPopup
 } from "../../../state/actions";
-import { getNextMeeting, sendDeleteRequest } from "../../../../Helper";
+import { getNextMeeting, sendDeleteRequest, sendLeaveRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 
@@ -45,18 +45,19 @@ const DetailsView = ({ group }) => {
             );
     };
     const submitLeave = async (confirmed) => {
-        if (confirmed) console.log("confirmed");
-        await sendLeaveRequest(
-            Routes.StudyGroup.LeaveStudyGroup,
-            { studyGroupId: group._id },
-            ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
-            null,
-            true,
-            (data, error) => {
-                if (error) return;
-                history.push("/");
-            }
-        );
+        if (confirmed) {
+            await sendLeaveRequest(
+                Routes.StudyGroup.LeaveStudyGroup,
+                group._id ,
+                ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
+                null,
+                true,
+                (data, error) => {
+                    if (error) return;
+                    history.push("/");
+                }
+            );
+        }
     };
     return (
         <div className="details-container">

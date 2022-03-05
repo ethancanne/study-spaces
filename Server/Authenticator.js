@@ -143,8 +143,9 @@ class Authenticator {
             });
             Log.write("Sending email success", info);
             return true;
-        } catch (e) {
-            Log.write("Sending email failed.", e);
+        } catch (error) {
+            Log.write("Sending email failed.");
+            Log.writeError(error);
             return false;
         }
     }

@@ -120,6 +120,29 @@ class User {
     }
 
     /**
+     * @param {StudyGroup} studyGroup The study group to remove.
+     * @return {Boolean} True if the study group was removed, false otherwise.
+     *
+     * @async
+     */
+     async removeStudyGroup(studyGroup) {
+        // REMOVE THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
+        const studyGroups = this.studyGroups.map((studyGroupId) => String(studyGroupId));
+        const studyGroupIndex = studyGroups.indexOf(String(studyGroup.getId()));
+        this.studyGroups.splice(studyGroupIndex, 1);
+
+        // SAVE THE CHANGE.
+        let studyGroupWasRemoved = true;
+        try {
+            await this.save();
+        } catch (error) {
+            studyGroupWasRemoved = false;
+            Log.writeError(error);
+        }
+        return studyGroupWasRemoved;
+    }
+
+    /**
      * Creates a user.
      * @param {UnverifiedUser} unverifiedUser The unverified user to create from.
      * @param {String} areaCode The user's area code.
