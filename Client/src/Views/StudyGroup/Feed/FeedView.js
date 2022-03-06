@@ -21,26 +21,21 @@ const FeedView = ({ group }) => {
     return (
         <div className="feed-container">
             <div className="posts-container">
-                {[
-                    {
-                        title: "Congratulations!",
-                        message: "You successfully created your group: " + group.name,
-                        creator: { name: "Study Spaces Robot", profilePicture: "" },
-                        date: new Date(),
-                        type: PostTypes.Announcement,
-                        responses: [{ message: "Hi", profilePicture: "" }]
-                    }
-                ].map((post) => (
-                    <Post
-                        title={post.title}
-                        message={post.message}
-                        creator={post.creator}
-                        dateCreated={post.date}
-                        type={post.type}
-                        color={group.groupColor}
-                        responses={post.responses}
-                    />
-                ))}
+                {group.feed && group.feed.posts ? (
+                    group.feed.posts.map((post) => (
+                        <Post
+                            title={post.title}
+                            message={post.message}
+                            creator={post.creator}
+                            dateCreated={post.date}
+                            type={post.type}
+                            color={group.groupColor}
+                            responses={post.responses}
+                        />
+                    ))
+                ) : (
+                    <h1>Nothing yet</h1>
+                )}
             </div>
             <div className="options-container">
                 <Button onClick={() => dispatch(showCreatePostStudyGroupPopup(group))}>Start Post</Button>

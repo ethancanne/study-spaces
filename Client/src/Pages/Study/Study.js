@@ -39,7 +39,8 @@ const Study = (props) => {
         async function getGroups() {
             await getStudyGroups();
         }
-        isLoggedIn && getGroups();
+        console.log(studyGroups);
+        isLoggedIn && studyGroups.length === 0 && getGroups();
 
         async function verifyUserEmail() {
             await verifyEmail(props.match.params.verificationToken);
@@ -53,6 +54,7 @@ const Study = (props) => {
      * @date   11/20/2021
      */
     const getStudyGroups = async () => {
+        console.log("Running");
         await sendGetRequest(
             Routes.StudyGroup.GetUserStudyGroups,
             ResponseMessages.StudyGroup.SuccessStudyGroupsRetrieved,
