@@ -1,5 +1,8 @@
 const Mongoose = require("mongoose");
 const Schema = Mongoose.Schema;
+const Configuration = require("../../Configuration.js");
+const Log = require("../Log.js");
+const Validator = require("../Validator.js");
 
 /**
  * @author Cliff Croom
@@ -74,7 +77,25 @@ class Post {
      * @return {Post} The post created.
      *
      */
-    static async create(title, message, feedId, creator, type, attachment) {}
+    static async create(title, message, feedId, creator, type, attachment) {
+        const postModel = new PostModel({
+            title: title,
+            message: message,
+            feedId: feedId,
+            creator: creator,
+            type: type,
+            attachment: attachment
+        });
+        try {
+            await postModel.save();
+        } catch (error) {
+            console.log(error);
+        }
+
+        // RETURN THE CREATED INSTANCE.
+        const post = new Post(postModel);
+        return post;
+    }
 
     /**
      * Creates a post response.
@@ -163,6 +184,15 @@ class Post {
     getAttachment() {
         return String(this.attachment);
     }
+
+    /**
+     * Gets the document id of the post in the database as a string.
+     * @return {String} The document id of the post.
+     */
+     getId() {
+        return this._id;
+    }
+
 
     /**
      * Gets the timestamp.

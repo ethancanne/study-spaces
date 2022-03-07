@@ -4,13 +4,16 @@ const Schema = Mongoose.Schema;
 const Configuration = require("../../Configuration.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
+const Post = require("../Models/Post.js");
 
 /**
  * Used to define the database schema for storing study group feeds.
  * @author Cameron Burkholder
  * @date   11/03/2021
  */
-const FeedSchema = new Schema({});
+const FeedSchema = new Schema({
+    //This needs to be done.
+});
 
 FeedSchema.virtual("posts", {
     ref: "Post",
@@ -25,6 +28,7 @@ FeedSchema.set("toObject", {
         return object;
     }
 });
+
 const feedCollectionName = Configuration.getFeedCollectionName();
 const FeedModel = Mongoose.model(feedCollectionName, FeedSchema);
 
@@ -43,22 +47,47 @@ class Feed {
      * @author Cliff Croom
      * @date   01/11/2021
      */
-    constructor(feedSchema) {
+    constructor(FeedSchema) {
         // COPY THE DATABASE INSTANCE TO THE MODEL INSTANCE.
         // In order to maximize the usability of this class, the attributes stored in the database
         // record are copied to the instance of this class so they can be properly editied.
         // The feed schema is converted to a regular object to sanitize it of wrapper methods and properties.
-        Object.assign(this, feedSchema.toObject());
+        Object.assign(this, FeedSchema.toObject());
     }
 
     /**
      * Adds a post to the feed.
-     * @param {String} postTitle The title of the post to add to the feed.
+     * @param {Post} post The post to add to the feed.
      * @return {Boolean} True if the post was added, false otherwise.
      *
      * @async
      */
-    async addPost(postTitle) {}
+    async addPost(title, message, feedId, creator, type, attachment) {
+        
+        // CREATE THE POST
+        let post = undefined;
+        post = Post.create(title, message, feedId, creator, type, attachment);
+        
+        // Validate that the post was created
+        if(!Validator.isDefined(post)) {
+            return false;
+        }
+
+        // ADD THE POST TO THE FEED'S POST LIST.
+        this.posts.push(post.getId());
+
+        // SAVE THE CHANGE.
+        let postWasAdded = true;
+        try {
+            await this.save();
+        } catch (error) {
+            studyGroupWasAdded = false;
+            Log.writeError(error);
+        }
+        return postWasAdded;
+
+        
+    }
 
     /**
      * Creates a feed.
@@ -113,12 +142,12 @@ class Feed {
     async deletePost(post) {}
 
     /**
-    * Gets the ID of the feed.
-    * @return {Mongoose.Types.ObjectId} The feed ID.
-    * @author Cameron Burkholder
-    * @date   03/05/2022
-    */
-    getId() {
+     * Gets the document id of the feed in the database as a string.
+     * @return {Mongoose.Types.ObjectId} The document id of the feed.
+     * @author Clifton Croom
+     * @date   03/07/2022
+     */
+     getId() {
         return this._id;
     }
 
