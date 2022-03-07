@@ -164,6 +164,11 @@ class StudyGroupRouter {
     * @date   03/04/2022
     */
     static async createPost(request, response) {
+        // CHECK THAT THE ATTACHMENT (IF PROVIDED) HAS NOT FAILED.
+        if (request.profilePictureFailed) {
+            return response.json({ message: ResponseMessages.StudyGroup.CreatePost.InvalidAttachment });
+        }
+
         // GET THE STUDY GROUP.
         const studyGroupId = request.body.studyGroupId;
         const studyGroup = await StudyGroup.getById(studyGroupId);
@@ -193,6 +198,7 @@ class StudyGroupRouter {
         // It is not required to upload an attachment, but if one has been uploaded
         // it must be processed in order to be stored in the database.
         let attachment = undefined;
+        console.log(request.body);
         const attachmentWasIncluded = Validator.isDefined(request.file);
         if (Validator.isDefined(request.file)) {
             const convertedAttachment = await sharp(request.file.buffer)
@@ -773,7 +779,6 @@ class StudyGroupRouter {
         // GET THE USER LEAVING THE GROUP.
         const user = request.user;
 
-
         // GET THE STUDY GROUP BEING LEFT.
         let studyGroup = undefined;
         try {
@@ -793,7 +798,6 @@ class StudyGroupRouter {
         let userWasRemoved = false;
         try {
             userWasRemoved = await studyGroup.removeMember(user);
-            console.log(userWasRemoved);
         } catch (error) {
             Log.write("An error occurred while attempting to remove a user from a study group.");
             Log.writeError(error);

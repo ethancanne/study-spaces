@@ -35,6 +35,7 @@ const ResponseMessages = {
         },
         CreatePost: {
             Error: "An error occurred while attempting to create a post.",
+            InvalidAttachment: "The file attached is of an unsupported format.",
             Success: "The post was created successfully."
         },
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",

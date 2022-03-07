@@ -48,7 +48,7 @@ const DetailsView = ({ group }) => {
         if (confirmed) {
             await sendPostRequest(
                 Routes.StudyGroup.LeaveStudyGroup,
-                group._id,
+                { studyGroupId: group._id },
                 ResponseMessages.StudyGroup.SuccessStudyGroupLeft,
                 null,
                 true,

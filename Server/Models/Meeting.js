@@ -18,9 +18,21 @@ const Validator = require("../Validator.js");
 class MeetingAvailability {
     constructor(days, meetingFrequencies, startTime, endTime) {
         this.days = days;
+        if (Validator.isUndefined(days)) {
+            this.days = Days;
+        }
         this.meetingFrequencies = meetingFrequencies;
+        if (Validator.isUndefined(meetingFrequencies)) {
+            this.meetingFrequencies = MeetingFrequencies;
+        }
         this.startTime = new Time(startTime.hour, startTime.minute, startTime.partOfDay);
+        if (Validator.isUndefined(startTime)) {
+            this.startTime = new Time(0, 0, PartOfDay.Am);
+        }
         this.endTime = new Time(endTime.hour, endTime.minute, endTime.partOfDay);
+        if (Validator.isUndefined(endTime)) {
+            this.endTime = new Time(11, 45, PartOfDay.Pm);
+        }
     }
 
     /**
