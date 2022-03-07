@@ -207,7 +207,7 @@ class StudyGroupRouter {
         }
 
         // GET THE UPDATED FEED.
-        const posts = feed.posts;
+        const posts = await feed.getPosts();
         const postsWereFound = Validator.isDefined(posts);
         if (postsWereFound) {
             return response.json({
@@ -619,6 +619,13 @@ class StudyGroupRouter {
             response.status(ResponseCodes.Error);
             return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
         }
+        const feed = new Feed(studyGroup.feed);
+        const posts = await feed.getPosts();
+        const postsWereFound = Validator.isDefined(posts);
+        if (!postsWereFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
+        }
+        studyGroup.posts = posts;
 
         // POPULATE THE STUDY GROUP'S MEETINGS.
         let meetingsWereFound = await studyGroup.getMeetings();
