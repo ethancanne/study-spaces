@@ -28,7 +28,7 @@ const CreatePostView = ({ group }) => {
         event.stopPropagation();
         console.log(group, title, body, category, attachment);
 
-        await sendPostRequest(Routes.StudyGroup.CreatePost, {title, body, category, attachment}, 
+        await sendPostRequest(Routes.StudyGroup.CreatePost, {title, message: body, category, attachment, studyGroupId:group._id}, 
             ResponseMessages.StudyGroup.CreatePostSuccess, 
             null,
             true, 
