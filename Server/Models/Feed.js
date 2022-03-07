@@ -16,7 +16,7 @@ const FeedSchema = new Schema({
 });
 
 FeedSchema.virtual("posts", {
-    ref: "Post",
+    ref: Configuration.getPostCollectionName(),
     localField: "_id",
     foreignField: "feedId"
 });
@@ -63,30 +63,12 @@ class Feed {
      * @async
      */
     async addPost(title, message, feedId, creator, type, attachment) {
-        
+
         // CREATE THE POST
         let post = undefined;
-        post = Post.create(title, message, feedId, creator, type, attachment);
-        
-        // Validate that the post was created
-        if(!Validator.isDefined(post)) {
-            return false;
-        }
-
-        // ADD THE POST TO THE FEED'S POST LIST.
-        this.posts.push(post.getId());
-
-        // SAVE THE CHANGE.
-        let postWasAdded = true;
-        try {
-            await this.save();
-        } catch (error) {
-            studyGroupWasAdded = false;
-            Log.writeError(error);
-        }
+        post = await Post.create(title, message, feedId, creator, type, attachment);
+        const postWasAdded = Validator.isDefined(post);
         return postWasAdded;
-
-        
     }
 
     /**
@@ -142,6 +124,35 @@ class Feed {
     async deletePost(post) {}
 
     /**
+    * Gets the feed from its ID.
+    * @param {Mongoose.Types.ObjectId} feedId The ID of the feed.
+    */
+    static async getById(feedId) {
+        // CONVERT THE ID TO THE ACCEPTABLE TYPE.
+        const convertedFeedId = Mongoose.Types.ObjectId(feedId);
+
+        // GET THE USER BASED ON THE GIVEN ID.
+        let feedRecord = undefined;
+        try {
+            feedRecord = await FeedModel.findOne({ _id: convertedFeedId }).exec();
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a study group by ID.");
+            Log.writeError(error);
+            // If an error occurs, it should be returned.
+            return error;
+        } finally {
+            // If the user wasn't able to be found in the database, this routine should return undefined.
+            let feed = undefined;
+            let feedWasFound = Validator.isDefined(feedRecord);
+            if (feedWasFound) {
+                // Since the userRecord is an instance of the UserSchema, it needs to be converted to an object.
+                feed = new Feed(feedRecord);
+            }
+            return feed;
+        }
+    }
+
+    /**
      * Gets the document id of the feed in the database as a string.
      * @return {Mongoose.Types.ObjectId} The document id of the feed.
      * @author Clifton Croom
@@ -175,11 +186,28 @@ class Feed {
     /**
      * Gets the posts housed in a feed.
      * @return {Post[]} The posts in the feed.
-     *
+     * @author Cameron Burkholder
+     * @date   03/07/2022
      * @async
      */
     async getPosts() {
-        return this.posts;
+        // CONVERT THE ID TO THE ACCEPTABLE TYPE.
+        const feedId = this._id;
+
+        // GET THE USER BASED ON THE GIVEN ID.
+        let feedRecord = undefined;
+        try {
+            feedRecord = await FeedModel.findOne({ _id: feedId }).exec();
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a feed by ID.");
+            Log.writeError(error);
+            // If an error occurs, it should be returned.
+            return error;
+        } finally {
+            await feedRecord.populate("posts");
+            const posts = feedRecord.posts;
+            return posts;
+        }
     }
 }
 
