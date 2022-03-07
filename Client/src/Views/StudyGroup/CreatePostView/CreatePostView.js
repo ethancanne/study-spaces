@@ -28,7 +28,15 @@ const CreatePostView = ({ group }) => {
         event.stopPropagation();
         console.log(group, title, body, category, attachment);
 
-        //...
+        await sendPostRequest(Routes.StudyGroup.CreatePost, {title, body, category, attachment}, 
+            ResponseMessages.StudyGroup.CreatePostSuccess, 
+            null,
+            true, 
+            (data, error)=>{
+                if (error) return;
+                useHistory.push(0);
+            }
+        );
     };
     /**
      * Used to update the title field in the create post form.
