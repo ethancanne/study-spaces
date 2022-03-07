@@ -39,6 +39,8 @@ const PostSchema = new Schema({
         type: String,
         required: false
     }
+}, {
+    timestamps: true
 });
 PostSchema.set("toObject", {
     versionKey: false,
