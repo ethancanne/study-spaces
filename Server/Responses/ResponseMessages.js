@@ -15,7 +15,9 @@ const ResponseMessages = {
         ErrorUploadProfilePicture: "The file type selected is not supported.",
         EmailSent: "Verification email sent.",
         NotOver18: "You need to be 18 or older to create an account.",
+        InvalidEmail: "The email address entered is not valid.",
         IncorrectPassword: "The password provided is incorrect.",
+        InvalidAccountInput: "One or more fields have been left empty.",
         SuccessAccountCreated: "The account was created successfully.",
         SuccessAccountDeleted: "The account was deleted successfully",
         SuccessAccountSetup: "The account was setup successfully.",
@@ -26,16 +28,20 @@ const ResponseMessages = {
         UnverifiedUserWasFound: "The unverified user was found.",
         UserAlreadyExists: "A user with that email address already exists.",
         UserNotFound: "The user was not found.",
+        PasswordsMustMatch: "The passwords entered must match.",
+        PasswordTooShort: "The password must be at least 6 characters.",
         InactiveAccount: "The account requested is not active."
     },
     StudyGroup: {
         AddOneTimeMeeting: {
             Error: "An error occured while attempting to add a one-time meeting.",
+            InvalidInput: "One or more required fields is empty.",
             Success: "The one-time meeting was added successfully."
         },
         CreatePost: {
             Error: "An error occurred while attempting to create a post.",
             InvalidAttachment: "The file attached is of an unsupported format.",
+            InvalidInput: "One or more required fields is empty.",
             Success: "The post was created successfully."
         },
         ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
@@ -47,6 +53,7 @@ const ResponseMessages = {
         ErrorJoinStudyGroup: "An error occurred while attempting to join a study group.",
         ErrorRemoveUser: "There was an error removing user from the study group.",
         ErrorRemoveStudyGroup: "There was an error removing study group from the user.",
+        InvalidEditStudyGroup: "One or more required fields is empty.",
         StudyGroupIsNotActive: "The requested study group is not active.",
         MeetingNotFound: "The requested meeting was not found.",
         StudyGroupNotFound: "The requested study group was not found.",
@@ -67,6 +74,7 @@ const ResponseMessages = {
         ErrorNullStudyGroupInput: "Error: Empty input was received for either the study group name or the user.",
         SetRecurringMeeting: {
             Error: "An error occurred while attempting to set the recurring meeting.",
+            InvalidInput: "One or more required fields is empty.",
             Success: "The recurring meeting was set successfully."
         }
     }

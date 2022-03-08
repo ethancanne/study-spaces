@@ -815,13 +815,18 @@ class StudyGroup {
             filters.endTime
         );
         studyGroups = studyGroups.filter((studyGroup) => {
-            if (Validator.isDefined(studyGroup.recurringMeeting)) {
-                const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
-                const meetingTimeFitsSchedule = meetingAvailability.matchAvailability(recurringMeeting);
-                return meetingTimeFitsSchedule;
-            } else {
-                return true;
+            if (studyGroup.active) {
+                if (meetingAvailability.isOpen()) {
+                    return true;
+                } else {
+                    if (Validator.isDefined(studyGroup.recurringMeeting)) {
+                        const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
+                        const meetingTimeFitsSchedule = meetingAvailability.matchAvailability(recurringMeeting);
+                        return meetingTimeFitsSchedule;
+                    }
+                }
             }
+            return false;
         });
 
         // RETURN THE STUDY GROUPS FOUND.

@@ -30,6 +30,18 @@ class MeetingAvailability {
     }
 
     /**
+     * Determines whether applicable filters have been applied to start filtering meetings.
+     * @return {Boolean} True if there are no requirements for meeting times, false otherwise.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     */
+    isOpen() {
+        const daysAreFlexible = this.days.length === Object.keys(Days).length;
+        const meetingFrequenciesAreFlexible = this.meetingFrequencies.length === Object.keys(MeetingFrequencies).length;
+        return daysAreFlexible && meetingFrequenciesAreFlexible;
+    }
+
+    /**
      * Checks if a given meeting matches the availability a user has.
      * @param {Meeting} meeting The meeting to check.
      * @return {Boolean} True if the meeting matches, false otherwise.

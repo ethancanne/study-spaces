@@ -36,7 +36,12 @@ class AccountRouter {
             authenticator.protectRoute(),
             AccountRouter.updateAuthenticationToken
         );
-        server.post(Routes.Account.ChangeEmail, authenticator.protectRoute(), AccountRouter.changeEmail);
+        server.post(
+            Routes.Account.ChangeEmail,
+            authenticator.protectRoute(),
+            Validator.validateChangeEmail,
+            AccountRouter.changeEmail
+        );
         server.post(
             Routes.Account.ChangePassword,
             authenticator.protectRoute(),
@@ -44,7 +49,7 @@ class AccountRouter {
             AccountRouter.changePassword
         );
         // This is used to create accounts.
-        server.post(Routes.Account.CreateAccount, AccountRouter.createAccount);
+        server.post(Routes.Account.CreateAccount, Validator.validateCreateAccountInput, AccountRouter.createAccount);
         // Gets the unverified user to complete the verification process.
         server.post(Routes.Account.GetUnverifiedUser, AccountRouter.getUnverifiedUser);
         // This is used to log users in.
@@ -73,7 +78,12 @@ class AccountRouter {
         });
 
         // This is used to complete the account setup process.
-        server.post(Routes.Account.SetupAccount, upload.single("profilePicture"), AccountRouter.setupAccount);
+        server.post(
+            Routes.Account.SetupAccount,
+            Validator.validateSetupAccount,
+            upload.single("profilePicture"),
+            AccountRouter.setupAccount
+        );
         // This is used to complete the email change process.
         server.post(Routes.Account.VerifyEmailChange, AccountRouter.verifyEmailChange);
     }

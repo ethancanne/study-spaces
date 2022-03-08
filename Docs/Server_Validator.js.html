@@ -76,6 +76,104 @@ class Validator {
     }
 
     /**
+    * Validates the form input for changing a user's email.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateChangeEmail(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.Account.InvalidAccountInput;
+        const { newEmail } = request.body;
+        if (newEmail.length === 0) {
+            inputIsValid = false;
+        }
+
+        // CHECK THAT THE EMAIL IS VALID.
+        if (!Validator.validateEmail(newEmail)) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.InvalidEmail;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
+    * Validates the form input for creating an account.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateCreateAccountInput(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.Account.InvalidAccountInput;
+        const { email, password, confirmPassword} = request.body;
+        if (email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
+            inputIsValid = false;
+        }
+
+        // CHECK THAT THE EMAIL IS VALID.
+        if (!Validator.validateEmail(email)) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.InvalidEmail;
+        }
+
+        // CHECK THE INPUT FOR MINIMUM LENGTHS.
+        const MINIMUM_PASSWORD_LENGTH = 6;
+        if (password.length &lt; MINIMUM_PASSWORD_LENGTH) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.PasswordTooShort;
+        }
+
+        // CHECK THAT THE PASSWORDS MATCH.
+        if (password !== confirmPassword) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.PasswordsMustMatch;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
+    * Validates the input for creating a post.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateCreatePost(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.StudyGroup.CreatePost.InvalidInput;
+        const { title, message, category } = request.body;
+        if (title == null || title.length === 0 || message == null || message.length === 0 || category == null || category.length === 0) {
+            inputIsValid = false;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            request.body.type = request.body.category;
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
      * Validates the form input for creating a study group before a study group gets created.
      * @author Cameron Burkholder
      * @date   02/04/2022
@@ -98,6 +196,158 @@ class Validator {
         // If the data is valid, then the next function in the middleware chain can be called.
         else {
             return nextMiddlewareFunction();
+        }
+    }
+
+    /**
+    * Validates the input for editing a meeting.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateEditMeeting(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.StudyGroup.InvalidAccountInput;
+        const { date, time } = request.body;
+        if (Validator.isUndefined(date) || Validator.isUndefined(time)) {
+            inputIsValid = false;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
+    * Validates the input for editing a study group.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateEditStudyGroup(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.StudyGroup.InvalidEditStudyGroup;
+        const { course, description, groupColor, isOnlineGroup, isTutorGroup, name, subject } = request.body;
+        if (name == null || name.length === 0 || name == "" || description == null || description.length === 0) {
+            inputIsValid = false;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
+    * Checks if an email is valid.
+    * @author W3Schools
+    * @static
+    */
+    static validateEmail(email) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            return (true);
+        } else {
+            return (false);
+        }
+    }
+
+    /**
+    * Validates the input for creating a one-time meeting.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateOneTimeMeeting(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.StudyGroup.AddOneTimeMeeting.InvalidInput;
+        const { date, time, day, details, location, roomNumber } = request.body;
+        if (Validator.isUndefined(date) || Validator.isUndefined(time) || date.length === 0 || time.length === 0) {
+            inputIsValid = false;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
+    * Validates the input for setting a recurring meeting.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateSetRecurringMeeting(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.StudyGroup.SetRecurringMeeting.InvalidInput;
+        const { day, frequency, time, date } = request.body;
+        if (frequency == null || time == null || frequency.length === 0 || time.length === 0 || Validator.isUndefined(date)) {
+            inputIsValid = false;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
+        }
+    }
+
+    /**
+    * Validates the input for setting up an account.
+    * @author Cameron Burkholder
+    * @date   03/08/2022
+    * @static
+    */
+    static validateSetupAccount(request, response, nextMiddlewareFunction) {
+        // CHECK THE INPUT FOR EMPTY VALUES.
+        let inputIsValid = true;
+        let error = ResponseMessages.Account.InvalidAccountInput;
+        const { areaCode, name } = request.body;
+        if (areaCode.length === 0 || name.length === 0) {
+            inputIsValid = false;
+        }
+
+        // CHECK THAT THE EMAIL IS VALID.
+        if (!Validator.validateEmail(email)) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.InvalidEmail;
+        }
+
+        // CHECK THE INPUT FOR MINIMUM LENGTHS.
+        const MINIMUM_PASSWORD_LENGTH = 6;
+        if (password.length &lt; MINIMUM_PASSWORD_LENGTH) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.PasswordTooShort;
+        }
+
+        // CHECK THAT THE PASSWORDS MATCH.
+        if (password !== confirmPassword) {
+            inputIsValid = false;
+            error = ResponseMessages.Account.PasswordsMustMatch;
+        }
+
+        // GENERATE THE RESPONSE.
+        if (inputIsValid) {
+            return nextMiddlewareFunction();
+        } else {
+            response.json({ message: error });
+            return response.end();
         }
     }
 
@@ -144,7 +394,7 @@ module.exports = Validator;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 07 2022 18:59:55 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 08 2022 11:47:09 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

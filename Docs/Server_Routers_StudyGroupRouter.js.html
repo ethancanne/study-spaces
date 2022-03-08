@@ -86,6 +86,7 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.AddOneTimeMeeting,
             authenticator.protectRoute(),
+            Validator.validateOneTimeMeeting,
             StudyGroupRouter.addOneTimeMeeting
         );
         // Used to create posts.
@@ -93,6 +94,7 @@ class StudyGroupRouter {
             Routes.StudyGroup.CreatePost,
             authenticator.protectRoute(),
             upload.single("attachment"),
+            Validator.validateCreatePost,
             StudyGroupRouter.createPost
         );
 
@@ -114,10 +116,10 @@ class StudyGroupRouter {
         server.delete(Routes.StudyGroup.DeleteMeeting, authenticator.protectRoute(), StudyGroupRouter.deleteMeeting);
 
         // This is used to edit a meeting.
-        server.post(Routes.StudyGroup.EditMeeting, authenticator.protectRoute(), StudyGroupRouter.editOneTimeMeeting);
+        server.post(Routes.StudyGroup.EditMeeting, authenticator.protectRoute(), Validator.validateEditMeeting, StudyGroupRouter.editOneTimeMeeting);
 
         // This is used to edit a study group.
-        server.post(Routes.StudyGroup.EditStudyGroup, authenticator.protectRoute(), StudyGroupRouter.editStudyGroup);
+        server.post(Routes.StudyGroup.EditStudyGroup, authenticator.protectRoute(), Validator.validateEditStudyGroup, StudyGroupRouter.editStudyGroup);
         // This is used to get a specific study group.
         server.get(Routes.StudyGroup.GetStudyGroup, authenticator.protectRoute(), StudyGroupRouter.getStudyGroup);
         // This is used to get a user's study groups.
@@ -136,6 +138,7 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.SetRecurringMeeting,
             authenticator.protectRoute(),
+            Validator.validateSetRecurringMeeting,
             StudyGroupRouter.setRecurringMeeting
         );
     }
@@ -226,7 +229,6 @@ class StudyGroupRouter {
         // It is not required to upload an attachment, but if one has been uploaded
         // it must be processed in order to be stored in the database.
         let attachment = undefined;
-        console.log(request.body);
         const attachmentWasIncluded = Validator.isDefined(request.file);
         if (Validator.isDefined(request.file)) {
             const convertedAttachment = await sharp(request.file.buffer)
@@ -350,39 +352,39 @@ class StudyGroupRouter {
         //Compare original meeting to new meeting to check for differences
 
         if (request.body.date != meeting.getDate()) {
-            if (request.body.date == null) {
+            if (request.body.date == null || request.body.date == "" || typeof date !== "object") {
                 return response.json({ message: "Date is a required attribute." });
             } else {
-                meeting.setDate(request.body.date);
+                await meeting.setDate(request.body.date);
             }
         }
 
         if (request.body.time != meeting.getTime()) {
-            if (request.body.time == null) {
+            if (request.body.time == null || request.body.time == "") {
                 return response.json({ message: "Time is a required attribute." });
             } else {
-                meeting.setTime(request.body.time);
+                await meeting.setTime(request.body.time);
             }
         }
 
         if (request.body.day != meeting.getDay()) {
-            if (request.body.day == null) {
+            if (request.body.day == null || request.body.day == "") {
                 return response.json({ message: "Day is a required attribute." });
             } else {
-                meeting.setDay(request.body.day);
+                await meeting.setDay(request.body.day);
             }
         }
 
         if (request.body.details != meeting.getDetails()) {
-            meeting.setDetails(request.body.details);
+            await meeting.setDetails(request.body.details);
         }
 
         if (request.body.location != meeting.getLocation()) {
-            meeting.setLocation(request.body.location);
+            await meeting.setLocation(request.body.location);
         }
 
         if (request.body.roomNumber != meeting.getRoomNumber()) {
-            meeting.setRoomNumber(request.body.roomNumber);
+            await meeting.setRoomNumber(request.body.roomNumber);
         }
 
         //Return the edited meeting
@@ -517,7 +519,6 @@ class StudyGroupRouter {
         //GET ORIGINAL STUDY GROUP
         const studyGroupId = request.body.studyGroupId;
         let studyGroup = undefined;
-        console.log(request.body.studyGroupId);
         try {
             studyGroup = await StudyGroup.getById(studyGroupId);
         } catch (error) {
@@ -526,63 +527,59 @@ class StudyGroupRouter {
             response.status(ResponseCodes.Error);
             return response.json({ message: ResponseMessages.StudyGroup.ErrorGetStudyGroup });
         }
-
         const studyGroupWasNotFound = Validator.isUndefined(studyGroup);
         if (studyGroupWasNotFound) {
             return response.json({ message: ResponseMessages.StudyGroup.StudyGroupNotFound });
         }
 
-        console.log(studyGroup.getCourse());
         // CHECK FOR EDITS AND MAKE CHANGES IF NECESSARY
-
         //Check for new study group course
         if (request.body.course != studyGroup.getCourse()) {
-            studyGroup.setCourse(request.body.course);
+            await studyGroup.setCourse(request.body.course);
         }
-        console.log(studyGroup.getCourse());
 
         //Check for new study group description
         if (request.body.description != studyGroup.getDescription()) {
-            studyGroup.setDescription(request.body.description);
+            await studyGroup.setDescription(request.body.description);
         }
 
         //Check for new color
         if (request.body.groupColor != studyGroup.getGroupColor()) {
-            studyGroup.setGroupColor(request.body.groupColor);
+            await studyGroup.setGroupColor(request.body.groupColor);
         }
 
         //Check for change in study group mode
         if (request.body.isOnlineGroup != studyGroup.OnlineGroup()) {
             if (studyGroup.OnlineGroup()) {
-                studyGroup.makeInPerson();
+                await studyGroup.makeInPerson();
             } else {
-                studyGroup.makeOnline();
+                await studyGroup.makeOnline();
             }
         }
 
         //Check for change in study group type
         if (request.body.isTutorGroup != studyGroup.getIsTutorGroup()) {
             if (studyGroup.getIsTutorGroup()) {
-                studyGroup.makeStudyGroup();
+                await studyGroup.makeStudyGroup();
             } else {
-                studyGroup.makeTutorGroup();
+                await studyGroup.makeTutorGroup();
             }
         }
 
         //Check for change in study group name
         if (request.body.name != studyGroup.getName()) {
-            if (request.body.name == null) {
+            if (request.body.name == null || request.body.name == "") {
                 return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
             }
-            studyGroup.setName(request.body.name);
+            await studyGroup.setName(request.body.name);
         }
 
         //Check for change in study group subject
         if (request.body.subject != studyGroup.getSubject()) {
-            if (request.body.subject == null) {
+            if (request.body.subject == null || request.body.subject == "") {
                 return response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
             }
-            studyGroup.setSubject(request.body.subject);
+            await studyGroup.setSubject(request.body.subject);
         }
 
         //RETURN SUCCESS MESSAGE
@@ -942,7 +939,7 @@ module.exports = StudyGroupRouter;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 07 2022 18:59:55 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 08 2022 11:47:09 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
