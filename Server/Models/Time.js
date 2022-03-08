@@ -51,17 +51,25 @@ class Time {
      */
     isAfter(firstTime) {
         let isAfter = false;
+        let hour = parseInt(this.hour);
+        let firstHour = parseInt(firstTime.hour);
+        let minute = parseInt(this.minute);
+        let firstMinute = parseInt(firstTime.minute);
         // If the times are both AM or both PM.
         if (this.partOfDay === firstTime.partOfDay) {
             // If this hour comes after the first hour.
-            if (this.hour > firstTime.hour) {
+            if (this.partOfDay === PartOfDay.Am) {
+                hour = hour % 12;
+                firstHour = firstHour % 12;
+            }
+            if (hour > firstHour) {
                 isAfter = true;
                 // If this hour comes before the first hour.
-            } else if (this.hour < firstTime.hour) {
+            } else if (hour < firstHour) {
                 isAfter = false;
                 // If the hours are equal.
             } else {
-                isAfter = this.minute > firstTime.minute;
+                isAfter = minute > firstMinute;
             }
             // If this time of day comes after the first time of day.
         } else if (this.partOfDay > firstTime.partOfDay) {
@@ -69,7 +77,6 @@ class Time {
         } else {
             isAfter = false;
         }
-
         return isAfter;
     }
 
@@ -100,6 +107,7 @@ class Time {
     static parse24HourTimeString(timeString) {
         // The time string will be in a predictable format.
         const COLON = ":";
+        timeString = String(timeString);
         const colonIndex = timeString.indexOf(COLON);
         const beginningOfTimeString = 0;
         let hour = parseInt(timeString.slice(beginningOfTimeString, colonIndex));

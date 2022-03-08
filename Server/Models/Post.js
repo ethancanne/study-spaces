@@ -8,40 +8,43 @@ const Validator = require("../Validator.js");
  * @author Cliff Croom
  * @date   01/11/2022
  */
-const PostSchema = new Schema({
-    attachment: {
-        type: String,
-        required: false
+const PostSchema = new Schema(
+    {
+        attachment: {
+            type: String,
+            required: false
+        },
+        creator: {
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: Configuration.getUserCollectionName(),
+            required: true
+        },
+        feedId: {
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: "Feed",
+            required: true
+        },
+        message: {
+            type: String,
+            required: true
+        },
+        responses: {
+            type: [String],
+            required: false
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        type: {
+            type: String,
+            required: false
+        }
     },
-    creator: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: Configuration.getUserCollectionName(),
-        required: true
-    },
-    feedId: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: "Feed",
-        required: true
-    },
-    message: {
-        type: String,
-        required: true
-    },
-    responses: {
-        type: [String],
-        required: false
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    type: {
-        type: String,
-        required: false
+    {
+        timestamps: true
     }
-}, {
-    timestamps: true
-});
+);
 PostSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -191,10 +194,9 @@ class Post {
      * Gets the document id of the post in the database as a string.
      * @return {String} The document id of the post.
      */
-     getId() {
+    getId() {
         return this._id;
     }
-
 
     /**
      * Gets the timestamp.

@@ -125,7 +125,7 @@ class User {
      *
      * @async
      */
-     async removeStudyGroup(studyGroup) {
+    async removeStudyGroup(studyGroup) {
         // REMOVE THE STUDY GROUP TO THE USER'S STUDY GROUP LIST.
         const studyGroups = this.studyGroups.map((studyGroupId) => String(studyGroupId));
         const studyGroupIndex = studyGroups.indexOf(String(studyGroup.getId()));

@@ -176,7 +176,7 @@ class StudyGroup {
         return memberWasAdded;
     }
 
-        /**
+    /**
      * Removes a member from the study group.
      * @param {User} The member to remove from the group.
      * @return {Boolean} True if the member was removed, false otherwise.
@@ -184,7 +184,7 @@ class StudyGroup {
      * @date 03/01/2022
      * @async
      */
-     async removeMember(studyGroupMember) {
+    async removeMember(studyGroupMember) {
         // Remove THE MEMBER TO THE STUDY GROUP'S LIST OF MEMBERS.
         const members = this.members.map((memberId) => String(memberId));
         const memberIndex = members.indexOf(String(studyGroupMember.getId()));
@@ -686,8 +686,6 @@ class StudyGroup {
         //!!!!!
     }
 
-
-
     /**
      * This saves the associated user document in the database with the current properties
      * stored in this object.
@@ -819,7 +817,8 @@ class StudyGroup {
         studyGroups = studyGroups.filter((studyGroup) => {
             if (Validator.isDefined(studyGroup.recurringMeeting)) {
                 const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
-                return meetingAvailability.matchAvailability(recurringMeeting);
+                const meetingTimeFitsSchedule = meetingAvailability.matchAvailability(recurringMeeting);
+                return meetingTimeFitsSchedule;
             } else {
                 return true;
             }

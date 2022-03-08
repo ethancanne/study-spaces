@@ -18,21 +18,15 @@ const Validator = require("../Validator.js");
 class MeetingAvailability {
     constructor(days, meetingFrequencies, startTime, endTime) {
         this.days = days;
-        if (Validator.isUndefined(days)) {
-            this.days = Days;
+        if (days.length === 0) {
+            this.days = Object.keys(Days);
         }
         this.meetingFrequencies = meetingFrequencies;
-        if (Validator.isUndefined(meetingFrequencies)) {
-            this.meetingFrequencies = MeetingFrequencies;
+        if (meetingFrequencies.length === 0) {
+            this.meetingFrequencies = Object.keys(MeetingFrequencies);
         }
         this.startTime = new Time(startTime.hour, startTime.minute, startTime.partOfDay);
-        if (Validator.isUndefined(startTime)) {
-            this.startTime = new Time(0, 0, PartOfDay.Am);
-        }
         this.endTime = new Time(endTime.hour, endTime.minute, endTime.partOfDay);
-        if (Validator.isUndefined(endTime)) {
-            this.endTime = new Time(11, 45, PartOfDay.Pm);
-        }
     }
 
     /**
@@ -46,7 +40,7 @@ class MeetingAvailability {
         const NOT_FOUND_INDEX = -1;
         const daysMatch = NOT_FOUND_INDEX !== this.days.indexOf(meeting.day);
         const frequenciesMatch = NOT_FOUND_INDEX !== this.meetingFrequencies.indexOf(meeting.frequency);
-        const meetingTime = Time.parseTimeString(meeting.time);
+        const meetingTime = meeting.time;
         const timesMatch = meetingTime.isBetween(this.startTime, this.endTime);
         return daysMatch && frequenciesMatch && timesMatch;
     }
@@ -122,6 +116,9 @@ class Meeting {
         // record are copied to the instance of this class so they can be properly editied.
         // The meeting schema is converted to a regular object to sanitize it of wrapper methods and properties.
         Object.assign(this, MeetingSchema.toObject());
+        if (typeof this.time !== "Time") {
+            this.time = Time.parse24HourTimeString(this.time);
+        }
     }
 
     /**
@@ -133,6 +130,10 @@ class Meeting {
      */
     static async create(day, frequency, time, date, details, location, roomNumber) {
         // CREATE MEETING IN THE DATABASE.
+        const days = Object.keys(Days);
+        if (days.indexOf(day) < 0) {
+            day = days[day];
+        }
         const meetingModel = new MeetingModel({
             day: day,
             date: date,

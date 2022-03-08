@@ -63,7 +63,6 @@ class Feed {
      * @async
      */
     async addPost(title, message, feedId, creator, type, attachment) {
-
         // CREATE THE POST
         let post = undefined;
         post = await Post.create(title, message, feedId, creator, type, attachment);
@@ -124,9 +123,9 @@ class Feed {
     async deletePost(post) {}
 
     /**
-    * Gets the feed from its ID.
-    * @param {Mongoose.Types.ObjectId} feedId The ID of the feed.
-    */
+     * Gets the feed from its ID.
+     * @param {Mongoose.Types.ObjectId} feedId The ID of the feed.
+     */
     static async getById(feedId) {
         // CONVERT THE ID TO THE ACCEPTABLE TYPE.
         const convertedFeedId = Mongoose.Types.ObjectId(feedId);
@@ -158,7 +157,7 @@ class Feed {
      * @author Clifton Croom
      * @date   03/07/2022
      */
-     getId() {
+    getId() {
         return this._id;
     }
 

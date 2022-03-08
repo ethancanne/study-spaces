@@ -66,7 +66,7 @@ class StudyGroupRouter {
             authenticator.protectRoute(),
             upload.single("attachment"),
             StudyGroupRouter.createPost
-        )
+        );
 
         // This is used to create study groups.
         server.post(
@@ -157,12 +157,12 @@ class StudyGroupRouter {
     }
 
     /**
-    * @param {String} request.body.title The post title.
-    * @param {String} request.body.message The post contents.
-    * @param {String} request.body.type The type of post being created.
-    * @author Cameron Burkholder
-    * @date   03/04/2022
-    */
+     * @param {String} request.body.title The post title.
+     * @param {String} request.body.message The post contents.
+     * @param {String} request.body.type The type of post being created.
+     * @author Cameron Burkholder
+     * @date   03/04/2022
+     */
     static async createPost(request, response) {
         // CHECK THAT THE ATTACHMENT (IF PROVIDED) HAS NOT FAILED.
         if (request.profilePictureFailed) {
@@ -285,7 +285,6 @@ class StudyGroupRouter {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorDeleteMeeting });
         }
         return response.json({ message: ResponseMessages.StudyGroup.SuccessDeleteMeeting });
-
     }
 
     /**
@@ -775,7 +774,7 @@ class StudyGroupRouter {
      * @async
      * @static
      */
-     static async leaveStudyGroup(request, response) {
+    static async leaveStudyGroup(request, response) {
         // GET THE USER LEAVING THE GROUP.
         const user = request.user;
 
@@ -819,7 +818,6 @@ class StudyGroupRouter {
         if (!studyGroupWasRemoved) {
             return response.json({ message: ResponseMessages.StudyGroup.ErrorRemoveStudyGroup });
         }
-
 
         // SEND THE SUCCESS MESSAGE
         return response.json({ message: ResponseMessages.StudyGroup.SuccessStudyGroupLeft });

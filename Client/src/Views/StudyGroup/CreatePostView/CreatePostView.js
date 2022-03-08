@@ -28,11 +28,13 @@ const CreatePostView = ({ group }) => {
         event.stopPropagation();
         console.log(group, title, body, category, attachment);
 
-        await sendPostRequest(Routes.StudyGroup.CreatePost, {title, message: body, category, attachment, studyGroupId: group._id },
+        await sendPostRequest(
+            Routes.StudyGroup.CreatePost,
+            { title, message: body, category, attachment, studyGroupId: group._id },
             ResponseMessages.StudyGroup.CreatePost.Success,
             null,
             true,
-            (data, error)=>{
+            (data, error) => {
                 if (error) return;
                 useHistory.push(0);
             }
