@@ -1,6 +1,7 @@
 const BodyParser = require("body-parser");
 const Express = require("express");
 const Helmet = require("helmet");
+const Http = require("http");
 const Mongoose = require("mongoose");
 const Passport = require("passport");
 const Path = require("path");
@@ -9,6 +10,7 @@ const Authenticator = require("./Authenticator.js");
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const AccountRouter = require("./Routers/AccountRouter.js");
+const MessageRouter = require("./Routers/MessageRouter.js");
 const SearchRouter = require("./Routers/SearchRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 const StudyGroupRouter = require("./Routers/StudyGroupRouter.js");
@@ -64,7 +66,7 @@ const authenticator = new Authenticator(server, Passport);
 // Helmet is used to help with basic security.
 server.use(Helmet());
 
-//Make uploads path accessable
+// Make uploads path accessable
 server.use("/uploads", Express.static("uploads"));
 
 // IMPLEMENT THE SERVER ROUTES.
@@ -76,6 +78,10 @@ StaticResourceRouter.serveRoutes(server, authenticator);
 
 // START SERVER.
 const serverPort = Configuration.getServerPort();
-server.listen(serverPort, () => {
+// The server defined above provides a function handler that can process requests and uses the Express
+// framework to integrate the various routes/route handlers and an HTTP server. Creating the HTTP server
+// separately allows it to be reused for implementing socket.io.
+const serverInstance = Http.createServer(server);
+serverInstance.listen(serverPort, () => {
     Log.write(`Server deployed on port ${serverPort} in mode: ${Configuration.getNodeEnvironment()}.`);
 });

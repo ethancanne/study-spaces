@@ -73,7 +73,7 @@ class Log {
             if (logFolderDoesNotExist) {
                 Filesystem.mkdirSync(logFolder);
             }
-            Filesystem.writeFile(logFilepath, EMPTY_LOG_FILE, Log.handleLogError);
+            Filesystem.writeFileSync(logFilepath, EMPTY_LOG_FILE, Log.handleLogError);
         }
     }
 
