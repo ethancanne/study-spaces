@@ -284,3 +284,5 @@ export const performSignOut = () => {
     store.dispatch(showSuccessNotification("You have been successfully signed out."));
     store.dispatch(clearStudyGroups());
 };
+
+export const setRefresh = () => {};

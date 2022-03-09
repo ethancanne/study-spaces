@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { closePopup } from "../../../state/actions";
 import CreateMeetingForm from "../../../components/CreateMeetingForm/CreateMeetingForm";
 import { useHistory } from "react-router";
+import { MeetingFrequencies } from "../../../../../Server/Models/Time";
 
 /**
  * This is a specific view that is used in a popup
@@ -20,8 +21,9 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
         isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.date.replace("/", "-") : ""
     );
     const [time, setTime] = useState(isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.time : "");
+
     const [frequency, setFrequency] = useState(
-        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.frequency : ""
+        isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.frequency : MeetingFrequencies.Daily
     );
     const [details, setDetails] = useState(
         isRecurringMeeting && group.recurringMeeting ? group.recurringMeeting.details : ""

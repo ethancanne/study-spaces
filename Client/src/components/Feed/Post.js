@@ -53,7 +53,7 @@ const Post = (props) => {
                 <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
             </div>
             <div className="post-metainfo">
-                <p className="post-date">{props.dateCreated.toLocaleString()}</p>
+                <p className="post-date">{props.dateCreated}</p>
             </div>
 
             <div className="post-creator">

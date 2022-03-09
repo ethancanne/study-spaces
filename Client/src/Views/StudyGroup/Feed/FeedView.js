@@ -21,8 +21,9 @@ const FeedView = ({ group }) => {
     return (
         <div className="feed-container">
             <div className="posts-container">
-                {group.feed && group.feed.posts ? (
-                    group.feed.posts.map((post) => (
+                {console.log(group.posts)}
+                {group.posts ? (
+                    group.posts.map((post) => (
                         <Post
                             title={post.title}
                             message={post.message}

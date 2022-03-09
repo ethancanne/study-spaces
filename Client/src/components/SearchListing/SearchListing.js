@@ -53,18 +53,23 @@ const SearchListing = ({ group }) => {
                     <p>Course Code:</p>
                     <h2>{group.course ? group.course : "None"}</h2>
                 </div>
-                <div className="group-info-item" id="schedule-info">
-                    {group.isOnlineGroup ? (
-                        <p>
-                            Meets <strong>Online</strong> Every:
-                        </p>
-                    ) : (
-                        <p>
-                            Meets <strong>In-Person</strong> Every:
-                        </p>
-                    )}
-                    <h2>{group.schedule}</h2>
-                </div>
+                {group.recurringMeeting && (
+                    <div className="group-info-item" id="schedule-info">
+                        {group.isOnlineGroup ? (
+                            <p>
+                                Meets <strong>Online</strong>:
+                            </p>
+                        ) : (
+                            <p>
+                                Meets <strong>In-Person</strong>:
+                            </p>
+                        )}
+                        <h2>
+                            {group.recurringMeeting.frequency} on {group.recurringMeeting.day} at{" "}
+                            {group.recurringMeeting.time}
+                        </h2>
+                    </div>
+                )}
             </div>
         </div>
     );

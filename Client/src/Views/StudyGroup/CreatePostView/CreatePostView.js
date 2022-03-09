@@ -4,6 +4,9 @@ import { sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import { useHistory } from "react-router";
+import PostTypes from "../../../../../Server/Models/PostTypes";
+import { useDispatch } from "react-redux";
+import { closePopup } from "../../../state/actions";
 
 /**
  * This is a specific view that is used in a popup
@@ -14,8 +17,11 @@ import { useHistory } from "react-router";
 const CreatePostView = ({ group }) => {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
-    const [category, setCategory] = useState(""); //OW
+    const [category, setCategory] = useState(PostTypes.Problem);
     const [attachment, setAttachment] = useState("");
+
+    const history = useHistory();
+    const dispatch = useDispatch();
 
     /**
      * Makes an api call to the create meeting route, passing in the information entered in the form and rendering the client according to the response received
@@ -26,8 +32,6 @@ const CreatePostView = ({ group }) => {
     const submitCreatePost = async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        console.log(group, title, body, category, attachment);
-
         await sendPostRequest(
             Routes.StudyGroup.CreatePost,
             { title, message: body, category, attachment, studyGroupId: group._id },
@@ -36,7 +40,8 @@ const CreatePostView = ({ group }) => {
             true,
             (data, error) => {
                 if (error) return;
-                useHistory.push(0);
+                dispatch(closePopup());
+                history.go(0);
             }
         );
     };

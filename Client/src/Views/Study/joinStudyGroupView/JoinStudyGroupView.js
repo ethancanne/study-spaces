@@ -74,6 +74,23 @@ const JoinStudyGroupView = ({ group }) => {
                         <Label>Meeting Format</Label>
                         <p>{isOnlineGroup ? <p>Online</p> : <p>In Person</p>}</p>
                     </div>
+                    {group.recurringMeeting && (
+                        <div className="info">
+                            {group.isOnlineGroup ? (
+                                <Label>
+                                    Meets <strong>Online</strong>:
+                                </Label>
+                            ) : (
+                                <Label>
+                                    Meets <strong>In-Person</strong>:
+                                </Label>
+                            )}
+                            <p>
+                                {group.recurringMeeting.frequency} on {group.recurringMeeting.day} at{" "}
+                                {group.recurringMeeting.time}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
 

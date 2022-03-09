@@ -17,7 +17,7 @@ const popupReducer = (state = { view: "", isShowing: false, payload: {}, showTop
                 view: views.Popup.StudyGroup.Join,
                 isShowing: true,
                 payload: action.payload,
-                showTop: true
+                showTop: false
             };
 
         case popupConstants.SHOW_EDIT_STUDY_GROUP_POPUP:
