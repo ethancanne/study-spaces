@@ -59,6 +59,7 @@
         "redux-thunk": "^2.4.0",
         "regenerator-runtime": "^0.13.9",
         "sharp": "^0.29.3",
+        "socket.io": "^4.4.1",
         "swot-node": "^2.0.371"
     },
     "devDependencies": {
