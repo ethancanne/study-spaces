@@ -51,19 +51,15 @@ const Validator = require("../Validator.js");
                 
                 if (Validator.isDefined(conversation)) {
                     response.json({
-                        message: ResponseMessages.StudyGroup.SuccessConversationRetrieved,
+                        message: ResponseMessages.Message.SuccessGetConversation,
                         conversation: conversation
                     });
                 } else {
-                    response.json({ message: ResponseMessages.StudyGroup.ErrorGetConversation });
+                    response.json({ message: ResponseMessages.Message.ErrorGetConversation });
                 }
             }
-
         }
-            
-    
-
-
+        
  }
 
 

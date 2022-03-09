@@ -160,10 +160,44 @@ class StudyGroupRouter {
         const { day, time, date, details, location, roomNumber } = request.body;
         const oneTimeMeeting = await Meeting.createOneTime(date, time, day, details, location, roomNumber);
 
+        // CREATE POST
+        let message = "Meeting created for " + date + " at " + time + " on " + day + ". ";
+        if (details != null) {
+            message = message + "Details: " + details + ". ";
+        }
+        if (location != null) {
+            message = message + "Location: " + location + ". ";
+        }
+        if (roomNumber != null) {
+            message = message + "Room number: " + roomNumber + ". ";
+        }
+
+        // GET THE STUDY GROUP'S FEED.
+        const feedWasFound = await studyGroup.getFeed();
+        if (!feedWasFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
+        }
+        const feed = new Feed(studyGroup.feed);    
+        
+        let feedId = feed.getId();
+        let creator = user.getId();
+        let postWasCreated = undefined;
+        try {
+            postWasCreated = await feed.addPost("Meeting", message, feedId, creator, "Meeting", null);
+        } catch (error) {
+            Log.writeError(error);
+        }
+
+        // GET THE UPDATED FEED.
+        const posts = await feed.getPosts();
+        const postsWereFound = Validator.isDefined(posts);
+                
+
         // ADD THE ONE-TIME MEETING.
         let oneTimeMeetingWasSet = await studyGroup.addMeeting(oneTimeMeeting);
-        if (oneTimeMeetingWasSet) {
-            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Success });
+        if (oneTimeMeetingWasSet && postWasCreated && postsWereFound) {
+            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Success,
+            posts: posts });
         } else {
             return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Error });
         }

@@ -33,7 +33,6 @@ const ResponseMessages = {
         InactiveAccount: "The account requested is not active."
     },
     Message: {
-    
         ErrorGetConversation: "An error occurred while attempting to get the conversation.",
         SuccessGetConversation: "Conversation returned successfully."
     },
