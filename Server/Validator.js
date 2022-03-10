@@ -145,6 +145,7 @@ class Validator {
         // GENERATE THE RESPONSE.
         if (inputIsValid) {
             request.body.type = request.body.category;
+            request.body.profilePicture = request.body.attachment;
             return nextMiddlewareFunction();
         } else {
             response.json({ message: error });

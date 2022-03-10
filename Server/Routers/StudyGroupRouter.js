@@ -65,8 +65,8 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.CreatePost,
             authenticator.protectRoute(),
-            upload.single("attachment"),
             Validator.validateCreatePost,
+            upload.single("profilePicture"),
             StudyGroupRouter.createPost
         );
 
@@ -177,8 +177,8 @@ class StudyGroupRouter {
         if (!feedWasFound) {
             return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
         }
-        const feed = new Feed(studyGroup.feed);    
-        
+        const feed = new Feed(studyGroup.feed);
+
         let feedId = feed.getId();
         let creator = user.getId();
         let postWasCreated = undefined;
@@ -191,7 +191,7 @@ class StudyGroupRouter {
         // GET THE UPDATED FEED.
         const posts = await feed.getPosts();
         const postsWereFound = Validator.isDefined(posts);
-                
+
 
         // ADD THE ONE-TIME MEETING.
         let oneTimeMeetingWasSet = await studyGroup.addMeeting(oneTimeMeeting);
@@ -213,8 +213,9 @@ class StudyGroupRouter {
     static async createPost(request, response) {
         // CHECK THAT THE ATTACHMENT (IF PROVIDED) HAS NOT FAILED.
         if (request.profilePictureFailed) {
-            return response.json({ message: ResponseMessages.StudyGroup.CreatePost.InvalidAttachment });
+            return response.json({ message: ResponseMessages.Account.ErrorUploadProfilePicture });
         }
+        console.log(request.body);
 
         // GET THE STUDY GROUP.
         const studyGroupId = request.body.studyGroupId;
@@ -244,16 +245,17 @@ class StudyGroupRouter {
         const feedId = feed.getId();
         // It is not required to upload an attachment, but if one has been uploaded
         // it must be processed in order to be stored in the database.
-        let attachment = undefined;
-        const attachmentWasIncluded = Validator.isDefined(request.file);
+        let encoded = undefined;
         if (Validator.isDefined(request.file)) {
-            const convertedAttachment = await sharp(request.file.buffer)
+            // Resize the profile picture and convert it to a png
+            const profilePicture = await sharp(request.file.buffer)
                 .resize({ height: 200, width: 200 })
                 .png()
                 .toBuffer();
-            attachment = convertedAttachment.toString("base64");
+            // Encode the picture to base64 and store it in db
+            encoded = profilePicture.toString("base64");
         }
-        const postWasCreated = await feed.addPost(title, message, feedId, creator, type, attachment);
+        const postWasCreated = await feed.addPost(title, message, feedId, creator, type, encoded);
         if (!postWasCreated) {
             return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
         }
