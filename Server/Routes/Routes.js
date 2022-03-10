@@ -15,6 +15,9 @@ const Routes = {
         UpdateAuthenticationToken: "/api/account/update-authentication-token",
         VerifyEmailChange: "/api/account/verify-email-change"
     },
+    Message: {
+        GetConversations: "/api/message/get-conversations"
+    },
     StaticResources: {
         Index: "/*"
     },

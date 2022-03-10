@@ -100,13 +100,13 @@ class AccountRouter {
      */
     static updateAuthenticationToken(request, response) {
         // GET THE AUTHENTICATION TOKEN.
-        const authenticationToken = authenticator.issueAuthenticationToken(request.user);
+        const authenticationToken = Authenticator.issueAuthenticationToken(request.user);
 
         // SEND THE RESPONSE.
         const responseMessage = {
             message: ResponseMessages.Account.AuthenticationTokenWasUpdated,
             authenticationToken: authenticationToken.token,
-            authenticationTokenExpirationDate: new Date(Date.now() + authentication.expires).toDateString(),
+            authenticationTokenExpirationDate: new Date(Date.now() + authenticationToken.expires).toDateString(),
             user: request.user
         };
         response.json(responseMessage);

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/core/Dropdown/Dropdown.js</title>
+    <title>JSDoc: Source: Server/Routers/MessageRouter.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/core/Dropdown/Dropdown.js</h1>
+    <h1 class="page-title">Source: Server/Routers/MessageRouter.js</h1>
 
     
 
@@ -26,30 +26,44 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import React, { useEffect } from "react";
-import "../core.scss";
+            <pre class="prettyprint source linenums"><code>const Events = require("../Events.js");
 
 /**
- * Used to render dropdown menus.
- * @param {Array} props.options The items to render in the dropdown menu.
- * @param {Function} props.onChange The function to be run when an item is selected
- * @author Ethan Cannelongo
- * @date   12/05/2021
- */
-const Dropdown = (props) => {
-    useEffect(() => {
-        console.log(props.options);
-    }, []);
-    return (
-        &lt;select className="dropdown" onChange={props.onChange} value={props.value}>
-            {props.options.map((option) => (
-                &lt;option value={option}>{option}&lt;/option>
-            ))}
-        &lt;/select>
-    );
-};
+* Manages routes related to sending and viewing messages.
+* @author Cameron Burkholder
+* @date   03/09/2022
+*/
+class MessageRouter {
+    /**
+    * Publicly exposes all necessary routes to the server instance.
+    * @author Cameron Burkholder
+    * @date   03/09/2022
+    */
+    static serveRoutes(server, authenticator, io) {
+        // EXPOSE THE SOCKET.IO HANDLERS.
+        MessageRouter.io = io;
+        io.on(Events.Connect, MessageRouter.handleConnection);
+        io.on(Events.Disconnect, MessageRouter.handleDisconnect);
+        io.on(Events.Error, MessageRouter.handleError);
 
-export default Dropdown;
+        // EXPOSE THE ROUTE HANDLERS.
+    }
+
+    static broadcastMessage(message) {
+        MessageRouter.io.emit(Events.Message, message);
+    }
+    static handleConnection(socket) {
+        socket.on(Events.Message, MessageRouter.broadcastMessage);
+    }
+    static handleDisconnect(socket) {
+
+    }
+    static handleError(error) {
+
+    }
+}
+
+module.exports = MessageRouter;
 </code></pre>
         </article>
     </section>

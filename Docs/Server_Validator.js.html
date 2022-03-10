@@ -76,11 +76,11 @@ class Validator {
     }
 
     /**
-    * Validates the form input for changing a user's email.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the form input for changing a user's email.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateChangeEmail(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
@@ -106,16 +106,16 @@ class Validator {
     }
 
     /**
-    * Validates the form input for creating an account.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the form input for creating an account.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateCreateAccountInput(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
         let error = ResponseMessages.Account.InvalidAccountInput;
-        const { email, password, confirmPassword} = request.body;
+        const { email, password, confirmPassword } = request.body;
         if (email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
             inputIsValid = false;
         }
@@ -149,17 +149,24 @@ class Validator {
     }
 
     /**
-    * Validates the input for creating a post.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the input for creating a post.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateCreatePost(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
         let error = ResponseMessages.StudyGroup.CreatePost.InvalidInput;
         const { title, message, category } = request.body;
-        if (title == null || title.length === 0 || message == null || message.length === 0 || category == null || category.length === 0) {
+        if (
+            title == null ||
+            title.length === 0 ||
+            message == null ||
+            message.length === 0 ||
+            category == null ||
+            category.length === 0
+        ) {
             inputIsValid = false;
         }
 
@@ -200,11 +207,11 @@ class Validator {
     }
 
     /**
-    * Validates the input for editing a meeting.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the input for editing a meeting.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateEditMeeting(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
@@ -224,11 +231,11 @@ class Validator {
     }
 
     /**
-    * Validates the input for editing a study group.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the input for editing a study group.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateEditStudyGroup(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
@@ -248,24 +255,24 @@ class Validator {
     }
 
     /**
-    * Checks if an email is valid.
-    * @author W3Schools
-    * @static
-    */
+     * Checks if an email is valid.
+     * @author W3Schools
+     * @static
+     */
     static validateEmail(email) {
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-            return (true);
+            return true;
         } else {
-            return (false);
+            return false;
         }
     }
 
     /**
-    * Validates the input for creating a one-time meeting.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the input for creating a one-time meeting.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateOneTimeMeeting(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
@@ -285,17 +292,23 @@ class Validator {
     }
 
     /**
-    * Validates the input for setting a recurring meeting.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the input for setting a recurring meeting.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateSetRecurringMeeting(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
         let error = ResponseMessages.StudyGroup.SetRecurringMeeting.InvalidInput;
         const { day, frequency, time, date } = request.body;
-        if (frequency == null || time == null || frequency.length === 0 || time.length === 0 || Validator.isUndefined(date)) {
+        if (
+            frequency == null ||
+            time == null ||
+            frequency.length === 0 ||
+            time.length === 0 ||
+            Validator.isUndefined(date)
+        ) {
             inputIsValid = false;
         }
 
@@ -309,11 +322,11 @@ class Validator {
     }
 
     /**
-    * Validates the input for setting up an account.
-    * @author Cameron Burkholder
-    * @date   03/08/2022
-    * @static
-    */
+     * Validates the input for setting up an account.
+     * @author Cameron Burkholder
+     * @date   03/08/2022
+     * @static
+     */
     static validateSetupAccount(request, response, nextMiddlewareFunction) {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
@@ -388,13 +401,13 @@ module.exports = Validator;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateMeetingView">CreateMeetingView</a></li><li><a href="global.html#CreatePostView">CreatePostView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#DetailsView">DetailsView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#ViewMeetingView">ViewMeetingView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageRouter.html">MessageRouter</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateMeetingView">CreateMeetingView</a></li><li><a href="global.html#CreatePostView">CreatePostView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#DetailsView">DetailsView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#ViewMeetingView">ViewMeetingView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Tue Mar 08 2022 11:47:09 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Mar 09 2022 21:14:08 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,16 +1,19 @@
 const BodyParser = require("body-parser");
+const cors = require("cors");
 const Express = require("express");
 const Helmet = require("helmet");
 const Http = require("http");
 const Mongoose = require("mongoose");
 const Passport = require("passport");
 const Path = require("path");
+const { Server } = require("socket.io");
 
 const Authenticator = require("./Authenticator.js");
 const Configuration = require("../Configuration.js");
 const Log = require("./Log.js");
 const AccountRouter = require("./Routers/AccountRouter.js");
 const MessageRouter = require("./Routers/MessageRouter.js");
+const ResponseCodes = require("./Responses/ResponseCodes.js");
 const SearchRouter = require("./Routers/SearchRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 const StudyGroupRouter = require("./Routers/StudyGroupRouter.js");
@@ -85,3 +88,18 @@ const serverInstance = Http.createServer(server);
 serverInstance.listen(serverPort, () => {
     Log.write(`Server deployed on port ${serverPort} in mode: ${Configuration.getNodeEnvironment()}.`);
 });
+
+// START SOCKET.IO.
+const io = new Server(serverInstance, {
+    cors: {
+        origins: ["*"],
+        handlePreflightRequest: (request, response) => {
+            response.writeHead(ResponseCodes.Success, {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET,POST"
+            });
+            response.end();
+        }
+    }
+});
+MessageRouter.serveRoutes(server, authenticator, io);

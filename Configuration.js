@@ -186,6 +186,17 @@ class Configuration {
     }
 
     /**
+     * Gets the server URL.
+     * @return {String} The server URL.
+     * @author Cameron Burkholder
+     * @date   03/09/2022
+     * @static
+     */
+    static getServerUrl() {
+        return process.env.SERVER_URL;
+    }
+
+    /**
      * Gets the server port to use.
      * @return {String} The server port.
      * @author Cameron Burkholder

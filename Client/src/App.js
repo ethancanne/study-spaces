@@ -119,16 +119,17 @@ const App = (props) => {
                     <Route exact path="/search">
                         <Search />
                     </Route>
-                    <Route 
-                        path="/message" render={(props) => {
+                    <Route
+                        path="/message"
+                        render={(props) => {
                             return isLoggedIn ? (
                                 <>
-                                    <Redirect to="/message" />
-                               </>
+                                    <Message {...props} />
+                                </>
                             ) : (
-                                <Message {...props}/>
+                                <Redirect to="/" />
                             );
-                        }} 
+                        }}
                     />
 
                     <Route
