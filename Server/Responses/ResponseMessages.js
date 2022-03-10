@@ -32,6 +32,10 @@ const ResponseMessages = {
         PasswordTooShort: "The password must be at least 6 characters.",
         InactiveAccount: "The account requested is not active."
     },
+    Message: {
+        ErrorGetConversation: "An error occurred while attempting to get the conversation.",
+        SuccessGetConversation: "Conversation returned successfully."
+    },
     StudyGroup: {
         AddOneTimeMeeting: {
             Error: "An error occured while attempting to add a one-time meeting.",
@@ -44,7 +48,7 @@ const ResponseMessages = {
             InvalidInput: "One or more required fields is empty.",
             Success: "The post was created successfully."
         },
-        ErrorCreateStudyGroup: "An error ocurred while attempting to create a study group.",
+        ErrorCreateStudyGroup: "An error occurred while attempting to create a study group.",
         ErrorDeleteStudyGroup: "An error occurred while attempting to delete a study group.",
         ErrorDeleteMeeting: "An error occurred while attempting to delete a meeting.",
         ErrorEditMeeting: "An error occurred while attempting to edit the meeting.",
