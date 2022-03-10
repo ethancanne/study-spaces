@@ -29,7 +29,7 @@ class MessageRouter {
         io.on(Events.Error, MessageRouter.handleError);
 
         // EXPOSE THE ROUTE HANDLERS.
-        // This is used to get a conversation
+        // This is used to get a conversation.
         server.post(
             Routes.Message.GetConversation,
             authenticator.protectRoute(),
