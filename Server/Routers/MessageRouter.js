@@ -30,11 +30,7 @@ class MessageRouter {
 
         // EXPOSE THE ROUTE HANDLERS.
         // This is used to get a conversation.
-        server.post(
-            Routes.Message.GetConversation,
-            authenticator.protectRoute(),
-            MessageRouter.getConversation
-        );
+        server.post(Routes.Message.GetConversation, authenticator.protectRoute(), MessageRouter.getConversation);
     }
 
     // SOCKET.IO HANDLERS.
@@ -49,21 +45,20 @@ class MessageRouter {
 
     // ROUTE HANDLERS.
     /**
-    * Gets the conversation of two users.
-    * @param
-    * @author Clifton Croom
-    * @date   03/09/2022
-    * @async
-    * @static
-    */
+     * Gets the conversation of two users.
+     * @param
+     * @author Clifton Croom
+     * @date   03/09/2022
+     * @async
+     * @static
+     */
     static async getConversation(request, response) {
         let conversation = undefined;
         try {
             conversation = await request.user.getConversation(request.user.getId(), request.body.person);
         } catch (error) {
             log.writeError(error);
-        }   finally {
-
+        } finally {
             if (Validator.isDefined(conversation)) {
                 response.json({
                     message: ResponseMessages.Message.SuccessGetConversation,
@@ -76,4 +71,4 @@ class MessageRouter {
     }
 }
 
- module.exports = MessageRouter;
+module.exports = MessageRouter;

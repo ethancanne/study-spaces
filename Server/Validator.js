@@ -133,7 +133,6 @@ class Validator {
         let inputIsValid = true;
         let error = ResponseMessages.StudyGroup.CreatePost.InvalidInput;
         const { title, message, category } = request.body;
-        console.log(request.body);
         if (
             title == null ||
             title.length === 0 ||
@@ -148,7 +147,6 @@ class Validator {
         // GENERATE THE RESPONSE.
         if (inputIsValid) {
             request.body.type = request.body.category;
-            request.body.profilePicture = request.body.attachment;
             return nextMiddlewareFunction();
         } else {
             response.json({ message: error });

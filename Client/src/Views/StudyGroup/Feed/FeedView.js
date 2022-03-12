@@ -25,6 +25,7 @@ const FeedView = ({ group }) => {
                 {group.posts ? (
                     group.posts.map((post) => (
                         <Post
+                            attachment={post.attachment}
                             title={post.title}
                             message={post.message}
                             creator={post.creator}

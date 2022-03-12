@@ -37,6 +37,7 @@ class StudyGroupRouter {
         // This is used to allow users to upload profile pictures.
         const fileFilter = (req, file, cb) => {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+            console.log(file);
             if (allowedFileTypes.includes(file.mimetype)) {
                 cb(null, true);
             } else {
@@ -44,7 +45,7 @@ class StudyGroupRouter {
                 Log.write("The file format is not supported.");
                 cb(null, false, req.profilattachment);
             }
-        }
+        };
         const upload = multer({
             limits: {
                 fileSize: 2000000
@@ -63,8 +64,8 @@ class StudyGroupRouter {
         server.post(
             Routes.StudyGroup.CreatePost,
             authenticator.protectRoute(),
-            Validator.validateCreatePost,
             upload.single("attachment"),
+            Validator.validateCreatePost,
             StudyGroupRouter.createPost
         );
 
@@ -190,12 +191,10 @@ class StudyGroupRouter {
         const posts = await feed.getPosts();
         const postsWereFound = Validator.isDefined(posts);
 
-
         // ADD THE ONE-TIME MEETING.
         let oneTimeMeetingWasSet = await studyGroup.addMeeting(oneTimeMeeting);
         if (oneTimeMeetingWasSet && postWasCreated && postsWereFound) {
-            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Success,
-            posts: posts });
+            return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Success, posts: posts });
         } else {
             return response.json({ message: ResponseMessages.StudyGroup.AddOneTimeMeeting.Error });
         }
@@ -213,8 +212,6 @@ class StudyGroupRouter {
         if (request.attachmentFailed) {
             return response.json({ message: ResponseMessages.Account.ErrorUploadProfilePicture });
         }
-        console.log(request.body);
-        console.log(request.file);
 
         // GET THE STUDY GROUP.
         const studyGroupId = request.body.studyGroupId;

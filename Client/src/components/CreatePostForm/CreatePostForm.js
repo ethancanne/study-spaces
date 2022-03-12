@@ -15,7 +15,7 @@ const CreatePostForm = ({
     updateTitleField,
     updateBodyField,
     updateCategoryField,
-    updateAttachmentField,
+    updateAttachment,
     submitCreatePost
 }) => {
     return (
@@ -43,7 +43,17 @@ const CreatePostForm = ({
 
                     <InputField>
                         <Label>Attachment</Label>
-                        <TextInput value={attachment} onChange={updateAttachmentField} type="file" name="attachment"/>
+                        <div className="photo">
+                            <input
+                                type="file"
+                                id="fileInput right"
+                                accept=".png, .jpg, .jpeg"
+                                name="profilePicture"
+                                onChange={updateAttachment}
+                            />
+
+                            <img className="imgPreview" id="left" src={attachment} alt="" />
+                        </div>
                     </InputField>
                 </div>
 

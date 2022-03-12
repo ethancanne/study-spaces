@@ -88,8 +88,8 @@ const CreatePostView = ({ group }) => {
      * @author Ethan Cannelongo
      * @date   02/17/2022
      */
-    const updateAttachmentField = (event) => {
-        setAttachment(event.target.value);
+    const updateAttachment = (event) => {
+        setAttachment(event.target.files[0]);
     };
 
     return (
@@ -101,7 +101,7 @@ const CreatePostView = ({ group }) => {
             updateTitleField={updateTitleField}
             updateBodyField={updateBodyField}
             updateCategoryField={updateCategoryField}
-            updateAttachmentField={updateAttachmentField}
+            updateAttachment={updateAttachment}
             submitCreatePost={submitCreatePost}
         />
     );

@@ -80,8 +80,8 @@ class AccountRouter {
         // This is used to complete the account setup process.
         server.post(
             Routes.Account.SetupAccount,
-            Validator.validateSetupAccount,
             upload.single("profilePicture"),
+            Validator.validateSetupAccount,
             AccountRouter.setupAccount
         );
         // This is used to complete the email change process.

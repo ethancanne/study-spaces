@@ -37,7 +37,7 @@ export const getPostTypeDetails = (post) => {
 };
 const Post = (props) => {
     const dispatch = useDispatch();
-
+    console.log(props);
     return (
         <div className="post-container" onClick={() => dispatch(showViewPostStudyGroupPopup(props))}>
             <div className="post-details">
@@ -47,6 +47,15 @@ const Post = (props) => {
                 </div>
                 <h1 className="post-title">{props.title}</h1>
                 <p className="post-body">{props.message}</p>
+                {props.attachment ? (
+                    <img
+                        className="attachment"
+                        src={"data:image/png;charset=utf-8;base64," + props.attachment}
+                        alt=""
+                    />
+                ) : (
+                    ""
+                )}
                 <p className="post-response-count">
                     <span>{props.responses.length}</span> Responses
                 </p>
