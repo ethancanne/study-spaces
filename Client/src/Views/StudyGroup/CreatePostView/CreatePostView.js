@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import CreatePostForm from "../../../components/CreatePostForm/CreatePostForm";
-import { sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import { useHistory } from "react-router";
 import PostTypes from "../../../../../Server/Models/PostTypes";
 import { useDispatch } from "react-redux";
 import { closePopup } from "../../../state/actions";
+import { sendPostRequestWithFormData } from "../../../../Helper";
 
 /**
  * This is a specific view that is used in a popup
@@ -32,9 +32,16 @@ const CreatePostView = ({ group }) => {
     const submitCreatePost = async (event) => {
         event.preventDefault();
         event.stopPropagation();
-        await sendPostRequest(
+
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("message", body);
+        formData.append("category", category);
+        formData.append("attachment", attachment);
+        formData.append("studyGroupId", group._id);
+        await sendPostRequestWithFormData(
             Routes.StudyGroup.CreatePost,
-            { title, message: body, category, attachment, studyGroupId: group._id },
+            formData,
             ResponseMessages.StudyGroup.CreatePost.Success,
             null,
             true,

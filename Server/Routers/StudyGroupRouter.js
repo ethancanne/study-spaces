@@ -40,13 +40,11 @@ class StudyGroupRouter {
             if (allowedFileTypes.includes(file.mimetype)) {
                 cb(null, true);
             } else {
-                req.profilePictureFailed = true;
+                req.attachmentFailed = true;
                 Log.write("The file format is not supported.");
-                cb(null, false, req.profilePictureFailed);
+                cb(null, false, req.profilattachment);
             }
-        };
-
-        //Limit the file size
+        }
         const upload = multer({
             limits: {
                 fileSize: 2000000
@@ -66,7 +64,7 @@ class StudyGroupRouter {
             Routes.StudyGroup.CreatePost,
             authenticator.protectRoute(),
             Validator.validateCreatePost,
-            upload.single("profilePicture"),
+            upload.single("attachment"),
             StudyGroupRouter.createPost
         );
 
@@ -212,10 +210,11 @@ class StudyGroupRouter {
      */
     static async createPost(request, response) {
         // CHECK THAT THE ATTACHMENT (IF PROVIDED) HAS NOT FAILED.
-        if (request.profilePictureFailed) {
+        if (request.attachmentFailed) {
             return response.json({ message: ResponseMessages.Account.ErrorUploadProfilePicture });
         }
         console.log(request.body);
+        console.log(request.file);
 
         // GET THE STUDY GROUP.
         const studyGroupId = request.body.studyGroupId;

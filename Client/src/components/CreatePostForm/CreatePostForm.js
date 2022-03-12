@@ -43,7 +43,7 @@ const CreatePostForm = ({
 
                     <InputField>
                         <Label>Attachment</Label>
-                        <TextInput value={attachment} onChange={updateAttachmentField} type="file" />
+                        <TextInput value={attachment} onChange={updateAttachmentField} type="file" name="attachment"/>
                     </InputField>
                 </div>
 

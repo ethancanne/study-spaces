@@ -87,7 +87,8 @@ class Validator {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
         let error = ResponseMessages.Account.InvalidAccountInput;
-        const { email, password, confirmPassword } = request.body;
+        const { email, password, password_confirmation } = request.body;
+        const confirmPassword = password_confirmation;
         if (email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
             inputIsValid = false;
         }
@@ -113,6 +114,7 @@ class Validator {
 
         // GENERATE THE RESPONSE.
         if (inputIsValid) {
+            request.confirmPassword = confirmPassword;
             return nextMiddlewareFunction();
         } else {
             response.json({ message: error });
@@ -131,6 +133,7 @@ class Validator {
         let inputIsValid = true;
         let error = ResponseMessages.StudyGroup.CreatePost.InvalidInput;
         const { title, message, category } = request.body;
+        console.log(request.body);
         if (
             title == null ||
             title.length === 0 ||
@@ -305,27 +308,8 @@ class Validator {
         let inputIsValid = true;
         let error = ResponseMessages.Account.InvalidAccountInput;
         const { areaCode, name } = request.body;
-        if (areaCode.length === 0 || name.length === 0) {
+        if (areaCode == null || areaCode.length === 0 || name == null || name.length === 0) {
             inputIsValid = false;
-        }
-
-        // CHECK THAT THE EMAIL IS VALID.
-        if (!Validator.validateEmail(email)) {
-            inputIsValid = false;
-            error = ResponseMessages.Account.InvalidEmail;
-        }
-
-        // CHECK THE INPUT FOR MINIMUM LENGTHS.
-        const MINIMUM_PASSWORD_LENGTH = 6;
-        if (password.length < MINIMUM_PASSWORD_LENGTH) {
-            inputIsValid = false;
-            error = ResponseMessages.Account.PasswordTooShort;
-        }
-
-        // CHECK THAT THE PASSWORDS MATCH.
-        if (password !== confirmPassword) {
-            inputIsValid = false;
-            error = ResponseMessages.Account.PasswordsMustMatch;
         }
 
         // GENERATE THE RESPONSE.
