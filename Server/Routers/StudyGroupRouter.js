@@ -37,7 +37,6 @@ class StudyGroupRouter {
         // This is used to allow users to upload profile pictures.
         const fileFilter = (req, file, cb) => {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
-            console.log(file);
             if (allowedFileTypes.includes(file.mimetype)) {
                 cb(null, true);
             } else {
