@@ -34,25 +34,26 @@ class StudyGroupRouter {
      * @static
      */
     static serveRoutes(server, authenticator) {
-        // This is used to allow users to upload profile pictures.
+        // This is used to allow users to upload attachments to their posts.
         const fileFilter = (req, file, cb) => {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
-            if (allowedFileTypes.includes(file.mimetype)) {
-                cb(null, true);
+            if (allowedFileTypes.includes(file.mimetype) || file.size < 2000000) {
+                cb(null, true); //Success Callback
             } else {
                 req.attachmentFailed = true;
                 Log.write("The file format is not supported.");
-                cb(null, false, req.profilattachment);
+                cb(null, false, req.profilattachment); //Fail Callback
             }
         };
         const upload = multer({
             limits: {
-                fileSize: 80000000
+                fileSize: 8000000
             },
             fileFilter: fileFilter
         });
 
         // Used to add one-time meetings.
+
         server.post(
             Routes.StudyGroup.AddOneTimeMeeting,
             authenticator.protectRoute(),
@@ -64,6 +65,12 @@ class StudyGroupRouter {
             Routes.StudyGroup.CreatePost,
             authenticator.protectRoute(),
             upload.single("attachment"),
+            function (err, req, res, next) {
+                if (err.code === "LIMIT_FILE_SIZE") {
+                    return res.send({ message: "The provided attachment is too large." });
+                }
+                next();
+            },
             Validator.validateCreatePost,
             StudyGroupRouter.createPost
         );
@@ -209,7 +216,7 @@ class StudyGroupRouter {
     static async createPost(request, response) {
         // CHECK THAT THE ATTACHMENT (IF PROVIDED) HAS NOT FAILED.
         if (request.attachmentFailed) {
-            return response.json({ message: ResponseMessages.Account.ErrorUploadProfilePicture });
+            return response.json({ message: "The file type of the provided attachment is not supported." });
         }
 
         // GET THE STUDY GROUP.

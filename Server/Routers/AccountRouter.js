@@ -65,6 +65,7 @@ class AccountRouter {
             } else {
                 req.profilePictureFailed = true;
                 Log.write("The file format is not supported.");
+
                 cb(null, false, req.profilePictureFailed);
             }
         };
@@ -72,7 +73,7 @@ class AccountRouter {
         //Limit the file size
         const upload = multer({
             limits: {
-                fileSize: 2000000
+                fileSize: 8000000
             },
             fileFilter: fileFilter
         });
@@ -81,6 +82,12 @@ class AccountRouter {
         server.post(
             Routes.Account.SetupAccount,
             upload.single("profilePicture"),
+            function (err, req, res, next) {
+                if (err.code === "LIMIT_FILE_SIZE") {
+                    return res.send({ message: "The provided picture is too large." });
+                }
+                next();
+            },
             Validator.validateSetupAccount,
             AccountRouter.setupAccount
         );
@@ -339,7 +346,7 @@ class AccountRouter {
     static async setupAccount(request, response) {
         // CHECK THAT THE PROFILE PICTURE (IF PROVIDED) HAS NOT FAILED.
         if (request.profilePictureFailed) {
-            return response.json({ message: ResponseMessages.Account.ErrorUploadProfilePicture });
+            return response.json({ message: "The file type of the provided profile picture is not supported." });
         }
 
         //VERIFY THE USER IS OVER 18
