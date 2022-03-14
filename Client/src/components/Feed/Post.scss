@@ -3,8 +3,10 @@
     position: relative;
     width: 100%;
     cursor: pointer;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 45px;
 
+    overflow: visible;
     .post-top {
         display: flex;
         justify-content: start;
@@ -25,32 +27,50 @@
 
     .post-creator {
         position: absolute;
-        bottom: 60px;
+        bottom: 0px;
         right: 20px;
     }
-    .post-details {
-        background-color: rgba(255, 255, 255, 0.721);
-        padding: 20px;
-        box-shadow: 0 0 0 1px rgba(97, 97, 97, 0.1), 0 3px 20px 0 rgba(92, 92, 92, 0.3), 0 1px 2px rgba(0, 0, 0, 0.5);
-        border-radius: 5px;
-        position: relative;
-        overflow: visible;
-        width: 87%;
-        display: flex;
-        flex-direction: column;
+    .post-inner {
+        .post-details {
+            background-color: rgba(255, 255, 255, 0.721);
+            padding: 20px;
+            box-shadow: 0 0 0 1px rgba(97, 97, 97, 0.1), 0 3px 20px 0 rgba(92, 92, 92, 0.3),
+                0 1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            position: relative;
+            overflow: visible;
+            width: 87%;
 
-        .post-title {
-            font-size: 25px;
-            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .post-inner-content {
+                flex: 90%;
+                .post-title {
+                    font-size: 25px;
+                    padding: 10px;
+                }
+                .post-body {
+                    padding: 5px 10px 10px 10px;
+                    // width: 90px;
+                    word-wrap: break-word;
+                    color: rgb(38, 38, 38);
+                }
+                display: flex;
+                flex-direction: column;
+            }
         }
-        .post-body {
-            padding: 5px 10px 10px 10px;
-            color: rgb(38, 38, 38);
-        }
+
         .post-response-count {
             font-size: 10px;
             text-align: right;
             padding-right: 20px;
+
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
 
             span {
                 font-weight: 900;
@@ -58,15 +78,19 @@
         }
     }
     .post-metainfo {
-        display: flex;
-        justify-content: start;
-        color: white;
+        position: absolute;
+        bottom: -30px;
+        right: 60px;
+
+        text-align: right;
+
+        color: rgb(72, 72, 72);
 
         .post-date {
             padding: 20px;
             width: 87%;
             text-align: right;
-            font-size: 13px;
+            font-size: 10px;
             text-shadow: rgba(0, 0, 0, 0.221) 0px 0px 5px;
         }
     }

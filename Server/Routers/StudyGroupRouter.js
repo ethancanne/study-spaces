@@ -47,7 +47,7 @@ class StudyGroupRouter {
         };
         const upload = multer({
             limits: {
-                fileSize: 2000000
+                fileSize: 80000000
             },
             fileFilter: fileFilter
         });
