@@ -1,0 +1,12 @@
+.message-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .message-area {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

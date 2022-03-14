@@ -40,29 +40,36 @@ const Post = (props) => {
     console.log(props);
     return (
         <div className="post-container" onClick={() => dispatch(showViewPostStudyGroupPopup(props))}>
-            <div className="post-details">
-                <div className="post-top">
-                    {getPostTypeDetails(props).icon}
-                    <h1 style={{ backgroundColor: props.color }}>{props.type}</h1>
+            <div className="post-inner">
+                <div className="post-details">
+                    <div className="post-inner-content">
+                        <div className="post-top">
+                            {getPostTypeDetails(props).icon}
+                            <h1 style={{ backgroundColor: props.color }}>{props.type}</h1>
+                        </div>
+                        <h1 className="post-title">{props.title}</h1>
+                        <p className="post-body">{props.message}</p>
+
+                        <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
+                    </div>
+                    {props.attachment ? (
+                        <img
+                            className="attachment"
+                            src={"data:image/png;charset=utf-8;base64," + props.attachment}
+                            alt=""
+                        />
+                    ) : (
+                        ""
+                    )}
+                    <p className="post-response-count">
+                        <span>{props.responses.length}</span> Responses
+                    </p>
                 </div>
-                <h1 className="post-title">{props.title}</h1>
-                <p className="post-body">{props.message}</p>
-                {props.attachment ? (
-                    <img
-                        className="attachment"
-                        src={"data:image/png;charset=utf-8;base64," + props.attachment}
-                        alt=""
-                    />
-                ) : (
-                    ""
-                )}
-                <p className="post-response-count">
-                    <span>{props.responses.length}</span> Responses
-                </p>
-                <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
-            </div>
-            <div className="post-metainfo">
-                <p className="post-date">{props.dateCreated}</p>
+                <div className="post-metainfo">
+                    <p className="post-date">
+                        <em>{props.timestamp && new Date(props.timestamp).toLocaleDateString()}</em>
+                    </p>
+                </div>
             </div>
 
             <div className="post-creator">

@@ -1,5 +1,5 @@
 import "./FeedView.scss";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Button from "../../../core/Button/Button";
 import ButtonTypes from "../../../core/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,30 +14,36 @@ import PostTypes from "../../../../../Server/Models/PostTypes";
 const FeedView = ({ group }) => {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.authReducer.user);
+    const feedRef = useRef();
+
+    useEffect(() => {
+        feedRef.current.scrollTop = feedRef.current.scrollHeight;
+    });
 
     const handleSelectMeeting = (recurringMeetingSelected) => {
         dispatch(showCreateMeetingStudyGroupPopup(group, recurringMeetingSelected));
     };
     return (
-        <div className="feed-container">
-            <div className="posts-container">
-                {console.log(group.posts)}
-                {group.posts ? (
-                    group.posts.map((post) => (
-                        <Post
-                            attachment={post.attachment}
-                            title={post.title}
-                            message={post.message}
-                            creator={post.creator}
-                            dateCreated={post.date}
-                            type={post.type}
-                            color={group.groupColor}
-                            responses={post.responses}
-                        />
-                    ))
-                ) : (
-                    <h1>Nothing yet</h1>
-                )}
+        <>
+            <div className="feed-container" ref={feedRef}>
+                <div className="posts-container">
+                    {group.posts ? (
+                        group.posts.map((post) => (
+                            <Post
+                                attachment={post.attachment}
+                                title={post.title}
+                                message={post.message}
+                                creator={post.creator}
+                                timestamp={post.createdAt}
+                                type={post.type}
+                                color={group.groupColor}
+                                responses={post.responses}
+                            />
+                        ))
+                    ) : (
+                        <h1>Nothing yet</h1>
+                    )}
+                </div>
             </div>
             <div className="options-container">
                 <Button onClick={() => dispatch(showCreatePostStudyGroupPopup(group))}>Start Post</Button>
@@ -60,7 +66,7 @@ const FeedView = ({ group }) => {
                     </Button>
                 )}
             </div>
-        </div>
+        </>
     );
 };
 

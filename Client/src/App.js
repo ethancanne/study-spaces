@@ -20,7 +20,7 @@ import Search from "./Pages/Search/Search";
 import StudyGroup from "./Pages/StudyGroup/StudyGroup";
 import Account from "./Pages/Account/Account";
 import { sendGetRequest } from "../Helper";
-import Message from "./Pages/Message";
+import Message from "./Pages/Message/Message";
 
 /**
  * This is the root presentational component that processes user authentication
@@ -119,18 +119,9 @@ const App = (props) => {
                     <Route exact path="/search">
                         <Search />
                     </Route>
-                    <Route
-                        path="/message"
-                        render={(props) => {
-                            return isLoggedIn ? (
-                                <>
-                                    <Message {...props} />
-                                </>
-                            ) : (
-                                <Redirect to="/" />
-                            );
-                        }}
-                    />
+                    <Route exact path="/message">
+                        <Message />
+                    </Route>
 
                     <Route
                         path="/group/:id"
