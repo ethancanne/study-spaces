@@ -10,18 +10,22 @@ const Validator = require("../Validator.js");
  * @date   10/29/2021
  */
 const MessageSchema = new Schema({
-    senderName: {
-        type: String,
+    conversationId: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getConversationCollectionName(),
         required: true
     },
-    timeSent: {
-        type: String,
+    senderId: {
+        type: Mongoose.Schema.Types.ObjectId,
+        ref: Configuration.getUserCollectionName(),
         required: true
     },
     value: {
         type: String,
         requird: true
     }
+}, {
+    timestamps: true
 });
 MessageSchema.set("toObject", {
     versionKey: false,
@@ -66,7 +70,27 @@ class Message {
      * @async
      * @static
      */
-    static async create(sender, value) {}
+    static async create(conversationId, senderId, value) {
+        const messageModel = new MessageModel({
+            conversationId,
+            senderId,
+            value
+        });
+        let messageWasSaved = false;
+        try {
+            messageWasSaved = await messageModel.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to create a message.");
+            Log.writeError(error);
+        } finally {
+            if (messageWasSaved) {
+                const message = new Message(messageModel);
+                return message;
+            } else {
+                return undefined;
+            }
+        }
+    }
 
     /**
      * Deletes the message.

@@ -15,6 +15,8 @@ import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
  */
 const ConversationView = ({ user }) => {
     const Events = require("../../../../Server/Events.js");
+    // Cameron's user ID, used for testing.
+    const receiverId = "61f16094f32ffcd874e0bfe9";
 
     const SERVER_URL = "http://localhost:5000";
     const [socket, setSocket] = useState({});
@@ -24,13 +26,19 @@ const ConversationView = ({ user }) => {
         { content: "hi", receiving: true }
     ]);
     useEffect(() => {
-        let initialSocket = io(SERVER_URL);
-        initialSocket.on(Events.Message, (message) => {
+        let initialSocket = io(SERVER_URL, { autoConnect: false });
+        initialSocket.auth = { id: user.id };
+        initialSocket.on(Events.Message, ({ message, senderId }) => {
             let tempMessages = [...messages];
-            tempMessages.push(<li>{message}</li>);
+            const messageWasReceived = (senderId !== receiverId);
+            tempMessages.push({ content: message, receiving: messageWasReceived });
             setMessages(tempMessages);
             setMessage("");
         });
+        initialSocket.on(Events.MessageFailure, (errorMessage) => {
+            console.log(errorMessage);
+        })
+        initialSocket.connect();
         setSocket(initialSocket);
     }, []);
     // send request to get conversations
@@ -41,7 +49,10 @@ const ConversationView = ({ user }) => {
     };
     const handleSubmit = (event) => {
         event.preventDefault();
-        socket.emit(Events.Message, message);
+        socket.emit(Events.Message, {
+            message,
+            receiverId: receiverId
+        });
     };
     return (
         <div className="conversation-view">

@@ -2,6 +2,7 @@ const Mongoose = require("mongoose");
 const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
+const Message = require("./Message.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
 
@@ -75,13 +76,33 @@ class Conversation {
 
     /**
      * Gets a conversation based on the participants that it includes.
-     * @param {String[]} participants The list of participants for the conversation.
+     * @param {Mongoose.Types.ObjectId} senderId The ID of the user sending the message.
+     * @param {Mongoose.Types.ObejctId} receiverId The ID of the user receiving the message.
      * @return {Conversation} The conversation between the participants.
-     *
+     * @author Cameron Burkholder
+     * @date   03/14/2022
      * @async
      * @static
      */
-    static async getByParticipants(participants) {}
+    static async getByParticipantIds(senderId, receiverId) {
+        let conversationModel = undefined;
+        try {
+            conversationModel = await ConversationModel.findOne({ participants: {
+                $all: [senderId, receiverId]
+            }});
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a conversation by its participants.");
+            Log.writeError(error);
+        } finally {
+            const conversationWasFound = Validator.isDefined(conversationModel);
+            if (conversationWasFound) {
+                const conversation = new Conversation(conversationModel);
+                return conversation;
+            } else {
+                return undefined;
+            }
+        }
+    }
 
     /**
      * Gets the other participant in the conversation.
@@ -109,12 +130,19 @@ class Conversation {
 
     /**
      * Sends a message.
-     * @param {Message} message The message to send.
+     * @param {String} message The message to send.
+     * @param {Mongoose.Types.ObjectId} senderId The user ID of the sender.
+     * @param {Mongoose.Types.ObjectId} receiverId The user ID of the receiver.
      * @return {Boolean} True if the message was sent, false otherwise.
      *
      * @async
      */
-    async sendMessage(message) {}
+    async sendMessage(messageValue, senderId, receiverId) {
+        // CREATE THE MESSAGE.
+        const message = await Message.create(this._id, senderId, messageValue);
+        const messageWasSent = Validator.isDefined(message);
+        return messageWasSent;
+    }
 }
 
 module.exports = Conversation;
