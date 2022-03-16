@@ -10,7 +10,12 @@ const Events = require("../../../../Server/Events.js");
 const SERVER_URL = "http://localhost:5000";
 
 const Message = (props) => {
-    const [selectedUserConversation, setSelectedUserConversation] = useState({ name: "ERR" });
+    const initialUser = {
+        name: "Ethan",
+        _property: "value",
+        id: "61f980f5b77a6bbd8237b476"
+    };
+    const [selectedUserConversation, setSelectedUserConversation] = useState(initialUser);
     return (
         <Page currentPage="message" topBar={true}>
             <div className="message-page">

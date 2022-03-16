@@ -2,7 +2,9 @@ const Events = {
     Connect: "connection",
     Disconnect: "disconnected",
     Error: "connect_error",
-    Message: "message"
+    InvalidUserId: "invalid user id",
+    Message: "message",
+    MessageFailure: "message send error"
 };
 
 module.exports = Events;

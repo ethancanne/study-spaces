@@ -34,6 +34,10 @@ const ResponseMessages = {
     },
     Message: {
         ErrorGetConversation: "An error occurred while attempting to get the conversation.",
+        GetConversations: {
+            Error: "An error occurred while attempting to get all conversations for a user.",
+            Success: "All conversations were found for a user."
+        },
         SuccessGetConversation: "Conversation returned successfully."
     },
     StudyGroup: {

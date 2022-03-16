@@ -184,6 +184,8 @@ class StudyGroupRouter {
         }
         const feed = new Feed(studyGroup.feed);
 
+
+        // POST THE MEETING TO THE FEED
         let feedId = feed.getId();
         let creator = user.getId();
         let postWasCreated = undefined;
@@ -923,6 +925,36 @@ class StudyGroupRouter {
             meetingUpdated = meetingUpdated && (await recurringMeeting.setLocation(location));
             meetingUpdated = meetingUpdated && (await recurringMeeting.setRoomNumber(roomNumber));
             if (meetingUpdated) {
+                // CREATE POST FOR UPDATED RECURRING MEETING
+                // GET THE STUDY GROUP'S FEED.
+                const feedWasFound = await studyGroup.getFeed();
+                if (!feedWasFound) {
+                    return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
+                }
+                const feed = new Feed(studyGroup.feed);
+                
+                // CREATE POST
+                let message = "Recurring meeting updated to " + date + " at " + time + " on " + day + ". ";
+                if (details != null) {
+                    message = message + "Details: " + details + ". ";
+                }
+                if (location != null) {
+                    message = message + "Location: " + location + ". ";
+                }
+                if (roomNumber != null) {
+                    message = message + "Room number: " + roomNumber + ". ";
+                }
+
+                // POST THE MEETING TO THE FEED
+                let feedId = feed.getId();
+                let creator = user.getId();
+                let postWasCreated = undefined;
+                try {
+                    postWasCreated = await feed.addPost("Recurring Meeting Updated", message, feedId, creator, "Meeting", null);
+                    console.log(feed)
+                } catch (error) {
+                    Log.writeError(error);
+                }
                 return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
             } else {
                 return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
@@ -930,6 +962,7 @@ class StudyGroupRouter {
         } else {
             // CREATE THE MEETING.
             const recurringMeeting = await Meeting.create(day, frequency, time, date, details, location, roomNumber);
+        
 
             // SET THE RECURRING MEETING.
             const meetingId = recurringMeeting.getId();
@@ -937,7 +970,42 @@ class StudyGroupRouter {
             if (!recurringMeetingWasSet) {
                 return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
             } else {
-                return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
+
+                // CREATE POST FOR RECURRING MEETING
+                // GET THE STUDY GROUP'S FEED.
+                const feedWasFound = await studyGroup.getFeed();
+                if (!feedWasFound) {
+                    return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
+                }
+                const feed = new Feed(studyGroup.feed);
+                
+                // CREATE POST
+                let message = "Recurring meeting created for " + date + " at " + time + " on " + day + ". ";
+                if (details != null) {
+                    message = message + "Details: " + details + ". ";
+                }
+                if (location != null) {
+                    message = message + "Location: " + location + ". ";
+                }
+                if (roomNumber != null) {
+                    message = message + "Room number: " + roomNumber + ". ";
+                }
+
+                // POST THE MEETING TO THE FEED
+                let feedId = feed.getId();
+                let creator = user.getId();
+                let postWasCreated = undefined;
+                try {
+                    postWasCreated = await feed.addPost("Recurring Meeting", message, feedId, creator, "Meeting", null);
+                    console.log(feed)
+                } catch (error) {
+                    Log.writeError(error);
+                }
+                if (!postWasCreated) {
+                    return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
+                } else {
+                    return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
+                }                
             }
         }
     }

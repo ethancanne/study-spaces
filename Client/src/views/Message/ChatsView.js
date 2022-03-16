@@ -10,8 +10,8 @@ const ChatsView = ({ setSelectedUserConversation }) => {
 
     
     const [chats, setChats] = useState([
-        { name: "Ethan", active: false },
-        { name: "Johnny", active: false }
+        { name: "Ethan", active: false, _id: 1 },
+        { name: "Johnny", active: false, _id: 2 }
     ]);
     return (
         <div className="chats-view">
