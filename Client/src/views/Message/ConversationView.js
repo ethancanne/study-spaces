@@ -17,12 +17,15 @@ const ConversationView = ({ user }) => {
     const Events = require("../../../../Server/Events.js");
 
     const SERVER_URL = "http://localhost:5000";
+
     const [socket, setSocket] = useState({});
     const [message, setMessage] = useState("");
+
     const [messages, setMessages] = useState([
         { content: "hi", receiving: false },
         { content: "hi", receiving: true }
     ]);
+
     useEffect(() => {
         let initialSocket = io(SERVER_URL);
         initialSocket.on(Events.Message, (message) => {

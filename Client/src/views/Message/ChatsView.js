@@ -7,6 +7,8 @@ import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
  * @author Ethan Cannelongo
  */
 const ChatsView = ({ setSelectedUserConversation }) => {
+
+    
     const [chats, setChats] = useState([
         { name: "Ethan", active: false },
         { name: "Johnny", active: false }
