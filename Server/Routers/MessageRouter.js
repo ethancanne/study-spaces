@@ -9,6 +9,7 @@ const ResponseMessages = require("../Responses/ResponseMessages.js");
 const Routes = require("../Routes/Routes.js");
 const StudyGroup = require("../Models/StudyGroup.js");
 const Validator = require("../Validator.js");
+const User = require("../Models/User.js");
 
 /**
  * The router used to serve account-related requests.
@@ -75,6 +76,51 @@ class MessageRouter {
             return MessageRouter.io.to(senderSocketId).emit(Events.MessageFailure, "Unable to save the message to the database.");
         }
     }
+
+    /**
+     * 
+     * @param {String} request.user The user sending messages
+     * @param {String} request.body.receiverId The user recieving messages
+     * @returns 
+     */
+
+    static async createConversation(request, response) {
+
+        userId = request.user.getId();
+        receiverId = request.body.receiverId;
+
+        // CREATE NEW CONVERSATION
+        let newConversation = undefined;
+        try {
+            newConversation = await Conversation.create(userId, receiverId);
+        } catch (error) {
+            Log.writeError(error);
+        }
+
+        
+        // VALIDATE STUDY GROUP CREATION.
+        const conversationCreated = Validator.isDefined(newConversation);
+        if (!conversationCreated) {
+            return response.json({ message: ResponseMessages.Message.ErrorCreateConversation });
+        } else {
+            // ADD CONVERSATION TO USER
+            let conversationWasAdded = false;
+            try {
+                conversationWasAdded = await request.user.addConversation(newConversation);
+            } catch (error) {
+            Log.writeError(error);
+            }
+            if (conversationWasAdded) {
+                return response.json({ message: ResponseMessages.Message.SuccessCreateConversation });
+            } else {
+                return response.json({ message: ResponseMessages.Message.ErrorAddConversation });
+            }
+        }
+    }
+
+        
+
+    
 
     /**
     * Converts a user's document ID to a socket ID if one exists.
