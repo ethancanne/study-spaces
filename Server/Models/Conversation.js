@@ -75,6 +75,44 @@ class Conversation {
     async delete() {}
 
     /**
+     * Gets all conversations for a given user.
+     * @param {Mongoose.Types.ObjectId} userId The ID of the user to find conversations for.
+     * @return {Conversation[]} The conversations between the participants.
+     * @author Cameron Burkholder
+     * @date   03/16/2022
+     * @async
+     * @static
+     */
+    static async getAllForUserById(userId) {
+        let conversationModels = undefined;
+        try {
+            conversationModels = await ConversationModel.find({ participants: userId });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get all conversations for a user.");
+            Log.writeError(error);
+        } finally {
+            const conversationsWereFound = Validator.isDefined(conversationModels);
+            if (conversationsWereFound) {
+                // FILL IN THE CONVERSATION DATA.
+                let conversationIndex = 0;
+                const conversationCount = conversationModels.length;
+                let conversations = [];
+                while (conversationIndex < conversationCount) {
+                    const conversationModel = conversationModels[conversationIndex];
+                    await conversationModel.populate("messages");
+                    await conversationModel.populate("participants");
+                    const conversation = new Conversation(conversationModel);
+                    conversations.push(conversation);
+                    conversationIndex++;
+                }
+                return conversations;
+            } else {
+                return undefined;
+            }
+        }
+    }
+
+    /**
      * Gets a conversation based on the participants that it includes.
      * @param {Mongoose.Types.ObjectId} senderId The ID of the user sending the message.
      * @param {Mongoose.Types.ObejctId} receiverId The ID of the user receiving the message.
@@ -121,12 +159,32 @@ class Conversation {
     async getMessages() {}
 
     /**
-     * Updates the conversation in the database.
-     * @return {Boolean} True if the conversation was saved, false otherwise.
-     *
+     * This saves the associated conversation document in the database with the current properties
+     * stored in this object.
+     * @return {bool} True if the conversation was saved, false if the conversation wasn't saved.
+     * @author Cameron Burkholder
+     * @date   03/16/2021
      * @async
      */
-    async save() {}
+    async save() {
+        let conversationWasSaved = false;
+        try {
+            // GET THE DATABASE INSTANCE OF THE USER.
+            let conversationModel = await ConversationModel.findOne({ _id: this._id }).exec();
+
+            // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
+            Object.assign(conversationModel, this);
+
+            // SAVE THE UPDATED DATABASE INSTANCE.
+            await conversationModel.save();
+            conversationWasSaved = true;
+        } catch (error) {
+            Log.write("An error occurred while attempting to retrieve the conversation to save.");
+            Log.writeError(error);
+        } finally {
+            return conversationWasSaved;
+        }
+    }
 
     /**
      * Sends a message.
@@ -140,8 +198,22 @@ class Conversation {
     async sendMessage(messageValue, senderId, receiverId) {
         // CREATE THE MESSAGE.
         const message = await Message.create(this._id, senderId, messageValue);
-        const messageWasSent = Validator.isDefined(message);
-        return messageWasSent;
+        const messageWasCreated = Validator.isDefined(message);
+        if (!messageWasCreated) {
+            return false;
+        }
+
+        // STORE THE MESSAGE IN THE CONVERSATION.
+        this.messages.push(message.getId());
+        let conversationWasSaved = false;
+        try {
+            conversationWasSaved = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to add a message to the conversation.");
+            Log.writeError(error);
+        } finally {
+            return conversationWasSaved;
+        }
     }
 }
 

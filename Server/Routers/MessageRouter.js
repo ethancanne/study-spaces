@@ -37,6 +37,8 @@ class MessageRouter {
         // EXPOSE THE ROUTE HANDLERS.
         // This is used to get a conversation.
         server.post(Routes.Message.GetConversation, authenticator.protectRoute(), MessageRouter.getConversation);
+        // Used to get all of a users conversations.
+        server.post(Routes.Message.GetConversations, authenticator.protectRoute(), MessageRouter.getConversations);
     }
 
     // SOCKET.IO HANDLERS.
@@ -49,13 +51,15 @@ class MessageRouter {
     * @static
     */
     static async broadcastMessage({ message, receiverId }, socket) {
-        // BROADCAST THE MESSAGE TO THE RECIPIENT.
-        // Since the sender will already have the message on their client,
-        // it doesn't make sense to broadcast the message back to their client.
+        // BROADCAST THE MESSAGE TO BOTH PARTIES.
         const senderId = socket.userId;
         const senderSocketId = MessageRouter.convertUserIdToSocketId(senderId);
         const receiverSocketId = MessageRouter.convertUserIdToSocketId(receiverId);
         MessageRouter.io.to(receiverSocketId).emit(Events.Message, {
+            message,
+            senderId: senderId
+        });
+        MessageRouter.io.to(senderSocketId).emit(Events.Message, {
             message,
             senderId: senderId
         });
@@ -92,6 +96,7 @@ class MessageRouter {
         if (!Configuration.isSetToProduction()) {
             socket.onAny((event, ...args) => {
                 Log.write(`Socket.IO: ${event}.`);
+                Log.write(`SenderID: ${socket.handshake.auth.id}.`);
                 Log.write(args);
             });
         }
@@ -126,7 +131,7 @@ class MessageRouter {
         try {
             conversation = await request.user.getConversation(request.user.getId(), request.body.person);
         } catch (error) {
-            log.writeError(error);
+            Log.writeError(error);
         } finally {
             if (Validator.isDefined(conversation)) {
                 response.json({
@@ -136,6 +141,28 @@ class MessageRouter {
             } else {
                 response.json({ message: ResponseMessages.Message.ErrorGetConversation });
             }
+        }
+    }
+
+    /**
+     * Gets all conversations for a user.
+     * @author Clifton Croom
+     * @date   03/09/2022
+     * @async
+     * @static
+     */
+    static async getConversations(request, response) {
+        // GET ALL CONVERSATIONS FOR A USER.
+        const userId = request.user.getId();
+        const conversations = await Conversation.getAllForUserById(userId);
+        const conversationsWereFound = Validator.isDefined(conversations);
+        if (conversationsWereFound) {
+            return response.json({
+                conversations: conversations,
+                message: ResponseMessages.Message.GetConversations.Success
+            });
+        } else {
+            return response.json({ message: ResponseMessages.Message.GetConversations.Error });
         }
     }
 }

@@ -16,7 +16,8 @@ const Routes = {
         VerifyEmailChange: "/api/account/verify-email-change"
     },
     Message: {
-        GetConversation: "/api/message/get-conversation"
+        GetConversation: "/api/message/get-conversation",
+        GetConversations: "/api/message/get-conversations"
     },
     StaticResources: {
         Index: "/*"

@@ -111,6 +111,16 @@ class Message {
     static async getById(messageId) {}
 
     /**
+    * Gets the message ID.
+    * @return {Mongoose.Types.ObjectId} The document ID for the message.
+    * @author Cameron Burkholder
+    * @date   03/16/2022
+    */
+    getId() {
+        return this._id;
+    }
+
+    /**
      * Gets the value of the message.
      * @return {String} The value of the message.
      *
