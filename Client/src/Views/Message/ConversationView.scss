@@ -43,6 +43,8 @@
             margin-bottom: 20px;
             display: flex;
 
+            animation: messageFloatIn 0.2s ease-in;
+
             &.receiving-msg {
                 img {
                     width: 30px;
@@ -53,6 +55,9 @@
                     bottom: 0;
                 }
                 p {
+                    max-width: 600px;
+                    word-wrap: break-word;
+
                     background-color: whitesmoke;
                     padding: 20px;
                     margin-left: 40px;
@@ -65,6 +70,9 @@
                     background-color: lighten($border-color, 10%);
 
                     padding: 20px;
+                    max-width: 600px;
+                    word-wrap: break-word;
+
                     margin-right: 40px;
                     color: white;
                 }
@@ -83,5 +91,16 @@
         .send-btn {
             flex: 10%;
         }
+    }
+}
+
+@keyframes messageFloatIn {
+    0% {
+        margin-top: 30px;
+        opacity: 0.1;
+    }
+    100% {
+        margin-top: 0;
+        opacity: 1;
     }
 }
