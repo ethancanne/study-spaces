@@ -1,6 +1,7 @@
 @import "../../globals.scss";
 .chats-view {
     flex: 20%;
+    min-width: 250px;
     height: 100%;
     box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.043);
     border-right: $border-color 5px solid;

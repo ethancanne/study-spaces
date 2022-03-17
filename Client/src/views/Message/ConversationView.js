@@ -1,5 +1,6 @@
 import "./ConversationView.scss";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Events from "../../../../Server/Events.js";
 import io from "socket.io-client";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 import Form from "../../core/Form/Form";
@@ -14,8 +15,8 @@ import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
  * @author Ethan Cannelongo
  */
 const ConversationView = ({ user }) => {
-    const Events = require("../../../../Server/Events.js");
     // Cameron's user ID, used for testing.
+    const messagesViewRef = useRef();
     const senderId = "61f16094f32ffcd874e0bfe9";
     const receiverId = "61f980f5b77a6bbd8237b476";
 
@@ -24,27 +25,27 @@ const ConversationView = ({ user }) => {
     const [socket, setSocket] = useState({});
     const [message, setMessage] = useState("");
 
-    const [messages, setMessages] = useState([
-        { content: "hi", receiving: false },
-        { content: "hi", receiving: true }
-    ]);
+    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         let initialSocket = io(SERVER_URL, { autoConnect: false });
         initialSocket.auth = { id: senderId };
         initialSocket.on(Events.Message, ({ message, senderId }) => {
             let tempMessages = [...messages];
-            const messageWasReceived = (senderId == receiverId);
+            const messageWasReceived = senderId === receiverId;
             tempMessages.push({ content: message, receiving: messageWasReceived });
             setMessages(tempMessages);
-            setMessage("");
+            console.log(tempMessages);
         });
         initialSocket.on(Events.MessageFailure, (errorMessage) => {
             console.log(errorMessage);
-        })
+        });
         initialSocket.connect();
         setSocket(initialSocket);
-    }, []);
+
+        messagesViewRef.current.scrollTop = messagesViewRef.current.scrollHeight;
+    }, [messages]);
+
     // send request to get conversations
     // needs: auth token, recipientId
 
@@ -57,6 +58,7 @@ const ConversationView = ({ user }) => {
             message,
             receiverId: receiverId
         });
+        setMessage("");
     };
     return (
         <div className="conversation-view">
@@ -64,12 +66,14 @@ const ConversationView = ({ user }) => {
                 <ProfilePicture image={""} />
                 <h1>{user.name && user.name}</h1>
             </div>
-            {messages.map((msg) => (
-                <div className={"message-box " + (msg.receiving ? "receiving-msg" : "sending-msg")}>
-                    {msg.receiving && <ProfilePicture image={""} />}
-                    <p>{msg.content}</p>
-                </div>
-            ))}
+            <div className="messages-view" ref={messagesViewRef}>
+                {messages.map((msg) => (
+                    <div className={"message-box " + (msg.receiving ? "receiving-msg" : "sending-msg")}>
+                        {msg.receiving && <ProfilePicture image={""} />}
+                        <p>{msg.content}</p>
+                    </div>
+                ))}
+            </div>
             <div className="send-message-form">
                 <Form>
                     <div className="side-by-side">

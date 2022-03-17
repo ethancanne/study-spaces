@@ -1,13 +1,14 @@
 @import "../../globals.scss";
 .conversation-view {
     flex: 80%;
-    background-color: rgba(255, 255, 255, 0.199);
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(198, 198, 198, 0.199);
     height: 100%;
     backdrop-filter: blur(3px);
 
-    padding-top: 9em;
     z-index: 0;
-    overflow-y: scroll;
+    overflow: visible;
 
     .currentConversationInfo {
         position: fixed;
@@ -20,51 +21,65 @@
         padding: 20px;
         border-bottom: lighten($border-color, 20%) 3px solid;
         backdrop-filter: blur(3px);
-        background-color: rgba(255, 255, 255, 0.303);
+        background-color: rgba(255, 255, 255, 0.781);
         h1 {
             margin-left: 20px;
             font-size: 15px;
         }
     }
-
-    .message-box {
-        position: relative;
-        margin-left: 20px;
-        margin-bottom: 50px;
-        display: flex;
-
-        &.receiving-msg {
-            img {
-                width: 30px;
-                height: 30px;
-                border-width: 3px;
-
-                position: absolute;
-                bottom: 0;
-            }
-            p {
-                background-color: whitesmoke;
-                padding: 20px;
-                margin-left: 40px;
-            }
+    .messages-view {
+        overflow-y: visible;
+        flex: 80%;
+        padding-top: 7em;
+        &::-webkit-scrollbar {
+            display: none;
         }
-        &.sending-msg {
-            justify-content: end;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
 
-            p {
-                background-color: lighten($border-color, 10%);
+        .message-box {
+            position: relative;
+            margin-left: 20px;
+            margin-bottom: 20px;
+            display: flex;
 
-                padding: 20px;
-                margin-right: 40px;
-                color: white;
+            &.receiving-msg {
+                img {
+                    width: 30px;
+                    height: 30px;
+                    border-width: 3px;
+
+                    position: absolute;
+                    bottom: 0;
+                }
+                p {
+                    background-color: whitesmoke;
+                    padding: 20px;
+                    margin-left: 40px;
+                }
+            }
+            &.sending-msg {
+                justify-content: end;
+
+                p {
+                    background-color: lighten($border-color, 10%);
+
+                    padding: 20px;
+                    margin-right: 40px;
+                    color: white;
+                }
             }
         }
     }
     .send-message-form {
-        position: fixed;
-        bottom: 0;
+        // height: 100px;
+        flex: 20%;
         width: 100%;
-        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.781);
+
+        box-shadow: rgba(0, 0, 0, 0.057) 0px 0 20px;
+
+        // padding: 20px;
         .send-btn {
             flex: 10%;
         }
