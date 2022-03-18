@@ -1,6 +1,8 @@
 import "./ChatsView.scss";
 import React, { useState } from "react";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+import { sendGetRequest } from "../../../Helper";
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 
 /**
  * A view for displaying the chats of a user
@@ -32,6 +34,25 @@ const ChatsView = ({ setSelectedUserConversation }) => {
             ))}
         </div>
     );
+
+    /**
+     * Sends chat get request.
+     * @author Stacey Popenfoose
+     * @date  03/18/22
+     */
+     const submitRequest = async (e) => {
+
+         await sendGetRequest(
+             Routes.Message.GetConversations,
+             {
+                 name,
+                 active,
+                 _id
+             },
+             
+         )
+     };
+    };
 };
 
 export default ChatsView;
