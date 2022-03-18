@@ -12,19 +12,25 @@ import Label from "../../core/Label/Label";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import Routes from "../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
-import { sendGetRequest } from "../../../Helper";
+import { sendGetRequest, sendPostRequest } from "../../../Helper";
 
 /**
  * A view for messaging a certain user
  * @author Ethan Cannelongo
  */
-const ConversationView = ({ receivingUser }) => {
-    // Cameron's user ID, used for testing.
+const ConversationView = ({ conversation }) => {
+    const messagesViewRef = useRef();
+
     const loggedInUser = useSelector((state) => state.authReducer.user);
 
-    const messagesViewRef = useRef();
+    const receivingUser =
+        conversation.participants &&
+        (String(conversation.participants[0]._id) !== loggedInUser._id
+            ? conversation.participants[0]
+            : conversation.participants[1]);
+
+    const receiverId = receivingUser && receivingUser._id;
     const senderId = loggedInUser._id; //set to loggedInUser._id
-    const receiverId = "61f980f5b77a6bbd8237b476"; //receivingUser._id
 
     const SERVER_URL = "http://localhost:5000";
 
@@ -36,34 +42,38 @@ const ConversationView = ({ receivingUser }) => {
     const loadConversation = async () => {
         await sendPostRequest(
             Routes.Message.GetConversation,
-            { receiverId: owner._id },
+            { receiverId: receivingUser._id },
             ResponseMessages.Message.SuccessGetConversation,
             null,
             true,
             (data, error) => {
+                console.log("TESING", error, data);
                 if (error) return;
-                setMessage(data.conversations);
+                setMessages(data.conversation.messages);
             }
         );
     };
 
     useEffect(() => {
-        loadConversation();
+        if (conversation.participants) {
+            loadConversation();
+        }
+    }, [conversation]);
+
+    useEffect(() => {
         let initialSocket = io(SERVER_URL, { autoConnect: false });
         initialSocket.auth = { id: senderId };
         initialSocket.on(Events.Message, ({ message, senderId }) => {
             let tempMessages = [...messages];
             const messageWasReceived = senderId === receiverId;
-            tempMessages.push({ content: message, receiving: messageWasReceived });
+            tempMessages.push({ value: message, senderId });
             setMessages(tempMessages);
-            console.log(tempMessages);
         });
         initialSocket.on(Events.MessageFailure, (errorMessage) => {
             console.log(errorMessage);
         });
         initialSocket.connect();
         setSocket(initialSocket);
-
         messagesViewRef.current.scrollTop = messagesViewRef.current.scrollHeight;
     }, [messages]);
 
@@ -77,7 +87,7 @@ const ConversationView = ({ receivingUser }) => {
         event.preventDefault();
         socket.emit(Events.Message, {
             message,
-            receiverId: receiverId
+            receiverId
         });
         setMessage("");
     };
@@ -85,13 +95,13 @@ const ConversationView = ({ receivingUser }) => {
         <div className="conversation-view">
             <div className="currentConversationInfo">
                 <ProfilePicture image={""} />
-                <h1>{receivingUser.name && receivingUser.name}</h1>
+                <h1>{receivingUser && receivingUser.name}</h1>
             </div>
             <div className="messages-view" ref={messagesViewRef}>
                 {messages.map((msg) => (
-                    <div className={"message-box " + (msg.receiving ? "receiving-msg" : "sending-msg")}>
-                        {msg.receiving && <ProfilePicture image={""} />}
-                        <p>{msg.content}</p>
+                    <div className={"message-box " + (msg.senderId !== senderId ? "receiving-msg" : "sending-msg")}>
+                        {msg.senderId !== senderId && <ProfilePicture image={""} />}
+                        <p>{msg.value}</p>
                     </div>
                 ))}
             </div>

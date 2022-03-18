@@ -1,50 +1,66 @@
 import "./ChatsView.scss";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
-import { sendGetRequest } from "../../../Helper";
+import { sendGetRequest, sendPostRequest } from "../../../Helper";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../Server/Routes/Routes";
+import { useSelector } from "react-redux";
 
 /**
  * A view for displaying the chats of a user
  * @author Ethan Cannelongo
  */
-const ChatsView = ({ setSelectedUserConversation }) => {
-    const [chats, setChats] = useState([
-        { name: "Ethan", active: false, _id: 1 },
-        { name: "Johnny", active: false, _id: 2 }
-    ]);
-    return (
-        <div className="chats-view">
-            {chats.map((chat) => (
-                <div
-                    className={"chatItem " + (chat.active && "chatActive")}
-                    onClick={() => {
-                        chats.forEach((otherChat) => {
-                            otherChat.active = false;
-                        });
-                        chat.active = true;
-                        setSelectedUserConversation(chat);
-                    }}
-                >
-                    <ProfilePicture src="" />
-                    <p>{chat.name}</p>
-                </div>
-            ))}
-        </div>
-    );
+const ChatsView = ({ setSelectedConversation }) => {
+    const [conversations, setConversations] = useState([]);
+    const user = useSelector((state) => state.authReducer.user);
 
     /**
      * Sends chat get request.
      * @author Stacey Popenfoose
      * @date  03/18/22
      */
-    const submitRequest = async (e) => {
-        await sendGetRequest(Routes.Message.GetConversations, {
-            name,
-            active,
-            _id
-        });
+    const populateConversations = async () => {
+        await sendPostRequest(
+            Routes.Message.GetConversations,
+            {},
+            ResponseMessages.Message.GetConversations.Success,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                console.log(data);
+                setConversations(data.conversations);
+            }
+        );
     };
+
+    useEffect(() => {
+        populateConversations();
+    }, []);
+
+    return (
+        <div className="chats-view">
+            {conversations.map((chat) => (
+                <div
+                    className={"chatItem " + (chat.active && "chatActive")}
+                    onClick={() => {
+                        conversations.forEach((otherChat) => {
+                            otherChat.active = false;
+                        });
+                        chat.active = true;
+                        setSelectedConversation(chat);
+                    }}
+                >
+                    <ProfilePicture src="" />
+                    <p>
+                        {String(chat.participants[0]._id) !== user._id
+                            ? chat.participants[0].name
+                            : chat.participants[1].name}
+                    </p>
+                </div>
+            ))}
+        </div>
+    );
 };
 
 export default ChatsView;
