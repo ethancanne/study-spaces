@@ -175,7 +175,7 @@ class MessageRouter {
     static async getConversation(request, response) {
         let conversation = undefined;
         try {
-            conversation = await request.user.getConversation(request.user.getId(), request.body.person);
+            conversation = await request.user.getConversation(request.user.getId(), request.body.receiverId);
         } catch (error) {
             Log.writeError(error);
         } finally {
