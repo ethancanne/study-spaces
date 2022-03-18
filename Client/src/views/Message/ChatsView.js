@@ -9,8 +9,6 @@ import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
  * @author Ethan Cannelongo
  */
 const ChatsView = ({ setSelectedUserConversation }) => {
-
-    
     const [chats, setChats] = useState([
         { name: "Ethan", active: false, _id: 1 },
         { name: "Johnny", active: false, _id: 2 }
@@ -40,17 +38,12 @@ const ChatsView = ({ setSelectedUserConversation }) => {
      * @author Stacey Popenfoose
      * @date  03/18/22
      */
-     const submitRequest = async (e) => {
-
-         await sendGetRequest(
-             Routes.Message.GetConversations,
-             {
-                 name,
-                 active,
-                 _id
-             },
-             
-         )
+    const submitRequest = async (e) => {
+        await sendGetRequest(Routes.Message.GetConversations, {
+            name,
+            active,
+            _id
+        });
     };
 };
 

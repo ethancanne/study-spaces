@@ -23,7 +23,7 @@ const ConversationView = ({ receivingUser }) => {
     const loggedInUser = useSelector((state) => state.authReducer.user);
 
     const messagesViewRef = useRef();
-    const senderId = "61f16094f32ffcd874e0bfe9"; //set to loggedInUser._id
+    const senderId = loggedInUser._id; //set to loggedInUser._id
     const receiverId = "61f980f5b77a6bbd8237b476"; //receivingUser._id
 
     const SERVER_URL = "http://localhost:5000";
@@ -34,9 +34,9 @@ const ConversationView = ({ receivingUser }) => {
     const [messages, setMessages] = useState([]);
 
     const loadConversation = async () => {
-        await sendGetRequest(
+        await sendPostRequest(
             Routes.Message.GetConversation,
-            { userId: owner._id },
+            { receiverId: owner._id },
             ResponseMessages.Message.SuccessGetConversation,
             null,
             true,
