@@ -99,7 +99,6 @@ class Conversation {
                 let conversations = [];
                 while (conversationIndex < conversationCount) {
                     const conversationModel = conversationModels[conversationIndex];
-                    await conversationModel.populate("messages");
                     await conversationModel.populate("participants");
                     const conversation = new Conversation(conversationModel);
                     conversations.push(conversation);
@@ -134,6 +133,8 @@ class Conversation {
         } finally {
             const conversationWasFound = Validator.isDefined(conversationModel);
             if (conversationWasFound) {
+                await conversationModel.populate("participants");
+                await conversationModel.populate("messages");
                 const conversation = new Conversation(conversationModel);
                 return conversation;
             } else {

@@ -100,10 +100,10 @@ class User {
 
 
     /**
-     * 
+     *
      * @param {String} conversation Conversation object added to the User
      * @returns {Boolean} True if the conversation was added, false otherwise.
-     * @async 
+     * @async
      */
     async addConversation(conversation) {
         //ADD THE CONVERSATION TO THE USER"S CONVERSATION LIST
@@ -344,33 +344,6 @@ class User {
             }
             return user;
         }
-    }
-
-    /**
-     * Gets the user's conversations.
-     * @return {Conversation[]} The user's conversations.
-     */
-    async getConversations() {
-        // ID -> Conversation;
-
-        // LOOP THROUGH EACH CONVERSATION ID.
-        let conversations = [];
-        this.conversations.map(async (conversationId) => {
-            let conversation = undefined;
-            try {
-                conversation = await Conversation.getById(conversationId);
-            } catch (error) {
-                Log.writeError(error);
-            } finally {
-                const conversationWasFound = Validator.isDefined(conversation);
-                if (conversationWasFound) {
-                    conversations.push(conversation);
-                }
-            }
-        });
-
-        // RETURN CONVERSATIONS.
-        return conversations;
     }
 
     /**

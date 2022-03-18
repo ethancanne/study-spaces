@@ -78,10 +78,10 @@ class MessageRouter {
     }
 
     /**
-     * 
+     *
      * @param {String} request.user The user sending messages
      * @param {String} request.body.receiverId The user recieving messages
-     * @returns 
+     * @returns
      */
 
     static async createConversation(request, response) {
@@ -97,7 +97,7 @@ class MessageRouter {
             Log.writeError(error);
         }
 
-        
+
         // VALIDATE STUDY GROUP CREATION.
         const conversationCreated = Validator.isDefined(newConversation);
         if (!conversationCreated) {
@@ -118,9 +118,9 @@ class MessageRouter {
         }
     }
 
-        
 
-    
+
+
 
     /**
     * Converts a user's document ID to a socket ID if one exists.
@@ -166,7 +166,7 @@ class MessageRouter {
     // ROUTE HANDLERS.
     /**
      * Gets the conversation of two users.
-     * @param
+     * @param {String} request.body.receiverId The ID of the person receiving messages.
      * @author Clifton Croom
      * @date   03/09/2022
      * @async
@@ -174,8 +174,10 @@ class MessageRouter {
      */
     static async getConversation(request, response) {
         let conversation = undefined;
+        const senderId = request.user.getId();
+        const receiverId = request.body.receiverId;
         try {
-            conversation = await request.user.getConversation(request.user.getId(), request.body.receiverId);
+            conversation = await Conversation.getByParticipantIds(senderId, receiverId);
         } catch (error) {
             Log.writeError(error);
         } finally {
@@ -192,8 +194,8 @@ class MessageRouter {
 
     /**
      * Gets all conversations for a user.
-     * @author Clifton Croom
-     * @date   03/09/2022
+     * @author Cameron Burkholder
+     * @date   03/15/2022
      * @async
      * @static
      */
