@@ -1,5 +1,6 @@
 import "./ConversationView.scss";
 import React, { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import Events from "../../../../Server/Events.js";
 import io from "socket.io-client";
 import ButtonTypes from "../../core/Button/ButtonTypes";
@@ -9,16 +10,21 @@ import InputField from "../../core/InputField/InputField";
 import TextInput from "../../core/Inputs/TextInput/TextInput";
 import Label from "../../core/Label/Label";
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+import Routes from "../../../../Server/Routes/Routes";
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
+import { sendGetRequest } from "../../../Helper";
 
 /**
  * A view for messaging a certain user
  * @author Ethan Cannelongo
  */
-const ConversationView = ({ user }) => {
+const ConversationView = ({ receivingUser }) => {
     // Cameron's user ID, used for testing.
+    const loggedInUser = useSelector((state) => state.authReducer.user);
+
     const messagesViewRef = useRef();
-    const senderId = "61f16094f32ffcd874e0bfe9";
-    const receiverId = "61f980f5b77a6bbd8237b476";
+    const senderId = "61f16094f32ffcd874e0bfe9"; //set to loggedInUser._id
+    const receiverId = "61f980f5b77a6bbd8237b476"; //receivingUser._id
 
     const SERVER_URL = "http://localhost:5000";
 
@@ -27,7 +33,22 @@ const ConversationView = ({ user }) => {
 
     const [messages, setMessages] = useState([]);
 
+    const loadConversation = async () => {
+        await sendGetRequest(
+            Routes.Message.GetConversation,
+            { userId: owner._id },
+            ResponseMessages.Message.SuccessGetConversation,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                setMessage(data.conversations);
+            }
+        );
+    };
+
     useEffect(() => {
+        loadConversation();
         let initialSocket = io(SERVER_URL, { autoConnect: false });
         initialSocket.auth = { id: senderId };
         initialSocket.on(Events.Message, ({ message, senderId }) => {
@@ -64,7 +85,7 @@ const ConversationView = ({ user }) => {
         <div className="conversation-view">
             <div className="currentConversationInfo">
                 <ProfilePicture image={""} />
-                <h1>{user.name && user.name}</h1>
+                <h1>{receivingUser.name && receivingUser.name}</h1>
             </div>
             <div className="messages-view" ref={messagesViewRef}>
                 {messages.map((msg) => (

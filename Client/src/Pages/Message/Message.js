@@ -26,7 +26,7 @@ const Message = (props) => {
 
                 <div className="message-area">
                     <ChatsView setSelectedUserConversation={setSelectedUserConversation} />
-                    <ConversationView user={selectedUserConversation} />
+                    <ConversationView receivingUser={selectedUserConversation} />
                 </div>
             </div>
         </Page>

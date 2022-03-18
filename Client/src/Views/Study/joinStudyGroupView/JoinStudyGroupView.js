@@ -9,6 +9,7 @@ import Label from "../../../core/Label/Label";
 import axios from "axios";
 import Validator from "../../../../../Server/Validator";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import { addStudyGroup, showErrorNotification, closePopup, showSuccessNotification } from "../../../state/actions";
 
 const JoinStudyGroupView = ({ group }) => {
@@ -17,6 +18,7 @@ const JoinStudyGroupView = ({ group }) => {
     const user = useSelector((state) => state.authReducer.user);
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const submitJoin = async (e) => {
         // SUBMIT THE SEARCH REQUEST.
@@ -35,10 +37,29 @@ const JoinStudyGroupView = ({ group }) => {
                 if (error) return;
                 dispatch(addStudyGroup(group));
                 dispatch(closePopup());
-                dispatch(showSuccessNotification(ResponseMessages.StudyGroup.SuccessStudyGroupJoined));
             }
         );
     };
+
+    const submitMessageStudyGroupOwner = async (e) => {
+        // SUBMIT THE SEARCH REQUEST.
+        e.preventDefault();
+        e.stopPropagation();
+
+        await sendPostRequest(
+            Routes.Message /*.CreateConversation*/,
+            { userId: owner._id },
+            ResponseMessages.Message /*.CreateConversation.Success*/,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                dispatch(closePopup());
+                history.push("/message");
+            }
+        );
+    };
+
     return (
         <div className="join-group-container">
             <div className="group-popup-title" style={{ backgroundColor: `${groupColor}70` }}>
@@ -94,9 +115,14 @@ const JoinStudyGroupView = ({ group }) => {
                 </div>
             </div>
 
-            <Button type={ButtonTypes.Creation} onClick={submitJoin}>
-                Join
-            </Button>
+            <div className="side-by-side">
+                <Button type={ButtonTypes.Primary} onClick={submitMessageStudyGroupOwner}>
+                    Message Study Group Owner
+                </Button>
+                <Button type={ButtonTypes.Creation} onClick={submitJoin}>
+                    Join
+                </Button>
+            </div>
         </div>
     );
 };
