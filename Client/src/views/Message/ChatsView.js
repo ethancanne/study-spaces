@@ -51,7 +51,6 @@ const ChatsView = ({ setSelectedUserConversation }) => {
              },
              
          )
-     };
     };
 };
 
