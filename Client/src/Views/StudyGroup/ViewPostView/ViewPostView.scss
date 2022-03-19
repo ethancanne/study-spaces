@@ -1,3 +1,4 @@
+@import "../../../globals.scss";
 .view-post-top {
     display: flex;
     justify-content: start;
@@ -19,11 +20,23 @@
 .post-contents {
     margin: 20px;
     .post-title {
-        font-size: 27px;
-        padding-bottom: 10px;
+        font-size: 35px;
+        padding-bottom: 20px;
     }
-    .post-message {
+    .post-body {
+        display: flex;
+        background-color: rgba(232, 231, 231, 0.221);
+        padding: 10px;
+        margin-bottom: 20px;
+        border-bottom: $border-color 5px solid;
+        .post-message {
+            flex: 70%;
+        }
+        .post-attachment {
+            flex: 30%;
+        }
     }
+
     .post-creator {
         align-items: center;
         justify-content: end;

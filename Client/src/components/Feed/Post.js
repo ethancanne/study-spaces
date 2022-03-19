@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../../core/Button/Button";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 import { useDispatch } from "react-redux";
-import { showViewPostStudyGroupPopup } from "../../state/actions";
+import { showViewPostStudyGroupPopup, showViewMeetingsStudyGroupPopup } from "../../state/actions";
 ButtonTypes;
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import PostTypes from "../../../../Server/Models/PostTypes";
@@ -11,6 +11,7 @@ import QuestionMarkIcon from "@mui/icons-material/QuestionMark"; //Question
 import CampaignIcon from "@mui/icons-material/Campaign"; //Announcement
 import CommentIcon from "@mui/icons-material/Comment"; //Discussion
 import ErrorIcon from "@mui/icons-material/Error"; //Problem
+import EventNoteIcon from "@mui/icons-material/EventNote"; //Meeting
 
 export const getPostTypeDetails = (post) => {
     var icon;
@@ -32,6 +33,9 @@ export const getPostTypeDetails = (post) => {
             icon = <ErrorIcon className="top-icon" style={{ color: post.color }} />;
             responseType = "Solution";
             break;
+        case PostTypes.Meeting:
+            icon = <EventNoteIcon className="top-icon" style={{ color: post.color }} />;
+            break;
     }
     return { icon, responseType };
 };
@@ -39,9 +43,22 @@ const Post = (props) => {
     const dispatch = useDispatch();
     console.log(props);
     return (
-        <div className="post-container" onClick={() => dispatch(showViewPostStudyGroupPopup(props))}>
+        <div
+            className="post-container"
+            onClick={() => {
+                if (props.type !== PostTypes.Meeting) dispatch(showViewPostStudyGroupPopup(props));
+                else dispatch(showViewMeetingsStudyGroupPopup(props.group));
+            }}
+        >
             <div className="post-inner">
-                <div className="post-details">
+                <div
+                    className="post-details"
+                    style={{
+                        backgroundColor:
+                            props.type !== PostTypes.Meeting ? "rgba(255, 255, 255, 0.721)" : props.group.color + "10",
+                        border: props.type === PostTypes.Meeting && "white 4px solid"
+                    }}
+                >
                     <div className="post-inner-content">
                         <div className="post-top">
                             {getPostTypeDetails(props).icon}
@@ -50,7 +67,9 @@ const Post = (props) => {
                         <h1 className="post-title">{props.title}</h1>
                         <p className="post-body">{props.message}</p>
 
-                        <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
+                        {props.type !== PostTypes.Meeting && (
+                            <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
+                        )}
                     </div>
                     {props.attachment ? (
                         <img

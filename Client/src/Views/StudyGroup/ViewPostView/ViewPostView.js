@@ -28,10 +28,13 @@ const ViewPostView = ({ post }) => {
             </div>
             <div className="post-contents">
                 <h1 className="post-title">{post.title}</h1>
-                <p className="post-message">{post.message}</p>
+                <div className="post-body">
+                    <p className="post-message">{post.message}</p>
+                    <img className="post-attachment" src={"data:image/png;charset=utf-8;base64," + post.attachment} />
+                </div>
                 <div className="post-creator">
+                    {/* TODO - populate post.creator */}
                     <p>{post.creator.name}</p>
-
                     <ProfilePicture image={post.creator.profilePicture} />
                 </div>
             </div>

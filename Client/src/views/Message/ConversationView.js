@@ -100,7 +100,7 @@ const ConversationView = ({ conversation }) => {
             <div className="messages-view" ref={messagesViewRef}>
                 {messages.map((msg) => (
                     <div className={"message-box " + (msg.senderId !== senderId ? "receiving-msg" : "sending-msg")}>
-                        {msg.senderId !== senderId && <ProfilePicture image={""} />}
+                        {msg.senderId !== senderId && <ProfilePicture image={receivingUser.profilePicture} />}
                         <p>{msg.value}</p>
                     </div>
                 ))}

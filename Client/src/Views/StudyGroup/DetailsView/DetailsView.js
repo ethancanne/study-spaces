@@ -6,7 +6,8 @@ import Button from "../../../core/Button/Button";
 import {
     showEditStudyGroupPopup,
     showConfirmationPopup,
-    showViewMeetingsStudyGroupPopup
+    showViewMeetingsStudyGroupPopup,
+    clearStudyGroups
 } from "../../../state/actions";
 import { getNextMeeting, sendDeleteRequest, sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
@@ -99,15 +100,16 @@ const DetailsView = ({ group }) => {
                 {group.owner && group.owner._id !== user._id && (
                     <>
                         <Button
-                            onClick={() =>
+                            onClick={() => {
                                 dispatch(
                                     showConfirmationPopup(
                                         submitLeave,
                                         "Confirm Leave",
                                         "Are you sure you want to leave the study group: " + group.name + "?"
                                     )
-                                )
-                            }
+                                );
+                                dispatch(clearStudyGroups());
+                            }}
                         >
                             Leave Group
                         </Button>

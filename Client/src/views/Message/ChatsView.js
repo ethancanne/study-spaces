@@ -51,7 +51,13 @@ const ChatsView = ({ setSelectedConversation }) => {
                         setSelectedConversation(chat);
                     }}
                 >
-                    <ProfilePicture src="" />
+                    <ProfilePicture
+                        image={
+                            String(chat.participants[0]._id) !== user._id
+                                ? chat.participants[0].profilePicture
+                                : chat.participants[1].profilePicture
+                        }
+                    />
                     <p>
                         {String(chat.participants[0]._id) !== user._id
                             ? chat.participants[0].name

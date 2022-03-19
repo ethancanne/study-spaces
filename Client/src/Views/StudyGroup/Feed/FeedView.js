@@ -38,6 +38,7 @@ const FeedView = ({ group }) => {
                                 type={post.type}
                                 color={group.groupColor}
                                 responses={post.responses}
+                                group={group}
                             />
                         ))
                     ) : (
