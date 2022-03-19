@@ -1,0 +1,21 @@
+.member-details {
+    padding: 50px;
+    .member-primary-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+        }
+        h1 {
+            font-weight: 900;
+        }
+    }
+    .member-secondary-info {
+        display: flex;
+        justify-content: space-evenly;
+    }
+}

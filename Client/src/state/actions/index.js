@@ -80,6 +80,13 @@ export const showViewMeetingsStudyGroupPopup = (group) => {
     };
 };
 
+export const showViewMemberPopup = (member) => {
+    return {
+        type: popupConstants.SHOW_VIEW_MEMBER_POPUP,
+        payload: member
+    };
+};
+
 export const showInputPopup = (title, label, defaultInput, callback, label2) => {
     return {
         type: popupConstants.SHOW_INPUT_POPUP,

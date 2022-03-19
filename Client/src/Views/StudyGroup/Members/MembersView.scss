@@ -14,7 +14,7 @@
         background-color: rgb(255, 255, 255);
         display: flex;
         align-items: center;
-        border-bottom: rgba(211, 211, 211, 0.208) solid 1px;
+        transition: all 0.2s;
         p {
             padding-left: 20px;
         }
@@ -23,7 +23,14 @@
             background-color: rgb(250, 250, 250);
         }
         &:nth-child(2n + 3) {
-            background-color: rgb(250, 250, 250);
+            background-color: rgb(244, 244, 244);
+        }
+
+        &:hover {
+            border-left: 10px solid;
+            background-color: rgb(244, 244, 244);
+            color: black;
+            cursor: pointer;
         }
 
         &.owner {

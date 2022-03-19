@@ -19,7 +19,8 @@ const Views = {
             CreateMeeting: "Create Meeting",
             CreatePost: "Create Post",
             ViewPost: "View Post",
-            ViewMeetings: "View Meetings"
+            ViewMeetings: "View Meetings",
+            ViewMember: "View Member"
         },
         Input: "Input Information",
         Confirmation: "Confirm"
