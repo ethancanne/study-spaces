@@ -83,9 +83,7 @@ class MessageRouter {
      * @param {String} request.body.receiverId The user recieving messages
      * @returns
      */
-
     static async createConversation(request, response) {
-
         userId = request.user.getId();
         receiverId = request.body.receiverId;
 
@@ -96,7 +94,6 @@ class MessageRouter {
         } catch (error) {
             Log.writeError(error);
         }
-
 
         // VALIDATE STUDY GROUP CREATION.
         const conversationCreated = Validator.isDefined(newConversation);
@@ -117,10 +114,6 @@ class MessageRouter {
             }
         }
     }
-
-
-
-
 
     /**
     * Converts a user's document ID to a socket ID if one exists.
