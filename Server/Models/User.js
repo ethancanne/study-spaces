@@ -98,7 +98,6 @@ class User {
         Object.assign(this, userSchema.toObject());
     }
 
-
     /**
      *
      * @param {String} conversation Conversation object added to the User
@@ -140,8 +139,6 @@ class User {
         }
         return studyGroupWasAdded;
     }
-
-
 
     /**
      * @param {StudyGroup} studyGroup The study group to remove.

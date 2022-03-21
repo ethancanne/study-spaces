@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Server/Routers/StaticResourceRouter.js</title>
+    <title>JSDoc: Source: Client/src/views/Message/ChatsView.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Server/Routers/StaticResourceRouter.js</h1>
+    <h1 class="page-title">Source: Client/src/views/Message/ChatsView.js</h1>
 
     
 
@@ -26,53 +26,78 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Path = require("path");
-
-const Configuration = require("../../Configuration.js");
-const Routes = require("../Routes/Routes.js");
-const StaticResources = require("../Routes/StaticResources.js");
+            <pre class="prettyprint source linenums"><code>import "./ChatsView.scss";
+import React, { useEffect, useState } from "react";
+import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
+import { sendGetRequest, sendPostRequest } from "../../../Helper";
+import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
+import Routes from "../../../../Server/Routes/Routes";
+import { useSelector } from "react-redux";
 
 /**
- * The router used to serve static resources.
- * @author Cameron Burkholder
- * @date   10/20/2021
+ * A view for displaying the chats of a user
+ * @author Ethan Cannelongo
  */
-class StaticResourceRouter {
-    /**
-     * Initialize the router and serve the routes.
-     * @param {Server} server The server instance used to provide the routes.
-     * @param {Authenticator} authenticator The authenticator used to protect the routes.
-     * @author Cameron Burkholder
-     * @date   10/20/2021
-     */
-    static serveRoutes(server, authenticator) {
-        // This serves the default index file, used to display all other contents of the application.
-        server.get(Routes.StaticResources.Index, StaticResourceRouter.getIndexFile);
-    }
+const ChatsView = ({ setSelectedConversation }) => {
+    const [conversations, setConversations] = useState([]);
+    const user = useSelector((state) => state.authReducer.user);
 
-    // GET ROUTES.
     /**
-     * This serves the index file.
-     * @param  {object} request The request being served.
-     * @param  {object} response The response being generated.
-     * @author Cameron Burkholder
-     * @date   07/31/2021
-     * @static
+     * Sends chat get request.
+     * @author Stacey Popenfoose
+     * @date  03/18/22
      */
-    static getIndexFile(request, response) {
-        // SEND THE INDEX FILE.
-        const staticResourceFolder = Configuration.getStaticResourceFolder();
-        const indexFileFilepath = Path.join(
-            global.rootDirectory,
-            "Client",
-            staticResourceFolder,
-            StaticResources.Index
+    const populateConversations = async () => {
+        await sendPostRequest(
+            Routes.Message.GetConversations,
+            {},
+            ResponseMessages.Message.GetConversations.Success,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                console.log(data);
+                setConversations(data.conversations);
+            }
         );
-        response.sendFile(indexFileFilepath);
-    }
-}
+    };
 
-module.exports = StaticResourceRouter;
+    useEffect(() => {
+        populateConversations();
+    }, []);
+
+    return (
+        &lt;div className="chats-view">
+            {conversations.map((chat) => (
+                &lt;div
+                    className={"chatItem " + (chat.active &amp;&amp; "chatActive")}
+                    onClick={() => {
+                        conversations.forEach((otherChat) => {
+                            otherChat.active = false;
+                        });
+                        chat.active = true;
+                        setSelectedConversation(chat);
+                    }}
+                >
+                    &lt;ProfilePicture
+                        image={
+                            String(chat.participants[0]._id) !== user._id
+                                ? chat.participants[0].profilePicture
+                                : chat.participants[1].profilePicture
+                        }
+                    />
+                    &lt;p>
+                        {String(chat.participants[0]._id) !== user._id
+                            ? chat.participants[0].name
+                            : chat.participants[1].name}
+                    &lt;/p>
+                &lt;/div>
+            ))}
+        &lt;/div>
+    );
+};
+
+export default ChatsView;
 </code></pre>
         </article>
     </section>

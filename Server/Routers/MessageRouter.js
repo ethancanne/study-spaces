@@ -46,13 +46,13 @@ class MessageRouter {
 
     // SOCKET.IO HANDLERS.
     /**
-    * Sends a message between two users.
-    * @param {Object} - { message, receiverId }.
-    * @author Cameron Burkholder
-    * @date   03/14/2022
-    * @async
-    * @static
-    */
+     * Sends a message between two users.
+     * @param {Object} - { message, receiverId }.
+     * @author Cameron Burkholder
+     * @date   03/14/2022
+     * @async
+     * @static
+     */
     static async broadcastMessage({ message, receiverId }, socket) {
         // BROADCAST THE MESSAGE TO BOTH PARTIES.
         const senderId = socket.userId;
@@ -71,11 +71,15 @@ class MessageRouter {
         const conversation = await Conversation.getByParticipantIds(senderId, receiverId);
         const conversationWasFound = Validator.isDefined(conversation);
         if (!conversationWasFound) {
-            return MessageRouter.io.to(senderSocketId).emit(Events.MessageFailure, "The conversation could not be found.");
+            return MessageRouter.io
+                .to(senderSocketId)
+                .emit(Events.MessageFailure, "The conversation could not be found.");
         }
         const messageWasSent = await conversation.sendMessage(message, senderId, receiverId);
         if (!messageWasSent) {
-            return MessageRouter.io.to(senderSocketId).emit(Events.MessageFailure, "Unable to save the message to the database.");
+            return MessageRouter.io
+                .to(senderSocketId)
+                .emit(Events.MessageFailure, "Unable to save the message to the database.");
         }
     }
 
@@ -83,7 +87,6 @@ class MessageRouter {
      *
      * @param {String} request.user The user sending messages
      * @param {String} request.body.receiverId The user recieving messages
-     * @returns
      */
     static async createConversation(request, response) {
         //Check for duplicates
@@ -99,7 +102,6 @@ class MessageRouter {
             return response.json({ message: ResponseMessages.Message.ErrorConversationExists });
         }
 
-
         //GET RECEIVER BY ID
         let receiver = undefined;
         receiver = await User.getById(receiverId);
@@ -107,7 +109,7 @@ class MessageRouter {
         if (!receiverFound) {
             return response.json({ message: ResponseMessages.Message.ErrorGetReceiver });
         }
-       
+
         // CREATE NEW CONVERSATION
         let newConversation = undefined;
         try {
@@ -126,11 +128,10 @@ class MessageRouter {
             let addToSender = false;
             let conversationId = newConversation.getId();
             try {
-                
                 addToReceiver = await request.user.addConversation(conversationId);
                 addToSender = await receiver.addConversation(conversationId);
             } catch (error) {
-            Log.writeError(error);
+                Log.writeError(error);
             }
             if (addToReceiver && addToSender) {
                 return response.json({ message: ResponseMessages.Message.SuccessCreateConversation });
@@ -141,10 +142,10 @@ class MessageRouter {
     }
 
     /**
-    * Converts a user's document ID to a socket ID if one exists.
-    * @param {Mongoose.Types.ObjectId} userId The user ID being converted.
-    * @return {String} The socket ID, if it exists.
-    */
+     * Converts a user's document ID to a socket ID if one exists.
+     * @param {Mongoose.Types.ObjectId} userId The user ID being converted.
+     * @return {String} The socket ID, if it exists.
+     */
     static convertUserIdToSocketId(userId) {
         const convertedUserId = userId;
         const socketId = MessageRouter.userIdToSocketIdMap[convertedUserId];
@@ -155,7 +156,9 @@ class MessageRouter {
         MessageRouter.userIdToSocketIdMap[socket.handshake.auth.id] = socket.id;
 
         // PROVIDE THE APPROPRIATE MESSAGE HANDLER.
-        socket.on(Events.Message, (args) => { MessageRouter.broadcastMessage(args, socket) });
+        socket.on(Events.Message, (args) => {
+            MessageRouter.broadcastMessage(args, socket);
+        });
         // If the application is being run in development, log all events to the console.
         if (!Configuration.isSetToProduction()) {
             socket.onAny((event, ...args) => {

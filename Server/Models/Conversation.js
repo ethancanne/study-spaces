@@ -65,13 +65,11 @@ class Conversation {
      * @static
      */
     static async create(sender, receiver) {
-        
-
         const conversationModel = new ConversationModel({
             messages: [],
             participants: [sender, receiver]
         });
-        
+
         let conversationWasSaved = false;
         try {
             conversationWasSaved = await conversationModel.save();
@@ -86,7 +84,6 @@ class Conversation {
                 return undefined;
             }
         }
-
     }
 
     /**
@@ -147,9 +144,11 @@ class Conversation {
     static async getByParticipantIds(senderId, receiverId) {
         let conversationModel = undefined;
         try {
-            conversationModel = await ConversationModel.findOne({ participants: {
-                $all: [senderId, receiverId]
-            }});
+            conversationModel = await ConversationModel.findOne({
+                participants: {
+                    $all: [senderId, receiverId]
+                }
+            });
         } catch (error) {
             Log.write("An error occurred while attempting to get a conversation by its participants.");
             Log.writeError(error);
@@ -246,9 +245,9 @@ class Conversation {
      * @author Clifton Croom
      * @date   03/21/22
      */
-         getId() {
-            return this._id;
-        }
+    getId() {
+        return this._id;
+    }
 }
 
 module.exports = Conversation;

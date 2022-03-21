@@ -184,7 +184,6 @@ class StudyGroupRouter {
         }
         const feed = new Feed(studyGroup.feed);
 
-
         // POST THE MEETING TO THE FEED
         let feedId = feed.getId();
         let creator = user.getId();
@@ -932,7 +931,7 @@ class StudyGroupRouter {
                     return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
                 }
                 const feed = new Feed(studyGroup.feed);
-                
+
                 // CREATE POST
                 let message = "Recurring meeting updated to " + date + " at " + time + " on " + day + ". ";
                 if (details != null) {
@@ -950,8 +949,15 @@ class StudyGroupRouter {
                 let creator = user.getId();
                 let postWasCreated = undefined;
                 try {
-                    postWasCreated = await feed.addPost("Recurring Meeting Updated", message, feedId, creator, "Meeting", null);
-                    console.log(feed)
+                    postWasCreated = await feed.addPost(
+                        "Recurring Meeting Updated",
+                        message,
+                        feedId,
+                        creator,
+                        "Meeting",
+                        null
+                    );
+                    console.log(feed);
                 } catch (error) {
                     Log.writeError(error);
                 }
@@ -962,7 +968,6 @@ class StudyGroupRouter {
         } else {
             // CREATE THE MEETING.
             const recurringMeeting = await Meeting.create(day, frequency, time, date, details, location, roomNumber);
-        
 
             // SET THE RECURRING MEETING.
             const meetingId = recurringMeeting.getId();
@@ -970,7 +975,6 @@ class StudyGroupRouter {
             if (!recurringMeetingWasSet) {
                 return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
             } else {
-
                 // CREATE POST FOR RECURRING MEETING
                 // GET THE STUDY GROUP'S FEED.
                 const feedWasFound = await studyGroup.getFeed();
@@ -978,7 +982,7 @@ class StudyGroupRouter {
                     return response.json({ message: ResponseMessages.StudyGroup.CreatePost.Error });
                 }
                 const feed = new Feed(studyGroup.feed);
-                
+
                 // CREATE POST
                 let message = "Recurring meeting created for " + date + " at " + time + " on " + day + ". ";
                 if (details != null) {
@@ -997,7 +1001,7 @@ class StudyGroupRouter {
                 let postWasCreated = undefined;
                 try {
                     postWasCreated = await feed.addPost("Recurring Meeting", message, feedId, creator, "Meeting", null);
-                    console.log(feed)
+                    console.log(feed);
                 } catch (error) {
                     Log.writeError(error);
                 }
@@ -1005,7 +1009,7 @@ class StudyGroupRouter {
                     return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Error });
                 } else {
                     return response.json({ message: ResponseMessages.StudyGroup.SetRecurringMeeting.Success });
-                }                
+                }
             }
         }
     }

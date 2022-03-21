@@ -9,24 +9,27 @@ const Validator = require("../Validator.js");
  * @author Cameron Burkholder
  * @date   10/29/2021
  */
-const MessageSchema = new Schema({
-    conversationId: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: Configuration.getConversationCollectionName(),
-        required: true
+const MessageSchema = new Schema(
+    {
+        conversationId: {
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: Configuration.getConversationCollectionName(),
+            required: true
+        },
+        senderId: {
+            type: Mongoose.Schema.Types.ObjectId,
+            ref: Configuration.getUserCollectionName(),
+            required: true
+        },
+        value: {
+            type: String,
+            requird: true
+        }
     },
-    senderId: {
-        type: Mongoose.Schema.Types.ObjectId,
-        ref: Configuration.getUserCollectionName(),
-        required: true
-    },
-    value: {
-        type: String,
-        requird: true
+    {
+        timestamps: true
     }
-}, {
-    timestamps: true
-});
+);
 MessageSchema.set("toObject", {
     versionKey: false,
     transform: (document, object) => {
@@ -111,11 +114,11 @@ class Message {
     static async getById(messageId) {}
 
     /**
-    * Gets the message ID.
-    * @return {Mongoose.Types.ObjectId} The document ID for the message.
-    * @author Cameron Burkholder
-    * @date   03/16/2022
-    */
+     * Gets the message ID.
+     * @return {Mongoose.Types.ObjectId} The document ID for the message.
+     * @author Cameron Burkholder
+     * @date   03/16/2022
+     */
     getId() {
         return this._id;
     }
