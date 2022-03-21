@@ -1,3 +1,4 @@
+const Dotenv = require("dotenv-webpack");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const Path = require("path");
 const PrettierPlugin = require("prettier-webpack-plugin");
@@ -34,7 +35,8 @@ let webpackConfiguration = {
     plugins: [
         new HTMLWebpackPlugin({
             template: Path.join(__dirname, "Client", "public", "index.html")
-        })
+        }),
+        new Dotenv()
     ],
     devServer: {
         static: {

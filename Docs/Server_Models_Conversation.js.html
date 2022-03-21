@@ -30,6 +30,7 @@
 const Schema = Mongoose.Schema;
 
 const Configuration = require("../../Configuration.js");
+const Message = require("./Message.js");
 const Log = require("../Log.js");
 const Validator = require("../Validator.js");
 
@@ -91,7 +92,27 @@ class Conversation {
      * @async
      * @static
      */
-    static async create(sender, receiver) {}
+    static async create(sender, receiver) {
+        const conversationModel = new ConversationModel({
+            messages: [],
+            participants: [sender, receiver]
+        });
+
+        let conversationWasSaved = false;
+        try {
+            conversationWasSaved = await conversationModel.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to create a conversation.");
+            Log.writeError(error);
+        } finally {
+            if (conversationWasSaved) {
+                const conversation = new Conversation(conversationModel);
+                return conversation;
+            } else {
+                return undefined;
+            }
+        }
+    }
 
     /**
      * Deletes the conversation.
@@ -102,14 +123,75 @@ class Conversation {
     async delete() {}
 
     /**
-     * Gets a conversation based on the participants that it includes.
-     * @param {String[]} participants The list of participants for the conversation.
-     * @return {Conversation} The conversation between the participants.
-     *
+     * Gets all conversations for a given user.
+     * @param {Mongoose.Types.ObjectId} userId The ID of the user to find conversations for.
+     * @return {Conversation[]} The conversations between the participants.
+     * @author Cameron Burkholder
+     * @date   03/16/2022
      * @async
      * @static
      */
-    static async getByParticipants(participants) {}
+    static async getAllForUserById(userId) {
+        let conversationModels = undefined;
+        try {
+            conversationModels = await ConversationModel.find({ participants: userId });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get all conversations for a user.");
+            Log.writeError(error);
+        } finally {
+            const conversationsWereFound = Validator.isDefined(conversationModels);
+            if (conversationsWereFound) {
+                // FILL IN THE CONVERSATION DATA.
+                let conversationIndex = 0;
+                const conversationCount = conversationModels.length;
+                let conversations = [];
+                while (conversationIndex &lt; conversationCount) {
+                    const conversationModel = conversationModels[conversationIndex];
+                    await conversationModel.populate("participants");
+                    const conversation = new Conversation(conversationModel);
+                    conversations.push(conversation);
+                    conversationIndex++;
+                }
+                return conversations;
+            } else {
+                return undefined;
+            }
+        }
+    }
+
+    /**
+     * Gets a conversation based on the participants that it includes.
+     * @param {Mongoose.Types.ObjectId} senderId The ID of the user sending the message.
+     * @param {Mongoose.Types.ObejctId} receiverId The ID of the user receiving the message.
+     * @return {Conversation} The conversation between the participants.
+     * @author Cameron Burkholder
+     * @date   03/14/2022
+     * @async
+     * @static
+     */
+    static async getByParticipantIds(senderId, receiverId) {
+        let conversationModel = undefined;
+        try {
+            conversationModel = await ConversationModel.findOne({
+                participants: {
+                    $all: [senderId, receiverId]
+                }
+            });
+        } catch (error) {
+            Log.write("An error occurred while attempting to get a conversation by its participants.");
+            Log.writeError(error);
+        } finally {
+            const conversationWasFound = Validator.isDefined(conversationModel);
+            if (conversationWasFound) {
+                await conversationModel.populate("participants");
+                await conversationModel.populate("messages");
+                const conversation = new Conversation(conversationModel);
+                return conversation;
+            } else {
+                return undefined;
+            }
+        }
+    }
 
     /**
      * Gets the other participant in the conversation.
@@ -128,21 +210,72 @@ class Conversation {
     async getMessages() {}
 
     /**
-     * Updates the conversation in the database.
-     * @return {Boolean} True if the conversation was saved, false otherwise.
-     *
+     * This saves the associated conversation document in the database with the current properties
+     * stored in this object.
+     * @return {bool} True if the conversation was saved, false if the conversation wasn't saved.
+     * @author Cameron Burkholder
+     * @date   03/16/2021
      * @async
      */
-    async save() {}
+    async save() {
+        let conversationWasSaved = false;
+        try {
+            // GET THE DATABASE INSTANCE OF THE USER.
+            let conversationModel = await ConversationModel.findOne({ _id: this._id }).exec();
+
+            // UPDATE THE DATABASE INSTANCE WITH THE CURRENT USER PROPERTIES.
+            Object.assign(conversationModel, this);
+
+            // SAVE THE UPDATED DATABASE INSTANCE.
+            await conversationModel.save();
+            conversationWasSaved = true;
+        } catch (error) {
+            Log.write("An error occurred while attempting to retrieve the conversation to save.");
+            Log.writeError(error);
+        } finally {
+            return conversationWasSaved;
+        }
+    }
 
     /**
      * Sends a message.
-     * @param {Message} message The message to send.
+     * @param {String} message The message to send.
+     * @param {Mongoose.Types.ObjectId} senderId The user ID of the sender.
+     * @param {Mongoose.Types.ObjectId} receiverId The user ID of the receiver.
      * @return {Boolean} True if the message was sent, false otherwise.
      *
      * @async
      */
-    async sendMessage(message) {}
+    async sendMessage(messageValue, senderId, receiverId) {
+        // CREATE THE MESSAGE.
+        const message = await Message.create(this._id, senderId, messageValue);
+        const messageWasCreated = Validator.isDefined(message);
+        if (!messageWasCreated) {
+            return false;
+        }
+
+        // STORE THE MESSAGE IN THE CONVERSATION.
+        this.messages.push(message.getId());
+        let conversationWasSaved = false;
+        try {
+            conversationWasSaved = await this.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to add a message to the conversation.");
+            Log.writeError(error);
+        } finally {
+            return conversationWasSaved;
+        }
+    }
+
+    /**
+     * Gets the document id of the conversation in the database as a string.
+     * @return {Mongoose.Types.ObjectId} The document id of the conversation.
+     * @author Clifton Croom
+     * @date   03/21/22
+     */
+    getId() {
+        return this._id;
+    }
 }
 
 module.exports = Conversation;
@@ -156,13 +289,13 @@ module.exports = Conversation;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageRouter.html">MessageRouter</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateMeetingView">CreateMeetingView</a></li><li><a href="global.html#CreatePostView">CreatePostView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#DetailsView">DetailsView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#ViewMeetingView">ViewMeetingView</a></li><li><a href="global.html#Views">Views</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AccountRouter.html">AccountRouter</a></li><li><a href="Authenticator.html">Authenticator</a></li><li><a href="Configuration.html">Configuration</a></li><li><a href="Conversation.html">Conversation</a></li><li><a href="Feed.html">Feed</a></li><li><a href="JsonWebTokenStrategyOptions.html">JsonWebTokenStrategyOptions</a></li><li><a href="Log.html">Log</a></li><li><a href="Meeting.html">Meeting</a></li><li><a href="MeetingAvailability.html">MeetingAvailability</a></li><li><a href="Message.html">Message</a></li><li><a href="MessageRouter.html">MessageRouter</a></li><li><a href="Post.html">Post</a></li><li><a href="SearchRouter.html">SearchRouter</a></li><li><a href="StaticResourceRouter.html">StaticResourceRouter</a></li><li><a href="StudyGroup.html">StudyGroup</a></li><li><a href="StudyGroupRouter.html">StudyGroupRouter</a></li><li><a href="Time.html">Time</a></li><li><a href="UnverifiedUser.html">UnverifiedUser</a></li><li><a href="User.html">User</a></li><li><a href="Validator.html">Validator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Account">Account</a></li><li><a href="global.html#AccountSetupForm">AccountSetupForm</a></li><li><a href="global.html#AccountSetupView">AccountSetupView</a></li><li><a href="global.html#allReducers">allReducers</a></li><li><a href="global.html#App">App</a></li><li><a href="global.html#authReducer">authReducer</a></li><li><a href="global.html#Button">Button</a></li><li><a href="global.html#ButtonTypes">ButtonTypes</a></li><li><a href="global.html#ChatsView">ChatsView</a></li><li><a href="global.html#ConversationSchema">ConversationSchema</a></li><li><a href="global.html#ConversationView">ConversationView</a></li><li><a href="global.html#CreateAccountForm">CreateAccountForm</a></li><li><a href="global.html#CreateAccountView">CreateAccountView</a></li><li><a href="global.html#CreateMeetingView">CreateMeetingView</a></li><li><a href="global.html#CreatePostView">CreatePostView</a></li><li><a href="global.html#CreateStudyGroupForm">CreateStudyGroupForm</a></li><li><a href="global.html#CreateStudyGroupView">CreateStudyGroupView</a></li><li><a href="global.html#DetailsView">DetailsView</a></li><li><a href="global.html#Dropdown">Dropdown</a></li><li><a href="global.html#EditStudyGroupView">EditStudyGroupView</a></li><li><a href="global.html#FeedSchema">FeedSchema</a></li><li><a href="global.html#Form">Form</a></li><li><a href="global.html#generateRSAKeyPair">generateRSAKeyPair</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#InputField">InputField</a></li><li><a href="global.html#Label">Label</a></li><li><a href="global.html#LoginForm">LoginForm</a></li><li><a href="global.html#LoginView">LoginView</a></li><li><a href="global.html#MeetingFormats">MeetingFormats</a></li><li><a href="global.html#MeetingSchema">MeetingSchema</a></li><li><a href="global.html#MessageSchema">MessageSchema</a></li><li><a href="global.html#Notification">Notification</a></li><li><a href="global.html#notificationReducer">notificationReducer</a></li><li><a href="global.html#Page">Page</a></li><li><a href="global.html#Popup">Popup</a></li><li><a href="global.html#popupReducer">popupReducer</a></li><li><a href="global.html#PostSchema">PostSchema</a></li><li><a href="global.html#PostTypes">PostTypes</a></li><li><a href="global.html#PrivacySettings">PrivacySettings</a></li><li><a href="global.html#ResponseCodes">ResponseCodes</a></li><li><a href="global.html#ResponseMessages">ResponseMessages</a></li><li><a href="global.html#Routes">Routes</a></li><li><a href="global.html#Search">Search</a></li><li><a href="global.html#SearchForm">SearchForm</a></li><li><a href="global.html#SearchListing">SearchListing</a></li><li><a href="global.html#SearchResultView">SearchResultView</a></li><li><a href="global.html#SearchView">SearchView</a></li><li><a href="global.html#sendDeleteRequest">sendDeleteRequest</a></li><li><a href="global.html#sendGetRequest">sendGetRequest</a></li><li><a href="global.html#sendPostRequest">sendPostRequest</a></li><li><a href="global.html#sendPostRequestWithFormData">sendPostRequestWithFormData</a></li><li><a href="global.html#StaticResources">StaticResources</a></li><li><a href="global.html#Study">Study</a></li><li><a href="global.html#StudyGroupSchema">StudyGroupSchema</a></li><li><a href="global.html#studyGroupsReducer">studyGroupsReducer</a></li><li><a href="global.html#StudyGroupTypes">StudyGroupTypes</a></li><li><a href="global.html#StudyGroupView">StudyGroupView</a></li><li><a href="global.html#Subjects">Subjects</a></li><li><a href="global.html#TextInput">TextInput</a></li><li><a href="global.html#Toggle">Toggle</a></li><li><a href="global.html#ToggleField">ToggleField</a></li><li><a href="global.html#UnverifiedUserSchema">UnverifiedUserSchema</a></li><li><a href="global.html#UserSchema">UserSchema</a></li><li><a href="global.html#VerificationEmailConfirmationView">VerificationEmailConfirmationView</a></li><li><a href="global.html#ViewMeetingView">ViewMeetingView</a></li><li><a href="global.html#Views">Views</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Wed Mar 09 2022 21:14:08 GMT-0500 (Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Mar 21 2022 12:48:30 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

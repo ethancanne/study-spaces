@@ -98,23 +98,22 @@ class User {
         Object.assign(this, userSchema.toObject());
     }
 
-
     /**
      *
      * @param {String} conversation Conversation object added to the User
      * @returns {Boolean} True if the conversation was added, false otherwise.
      * @async
      */
-    async addConversation(conversation) {
-        //ADD THE CONVERSATION TO THE USER"S CONVERSATION LIST
-        this.conversations.push(conversation.getId())
+    async addConversation(conversationId) {
+        //ADD THE CONVERSATION TO THE USER'S CONVERSATION LIST
+        this.conversations.push(conversationId);
 
         // SAVE THE CHANGE.
         let conversationWasAdded = true;
         try {
             await this.save();
         } catch (error) {
-            conversationAdded = false;
+            conversationWasAdded = false;
             Log.writeError(error);
         }
         return conversationWasAdded;
@@ -140,8 +139,6 @@ class User {
         }
         return studyGroupWasAdded;
     }
-
-
 
     /**
      * @param {StudyGroup} studyGroup The study group to remove.

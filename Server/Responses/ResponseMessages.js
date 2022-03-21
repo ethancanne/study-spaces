@@ -33,12 +33,17 @@ const ResponseMessages = {
         InactiveAccount: "The account requested is not active."
     },
     Message: {
+        ErrorAddConversation: "An error occurrred while attempting to add a conversation. ",
+        ErrorConversationExists: "The conversation requested already exists.",
         ErrorGetConversation: "An error occurred while attempting to get the conversation.",
+        ErrorGetReceiver: "An error occurred while attempting to get the receiver.",
+        ErrorCreateConversation: "An error occurred while attempting to create the conversation.",
         GetConversations: {
             Error: "An error occurred while attempting to get all conversations for a user.",
             Success: "All conversations were found for a user."
         },
-        SuccessGetConversation: "Conversation returned successfully."
+        SuccessGetConversation: "Conversation returned successfully.",
+        SuccessCreateConversation: "Conversation created successfully."
     },
     StudyGroup: {
         AddOneTimeMeeting: {

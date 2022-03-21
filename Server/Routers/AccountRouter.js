@@ -166,7 +166,7 @@ class AccountRouter {
 
             // EMAIL THE VERIFICATION LINK TO THE USER.
             const verificationToken = unverifiedUser.verificationToken;
-            let verificationLink = `http://${request.hostname}:3000/verify/${verificationToken}`;
+            let verificationLink = `http://${request.hostname}${Configuration.isSetToProduction() ? "" : ":3000"}/verify/${verificationToken}`;
             const emailSubject = "Your Study Spaces Verification Link";
             const emailBody = "Click this: " + verificationLink;
 
@@ -241,7 +241,7 @@ class AccountRouter {
             }
 
             // EMAIL THE VERIFICATION LINK TO THE USER.
-            let verificationLink = `http://${request.hostname}:3000/verifyEmail/${verificationToken}`;
+            let verificationLink = `http://${request.hostname}${Configuration.isSetToProduction() ? "" : ":3000"}/verifyEmail/${verificationToken}`;
             const emailSubject = "Your Study Spaces Verification Link";
             const emailBody = "Click this: " + verificationLink;
             let emailWasSent = false;

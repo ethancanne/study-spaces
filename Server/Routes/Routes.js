@@ -17,7 +17,8 @@ const Routes = {
     },
     Message: {
         GetConversation: "/api/message/get-conversation",
-        GetConversations: "/api/message/get-conversations"
+        GetConversations: "/api/message/get-conversations",
+        CreateConversation: "/api/message/create-conversation"
     },
     StaticResources: {
         Index: "/*"

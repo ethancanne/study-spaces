@@ -32,7 +32,7 @@ const ConversationView = ({ conversation }) => {
     const receiverId = receivingUser && receivingUser._id;
     const senderId = loggedInUser._id; //set to loggedInUser._id
 
-    const SERVER_URL = "http://localhost:5000";
+    const SERVER_URL = process.env.SERVER_URL;
 
     const [socket, setSocket] = useState({});
     const [message, setMessage] = useState("");
