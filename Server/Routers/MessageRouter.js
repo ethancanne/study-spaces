@@ -40,6 +40,8 @@ class MessageRouter {
         server.post(Routes.Message.GetConversation, authenticator.protectRoute(), MessageRouter.getConversation);
         // Used to get all of a users conversations.
         server.post(Routes.Message.GetConversations, authenticator.protectRoute(), MessageRouter.getConversations);
+        // Used to create a conversation.
+        server.post(Routes.Message.CreateConversation, authenticator.protectRoute(), MessageRouter.createConversation);
     }
 
     // SOCKET.IO HANDLERS.
@@ -85,10 +87,28 @@ class MessageRouter {
      */
 
     static async createConversation(request, response) {
+        //Check for duplicates
 
-        userId = request.user.getId();
-        receiverId = request.body.receiverId;
+        let userId = String(request.user.getId());
+        let receiverId = request.body.receiverId;
+        console.log(userId);
+        console.log(receiverId);
+        let conversationExists = undefined;
+        conversationExists = await Conversation.getByParticipantIds(userId, receiverId);
+        console.log(conversationExists);
+        if (Validator.isDefined(conversationExists)) {
+            return response.json({ message: ResponseMessages.Message.ErrorConversationExists });
+        }
 
+
+        //GET RECEIVER BY ID
+        let receiver = undefined;
+        receiver = await User.getById(receiverId);
+        const receiverFound = Validator.isDefined(receiver);
+        if (!receiverFound) {
+            return response.json({ message: ResponseMessages.Message.ErrorGetReceiver });
+        }
+       
         // CREATE NEW CONVERSATION
         let newConversation = undefined;
         try {
@@ -97,29 +117,29 @@ class MessageRouter {
             Log.writeError(error);
         }
 
-
         // VALIDATE STUDY GROUP CREATION.
         const conversationCreated = Validator.isDefined(newConversation);
         if (!conversationCreated) {
             return response.json({ message: ResponseMessages.Message.ErrorCreateConversation });
         } else {
-            // ADD CONVERSATION TO USER
-            let conversationWasAdded = false;
+            // ADD CONVERSATION TO USERS
+            let addToReceiver = false;
+            let addToSender = false;
+            let conversationId = newConversation.getId();
             try {
-                conversationWasAdded = await request.user.addConversation(newConversation);
+                
+                addToReceiver = await request.user.addConversation(conversationId);
+                addToSender = await receiver.addConversation(conversationId);
             } catch (error) {
             Log.writeError(error);
             }
-            if (conversationWasAdded) {
+            if (addToReceiver && addToSender) {
                 return response.json({ message: ResponseMessages.Message.SuccessCreateConversation });
             } else {
                 return response.json({ message: ResponseMessages.Message.ErrorAddConversation });
             }
         }
     }
-
-
-
 
 
     /**

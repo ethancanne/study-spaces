@@ -64,7 +64,30 @@ class Conversation {
      * @async
      * @static
      */
-    static async create(sender, receiver) {}
+    static async create(sender, receiver) {
+        
+
+        const conversationModel = new ConversationModel({
+            messages: [],
+            participants: [sender, receiver]
+        });
+        
+        let conversationWasSaved = false;
+        try {
+            conversationWasSaved = await conversationModel.save();
+        } catch (error) {
+            Log.write("An error occurred while attempting to create a conversation.");
+            Log.writeError(error);
+        } finally {
+            if (conversationWasSaved) {
+                const conversation = new Conversation(conversationModel);
+                return conversation;
+            } else {
+                return undefined;
+            }
+        }
+
+    }
 
     /**
      * Deletes the conversation.
@@ -216,6 +239,16 @@ class Conversation {
             return conversationWasSaved;
         }
     }
+
+    /**
+     * Gets the document id of the conversation in the database as a string.
+     * @return {Mongoose.Types.ObjectId} The document id of the conversation.
+     * @author Clifton Croom
+     * @date   03/21/22
+     */
+         getId() {
+            return this._id;
+        }
 }
 
 module.exports = Conversation;
