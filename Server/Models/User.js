@@ -468,6 +468,8 @@ class User {
      */
     removeSensitiveAttributes() {
         delete this.passwordHash;
+        delete this.temporaryEmail;
+        delete this.verificationToken;
         return this;
     }
 
