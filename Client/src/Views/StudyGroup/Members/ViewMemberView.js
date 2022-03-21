@@ -14,12 +14,19 @@ const ViewMemberView = ({ member }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const createConversation = () => {
-        sendPostRequest(Routes.Message.CreateConversation, {receiverId: member._id}, ResponseMessages.Message.SuccessCreateConversation, null, true, (data, error)=>{
-            if (error) return; 
-            dispatch(closePopup());
-            history.push("/message");
-        })
-    }
+        sendPostRequest(
+            Routes.Message.CreateConversation,
+            { receiverId: member._id },
+            ResponseMessages.Message.SuccessCreateConversation,
+            null,
+            true,
+            (data, error) => {
+                if (error) return;
+                dispatch(closePopup());
+                history.push("/message");
+            }
+        );
+    };
     return (
         <div className="view-member-view-container">
             <div className="member-details">
@@ -29,13 +36,14 @@ const ViewMemberView = ({ member }) => {
                 </div>
                 <div className="member-secondary-info">
                     <p>{member.email}</p>
-                    <p></p>
                 </div>
             </div>
 
             <hr />
             <div className="options side-by-side">
-                <Button type={ButtonTypes.Creation} onClick={createConversation}>Message</Button>
+                <Button type={ButtonTypes.Creation} onClick={createConversation}>
+                    Message
+                </Button>
                 <Button type={ButtonTypes.Destrucive}>Report</Button>
             </div>
         </div>

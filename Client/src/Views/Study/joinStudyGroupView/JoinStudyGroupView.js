@@ -47,9 +47,9 @@ const JoinStudyGroupView = ({ group }) => {
         e.stopPropagation();
 
         await sendPostRequest(
-            Routes.Message /*.CreateConversation*/,
-            { userId: owner._id },
-            ResponseMessages.Message /*.CreateConversation.Success*/,
+            Routes.Message.CreateConversation /*.CreateConversation*/,
+            { receiverId: owner._id },
+            ResponseMessages.Message.SuccessCreateConversation /*.CreateConversation.Success*/,
             null,
             true,
             (data, error) => {
