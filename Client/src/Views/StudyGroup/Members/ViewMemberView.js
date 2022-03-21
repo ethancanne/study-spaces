@@ -14,6 +14,7 @@ const ViewMemberView = ({ member }) => {
                 </div>
                 <div className="member-secondary-info">
                     <p>{member.email}</p>
+                    <p></p>
                 </div>
             </div>
 
