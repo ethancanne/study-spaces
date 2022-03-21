@@ -85,7 +85,6 @@ class MessageRouter {
      * @param {String} request.body.receiverId The user recieving messages
      * @returns
      */
-
     static async createConversation(request, response) {
         //Check for duplicates
 
@@ -140,7 +139,6 @@ class MessageRouter {
             }
         }
     }
-
 
     /**
     * Converts a user's document ID to a socket ID if one exists.
