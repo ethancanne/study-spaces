@@ -204,6 +204,12 @@ class Feed {
             return error;
         } finally {
             await feedRecord.populate("posts");
+            let postIndex = 0;
+            let postCount = feedRecord.posts.length;
+            while (postIndex < postCount) {
+                await feedRecord.posts[postIndex].populate("creator");
+                postIndex++;
+            }
             const posts = feedRecord.posts;
             return posts;
         }
