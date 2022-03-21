@@ -93,11 +93,8 @@ class MessageRouter {
 
         let userId = String(request.user.getId());
         let receiverId = request.body.receiverId;
-        console.log(userId);
-        console.log(receiverId);
         let conversationExists = undefined;
         conversationExists = await Conversation.getByParticipantIds(userId, receiverId);
-        console.log(conversationExists);
         if (Validator.isDefined(conversationExists)) {
             return response.json({ message: ResponseMessages.Message.ErrorConversationExists });
         }
@@ -159,14 +156,12 @@ class MessageRouter {
         socket.on(Events.Message, (args) => {
             MessageRouter.broadcastMessage(args, socket);
         });
-        // If the application is being run in development, log all events to the console.
-        if (!Configuration.isSetToProduction()) {
-            socket.onAny((event, ...args) => {
-                Log.write(`Socket.IO: ${event}.`);
-                Log.write(`SenderID: ${socket.handshake.auth.id}.`);
-                Log.write(args);
-            });
-        }
+        Log.write(`Socket.IO: new connection from ${socket.id}.`);
+        socket.onAny((event, ...args) => {
+            Log.write(`Socket.IO: ${event}.`);
+            Log.write(`SenderID: ${socket.handshake.auth.id}.`);
+            Log.write(args);
+        });
     }
     static handleDisconnect(socket) {}
     static handleError(error) {
