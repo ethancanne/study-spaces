@@ -17,6 +17,7 @@ const ResponseCodes = require("./Responses/ResponseCodes.js");
 const SearchRouter = require("./Routers/SearchRouter.js");
 const StaticResourceRouter = require("./Routers/StaticResourceRouter.js");
 const StudyGroupRouter = require("./Routers/StudyGroupRouter.js");
+const ReportRouter = require("./Routers/ReportRouter.js");
 
 // ASSIGN THE ROOT DIRECTORY TO A GLOBAL VARIABLE FOR REUSE THROUGHOUT THE APPLICATION.
 const rootDirectory = Path.resolve("./");
@@ -76,8 +77,10 @@ server.use("/uploads", Express.static("uploads"));
 AccountRouter.serveRoutes(server, authenticator);
 StudyGroupRouter.serveRoutes(server, authenticator);
 SearchRouter.serveRoutes(server, authenticator);
+ReportRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
 StaticResourceRouter.serveRoutes(server, authenticator);
+
 
 // START SERVER.
 const serverPort = Configuration.getServerPort();

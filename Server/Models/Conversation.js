@@ -60,7 +60,8 @@ class Conversation {
      * @param {User} sender The user sending the first message in the conversation.
      * @param {User} receiver The user receiving the first message in the conversation.
      * @return {Conversation} The conversation created.
-     *
+     * @author Clifton Croom
+     * @date 03/21/22
      * @async
      * @static
      */
@@ -69,7 +70,7 @@ class Conversation {
             messages: [],
             participants: [sender, receiver]
         });
-
+        
         let conversationWasSaved = false;
         try {
             conversationWasSaved = await conversationModel.save();
@@ -84,6 +85,7 @@ class Conversation {
                 return undefined;
             }
         }
+
     }
 
     /**
@@ -144,11 +146,9 @@ class Conversation {
     static async getByParticipantIds(senderId, receiverId) {
         let conversationModel = undefined;
         try {
-            conversationModel = await ConversationModel.findOne({
-                participants: {
-                    $all: [senderId, receiverId]
-                }
-            });
+            conversationModel = await ConversationModel.findOne({ participants: {
+                $all: [senderId, receiverId]
+            }});
         } catch (error) {
             Log.write("An error occurred while attempting to get a conversation by its participants.");
             Log.writeError(error);
@@ -245,9 +245,9 @@ class Conversation {
      * @author Clifton Croom
      * @date   03/21/22
      */
-    getId() {
-        return this._id;
-    }
+         getId() {
+            return this._id;
+        }
 }
 
 module.exports = Conversation;

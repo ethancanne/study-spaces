@@ -20,6 +20,9 @@ const Routes = {
         GetConversations: "/api/message/get-conversations",
         CreateConversation: "/api/message/create-conversation"
     },
+    Report: {
+        SendReport: "/api/report/send-report"
+    },
     StaticResources: {
         Index: "/*"
     },
