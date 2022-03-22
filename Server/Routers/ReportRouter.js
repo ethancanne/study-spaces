@@ -41,6 +41,12 @@ class ReportRouter {
      */
 
     static async sendReport(request, response) {
+        //Check for empty reports
+        if (request.body.comment == "") {
+            return response.json({ message: ResponseMessages.Report.EmptyField });
+        }
+
+        
         //SEND REPORT
 
         //Format Email Subject and Body

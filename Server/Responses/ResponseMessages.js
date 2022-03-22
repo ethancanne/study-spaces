@@ -93,7 +93,8 @@ const ResponseMessages = {
         
     },
     Report: {
-        EmailSent: "Report email was sent."
+        EmailSent: "Report email was sent.",
+        EmptyField: "Empty field received. Please include a comment about why you are reporting this item."
     }
 };
 module.exports = ResponseMessages;
