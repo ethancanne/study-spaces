@@ -13,7 +13,6 @@ const AuthView = (props) => {
                 <>
                     <h1>Study Spaces</h1>
                     {props.children}
-                    <p className="error-message">{props.errMsg}</p>
                 </>
             )}
         </div>

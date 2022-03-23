@@ -67,8 +67,6 @@ const ConversationView = ({ conversation }) => {
             initialSocket.on(Events.Message, ({ message, senderId }) => {
                 let tempMessages = [...messages];
                 const messageWasReceived = senderId === receiverId;
-                console.log("message was received");
-
                 tempMessages.push({ value: message, senderId });
                 setMessages(tempMessages);
             });
