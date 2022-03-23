@@ -52,7 +52,7 @@ class ReportRouter {
         //Format Email Subject and Body
         let emailSubject = request.body.reportType;
         let emailBody = "Report from: " + request.user.getName()
-        + " User ID: " + request.user.getId() + " Item Identifier: " + 
+        + " User ID: " + request.user.getId() + " Email: " + request.user.getEmail() + " Item Identifier: " + 
         request.body.id +  " Comment: " + request.body.comment;
         
         
