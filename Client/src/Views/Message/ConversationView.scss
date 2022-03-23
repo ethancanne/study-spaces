@@ -9,9 +9,10 @@
 
     z-index: 0;
     overflow: visible;
+    position: relative;
 
     .currentConversationInfo {
-        position: fixed;
+        position: absolute;
         z-index: 30;
         top: 0;
         width: 100%;
@@ -27,6 +28,7 @@
             font-size: 15px;
         }
     }
+
     .messages-view {
         overflow-y: visible;
         flex: 80%;

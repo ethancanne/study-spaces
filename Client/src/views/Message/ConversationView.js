@@ -32,7 +32,7 @@ const ConversationView = ({ conversation }) => {
     const receiverId = receivingUser && receivingUser._id;
     const senderId = loggedInUser._id; //set to loggedInUser._id
 
-    const SERVER_URL = (process.env.production ? process.env.PRODUCTION_SERVER_URL : process.env.DEVELOPMENT_SERVER_URL);
+    const SERVER_URL = process.env.production ? process.env.PRODUCTION_SERVER_URL : process.env.DEVELOPMENT_SERVER_URL;
 
     const [socket, setSocket] = useState({});
     const [message, setMessage] = useState("");
@@ -47,7 +47,6 @@ const ConversationView = ({ conversation }) => {
             null,
             true,
             (data, error) => {
-                console.log("TESING", error, data);
                 if (error) return;
                 setMessages(data.conversation.messages);
             }
@@ -61,20 +60,26 @@ const ConversationView = ({ conversation }) => {
     }, [conversation]);
 
     useEffect(() => {
-        let initialSocket = io(SERVER_URL, { autoConnect: false });
-        initialSocket.auth = { id: senderId };
-        initialSocket.on(Events.Message, ({ message, senderId }) => {
-            let tempMessages = [...messages];
-            const messageWasReceived = senderId === receiverId;
-            tempMessages.push({ value: message, senderId });
-            setMessages(tempMessages);
-        });
-        initialSocket.on(Events.MessageFailure, (errorMessage) => {
-            console.log(errorMessage);
-        });
-        initialSocket.connect();
-        setSocket(initialSocket);
-        messagesViewRef.current.scrollTop = messagesViewRef.current.scrollHeight;
+        if (receivingUser) {
+            let initialSocket = io(SERVER_URL, { autoConnect: false });
+            initialSocket.auth = { id: senderId };
+
+            initialSocket.on(Events.Message, ({ message, senderId }) => {
+                let tempMessages = [...messages];
+                const messageWasReceived = senderId === receiverId;
+                console.log("message was received");
+
+                tempMessages.push({ value: message, senderId });
+                setMessages(tempMessages);
+            });
+            initialSocket.on(Events.MessageFailure, (errorMessage) => {
+                console.log(errorMessage);
+                //TODO show notification
+            });
+            initialSocket.connect();
+            setSocket(initialSocket);
+            messagesViewRef.current.scrollTop = messagesViewRef.current.scrollHeight;
+        }
     }, [messages]);
 
     // send request to get conversations
@@ -85,6 +90,7 @@ const ConversationView = ({ conversation }) => {
     };
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log(message, receiverId);
         socket.emit(Events.Message, {
             message,
             receiverId
@@ -93,32 +99,41 @@ const ConversationView = ({ conversation }) => {
     };
     return (
         <div className="conversation-view">
-            <div className="currentConversationInfo">
-                <ProfilePicture image={""} />
-                <h1>{receivingUser && receivingUser.name}</h1>
-            </div>
-            <div className="messages-view" ref={messagesViewRef}>
-                {messages.map((msg) => (
-                    <div className={"message-box " + (msg.senderId !== senderId ? "receiving-msg" : "sending-msg")}>
-                        {msg.senderId !== senderId && <ProfilePicture image={receivingUser.profilePicture} />}
-                        <p>{msg.value}</p>
+            {receivingUser && (
+                <>
+                    <div className="currentConversationInfo">
+                        <ProfilePicture image={receivingUser.profilePicture} />
+                        <h1>{receivingUser && receivingUser.name}</h1>
                     </div>
-                ))}
-            </div>
-            <div className="send-message-form">
-                <Form>
-                    <div className="side-by-side">
-                        <InputField style={{ flex: "70%" }}>
-                            <Label>Message</Label>
-                            <TextInput value={message} onChange={handleChange} />
-                        </InputField>
 
-                        <Button type={ButtonTypes.Creation} onClick={handleSubmit}>
-                            Send
-                        </Button>
+                    <div className="messages-view" ref={messagesViewRef}>
+                        {messages.map((msg) => (
+                            <div
+                                className={
+                                    "message-box " + (msg.senderId !== senderId ? "receiving-msg" : "sending-msg")
+                                }
+                            >
+                                {msg.senderId !== senderId && <ProfilePicture image={receivingUser.profilePicture} />}
+                                <p>{msg.value}</p>
+                            </div>
+                        ))}
                     </div>
-                </Form>
-            </div>
+                    <div className="send-message-form">
+                        <Form>
+                            <div className="side-by-side">
+                                <InputField style={{ flex: "70%" }}>
+                                    <Label>Message</Label>
+                                    <TextInput value={message} onChange={handleChange} />
+                                </InputField>
+
+                                <Button type={ButtonTypes.Creation} onClick={handleSubmit}>
+                                    Send
+                                </Button>
+                            </div>
+                        </Form>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

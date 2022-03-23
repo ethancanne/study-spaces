@@ -1,3 +1,4 @@
+@import "../../globals.scss";
 .message-page {
     display: flex;
     flex-direction: column;
@@ -8,5 +9,26 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .guest-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        height: 100%;
+        width: 100%;
+
+        h1 {
+            margin: 20px;
+            padding: 10px;
+            background-color: $highlight-color;
+        }
+        p {
+            padding: 10px;
+            color: rgb(87, 87, 87);
+            font-size: 20px;
+        }
     }
 }
