@@ -7,7 +7,8 @@ import {
     showEditStudyGroupPopup,
     showConfirmationPopup,
     showViewMeetingsStudyGroupPopup,
-    clearStudyGroups
+    clearStudyGroups,
+    showReportPopup
 } from "../../../state/actions";
 import { getNextMeeting, sendDeleteRequest, sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
@@ -112,6 +113,23 @@ const DetailsView = ({ group }) => {
                             }}
                         >
                             Leave Group
+                        </Button>
+                    </>
+                )}
+                {group.owner && group.owner._id !== user._id && (
+                    <>
+                        <Button
+                            onClick={() => {
+                                dispatch(
+                                    showReportPopup(
+                                        sendReport,
+                                        "Confirm Report",
+                                    )
+                                );
+                                dispatch(sendReport());
+                            }}
+                        >
+                            Report
                         </Button>
                     </>
                 )}

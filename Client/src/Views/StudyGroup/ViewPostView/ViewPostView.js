@@ -63,6 +63,19 @@ const ViewPostView = ({ post }) => {
                     </div>
                 </Form>
             </div>
+            <Button 
+                onClick={() => {
+                    dispatch(
+                        showReportPopup(
+                            sendReport,
+                            "Confirm Report",
+                        )
+                    );
+                dispatch(sendReport());
+                }}
+            >
+                Report
+            </Button>
         </div>
     );
 };
