@@ -10,9 +10,9 @@ import "./Page.scss";
 const Page = (props) => {
     return (
         <div>
-            {props.topBar && <TopBar currentPage={props.currentPage} color={props.color} />}
+            {props.topBar && <TopBar currentPage={props.currentPage} />}
 
-            <div className="page" {...props} style={{ backgroundColor: props.color + "49" }}>
+            <div className="page" {...props}>
                 {props.children}
             </div>
         </div>

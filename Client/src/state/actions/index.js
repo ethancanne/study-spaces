@@ -108,6 +108,13 @@ export const showConfirmationPopup = (
     };
 };
 
+export const showReportPopup = (type, reportData) => {
+    return {
+        type: popupConstants.SHOW_REPORT_POPUP,
+        payload: { type, reportData }
+    };
+};
+
 export const closePopup = () => {
     return {
         type: popupConstants.CLOSE_POPUP

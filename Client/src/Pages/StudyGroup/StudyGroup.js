@@ -68,11 +68,11 @@ const StudyGroup = (props) => {
     };
     return (
         <div>
-            <Page topBar={true} currentPage="study" color={group.groupColor}>
+            <Page topBar={true} currentPage="study">
                 <div className="study-group-page">
-                    <div className="page-title">
+                    <div className="page-title-study-group" style={{ backgroundColor: group.groupColor + "90" }}>
                         <Link to="/">
-                            <Button style={{ marginLeft: "0px" }}>{"<"}</Button>
+                            <Button style={{ marginLeft: "0px", backgroundColor: group.groupColor }}>{"<"}</Button>
                         </Link>
                         <h1>{group.name}</h1>
                     </div>

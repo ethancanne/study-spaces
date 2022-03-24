@@ -18,7 +18,8 @@ const FeedView = ({ group }) => {
 
     useEffect(() => {
         feedRef.current.scrollTop = feedRef.current.scrollHeight;
-    });
+        console.log("running");
+    }, [group.posts]);
 
     const handleSelectMeeting = (recurringMeetingSelected) => {
         dispatch(showCreateMeetingStudyGroupPopup(group, recurringMeetingSelected));

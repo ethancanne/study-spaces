@@ -30,7 +30,8 @@ const ChatsView = ({ setSelectedConversation }) => {
                 if (error) return;
                 console.log(data);
                 setConversations(data.conversations);
-            }
+            },
+            false
         );
     };
 

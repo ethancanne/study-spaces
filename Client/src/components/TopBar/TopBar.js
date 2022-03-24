@@ -50,7 +50,7 @@ const TopBar = ({ currentPage, color }) => {
                     )}
                 </div>
             </div>
-            <div className="border" style={{ borderColor: color }}>
+            <div className="border">
                 <Menu isShowing={menuIsShowing} setIsShowing={setMenuIsShowing} />
             </div>
         </>

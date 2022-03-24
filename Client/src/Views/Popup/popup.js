@@ -16,6 +16,7 @@ import ViewPostView from "../StudyGroup/ViewPostView/ViewPostView";
 import Loading from "../../components/Loading/Loading";
 import ViewMeetingView from "../StudyGroup/ViewMeetingView/ViewMeetingView";
 import ViewMemberView from "../StudyGroup/Members/ViewMemberView";
+import ReportView from "../Report/ReportView";
 
 /**
  * This is the presentational component that presents different popup views according to the
@@ -86,6 +87,9 @@ const Popup = (props) => {
                     secondButtonTitle={payload.secondButtonTitle}
                 />
             );
+            break;
+        case views.Popup.Report:
+            popupView = <ReportView type={payload.type} reportData={payload.reportData} />;
             break;
     }
 

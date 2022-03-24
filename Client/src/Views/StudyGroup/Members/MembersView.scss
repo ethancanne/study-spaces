@@ -15,6 +15,9 @@
         display: flex;
         align-items: center;
         transition: all 0.2s;
+        border-left: 0px solid;
+        // word-wrap: break-word;
+
         p {
             padding-left: 20px;
         }
@@ -28,14 +31,15 @@
 
         &:hover {
             border-left: 10px solid;
-            background-color: rgb(244, 244, 244);
+            // background-color: rgb(244, 244, 244);
             color: black;
             cursor: pointer;
+            overflow: hidden;
         }
 
         &.owner {
             margin-bottom: 20px;
-            border-width: 20px;
+            // border-width: 20px;
         }
     }
 }

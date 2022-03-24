@@ -1,20 +1,23 @@
 .member-details {
-    padding: 50px;
+    padding: 60px;
     .member-primary-info {
         display: flex;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: center;
 
         img {
             width: 100px;
             height: 100px;
             border-radius: 50px;
+            margin-right: 30px;
         }
         h1 {
             font-weight: 900;
         }
     }
     .member-secondary-info {
+        padding-top: 50px;
+        // padding-bottom: 30px;
         display: flex;
         justify-content: space-evenly;
     }

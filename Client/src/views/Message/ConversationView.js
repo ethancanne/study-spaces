@@ -49,7 +49,8 @@ const ConversationView = ({ conversation }) => {
             (data, error) => {
                 if (error) return;
                 setMessages(data.conversation.messages);
-            }
+            },
+            false
         );
     };
 

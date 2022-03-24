@@ -3,7 +3,7 @@ import React from "react";
 import Button from "../../core/Button/Button";
 import ButtonTypes from "../../core/Button/ButtonTypes";
 import { useDispatch } from "react-redux";
-import { showViewPostStudyGroupPopup, showViewMeetingsStudyGroupPopup } from "../../state/actions";
+import { showViewPostStudyGroupPopup, showViewMeetingsStudyGroupPopup, showViewMemberPopup } from "../../state/actions";
 ButtonTypes;
 import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import PostTypes from "../../../../Server/Models/PostTypes";
@@ -43,20 +43,18 @@ const Post = (props) => {
     const dispatch = useDispatch();
     console.log(props);
     return (
-        <div
-            className="post-container"
-            onClick={() => {
-                if (props.type !== PostTypes.Meeting) dispatch(showViewPostStudyGroupPopup(props));
-                else dispatch(showViewMeetingsStudyGroupPopup(props.group));
-            }}
-        >
+        <div className="post-container">
             <div className="post-inner">
                 <div
                     className="post-details"
                     style={{
                         backgroundColor:
-                            props.type !== PostTypes.Meeting ? "rgba(255, 255, 255, 0.721)" : props.group.color + "10",
+                            props.type !== PostTypes.Meeting ? "rgba(255, 255, 255, 0.9)" : props.group.color + "10",
                         border: props.type === PostTypes.Meeting && "white 4px solid"
+                    }}
+                    onClick={() => {
+                        if (props.type !== PostTypes.Meeting) dispatch(showViewPostStudyGroupPopup(props));
+                        else dispatch(showViewMeetingsStudyGroupPopup(props.group));
                     }}
                 >
                     <div className="post-inner-content">
@@ -67,11 +65,11 @@ const Post = (props) => {
                         <h1 className="post-title">{props.title}</h1>
                         <p className="post-body">{props.message}</p>
 
-                        {props.type !== PostTypes.Meeting && (
+                        {/* {props.type !== PostTypes.Meeting && (
                             <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
-                        )}
+                        )} */}
                     </div>
-                    {props.attachment ? (
+                    {props.attachment !== "" ? (
                         <img
                             className="attachment"
                             src={"data:image/png;charset=utf-8;base64," + props.attachment}
@@ -80,18 +78,16 @@ const Post = (props) => {
                     ) : (
                         ""
                     )}
-                    <p className="post-response-count">
-                        <span>{props.responses.length}</span> Responses
-                    </p>
                 </div>
                 <div className="post-metainfo">
-                    <p className="post-date">
-                        <em>{props.timestamp && new Date(props.timestamp).toLocaleDateString()}</em>
+                    <p className="post-response-count">
+                        <span>{props.responses.length} </span>Responses
                     </p>
+                    <p className="post-date">{props.timestamp && new Date(props.timestamp).toLocaleDateString()}</p>
                 </div>
             </div>
 
-            <div className="post-creator">
+            <div className="post-creator" onClick={() => dispatch(showViewMemberPopup(props.creator))}>
                 <ProfilePicture image={props.creator.profilePicture} />
             </div>
         </div>

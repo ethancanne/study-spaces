@@ -23,7 +23,8 @@ const Views = {
             ViewMember: "View Member"
         },
         Input: "Input Information",
-        Confirmation: "Confirm"
+        Confirmation: "Confirm",
+        Report: "Report"
     }
 };
 

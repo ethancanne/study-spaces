@@ -7,8 +7,9 @@ import { sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import { useDispatch } from "react-redux";
-import { closePopup } from "../../../state/actions";
+import { closePopup, showReportPopup } from "../../../state/actions";
 import { useHistory } from "react-router";
+import { ReportTypes } from "../../Report/ReportTypes";
 
 const ViewMemberView = ({ member }) => {
     const dispatch = useDispatch();
@@ -44,7 +45,12 @@ const ViewMemberView = ({ member }) => {
                 <Button type={ButtonTypes.Creation} onClick={createConversation}>
                     Message
                 </Button>
-                <Button type={ButtonTypes.Destrucive}>Report</Button>
+                <Button
+                    type={ButtonTypes.Destrucive}
+                    onClick={() => dispatch(showReportPopup(ReportTypes.USER, member))}
+                >
+                    Report
+                </Button>
             </div>
         </div>
     );

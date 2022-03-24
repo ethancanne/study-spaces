@@ -11,7 +11,11 @@ const MembersView = ({ group }) => {
         <div className="members-container">
             <Label style={{ padding: "10px" }}>Owner</Label>
 
-            <div className="member owner">
+            <div
+                className="member owner"
+                onClick={() => dispatch(showViewMemberPopup(group.owner))}
+                style={{ borderColor: group.groupColor }}
+            >
                 {group.owner && (
                     <>
                         <ProfilePicture image={group.owner.profilePicture} />
