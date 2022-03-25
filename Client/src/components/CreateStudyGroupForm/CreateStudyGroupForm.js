@@ -16,6 +16,7 @@ import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import axios from "axios";
 import Dropdown from "../../core/Dropdown/Dropdown";
 import ColorPicker from "../../core/ColorPicker/ColorPicker";
+import Subjects from "../../../../Server/Models/Subjects.js";
 
 /**
  * Renders a create study group form
@@ -59,7 +60,7 @@ const CreateStudyGroupForm = (props) => {
                 <div className="side-by-side">
                     <InputField>
                         <Label>Subject</Label>
-                        <Dropdown options={["This", "That"]} onChange={props.updateSubjectField} />
+                        <Dropdown options={Object.keys(Subjects)} onChange={props.updateSubjectField} />
                     </InputField>
 
                     <InputField>
