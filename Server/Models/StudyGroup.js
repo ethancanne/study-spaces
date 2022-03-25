@@ -743,7 +743,6 @@ class StudyGroup {
             const schoolRegex = new RegExp(`${filters.school}`, "i");
             searchFilter.school = schoolRegex;
         }
-
         const subjectFilteringIsEnabled = Subjects.Any !== filters.subject;
         if (subjectFilteringIsEnabled) {
             searchFilter.subject = filters.subject;
