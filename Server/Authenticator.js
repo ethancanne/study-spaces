@@ -150,7 +150,7 @@ class Authenticator {
         }
     }
 
-        /**
+    /**
      * Sends a report email to a admin.
      * @param {String} subject The subject of the email.
      * @param {String} body The body of the email.
@@ -159,36 +159,35 @@ class Authenticator {
      * @date   03/22/2022
      * @async
      */
-         static async sendReportEmail(subject, body) {
-            
-            // SEND THE EMAIL.
-            // Generate test SMTP service account from ethereal.email
-            // create reusable transporter object using the default SMTP transport
-            let transporter = nodemailer.createTransport({
-                service: "gmail",
-                auth: {
-                    user: process.env.EMAIL_ACCOUNT,
-                    pass: process.env.EMAIL_PASSWORD
-                }
-            });
-        
-            // send mail with defined transport object
-            try {
-                let info = await transporter.sendMail({
-                    from: process.env.EMAIL_ACCOUNT,
-                    to: process.env.EMAIL_ACCOUNT, // list of receivers
-                    subject: subject, // Subject line
-                    text: body, // plain text body
-                    html: "<h1>" + body + "</h1>" // html body
-                });
-                Log.write("Sending email success", info);
-                return true;
-            } catch (error) {
-                Log.write("Sending email failed.");
-                Log.writeError(error);
-                return false;
+    static async sendReportEmail(subject, body) {
+        // SEND THE EMAIL.
+        // Generate test SMTP service account from ethereal.email
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.EMAIL_ACCOUNT,
+                pass: process.env.EMAIL_PASSWORD
             }
+        });
+
+        // send mail with defined transport object
+        try {
+            let info = await transporter.sendMail({
+                from: process.env.EMAIL_ACCOUNT,
+                to: process.env.EMAIL_ACCOUNT, // list of receivers
+                subject: subject, // Subject line
+                text: body, // plain text body
+                html: "<h1>" + body + "</h1>" // html body
+            });
+            Log.write("Sending email success", info);
+            return true;
+        } catch (error) {
+            Log.write("Sending email failed.");
+            Log.writeError(error);
+            return false;
         }
+    }
 
     /**
      * Used to verify that a JSON web token is associated with a valid user.

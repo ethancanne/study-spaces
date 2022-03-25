@@ -3,6 +3,10 @@
  *
  */
 const Subjects = {
-    Any: ""
+    Any: "Any",
+    History: "History",
+    Literature: "Literature",
+    Math: "Math",
+    Science: "Science"
 };
 module.exports = Subjects;

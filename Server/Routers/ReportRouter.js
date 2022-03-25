@@ -16,7 +16,6 @@ const StudyGroup = require("../Models/StudyGroup.js");
  */
 
 class ReportRouter {
-
     /**
      * Initialize the router and serve the routes.
      * @param {Server} server The server instance used to provide the routes.
@@ -46,17 +45,23 @@ class ReportRouter {
             return response.json({ message: ResponseMessages.Report.EmptyField });
         }
 
-        
         //SEND REPORT
 
         //Format Email Subject and Body
         let emailSubject = request.body.reportType;
-        let emailBody = "Report from: " + request.user.getName()
-        + " User ID: " + request.user.getId() + " Email: " + request.user.getEmail() + " Item Identifier: " + 
-        request.body.id +  " Comment: " + request.body.comment;
-        
-        
-       //Send Email
+        let emailBody =
+            "Report from: " +
+            request.user.getName() +
+            " User ID: " +
+            request.user.getId() +
+            " Email: " +
+            request.user.getEmail() +
+            " Item Identifier: " +
+            request.body.id +
+            " Comment: " +
+            request.body.comment;
+
+        //Send Email
         let emailWasSent = false;
         try {
             emailWasSent = await Authenticator.sendReportEmail(emailSubject, emailBody);
@@ -67,9 +72,8 @@ class ReportRouter {
         if (!emailWasSent) {
             return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
         } else {
-            return response.json({ message: ResponseMessages.Report.EmailSent});
+            return response.json({ message: ResponseMessages.Report.EmailSent });
         }
-
     }
 }
 

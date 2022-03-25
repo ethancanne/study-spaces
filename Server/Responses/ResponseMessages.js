@@ -90,7 +90,6 @@ const ResponseMessages = {
             InvalidInput: "One or more required fields is empty.",
             Success: "The recurring meeting was set successfully."
         }
-        
     },
     Report: {
         EmailSent: "Report email was sent.",

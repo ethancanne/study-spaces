@@ -81,7 +81,6 @@ ReportRouter.serveRoutes(server, authenticator);
 // The static resource router needs to go last so that it is used for routes not addressed above.
 StaticResourceRouter.serveRoutes(server, authenticator);
 
-
 // START SERVER.
 const serverPort = Configuration.getServerPort();
 // The server defined above provides a function handler that can process requests and uses the Express
