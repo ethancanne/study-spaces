@@ -9,6 +9,7 @@ import { closePopup } from "../../state/actions";
 const ReportView = ({ type, reportData }) => {
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
+
     const submitReport = () => {
         sendPostRequest(
             Routes.Report.SendReport,

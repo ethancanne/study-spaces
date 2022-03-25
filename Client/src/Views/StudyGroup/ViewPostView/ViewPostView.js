@@ -9,8 +9,9 @@ import Button from "../../../core/Button/Button.js";
 import InputField from "../../../core/InputField/InputField.js";
 import ProfilePicture from "../../../components/ProfilePicture/ProfilePicture";
 import { getPostTypeDetails } from "../../../components/Feed/Post";
-import { showViewMemberPopup } from "../../../state/actions";
+import { showReportPopup, showViewMemberPopup } from "../../../state/actions";
 import { useDispatch } from "react-redux";
+import { ReportTypes } from "../../Report/ReportTypes";
 
 const ViewPostView = ({ post }) => {
     const [response, setResponse] = useState("");
@@ -65,8 +66,7 @@ const ViewPostView = ({ post }) => {
             </div>
             <Button
                 onClick={() => {
-                    dispatch(showReportPopup(sendReport, "Confirm Report"));
-                    dispatch(sendReport());
+                    dispatch(showReportPopup(ReportTypes.POST, post));
                 }}
             >
                 Report
