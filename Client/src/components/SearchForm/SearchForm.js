@@ -10,6 +10,7 @@ import ToggleField from "../../core/ToggleField/ToggleField.js";
 import Toggle from "../../core/Toggle/Toggle.js";
 import Dropdown from "../../core/Dropdown/Dropdown.js";
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
+import Subjects from "../../../../Server/Models/Subjects.js";
 import TimeRange from "../../core/Range/TimeRange";
 import MultipleDropdown from "../../core/Dropdown/MultipleDropdown";
 import { Days, MeetingFrequencies } from "../../../../Server/Models/Time";
@@ -48,7 +49,7 @@ const SearchForm = ({
                 </InputField>
                 <InputField>
                     <Label>Category</Label>
-                    <Dropdown options={["This", "That"]} value={subject} onChange={updateSubject} />
+                    <Dropdown options={Object.keys(Subjects)} value={subject} onChange={updateSubject} />
                 </InputField>
                 <InputField>
                     <Label>Meeting Frequency</Label>

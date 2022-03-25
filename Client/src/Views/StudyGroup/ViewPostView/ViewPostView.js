@@ -63,15 +63,10 @@ const ViewPostView = ({ post }) => {
                     </div>
                 </Form>
             </div>
-            <Button 
+            <Button
                 onClick={() => {
-                    dispatch(
-                        showReportPopup(
-                            sendReport,
-                            "Confirm Report",
-                        )
-                    );
-                dispatch(sendReport());
+                    dispatch(showReportPopup(sendReport, "Confirm Report"));
+                    dispatch(sendReport());
                 }}
             >
                 Report

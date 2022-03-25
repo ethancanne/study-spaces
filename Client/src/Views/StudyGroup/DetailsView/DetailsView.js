@@ -120,12 +120,7 @@ const DetailsView = ({ group }) => {
                     <>
                         <Button
                             onClick={() => {
-                                dispatch(
-                                    showReportPopup(
-                                        sendReport,
-                                        "Confirm Report",
-                                    )
-                                );
+                                dispatch(showReportPopup(sendReport, "Confirm Report"));
                                 dispatch(sendReport());
                             }}
                         >

@@ -12,6 +12,8 @@ import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 import { sendPostRequest } from "../../../Helper";
 import { useSelector } from "react-redux";
 
+import Subjects from "../../../../Server/Models/Subjects.js";
+
 /**
  * A view for inputting search terms and filters for searching study groups
  * The results of this search will be displayed on the SearchResults.js View
@@ -19,10 +21,10 @@ import { useSelector } from "react-redux";
  */
 const SearchView = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [subject, setSubject] = useState("This");
+    const [subject, setSubject] = useState(Subjects.Any);
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
-    const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.InPerson);
-    const [type, setType] = useState("Group");
+    const [meetingFormat, setMeetingFormat] = useState(MeetingFormats.Mixed);
+    const [type, setType] = useState("Mixed");
     const [timeRange, setTimeRange] = useState(["12:00AM", "11:45PM"]);
     const [days, setDays] = useState([]);
     const [meetingFrequencies, setMeetingFrequencies] = useState([]);
@@ -36,8 +38,10 @@ const SearchView = () => {
      */
     const submitSearch = async (e) => {
         // SUBMIT THE SEARCH REQUEST.
-        e.preventDefault();
-        e.stopPropagation();
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
         await sendPostRequest(
             Routes.Search.GetSearchResults,
@@ -142,6 +146,13 @@ const SearchView = () => {
     const updateMeetingFrequencies = (value) => {
         setMeetingFrequencies(value);
     };
+
+    /**
+     * Sends a default search upon initially loading the page.
+     */
+    useEffect(() => {
+        submitSearch();
+    }, []);
     return (
         <div className="search-view">
             <SearchForm
