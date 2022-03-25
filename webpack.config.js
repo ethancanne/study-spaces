@@ -1,9 +1,19 @@
-const Dotenv = require("dotenv-webpack");
+let dotenv = require("dotenv").config({ path: __dirname + "/.env" });
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const Path = require("path");
 const PrettierPlugin = require("prettier-webpack-plugin");
+const webpack = require("webpack");
 
 const Configuration = require("./Configuration.js");
+
+// SANITIZE ENVIRONMENT VARIABLES.
+// Due to the way that the dotenv plugin incorporates environment variables
+// into the scripts bundle, sensitive attributes should be sanitized.
+const clientEnvironmentVariables = {
+    DEVELOPMENT_SERVER_URL: dotenv.parsed.DEVELOPMENT_SERVER_URL,
+    NODE_ENV: dotenv.parsed.NODE_ENV,
+    PRODUCTION_SERVER_URL: dotenv.parsed.PRODUCTION_SERVER_URL
+};
 
 let webpackConfiguration = {
     entry: Path.join(__dirname, "Client", "src", "index.js"),
@@ -33,10 +43,12 @@ let webpackConfiguration = {
         filename: "bundle.js"
     },
     plugins: [
+        new webpack.DefinePlugin({
+            "process.env": JSON.stringify(clientEnvironmentVariables)
+        }),
         new HTMLWebpackPlugin({
             template: Path.join(__dirname, "Client", "public", "index.html")
-        }),
-        new Dotenv()
+        })
     ],
     devServer: {
         static: {
