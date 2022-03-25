@@ -7,6 +7,7 @@ import { addStudyGroup, closePopup, showSuccessNotification, showErrorNotificati
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages.js";
 import Validator from "../../../../Server/Validator";
 import Routes from "../../../../Server/Routes/Routes";
+import Subjects from "../../../../Server/Models/Subjects.js";
 import { sendPostRequest } from "../../../Helper";
 
 /**
@@ -21,7 +22,7 @@ const CreateStudyGroupView = () => {
     const BLANK = "";
     const [name, setName] = useState(BLANK); //TextInput tag
     const [description, setDescription] = useState(BLANK); //TextInput tag
-    const [subject, setSubject] = useState("This"); //select tag, filled with option tags
+    const [subject, setSubject] = useState(Subjects.Any); //select tag, filled with option tags
     const [privacy, setPrivacy] = useState("Public"); //select tag, filled with option tags
     const [courseCode, setCourseCode] = useState(BLANK); //TextInput tag
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false); //Input tag with type "checkbox"

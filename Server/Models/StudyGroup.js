@@ -829,6 +829,17 @@ class StudyGroup {
             return false;
         });
 
+        // RETURN THE RESULTS IN ALPHABETICAL ORDER.
+        studyGroups = studyGroups.sort((currentGroup, nextGroup) => {
+            if (currentGroup.name < nextGroup.name) {
+                return -1;
+            } else if (currentGroup.name > nextGroup.name) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
         // RETURN THE STUDY GROUPS FOUND.
         return studyGroups;
     }
