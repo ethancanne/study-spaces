@@ -80,9 +80,9 @@ const Post = (props) => {
                     )}
                 </div>
                 <div className="post-metainfo">
-                    <p className="post-response-count">
+                    {/* <p className="post-response-count">
                         <span>{props.responses.length} </span>Responses
-                    </p>
+                    </p> */}
                     <p className="post-date">{props.timestamp && new Date(props.timestamp).toLocaleDateString()}</p>
                 </div>
             </div>

@@ -8,9 +8,7 @@ import ProfilePicture from "../ProfilePicture/ProfilePicture";
 
 import Menu from "./Menu";
 const TopBar = ({ currentPage, color }) => {
-    const dispatch = useDispatch();
     const { user, isLoggedIn } = useSelector((state) => state.authReducer);
-    // const { name, profilePicture } = user;
     const [menuIsShowing, setMenuIsShowing] = useState(false);
 
     return (
@@ -39,9 +37,22 @@ const TopBar = ({ currentPage, color }) => {
                                 console.log(menuIsShowing);
                             }}
                         >
-                            <p className="school">{user.school}</p>
-                            <p className="name">{user.name}</p>
-                            <ProfilePicture image={user.profilePicture} />
+                            <div className="userInfoContainer">
+                                <p className="school">{user.school}</p>
+                                <p className="name">{user.name}</p>
+                                <ProfilePicture image={user.profilePicture} />
+                            </div>
+
+                            <div
+                                className={"hamburger" + " " + (menuIsShowing && "activeHamburger")}
+                                onClick={() => {
+                                    setMenuIsShowing(!menuIsShowing);
+                                }}
+                            >
+                                <span className="line1"></span>
+                                <span className="line2"></span>
+                                <span className="line3"></span>
+                            </div>
                         </div>
                     ) : (
                         <Link to="/">
@@ -50,9 +61,8 @@ const TopBar = ({ currentPage, color }) => {
                     )}
                 </div>
             </div>
-            <div className="border">
-                <Menu isShowing={menuIsShowing} setIsShowing={setMenuIsShowing} />
-            </div>
+
+            <Menu isShowing={menuIsShowing} setIsShowing={setMenuIsShowing} currentPage={currentPage} user={user} />
         </>
     );
 };

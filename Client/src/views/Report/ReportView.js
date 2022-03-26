@@ -16,39 +16,33 @@ const ReportView = ({ type, reportData }) => {
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
 
-    const submitReport = () => {
+    const submitReport = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         sendPostRequest(
             Routes.Report.SendReport,
-            { id: reportData._id, comment },
+            { id: reportData._id, comment, reportType: type },
             ResponseMessages.Report.EmailSent,
             null,
             true,
             (data, error) => {
                 if (error) return;
-                dispatch(closePopup);
+                dispatch(closePopup());
             }
         );
     };
     return (
         <div className="report-view">
-            
             <h1>Please add a comment for the reason you are reporting this {type}</h1>
-            <Form
-                onSubmit={(e) => {
-                   e.preventDefault();
-                  e.stopPropagation();
-                  callback(input, input2);
-                  setInput("");
-                }}
-            >
+            <Form onSubmit={submitReport}>
                 <InputField>
-                   <Label>Comments:</Label>
-                   <TextInput onChange={comment} value={setComment} isTextArea={true}/>
+                    <Label>Comments:</Label>
+                    <TextInput onChange={(e) => setComment(e.target.value)} value={comment} isTextArea={true} />
                 </InputField>
-            
+
                 <Button type={ButtonTypes.Creation}>Done</Button>
             </Form>
-  
         </div>
     );
 };

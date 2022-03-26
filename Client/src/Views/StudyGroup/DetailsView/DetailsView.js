@@ -13,6 +13,7 @@ import {
 import { getNextMeeting, sendDeleteRequest, sendPostRequest } from "../../../../Helper";
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
+import { ReportTypes } from "../../Report/ReportTypes";
 
 /**
  * Renders a view for a user to view details about a joined or edit an owned study group
@@ -120,7 +121,7 @@ const DetailsView = ({ group }) => {
                     <>
                         <Button
                             onClick={() => {
-                                dispatch(show);
+                                dispatch(showReportPopup(ReportTypes.STUDY_GROUP, group));
                             }}
                         >
                             Report
