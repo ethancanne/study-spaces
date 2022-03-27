@@ -51,7 +51,7 @@ const Home = (props) => {
     }
 
     return (
-        <Page topBar={false}>
+        <Page topBar={false} showingPageTitle={false}>
             <div className="HomePage">
                 <h1 className="subtitle">
                     Study <br /> with <br /> excellence.

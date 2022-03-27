@@ -3,7 +3,10 @@
 .top-bar {
     border-bottom: $border-color 5px solid;
 
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     overflow: visible;
     z-index: 20;
     background-color: white;

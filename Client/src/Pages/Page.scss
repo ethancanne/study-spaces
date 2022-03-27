@@ -3,9 +3,22 @@
     animation: page-load-up 0.3s ease-out;
     padding-top: 0px;
 
-    height: calc(100vh - 4em);
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    top: 0em;
+
+    &.showingPageTitle {
+        padding-top: 10em;
+    }
+
+    &.showingTopBar {
+    }
+
     flex: 1;
-    // border-bottom: 0px;
+
+    // overflow: hidden;
 
     .page-title {
         padding: 40px;
@@ -16,6 +29,13 @@
         align-items: center;
         overflow: hidden;
         height: 6em;
+
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin-top: 4em;
+
         background-color: rgba(103, 78, 48, 0.084);
         backdrop-filter: blur(10px);
         color: rgba(0, 0, 0, 0.858);

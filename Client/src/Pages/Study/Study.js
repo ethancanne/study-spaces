@@ -99,37 +99,32 @@ const Study = (props) => {
     };
 
     return (
-        <div>
-            <Page topBar={true} currentPage="study">
-                <div className="study-page">
-                    <div className="page-title">
-                        <h1>Study</h1>
-                    </div>
-                    {isLoggedIn ? (
-                        <div>
-                            <Button
-                                className="add-button"
-                                onClick={() => dispatch(showCreateStudyGroupPopup())}
-                            ></Button>
-                            {isLoading ? (
-                                <Loading />
-                            ) : (
-                                <div className="study-groups-container">
-                                    {Validator.isDefined(studyGroups) &&
-                                        studyGroups.map((studyGroup) => <StudyGroupView group={studyGroup} />)}
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="guest-message">
-                            <h1>You are currently browsing Study Spaces as a guest!</h1>
-                            <p>Please sign-up or log-in to be able to join and create study groups</p>
-                            <p>Feel free to use our search tool to discover study groups in your area.</p>
-                        </div>
-                    )}
+        <Page topBar={true} currentPage="study">
+            <div className="study-page">
+                <div className="page-title">
+                    <h1>Study</h1>
                 </div>
-            </Page>
-        </div>
+                {isLoggedIn ? (
+                    <div>
+                        <Button className="add-button" onClick={() => dispatch(showCreateStudyGroupPopup())}></Button>
+                        {isLoading ? (
+                            <Loading />
+                        ) : (
+                            <div className="study-groups-container">
+                                {Validator.isDefined(studyGroups) &&
+                                    studyGroups.map((studyGroup) => <StudyGroupView group={studyGroup} />)}
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="guest-message">
+                        <h1>You are currently browsing Study Spaces as a guest!</h1>
+                        <p>Please sign-up or log-in to be able to join and create study groups</p>
+                        <p>Feel free to use our search tool to discover study groups in your area.</p>
+                    </div>
+                )}
+            </div>
+        </Page>
     );
 };
 

@@ -68,7 +68,7 @@ const StudyGroup = (props) => {
     };
     return (
         <div>
-            <Page topBar={true} currentPage="study">
+            <Page topBar={true} currentPage="study" showingPageTitle={false}>
                 <div className="study-group-page">
                     <div className="page-title-study-group" style={{ backgroundColor: group.groupColor + "90" }}>
                         <Link to="/">

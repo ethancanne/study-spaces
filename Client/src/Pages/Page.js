@@ -7,14 +7,12 @@ import "./Page.scss";
  * @author Cameron Burkholder and Ethan Cannelongo
  * @date   10/20/2021
  */
-const Page = (props) => {
+const Page = ({ currentPage, topBar, showingPageTitle, children }) => {
     return (
         <div>
-            {props.topBar && <TopBar currentPage={props.currentPage} />}
+            {topBar && <TopBar currentPage={currentPage} />}
 
-            <div className="page" {...props}>
-                {props.children}
-            </div>
+            <div className={showingPageTitle === undefined ? "page showingPageTitle" : "page"}>{children}</div>
         </div>
     );
 };
