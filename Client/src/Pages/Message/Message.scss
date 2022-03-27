@@ -4,6 +4,8 @@
     flex-direction: column;
     height: 100%;
 
+    position: relative;
+
     .message-area {
         flex: 1;
         display: flex;
@@ -29,6 +31,17 @@
             padding: 10px;
             color: rgb(87, 87, 87);
             font-size: 20px;
+        }
+    }
+
+    .open-chats-view-button-container {
+        position: absolute;
+        display: none;
+        top: 5px;
+        right: 0;
+        z-index: 0;
+        @include mobile {
+            display: block;
         }
     }
 }

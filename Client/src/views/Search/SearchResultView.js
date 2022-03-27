@@ -5,12 +5,12 @@ import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Loading from "../../components/Loading/Loading";
-
+import Button from "../../core/Button/Button";
 /**
  * A view for displaying resulting study groups from a search query
- * @author ???
+ * @author Ethan Cannelongo
  */
-const SearchResultView = () => {
+const SearchResultView = ({ searchViewIsShowing }) => {
     const search = useSelector((state) => state.studyGroupsReducer.search);
     const isLoading = useSelector((state) => state.notificationReducer.loading);
     return (

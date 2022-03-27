@@ -11,15 +11,15 @@ import { populateStudyGroupSearch, showErrorNotification } from "../../state/act
 import MeetingFormats from "../../../../Server/Models/MeetingFormats";
 import { sendPostRequest } from "../../../Helper";
 import { useSelector } from "react-redux";
-
 import Subjects from "../../../../Server/Models/Subjects.js";
+import SideView from "../SideView/SideView";
 
 /**
  * A view for inputting search terms and filters for searching study groups
  * The results of this search will be displayed on the SearchResults.js View
  * @author Ethan Cannelongo
  */
-const SearchView = () => {
+const SearchView = ({ searchViewIsShowing, setSearchViewIsShowing }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [subject, setSubject] = useState(Subjects.Any);
     const [isAssociatedWithSchool, setIsAssociatedWithSchool] = useState(false);
@@ -42,6 +42,7 @@ const SearchView = () => {
             e.preventDefault();
             e.stopPropagation();
         }
+        setSearchViewIsShowing(false);
 
         await sendPostRequest(
             Routes.Search.GetSearchResults,
@@ -154,28 +155,34 @@ const SearchView = () => {
         submitSearch();
     }, []);
     return (
-        <div className="search-view">
-            <SearchForm
-                searchTerm={searchTerm}
-                subject={subject}
-                isAssociatedWithSchool={isAssociatedWithSchool}
-                meetingFormat={meetingFormat}
-                type={type}
-                timeRange={timeRange}
-                days={days}
-                meetingFrequencies={meetingFrequencies}
-                updateSearchTerm={updateSearchTerm}
-                updateSubject={updateSubject}
-                updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
-                updateMeetingFormat={updateMeetingFormat}
-                updateType={updateType}
-                updateTimeRange={updateTimeRange}
-                updateDays={updateDays}
-                updateMeetingFrequencies={updateMeetingFrequencies}
-                submitSearch={submitSearch}
-                userSchool={user !== "" ? user.school : ""}
-            />
-        </div>
+        <SideView
+            setSideViewIsShowing={setSearchViewIsShowing}
+            sideViewIsShowing={searchViewIsShowing}
+            nameOfClass="search-view"
+        >
+            <div>
+                <SearchForm
+                    searchTerm={searchTerm}
+                    subject={subject}
+                    isAssociatedWithSchool={isAssociatedWithSchool}
+                    meetingFormat={meetingFormat}
+                    type={type}
+                    timeRange={timeRange}
+                    days={days}
+                    meetingFrequencies={meetingFrequencies}
+                    updateSearchTerm={updateSearchTerm}
+                    updateSubject={updateSubject}
+                    updateIsAssociatedWithSchool={updateIsAssociatedWithSchool}
+                    updateMeetingFormat={updateMeetingFormat}
+                    updateType={updateType}
+                    updateTimeRange={updateTimeRange}
+                    updateDays={updateDays}
+                    updateMeetingFrequencies={updateMeetingFrequencies}
+                    submitSearch={submitSearch}
+                    userSchool={user !== "" ? user.school : ""}
+                />
+            </div>
+        </SideView>
     );
 };
 

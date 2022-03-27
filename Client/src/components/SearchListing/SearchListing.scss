@@ -46,6 +46,17 @@
                 }
                 border-left: none;
             }
+            @include mobile {
+                &#courseCode-info {
+                    display: none;
+                }
+                &#school-info {
+                    display: none;
+                }
+                &#schedule-info {
+                    display: none;
+                }
+            }
             padding: 5px 15px 5px 15px;
             border-left: rgba(125, 125, 125, 0.345) 2px solid;
         }
