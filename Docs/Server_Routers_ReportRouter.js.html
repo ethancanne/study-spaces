@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/state/reducers/popupReducer.js</title>
+    <title>JSDoc: Source: Server/Routers/ReportRouter.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/state/reducers/popupReducer.js</h1>
+    <h1 class="page-title">Source: Server/Routers/ReportRouter.js</h1>
 
     
 
@@ -26,110 +26,86 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import { popupConstants } from "../constants/constants";
-import views from "../../Views/Views";
+            <pre class="prettyprint source linenums"><code>const Authenticator = require("../Authenticator.js");
+const Configuration = require("../../Configuration.js");
+const Conversation = require("../Models/Conversation.js");
+const Events = require("../Events.js");
+const ResponseMessages = require("../Responses/ResponseMessages.js");
+const Routes = require("../Routes/Routes.js");
+const Validator = require("../Validator.js");
+const User = require("../Models/User.js");
+const Log = require("../Log.js");
+const StudyGroup = require("../Models/StudyGroup.js");
+
 /**
- * This is the reducer for all actions relating to popus
- * @param  {object} state The inital state of the reducer
- * @param  {String} action The action from popupConstants that transforms the state into the next state
- * @author Ethan Cannelongo
- * @date   11/18/2021
+ * The router used to serve reports
+ * @author Clifton Croom
+ * @date 03/22/22
  */
-const popupReducer = (state = { view: "", isShowing: false, payload: {}, showTop: true }, action) => {
-    switch (action.type) {
-        case popupConstants.SHOW_CREATE_STUDY_GROUP_POPUP:
-            return { ...state, view: views.Popup.StudyGroup.Create, isShowing: true, payload: {}, showTop: true };
-        case popupConstants.SHOW_JOIN_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.Join,
-                isShowing: true,
-                payload: action.payload,
-                showTop: false
-            };
 
-        case popupConstants.SHOW_EDIT_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.Edit,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
-
-        case popupConstants.SHOW_CREATE_MEETING_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.CreateMeeting,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
-
-        case popupConstants.SHOW_CREATE_POST_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.CreatePost,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
-
-        case popupConstants.SHOW_VIEW_POST_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.ViewPost,
-                isShowing: true,
-                showTop: false,
-                payload: action.payload
-            };
-
-        case popupConstants.SHOW_VIEW_MEETINGS_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.ViewMeetings,
-                isShowing: true,
-                showTop: false,
-                payload: action.payload
-            };
-
-        case popupConstants.SHOW_VIEW_MEMBER_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.ViewMember,
-                isShowing: true,
-                showTop: false,
-                payload: action.payload
-            };
-
-        case popupConstants.SHOW_INPUT_POPUP:
-            return { ...state, view: views.Popup.Input, isShowing: true, payload: action.payload, showTop: true };
-
-        case popupConstants.SHOW_CONFIRMATION_POPUP:
-            return {
-                ...state,
-                view: views.Popup.Confirmation,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
-        case popupConstants.SHOW_REPORT_POPUP:
-            return {
-                ...state,
-                view: views.Popup.Report,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
-
-        case popupConstants.CLOSE_POPUP:
-            return { ...state, isShowing: false, view: "" };
-        default:
-            return state;
+class ReportRouter {
+    /**
+     * Initialize the router and serve the routes.
+     * @param {Server} server The server instance used to provide the routes.
+     * @param {Authenticator} authenticator The authenticator used to protect the routes.
+     * @author Clifton Croom
+     * @date   03/22/2022
+     */
+    static serveRoutes(server, authenticator) {
+        // Used to send a report.
+        server.post(Routes.Report.SendReport, authenticator.protectRoute(), ReportRouter.sendReport);
     }
-};
 
-export default popupReducer;
+    /**
+     * Send report via email. Report types include users, study group owners, tutors, study groups and posts.
+     * @param {String} request.body.id The ID of the item being reported
+     * @param {String} request.body.comment The comment associated with the report.
+     * @param {String} request.body.reportType The type of the report being sent.
+     * @author Clifton Croom
+     * @date   03/22/22
+     * @async
+     * @static
+     */
+
+    static async sendReport(request, response) {
+        //Check for empty reports
+        if (request.body.comment == "") {
+            return response.json({ message: ResponseMessages.Report.EmptyField });
+        }
+
+        //SEND REPORT
+
+        //Format Email Subject and Body
+        let emailSubject = request.body.reportType;
+        let emailBody =
+            "Report from: " +
+            request.user.getName() +
+            " User ID: " +
+            request.user.getId() +
+            " Email: " +
+            request.user.getEmail() +
+            " Item Identifier: " +
+            request.body.id +
+            " Comment: " +
+            request.body.comment;
+
+        //Send Email
+        let emailWasSent = false;
+        try {
+            emailWasSent = await Authenticator.sendReportEmail(emailSubject, emailBody);
+        } catch (error) {
+            Log.write("An error occurred while sending an email during the account creation process.");
+            Log.writeError(error);
+        }
+        if (!emailWasSent) {
+            return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
+        } else {
+            return response.json({ message: ResponseMessages.Report.EmailSent });
+        }
+    }
+}
+
+module.exports = ReportRouter;
 </code></pre>
         </article>
     </section>

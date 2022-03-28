@@ -88,7 +88,7 @@ const Post = (props) => {
             </div>
 
             <div className="post-creator" onClick={() => dispatch(showViewMemberPopup(props.creator))}>
-                <ProfilePicture image={props.creator.profilePicture} />
+                <ProfilePicture image={props.creator.profilePicture} name={props.creator.name} />
             </div>
         </div>
     );

@@ -18,7 +18,7 @@ const MembersView = ({ group }) => {
             >
                 {group.owner && (
                     <>
-                        <ProfilePicture image={group.owner.profilePicture} />
+                        <ProfilePicture image={group.owner.profilePicture} name={group.owner.name} />
                         <p>{group.owner.name}</p>{" "}
                     </>
                 )}
@@ -31,7 +31,7 @@ const MembersView = ({ group }) => {
                         onClick={() => dispatch(showViewMemberPopup(member))}
                         style={{ borderColor: group.groupColor }}
                     >
-                        <ProfilePicture image={member.profilePicture} />
+                        <ProfilePicture image={member.profilePicture} name={member.name} />
 
                         <p>{member.name}</p>
                     </div>

@@ -102,7 +102,7 @@ const ConversationView = ({ conversation }) => {
             {receivingUser && (
                 <>
                     <div className="currentConversationInfo">
-                        <ProfilePicture image={receivingUser.profilePicture} />
+                        <ProfilePicture image={receivingUser.profilePicture} name={receivingUser.name} />
                         <h1>{receivingUser && receivingUser.name}</h1>
                     </div>
 
@@ -113,7 +113,9 @@ const ConversationView = ({ conversation }) => {
                                     "message-box " + (msg.senderId !== senderId ? "receiving-msg" : "sending-msg")
                                 }
                             >
-                                {msg.senderId !== senderId && <ProfilePicture image={receivingUser.profilePicture} />}
+                                {msg.senderId !== senderId && (
+                                    <ProfilePicture image={receivingUser.profilePicture} name={receivingUser.name} />
+                                )}
                                 <p>{msg.value}</p>
                             </div>
                         ))}

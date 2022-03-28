@@ -65,6 +65,11 @@ const ChatsView = ({ setSelectedConversation, chatsViewIsShowing, setChatsViewIs
                                     ? chat.participants[0].profilePicture
                                     : chat.participants[1].profilePicture
                             }
+                            name={
+                                String(chat.participants[0]._id) !== user._id
+                                    ? chat.participants[0].name
+                                    : chat.participants[1].name
+                            }
                         />
                         <p>
                             {String(chat.participants[0]._id) !== user._id
