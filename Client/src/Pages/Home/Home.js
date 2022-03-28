@@ -23,13 +23,8 @@ import Validator from "../../../../Server/Validator.js";
 const Home = (props) => {
     const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
     let homeView = <></>;
-    // let verificationToken = undefined;
-    // const verificationTokenExists = Validator.isDefined(props.match);
-    // if (verificationTokenExists) {
-    //   verificationToken = props.match.params.verificationToken;
-    // }
+  
 
-    //
     switch (view) {
         case Views.Home.Login:
             homeView = <LoginView setHomeView={setHomeView} />;
