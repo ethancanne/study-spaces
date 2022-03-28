@@ -23,7 +23,6 @@ import Validator from "../../../../Server/Validator.js";
 const Home = (props) => {
     const [view, setHomeView] = useState(props.homeView ? props.homeView : Views.Home.Login);
     let homeView = <></>;
-  
 
     switch (view) {
         case Views.Home.Login:
