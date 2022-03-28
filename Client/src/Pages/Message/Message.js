@@ -17,6 +17,7 @@ const Message = (props) => {
     const [chatsViewIsShowing, setChatsViewIsShowing] = useState(false);
     const [selectedConversation, setSelectedConversation] = useState({});
     const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+
     return (
         <Page currentPage="message" topBar={true}>
             <div className="message-page">

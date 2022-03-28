@@ -1,6 +1,6 @@
 import "./ConversationView.scss";
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Events from "../../../../Server/Events.js";
 import io from "socket.io-client";
 import ButtonTypes from "../../core/Button/ButtonTypes";
@@ -13,6 +13,7 @@ import ProfilePicture from "../../components/ProfilePicture/ProfilePicture";
 import Routes from "../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import { sendGetRequest, sendPostRequest } from "../../../Helper";
+import { showErrorNotification } from "../../state/actions";
 
 /**
  * A view for messaging a certain user
@@ -20,9 +21,9 @@ import { sendGetRequest, sendPostRequest } from "../../../Helper";
  */
 const ConversationView = ({ conversation }) => {
     const messagesViewRef = useRef();
+    const dispatch = useDispatch();
 
     const loggedInUser = useSelector((state) => state.authReducer.user);
-
     const receivingUser =
         conversation.participants &&
         (String(conversation.participants[0]._id) !== loggedInUser._id
@@ -30,14 +31,14 @@ const ConversationView = ({ conversation }) => {
             : conversation.participants[1]);
 
     const receiverId = receivingUser && receivingUser._id;
-    const senderId = loggedInUser._id; //set to loggedInUser._id
+    const loggedInUserId = loggedInUser._id;
 
     const SERVER_URL =
         process.env.NODE_ENV === "production" ? process.env.PRODUCTION_SERVER_URL : process.env.DEVELOPMENT_SERVER_URL;
 
     const [socket, setSocket] = useState({});
-    const [message, setMessage] = useState("");
 
+    const [inputtedMessage, setInputtedMessage] = useState("");
     const [messages, setMessages] = useState([]);
 
     const loadConversation = async () => {
@@ -55,61 +56,60 @@ const ConversationView = ({ conversation }) => {
         );
     };
 
+    //Load the conversation messages
     useEffect(() => {
         if (conversation.participants) {
             loadConversation();
         }
     }, [conversation]);
 
+    //Setup socket connection
     useEffect(() => {
-        if (Object.keys(socket).length !== 0) {
-            console.log("disconnecting from socket", socket);
-            socket.disconnect(true);
-            setSocket({});
-        }
         if (receivingUser) {
-            console.log("connecting to socket");
             let initialSocket = io(SERVER_URL, { autoConnect: false });
-            initialSocket.auth = { id: senderId };
+
+            initialSocket.auth = { id: loggedInUserId };
 
             initialSocket.on(Events.Message, ({ message, senderId }) => {
                 let tempMessages = [...messages];
                 const messageWasReceived = senderId === receiverId;
-                tempMessages.push({ value: message, senderId });
-                setMessages(tempMessages);
+                if (messageWasReceived) {
+                    tempMessages.push({ value: message, senderId });
+                    setMessages(tempMessages);
+                }
             });
+
             initialSocket.on(Events.MessageFailure, (errorMessage) => {
                 console.log(errorMessage);
-                //TODO show notification
+                dispatch(showErrorNotification(errorMessage));
             });
+
             initialSocket.connect();
             setSocket(initialSocket);
+
             messagesViewRef.current.scrollTop = messagesViewRef.current.scrollHeight;
         }
-        return () => {
-            if (Object.keys(socket).length !== 0) {
-                console.log("disconnecting from socket", socket);
-                socket.disconnect(true);
-                setSocket({});
-            }
-        };
-    }, [receivingUser]);
-
-    // send request to get conversations
-    // needs: auth token, recipientId
+    }, [messages]);
 
     const handleChange = (event) => {
-        setMessage(event.target.value);
+        setInputtedMessage(event.target.value);
     };
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(message, receiverId);
+        console.log(inputtedMessage, receiverId);
+
+        let tempMessages = [...messages];
+        tempMessages.push({ value: inputtedMessage, senderId: loggedInUserId });
+        setMessages(tempMessages);
+
         socket.emit(Events.Message, {
-            message,
+            message: inputtedMessage,
             receiverId
         });
-        setMessage("");
+        setInputtedMessage("");
     };
+
     return (
         <div className="conversation-view">
             {receivingUser && (
@@ -123,10 +123,10 @@ const ConversationView = ({ conversation }) => {
                         {messages.map((msg) => (
                             <div
                                 className={
-                                    "message-box " + (msg.senderId !== senderId ? "receiving-msg" : "sending-msg")
+                                    "message-box " + (msg.senderId !== loggedInUserId ? "receiving-msg" : "sending-msg")
                                 }
                             >
-                                {msg.senderId !== senderId && (
+                                {msg.senderId !== loggedInUserId && (
                                     <ProfilePicture image={receivingUser.profilePicture} name={receivingUser.name} />
                                 )}
                                 <p>{msg.value}</p>
@@ -138,7 +138,7 @@ const ConversationView = ({ conversation }) => {
                             <div className="side-by-side">
                                 <InputField style={{ flex: "50%", overflow: "hidden" }}>
                                     <Label>Message</Label>
-                                    <TextInput value={message} onChange={handleChange} />
+                                    <TextInput value={inputtedMessage} onChange={handleChange} />
                                 </InputField>
 
                                 <Button type={ButtonTypes.Creation} onClick={handleSubmit}>
