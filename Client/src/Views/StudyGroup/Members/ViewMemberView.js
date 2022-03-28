@@ -32,7 +32,7 @@ const ViewMemberView = ({ member }) => {
         <div className="view-member-view-container">
             <div className="member-details">
                 <div className="member-primary-info">
-                    <ProfilePicture image={member.profilePicture} />
+                    <ProfilePicture image={member.profilePicture} name={member.name} />
                     <h1>{member.name}</h1>
                 </div>
                 <div className="member-secondary-info">
