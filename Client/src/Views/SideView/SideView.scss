@@ -2,13 +2,14 @@
 .side-view {
     transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
     z-index: 100;
-    overflow: visible;
 
     @include mobile {
         position: absolute;
+        height: 100%;
         top: 0;
-        left: -100%;
+        left: -105%;
         width: 100%;
+        overflow: auto;
 
         &.showing {
             left: 0;

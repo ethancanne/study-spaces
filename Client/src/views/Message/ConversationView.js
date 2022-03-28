@@ -121,7 +121,7 @@ const ConversationView = ({ conversation }) => {
                     <div className="send-message-form">
                         <Form>
                             <div className="side-by-side">
-                                <InputField style={{ flex: "70%" }}>
+                                <InputField style={{ flex: "50%", overflow: "hidden" }}>
                                     <Label>Message</Label>
                                     <TextInput value={message} onChange={handleChange} />
                                 </InputField>

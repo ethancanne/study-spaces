@@ -10,26 +10,7 @@
     overflow: auto;
     padding: 20px 20px 20px 20px;
     min-width: 400px;
-
-    .close-search-view-btn {
-        border: none;
-        position: absolute;
-        top: 14px;
-        right: 17px;
-        z-index: 9000;
-        background-color: rgba(116, 11, 11, 0);
-        width: 40px;
-        height: 40px;
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-        font-size: 20px;
-        font-weight: 100;
-        color: rgb(0, 0, 0);
-        cursor: pointer;
-
-        display: none;
-
-        @include mobile {
-            display: block;
-        }
+    @include mobile {
+        min-width: 100%;
     }
 }

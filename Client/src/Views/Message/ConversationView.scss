@@ -5,6 +5,7 @@
     flex-direction: column;
     background-color: rgba(198, 198, 198, 0.199);
     height: 100%;
+    width: 100%;
     backdrop-filter: blur(3px);
 
     z-index: 0;
@@ -89,10 +90,9 @@
         background-color: rgba(255, 255, 255, 0.781);
 
         box-shadow: rgba(0, 0, 0, 0.057) 0px 0 20px;
-
         // padding: 20px;
         .send-btn {
-            flex: 10%;
+            flex: 30%;
         }
     }
 }

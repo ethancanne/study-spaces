@@ -179,7 +179,7 @@ const SearchView = ({ searchViewIsShowing, setSearchViewIsShowing }) => {
                     updateDays={updateDays}
                     updateMeetingFrequencies={updateMeetingFrequencies}
                     submitSearch={submitSearch}
-                    userSchool={user !== "" ? user.school : ""}
+                    userSchool={user.school || ""}
                 />
             </div>
         </SideView>

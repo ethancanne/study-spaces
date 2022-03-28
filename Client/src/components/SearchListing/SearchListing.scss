@@ -21,6 +21,11 @@
         padding: 20px;
         color: white;
         font-size: 10px;
+
+        @include mobile {
+            font-size: 8px;
+            width: 150px;
+        }
     }
     .group-info-container {
         display: flex;
