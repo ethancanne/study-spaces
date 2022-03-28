@@ -38,8 +38,7 @@ const SearchForm = ({
     updateDays,
     updateMeetingFrequencies,
     submitSearch,
-    userSchool,
-
+    userSchool
 }) => {
     return (
         <div>

@@ -40,7 +40,7 @@ const TopBar = ({ currentPage, color }) => {
                             <div className="userInfoContainer">
                                 <p className="school">{user.school}</p>
                                 <p className="name">{user.name}</p>
-                                <ProfilePicture image={user.profilePicture} />
+                                <ProfilePicture image={user.profilePicture} name={user.name} />
                             </div>
 
                             <div

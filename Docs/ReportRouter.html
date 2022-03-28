@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/state/reducers/popupReducer.js</title>
+    <title>JSDoc: Class: ReportRouter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,122 +17,505 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/state/reducers/popupReducer.js</h1>
+    <h1 class="page-title">Class: ReportRouter</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>import { popupConstants } from "../constants/constants";
-import views from "../../Views/Views";
-/**
- * This is the reducer for all actions relating to popus
- * @param  {object} state The inital state of the reducer
- * @param  {String} action The action from popupConstants that transforms the state into the next state
- * @author Ethan Cannelongo
- * @date   11/18/2021
- */
-const popupReducer = (state = { view: "", isShowing: false, payload: {}, showTop: true }, action) => {
-    switch (action.type) {
-        case popupConstants.SHOW_CREATE_STUDY_GROUP_POPUP:
-            return { ...state, view: views.Popup.StudyGroup.Create, isShowing: true, payload: {}, showTop: true };
-        case popupConstants.SHOW_JOIN_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.Join,
-                isShowing: true,
-                payload: action.payload,
-                showTop: false
-            };
+        <h2><span class="attribs"><span class="type-signature"></span></span>ReportRouter<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">The router used to serve reports</div>
+        
+    
+</header>
 
-        case popupConstants.SHOW_EDIT_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.Edit,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
+<article>
+    <div class="container-overview">
+    
+        
 
-        case popupConstants.SHOW_CREATE_MEETING_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.CreateMeeting,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
+    
+    <h2>Constructor</h2>
+    
 
-        case popupConstants.SHOW_CREATE_POST_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.CreatePost,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
+    
+    <h4 class="name" id="ReportRouter"><span class="type-signature"></span>new ReportRouter<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-        case popupConstants.SHOW_VIEW_POST_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.ViewPost,
-                isShowing: true,
-                showTop: false,
-                payload: action.payload
-            };
+    
 
-        case popupConstants.SHOW_VIEW_MEETINGS_STUDY_GROUP_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.ViewMeetings,
-                isShowing: true,
-                showTop: false,
-                payload: action.payload
-            };
 
-        case popupConstants.SHOW_VIEW_MEMBER_POPUP:
-            return {
-                ...state,
-                view: views.Popup.StudyGroup.ViewMember,
-                isShowing: true,
-                showTop: false,
-                payload: action.payload
-            };
 
-        case popupConstants.SHOW_INPUT_POPUP:
-            return { ...state, view: views.Popup.Input, isShowing: true, payload: action.payload, showTop: true };
 
-        case popupConstants.SHOW_CONFIRMATION_POPUP:
-            return {
-                ...state,
-                view: views.Popup.Confirmation,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
-        case popupConstants.SHOW_REPORT_POPUP:
-            return {
-                ...state,
-                view: views.Popup.Report,
-                isShowing: true,
-                payload: action.payload,
-                showTop: true
-            };
 
-        case popupConstants.CLOSE_POPUP:
-            return { ...state, isShowing: false, view: "" };
-        default:
-            return state;
-    }
-};
 
-export default popupReducer;
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Clifton Croom</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server_Routers_ReportRouter.js.html">Server/Routers/ReportRouter.js</a>, <a href="Server_Routers_ReportRouter.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".sendReport"><span class="type-signature">(async, static) </span>sendReport<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Send report via email. Report types include users, study group owners, tutors, study groups and posts.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>request.body.id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the item being reported</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>request.body.comment</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The comment associated with the report.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>request.body.reportType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of the report being sent.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Clifton Croom</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server_Routers_ReportRouter.js.html">Server/Routers/ReportRouter.js</a>, <a href="Server_Routers_ReportRouter.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".serveRoutes"><span class="type-signature">(static) </span>serveRoutes<span class="signature">(server, authenticator)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initialize the router and serve the routes.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>server</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Server</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server instance used to provide the routes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authenticator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Authenticator.html">Authenticator</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The authenticator used to protect the routes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Clifton Croom</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server_Routers_ReportRouter.js.html">Server/Routers/ReportRouter.js</a>, <a href="Server_Routers_ReportRouter.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

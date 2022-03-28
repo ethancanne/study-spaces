@@ -7,3 +7,14 @@
     overflow: hidden;
     border: $border-color 4px solid;
 }
+.profile-picture-initial {
+    align-items: center;
+    background: rgb(249, 245, 241);
+    border: 3px solid $primary-button-color;
+    border-radius: 27px;
+    display: flex;
+    font-weight: bold;
+    height: 50px;
+    justify-content: center;
+    width: 50px;
+}
