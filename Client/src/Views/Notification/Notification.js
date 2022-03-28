@@ -30,7 +30,9 @@ const Notification = (props) => {
             clearTimeout(timeout.current);
         }, 5000);
     };
-    switch (type) {
+    switch (
+        type //TODO: add a x or checkmark to the notification
+    ) {
         case notificationTypes.ERROR:
             configureTimeout();
             className = "error";
