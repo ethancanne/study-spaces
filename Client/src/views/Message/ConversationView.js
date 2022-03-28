@@ -62,7 +62,13 @@ const ConversationView = ({ conversation }) => {
     }, [conversation]);
 
     useEffect(() => {
+        if (Object.keys(socket).length !== 0) {
+            console.log("disconnecting from socket", socket);
+            socket.disconnect(true);
+            setSocket({});
+        }
         if (receivingUser) {
+            console.log("connecting to socket");
             let initialSocket = io(SERVER_URL, { autoConnect: false });
             initialSocket.auth = { id: senderId };
 
@@ -80,7 +86,14 @@ const ConversationView = ({ conversation }) => {
             setSocket(initialSocket);
             messagesViewRef.current.scrollTop = messagesViewRef.current.scrollHeight;
         }
-    }, [messages]);
+        return () => {
+            if (Object.keys(socket).length !== 0) {
+                console.log("disconnecting from socket", socket);
+                socket.disconnect(true);
+                setSocket({});
+            }
+        };
+    }, [receivingUser]);
 
     // send request to get conversations
     // needs: auth token, recipientId
