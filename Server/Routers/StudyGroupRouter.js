@@ -805,6 +805,7 @@ class StudyGroupRouter {
             }
         } else {
             // Nothing needs done here in this iteration of the project.
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGroupIsPrivate });
         }
 
         // SEND THE RESPONSE.
