@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showEditStudyGroupPopup } from "../../state/actions";
 import FeedView from "../../Views/StudyGroup/Feed/FeedView";
 import Loading from "../../components/Loading/Loading";
+import MembersIcon from "@mui/icons-material/People";
 
 const StudyGroup = (props) => {
     const dispatch = useDispatch();
@@ -27,6 +28,10 @@ const StudyGroup = (props) => {
 
     const [group, setGroup] = useState({});
     const [nextMeeting, setNextMeeting] = useState("All Clear");
+
+    const [membersViewIsShowing, setMembersViewIsShowing] = useState(false);
+    const [detailsViewIsShowing, setDetailsViewIsShowing] = useState(false);
+
     const getNextMeeting = () => {
         var nextMeeting = { date: "All Clear" };
 
@@ -82,7 +87,20 @@ const StudyGroup = (props) => {
                             <Loading />
                         ) : (
                             <>
-                                <MembersView group={group} />
+                                <div className="open-views-button-container">
+                                    <Button
+                                        onClick={() => {
+                                            setMembersViewIsShowing(!membersViewIsShowing);
+                                        }}
+                                    >
+                                        <MembersIcon />
+                                    </Button>
+                                </div>
+                                <MembersView
+                                    group={group}
+                                    setMembersViewIsShowing={setMembersViewIsShowing}
+                                    membersViewIsShowing={membersViewIsShowing}
+                                />
                                 <FeedView group={group} />
                                 <DetailsView group={group} />
                             </>

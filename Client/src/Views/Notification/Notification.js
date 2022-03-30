@@ -5,6 +5,8 @@ import notificationTypes from "./notificationTypes";
 //Redux
 import { useSelector, useDispatch } from "react-redux";
 import { hideNotification } from "../../state/actions";
+import CheckmarkIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 
 /**
  * Renders a notification view, which will be shown whenever the
@@ -20,6 +22,7 @@ const Notification = (props) => {
     const dispatch = useDispatch();
 
     var className = "";
+    var icon = <></>;
     const timeout = useRef();
 
     const configureTimeout = () => {
@@ -36,14 +39,17 @@ const Notification = (props) => {
         case notificationTypes.ERROR:
             configureTimeout();
             className = "error";
+            icon = <ErrorIcon className="icon" />;
             break;
         case notificationTypes.SUCCESS:
             configureTimeout();
             className = "success";
+            icon = <CheckmarkIcon className="icon" />;
             break;
     }
     return (
         <div className={"notification " + className + " " + (props.isShowing ? "active" : "")}>
+            {icon}
             <h1>{message || "No Message"}</h1>
         </div>
     );

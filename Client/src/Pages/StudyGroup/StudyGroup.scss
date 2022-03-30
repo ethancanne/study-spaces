@@ -1,3 +1,4 @@
+@import "../../globals.scss";
 .study-group-page {
     height: 100%;
     overflow: hidden;
@@ -34,5 +35,17 @@
         flex-direction: row;
 
         overflow: hidden;
+    }
+
+    .open-views-button-container {
+        position: absolute;
+        display: none;
+        bottom: 20px;
+        width: 100%;
+        left: 0px;
+        z-index: 0;
+        @include mobile {
+            display: block;
+        }
     }
 }

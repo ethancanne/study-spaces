@@ -40,49 +40,67 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
 
-        .message-box {
+        .message-container {
             position: relative;
             margin-left: 20px;
             margin-bottom: 20px;
-            display: flex;
+            .message-box {
+                display: flex;
+                animation: messageFloatIn 0.2s ease-in;
 
-            animation: messageFloatIn 0.2s ease-in;
+                &.receiving-msg {
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-width: 3px;
 
-            &.receiving-msg {
-                img {
-                    width: 30px;
-                    height: 30px;
-                    border-width: 3px;
+                        position: absolute;
+                        bottom: 0;
+                    }
+                    .message-content {
+                        max-width: 600px;
+                        word-wrap: break-word;
 
-                    position: absolute;
-                    bottom: 0;
+                        background-color: rgb(255, 255, 255);
+                        box-shadow: rgba(0, 0, 0, 0.027) 0px 0px 20px;
+                        padding: 20px;
+                        margin-left: 40px;
+                    }
                 }
-                p {
-                    max-width: 600px;
-                    word-wrap: break-word;
+                &.sending-msg {
+                    justify-content: end;
 
-                    background-color: rgb(255, 255, 255);
-                    box-shadow: rgba(0, 0, 0, 0.027) 0px 0px 20px;
-                    padding: 20px;
-                    margin-left: 40px;
+                    .message-content {
+                        background-color: lighten($border-color, 10%);
+
+                        padding: 20px;
+                        max-width: 600px;
+                        word-wrap: break-word;
+
+                        margin-right: 40px;
+                        color: white;
+                    }
                 }
             }
-            &.sending-msg {
-                justify-content: end;
+            .message-timestamp {
+                font-size: 10px;
 
-                p {
-                    background-color: lighten($border-color, 10%);
+                color: rgba(0, 0, 0, 0.536);
 
-                    padding: 20px;
-                    max-width: 600px;
-                    word-wrap: break-word;
-
+                &.sending-msg {
+                    margin-top: 10px;
                     margin-right: 40px;
-                    color: white;
+                    text-align: right;
+                }
+                &.receiving-msg {
+                    margin-top: 10px;
+                    margin-left: 40px;
+                    text-align: left;
                 }
             }
         }
     }
+
     .send-message-form {
         // height: 100px;
         flex: 20%;

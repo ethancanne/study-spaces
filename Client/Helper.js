@@ -56,8 +56,7 @@ export const sendPostRequest = async (
                 shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
             } else {
-                shouldShowNotification &&
-                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                shouldShowNotification && store.dispatch(showErrorNotification(response.data.message));
                 callback(null, response.data.message);
             }
         } else {
@@ -110,8 +109,7 @@ export const sendGetRequest = async (
                 shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
             } else {
-                shouldShowNotification &&
-                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                shouldShowNotification && store.dispatch(showErrorNotification(response.data.message));
                 callback(null, response.data.message);
             }
         } else {
@@ -165,8 +163,7 @@ export const sendDeleteRequest = async (
                 shouldShowNotification && store.dispatch(showSuccessNotification(response.data.message));
             } else {
                 callback(null, response.data.message);
-                shouldShowNotification &&
-                    store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                shouldShowNotification && store.dispatch(showErrorNotification(response.data.message));
             }
         } else {
             callback(null, "There was an error, the server sent undefined results");
@@ -220,7 +217,7 @@ export const sendPostRequestWithFormData = async (
                 store.dispatch(showSuccessNotification(response.data.message));
                 callback(response.data);
             } else {
-                store.dispatch(showErrorNotification("There was an error: " + response.data.message));
+                store.dispatch(showErrorNotification(response.data.message));
                 callback(null, response.data.message);
             }
         } else {

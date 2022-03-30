@@ -14,6 +14,7 @@ import Routes from "../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import { sendGetRequest, sendPostRequest } from "../../../Helper";
 import { showErrorNotification } from "../../state/actions";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * A view for messaging a certain user
@@ -24,6 +25,8 @@ const ConversationView = ({ conversation }) => {
     const dispatch = useDispatch();
 
     const loggedInUser = useSelector((state) => state.authReducer.user);
+    const isLoading = useSelector((state) => state.notificationReducer.loading);
+
     const receivingUser =
         conversation.participants &&
         (String(conversation.participants[0]._id) !== loggedInUser._id
@@ -119,34 +122,56 @@ const ConversationView = ({ conversation }) => {
                         <h1>{receivingUser && receivingUser.name}</h1>
                     </div>
 
-                    <div className="messages-view" ref={messagesViewRef}>
-                        {messages.map((msg) => (
-                            <div
-                                className={
-                                    "message-box " + (msg.senderId !== loggedInUserId ? "receiving-msg" : "sending-msg")
-                                }
-                            >
-                                {msg.senderId !== loggedInUserId && (
-                                    <ProfilePicture image={receivingUser.profilePicture} name={receivingUser.name} />
-                                )}
-                                <p>{msg.value}</p>
+                    {!isLoading ? (
+                        <>
+                            <div className="messages-view" ref={messagesViewRef}>
+                                {messages.map((msg) => (
+                                    <div className="message-container">
+                                        <div
+                                            className={
+                                                msg.senderId !== loggedInUserId
+                                                    ? "message-box receiving-msg"
+                                                    : "message-box sending-msg"
+                                            }
+                                        >
+                                            {msg.senderId !== loggedInUserId && (
+                                                <ProfilePicture
+                                                    image={receivingUser.profilePicture}
+                                                    name={receivingUser.name}
+                                                />
+                                            )}
+                                            <p className="message-content">{msg.value}</p>
+                                        </div>
+                                        <p
+                                            className={
+                                                msg.senderId !== loggedInUserId
+                                                    ? "message-timestamp receiving-msg"
+                                                    : "message-timestamp sending-msg"
+                                            }
+                                        >
+                                            {new Date(msg.createdAt).toLocaleString()}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                    <div className="send-message-form">
-                        <Form>
-                            <div className="side-by-side">
-                                <InputField style={{ flex: "50%", overflow: "hidden" }}>
-                                    <Label>Message</Label>
-                                    <TextInput value={inputtedMessage} onChange={handleChange} />
-                                </InputField>
+                            <div className="send-message-form">
+                                <Form>
+                                    <div className="side-by-side">
+                                        <InputField style={{ flex: "50%", overflow: "hidden" }}>
+                                            <Label>Message</Label>
+                                            <TextInput value={inputtedMessage} onChange={handleChange} />
+                                        </InputField>
 
-                                <Button type={ButtonTypes.Creation} onClick={handleSubmit}>
-                                    Send
-                                </Button>
+                                        <Button type={ButtonTypes.Creation} onClick={handleSubmit}>
+                                            Send
+                                        </Button>
+                                    </div>
+                                </Form>
                             </div>
-                        </Form>
-                    </div>
+                        </>
+                    ) : (
+                        <Loading />
+                    )}
                 </>
             )}
         </div>
