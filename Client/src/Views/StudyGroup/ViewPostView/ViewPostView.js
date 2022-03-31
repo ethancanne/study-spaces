@@ -42,7 +42,7 @@ const ViewPostView = ({ post }) => {
                     <ProfilePicture image={post.creator.profilePicture} />
                 </div>
             </div>
-            <div className="responses-container">
+            {/* <div className="responses-container">
                 <h1>{getPostTypeDetails(post).responseType}s:</h1>
                 {post.responses.map((response) => (
                     <div className="response">
@@ -63,7 +63,7 @@ const ViewPostView = ({ post }) => {
                         <Button type={ButtonTypes.Creation}>Submit</Button>
                     </div>
                 </Form>
-            </div>
+            </div> */}
             <Button
                 onClick={() => {
                     dispatch(showReportPopup(ReportTypes.POST, post));

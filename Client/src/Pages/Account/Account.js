@@ -119,7 +119,7 @@ const Account = () => {
                         </div>
                         <div className="user-info">
                             <h1>Profile Picture:</h1>
-                            <ProfilePicture image={user.profilePicture} />
+                            <ProfilePicture image={user.profilePicture} name={user.name} />
                         </div>
                     </div>
                     <div className="edit-account-buttons">

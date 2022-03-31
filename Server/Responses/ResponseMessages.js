@@ -62,6 +62,7 @@ const ResponseMessages = {
         ErrorDeleteMeeting: "An error occurred while attempting to delete a meeting.",
         ErrorEditMeeting: "An error occurred while attempting to edit the meeting.",
         ErrorGetStudyGroup: "An error occurred while attempting to get a study group.",
+        ErrorGroupIsPrivate: "The study group requested to join is private.",
         ErrorLeaveStudyGroup: "The study group you are trying to leave was not found.",
         ErrorJoinStudyGroup: "An error occurred while attempting to join a study group.",
         ErrorRemoveUser: "There was an error removing user from the study group.",

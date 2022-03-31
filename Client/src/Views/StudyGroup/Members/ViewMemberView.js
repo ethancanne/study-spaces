@@ -22,17 +22,17 @@ const ViewMemberView = ({ member }) => {
             null,
             true,
             (data, error) => {
-                if (error) return;
-                dispatch(closePopup());
                 history.push("/message");
+                dispatch(closePopup());
+                if (error) return;
             }
         );
     };
     return (
-        <div className="view-member-view-container">
+        <div className="view-members-view-container">
             <div className="member-details">
                 <div className="member-primary-info">
-                    <ProfilePicture image={member.profilePicture} />
+                    <ProfilePicture image={member.profilePicture} name={member.name} />
                     <h1>{member.name}</h1>
                 </div>
                 <div className="member-secondary-info">

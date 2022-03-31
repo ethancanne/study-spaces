@@ -63,11 +63,7 @@ const Post = (props) => {
                             <h1 style={{ backgroundColor: props.color }}>{props.type}</h1>
                         </div>
                         <h1 className="post-title">{props.title}</h1>
-                        <p className="post-body">{props.message}</p>
-
-                        {/* {props.type !== PostTypes.Meeting && (
-                            <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
-                        )} */}
+                        <p className="post-body"> {props.message}</p>
                     </div>
                     {props.attachment !== "" ? (
                         <img
@@ -80,15 +76,15 @@ const Post = (props) => {
                     )}
                 </div>
                 <div className="post-metainfo">
-                    <p className="post-response-count">
+                    {/* <p className="post-response-count">
                         <span>{props.responses.length} </span>Responses
-                    </p>
+                    </p> */}
                     <p className="post-date">{props.timestamp && new Date(props.timestamp).toLocaleDateString()}</p>
                 </div>
             </div>
 
             <div className="post-creator" onClick={() => dispatch(showViewMemberPopup(props.creator))}>
-                <ProfilePicture image={props.creator.profilePicture} />
+                <ProfilePicture image={props.creator.profilePicture} name={props.creator.name} />
             </div>
         </div>
     );

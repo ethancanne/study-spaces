@@ -6,13 +6,18 @@ import ConversationView from "../../Views/Message/ConversationView";
 import ChatsView from "../../Views/Message/ChatsView";
 import { useSelector } from "react-redux";
 
+import FriendsIcon from "@mui/icons-material/People";
+import Button from "../../core/Button/Button";
+
 const Events = require("../../../../Server/Events.js");
 
 const SERVER_URL = "http://localhost:5000";
 
 const Message = (props) => {
+    const [chatsViewIsShowing, setChatsViewIsShowing] = useState(false);
     const [selectedConversation, setSelectedConversation] = useState({});
     const isLoggedIn = useSelector((state) => state.authReducer.isLoggedIn);
+
     return (
         <Page currentPage="message" topBar={true}>
             <div className="message-page">
@@ -24,7 +29,11 @@ const Message = (props) => {
                         <script src="/socket.io/socket.io.js"></script>
 
                         <div className="message-area">
-                            <ChatsView setSelectedConversation={setSelectedConversation} />
+                            <ChatsView
+                                setSelectedConversation={setSelectedConversation}
+                                setChatsViewIsShowing={setChatsViewIsShowing}
+                                chatsViewIsShowing={chatsViewIsShowing}
+                            />
                             <ConversationView conversation={selectedConversation} />
                         </div>
                     </>
@@ -35,6 +44,15 @@ const Message = (props) => {
                         <p>Feel free to use our search tool to discover study groups in your area.</p>
                     </div>
                 )}
+                <div className="open-chats-view-button-container">
+                    <Button
+                        onClick={() => {
+                            setChatsViewIsShowing(!chatsViewIsShowing);
+                        }}
+                    >
+                        <FriendsIcon />
+                    </Button>
+                </div>
             </div>
         </Page>
     );

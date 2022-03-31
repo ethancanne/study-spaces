@@ -1,12 +1,14 @@
+@import "../../globals.scss";
 .study-group-page {
     height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    // overflow: hidden;
 
     .page-title-study-group {
         padding: 40px;
-        margin: 20px 20px 0 20px;
+        margin: 80px 20px 0 20px;
         border: white 6px solid;
         display: flex;
         align-items: center;
@@ -16,7 +18,7 @@
         backdrop-filter: blur(10px);
         color: rgba(0, 0, 0, 0.858);
         text-shadow: rgba(0, 0, 0, 0.123) 0 3px 1px;
-        z-index: 0;
+        z-index: 39;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.123);
 
         h1 {

@@ -46,12 +46,11 @@
         }
     }
 
-    @media (max-width: $mobile-width) {
-        & {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-        }
+    @include mobile {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        animation: auth-view-load-mobile 0.3s ease-out;
     }
 }
 
@@ -63,5 +62,15 @@
     100% {
         opacity: 1;
         margin-top: 50px;
+    }
+}
+@keyframes auth-view-load-mobile {
+    0% {
+        opacity: 0;
+        margin-top: -20px;
+    }
+    100% {
+        opacity: 1;
+        margin-top: 0px;
     }
 }

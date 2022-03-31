@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Client/src/pages/StudyGroup/StudyGroup.js</title>
+    <title>JSDoc: Source: Server/Routers/ReportRouter.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Client/src/pages/StudyGroup/StudyGroup.js</h1>
+    <h1 class="page-title">Source: Server/Routers/ReportRouter.js</h1>
 
     
 
@@ -26,103 +26,86 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import "./StudyGroup.scss";
-import React, { useEffect, useState } from "react";
-import Button from "../../core/Button/Button";
-import { Link } from "react-router-dom";
-import TopBar from "../../components/TopBar/TopBar";
-import Page from "../Page";
-import MembersView from "../../Views/StudyGroup/Members/MembersView";
-import DetailsView from "../../Views/StudyGroup/DetailsView/DetailsView";
-import Routes from "../../../../Server/Routes/Routes";
-import { sendGetRequest, sendPostRequest } from "../../../Helper";
-import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
-import { useDispatch, useSelector } from "react-redux";
-import { showEditStudyGroupPopup } from "../../state/actions";
-import FeedView from "../../Views/StudyGroup/Feed/FeedView";
-import Loading from "../../components/Loading/Loading";
+            <pre class="prettyprint source linenums"><code>const Authenticator = require("../Authenticator.js");
+const Configuration = require("../../Configuration.js");
+const Conversation = require("../Models/Conversation.js");
+const Events = require("../Events.js");
+const ResponseMessages = require("../Responses/ResponseMessages.js");
+const Routes = require("../Routes/Routes.js");
+const Validator = require("../Validator.js");
+const User = require("../Models/User.js");
+const Log = require("../Log.js");
+const StudyGroup = require("../Models/StudyGroup.js");
 
-const StudyGroup = (props) => {
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.authReducer.user);
-    const isLoading = useSelector((state) => state.notificationReducer.loading);
+/**
+ * The router used to serve reports
+ * @author Clifton Croom
+ * @date 03/22/22
+ */
 
-    const {
-        match: {
-            params: { id }
-        }
-    } = props;
-
-    const [group, setGroup] = useState({});
-    const [nextMeeting, setNextMeeting] = useState("All Clear");
-    const getNextMeeting = () => {
-        var nextMeeting = { date: "All Clear" };
-
-        group.meetings.forEach((meeting) => {
-            if (new Date(meeting.date) > Date.now()) nextMeeting = meeting;
-        });
-
-        return nextMeeting;
-    };
-
-    useEffect(() => {
-        async function getGroups() {
-            await getStudyGroup();
-        }
-        getGroups();
-
-        console.log(group);
-    }, []);
+class ReportRouter {
+    /**
+     * Initialize the router and serve the routes.
+     * @param {Server} server The server instance used to provide the routes.
+     * @param {Authenticator} authenticator The authenticator used to protect the routes.
+     * @author Clifton Croom
+     * @date   03/22/2022
+     */
+    static serveRoutes(server, authenticator) {
+        // Used to send a report.
+        server.post(Routes.Report.SendReport, authenticator.protectRoute(), ReportRouter.sendReport);
+    }
 
     /**
-     * Retrieves the study group associated with the id from the url
-     * @author Ethan Cannelongo
-     * @date 02/10/2022
+     * Send report via email. Report types include users, study group owners, tutors, study groups and posts.
+     * @param {String} request.body.id The ID of the item being reported
+     * @param {String} request.body.comment The comment associated with the report.
+     * @param {String} request.body.reportType The type of the report being sent.
+     * @author Clifton Croom
+     * @date   03/22/22
+     * @async
+     * @static
      */
 
-    const getStudyGroup = async () => {
-        await sendGetRequest(
-            Routes.StudyGroup.GetStudyGroup + "?studyGroupId=" + id,
-            ResponseMessages.StudyGroup.SuccessStudyGroupRetrieved,
-            ResponseMessages.StudyGroup.ErrorGetStudyGroup,
-            true,
-            (data, error) => {
-                if (error) return;
-                //Load study group into state
-                setGroup(data.studyGroup);
-            },
-            false
-        );
-    };
-    return (
-        &lt;div>
-            &lt;Page topBar={true} currentPage="study" showingPageTitle={false}>
-                &lt;div className="study-group-page">
-                    &lt;div className="page-title-study-group" style={{ backgroundColor: group.groupColor + "90" }}>
-                        &lt;Link to="/">
-                            &lt;Button style={{ marginLeft: "0px", backgroundColor: group.groupColor }}>{"&lt;"}&lt;/Button>
-                        &lt;/Link>
-                        &lt;h1>{group.name}&lt;/h1>
-                    &lt;/div>
+    static async sendReport(request, response) {
+        //Check for empty reports
+        if (request.body.comment == "") {
+            return response.json({ message: ResponseMessages.Report.EmptyField });
+        }
 
-                    &lt;div className="main-view">
-                        {isLoading ? (
-                            &lt;Loading />
-                        ) : (
-                            &lt;>
-                                &lt;MembersView group={group} />
-                                &lt;FeedView group={group} />
-                                &lt;DetailsView group={group} />
-                            &lt;/>
-                        )}
-                    &lt;/div>
-                &lt;/div>
-            &lt;/Page>
-        &lt;/div>
-    );
-};
+        //SEND REPORT
 
-export default StudyGroup;
+        //Format Email Subject and Body
+        let emailSubject = request.body.reportType;
+        let emailBody =
+            "Report from: " +
+            request.user.getName() +
+            " User ID: " +
+            request.user.getId() +
+            " Email: " +
+            request.user.getEmail() +
+            " Item Identifier: " +
+            request.body.id +
+            " Comment: " +
+            request.body.comment;
+
+        //Send Email
+        let emailWasSent = false;
+        try {
+            emailWasSent = await Authenticator.sendReportEmail(emailSubject, emailBody);
+        } catch (error) {
+            Log.write("An error occurred while sending an email during the account creation process.");
+            Log.writeError(error);
+        }
+        if (!emailWasSent) {
+            return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
+        } else {
+            return response.json({ message: ResponseMessages.Report.EmailSent });
+        }
+    }
+}
+
+module.exports = ReportRouter;
 </code></pre>
         </article>
     </section>

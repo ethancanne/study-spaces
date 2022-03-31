@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Time</title>
+    <title>JSDoc: Class: ReportRouter</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Time</h1>
+    <h1 class="page-title">Class: ReportRouter</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Time<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ReportRouter<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">A model for representing time.</div>
+            <div class="class-description">The router used to serve reports</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="Time"><span class="type-signature"></span>new Time<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ReportRouter"><span class="type-signature"></span>new ReportRouter<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -60,104 +60,6 @@
 
 
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>hour</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The hour component of time (12-hour format).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>minute</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The minute component of time.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>partOfDay</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The part of the day (AM or PM).</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -184,7 +86,7 @@
     <dt class="tag-author">Author:</dt>
     <dd class="tag-author">
         <ul>
-            <li>Cameron Burkholder</li>
+            <li>Clifton Croom</li>
         </ul>
     </dd>
     
@@ -198,7 +100,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Time.js.html">Server/Models/Time.js</a>, <a href="Server_Models_Time.js.html#line38">line 38</a>
+        <a href="Server_Routers_ReportRouter.js.html">Server/Routers/ReportRouter.js</a>, <a href="Server_Routers_ReportRouter.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -254,7 +156,7 @@
     
 
     
-    <h4 class="name" id=".parse24HourTimeString"><span class="type-signature">(static) </span>parse24HourTimeString<span class="signature">(timeString)</span><span class="type-signature"> &rarr; {<a href="Time.html">Time</a>}</span></h4>
+    <h4 class="name" id=".sendReport"><span class="type-signature">(async, static) </span>sendReport<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -262,7 +164,7 @@
 
 
 <div class="description">
-    Parses the time from a 24-hour format time string.
+    Send report via email. Report types include users, study group owners, tutors, study groups and posts.
 </div>
 
 
@@ -298,7 +200,7 @@
 
         <tr>
             
-                <td class="name"><code>timeString</code></td>
+                <td class="name"><code>request.body.id</code></td>
             
 
             <td class="type">
@@ -314,157 +216,14 @@
 
             
 
-            <td class="description last">The time string to parse.</td>
+            <td class="description last">The ID of the item being reported</td>
         </tr>
 
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Time.js.html">Server/Models/Time.js</a>, <a href="Server_Models_Time.js.html#line107">line 107</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The time object.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Time.html">Time</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".parseTimeString"><span class="type-signature">(static) </span>parseTimeString<span class="signature">(timeString)</span><span class="type-signature"> &rarr; {<a href="Time.html">Time</a>}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Parses the time from a time string.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>timeString</code></td>
+                <td class="name"><code>request.body.comment</code></td>
             
 
             <td class="type">
@@ -480,597 +239,269 @@
 
             
 
-            <td class="description last">The time string to parse.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Time.js.html">Server/Models/Time.js</a>, <a href="Server_Models_Time.js.html#line149">line 149</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The time object.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Time.html">Time</a></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="isAfter"><span class="type-signature"></span>isAfter<span class="signature">(laterTime)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Checks if one time is after another.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>laterTime</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Time.html">Time</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The time to compare against.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Time.js.html">Server/Models/Time.js</a>, <a href="Server_Models_Time.js.html#line52">line 52</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the second time comes before the first, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="isBetween"><span class="type-signature"></span>isBetween<span class="signature">(meetingTime, startTime, endTime)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Checks whether a given meeting time is between the start and ending
-of a user's availability times.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>meetingTime</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Time.html">Time</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The time of the meeting.</td>
+            <td class="description last">The comment associated with the report.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>startTime</code></td>
+                <td class="name"><code>request.body.reportType</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Time.html">Time</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The time availability starts.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>endTime</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Time.html">Time</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The time availability ends.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Time.js.html">Server/Models/Time.js</a>, <a href="Server_Models_Time.js.html#line93">line 93</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    True if the meeting time is between the two times, false otherwise.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Convers the object to standard time string syntax.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-author">Author:</dt>
-    <dd class="tag-author">
-        <ul>
-            <li>Cameron Burkholder</li>
-        </ul>
-    </dd>
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Server_Models_Time.js.html">Server/Models/Time.js</a>, <a href="Server_Models_Time.js.html#line168">line 168</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The time as a string.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
 <span class="param-type">String</span>
 
 
-    </dd>
-</dl>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of the report being sent.</td>
+        </tr>
 
     
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Clifton Croom</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server_Routers_ReportRouter.js.html">Server/Routers/ReportRouter.js</a>, <a href="Server_Routers_ReportRouter.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".serveRoutes"><span class="type-signature">(static) </span>serveRoutes<span class="signature">(server, authenticator)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Initialize the router and serve the routes.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>server</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Server</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The server instance used to provide the routes.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>authenticator</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Authenticator.html">Authenticator</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The authenticator used to protect the routes.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>Clifton Croom</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Server_Routers_ReportRouter.js.html">Server/Routers/ReportRouter.js</a>, <a href="Server_Routers_ReportRouter.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -156,6 +156,9 @@ class MessageRouter {
         socket.on(Events.Message, (args) => {
             MessageRouter.broadcastMessage(args, socket);
         });
+        socket.on("forceDisconnect", function () {
+            socket.disconnect();
+        });
         Log.write(`Socket.IO: new connection from ${socket.id}.`);
         socket.onAny((event, ...args) => {
             Log.write(`Socket.IO: ${event}.`);

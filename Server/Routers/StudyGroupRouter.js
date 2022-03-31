@@ -252,7 +252,6 @@ class StudyGroupRouter {
         if (Validator.isDefined(request.file)) {
             // Resize the profile picture and convert it to a png
             const profilePicture = await sharp(request.file.buffer)
-                .resize({ height: 500, width: 500 })
                 .png()
                 .toBuffer();
             // Encode the picture to base64 and store it in db
@@ -806,6 +805,7 @@ class StudyGroupRouter {
             }
         } else {
             // Nothing needs done here in this iteration of the project.
+            return response.json({ message: ResponseMessages.StudyGroup.ErrorGroupIsPrivate });
         }
 
         // SEND THE RESPONSE.

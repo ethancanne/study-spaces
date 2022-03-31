@@ -53,9 +53,9 @@ const JoinStudyGroupView = ({ group }) => {
             null,
             true,
             (data, error) => {
-                if (error) return;
-                dispatch(closePopup());
                 history.push("/message");
+                dispatch(closePopup());
+                if (error) return;
             }
         );
     };

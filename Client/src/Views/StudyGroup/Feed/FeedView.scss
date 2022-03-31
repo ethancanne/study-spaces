@@ -1,5 +1,6 @@
+@import "../../../globals.scss";
 .feed-container {
-    position: relative;
+    // position: relative;
     overflow: visible;
     overflow-y: scroll;
     flex: 0.6;
@@ -9,6 +10,30 @@
     padding: 20px;
 
     scrollbar-width: none;
+
+    .no-posts-message {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        padding-top: 40px;
+        text-align: center;
+        h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 20px;
+        }
+    }
+
+    @include mobile {
+        flex: 1;
+        padding: 25px;
+    }
     .posts-container {
         padding-bottom: 30px;
         overflow: visible;
@@ -17,9 +42,24 @@
 
 .options-container {
     position: fixed;
-    z-index: 900;
+    z-index: 9;
     bottom: 0;
     right: 300px;
     width: 100%;
     text-align: right;
+
+    .open-view-buttons {
+        display: none;
+        @include mobile {
+            display: block;
+        }
+    }
+
+    @include mobile {
+        position: fixed;
+        bottom: 0px;
+        right: 0;
+        width: 100%;
+        display: flex;
+    }
 }

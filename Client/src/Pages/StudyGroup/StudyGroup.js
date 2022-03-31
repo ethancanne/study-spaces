@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { showEditStudyGroupPopup } from "../../state/actions";
 import FeedView from "../../Views/StudyGroup/Feed/FeedView";
 import Loading from "../../components/Loading/Loading";
+import MembersIcon from "@mui/icons-material/People";
+import DetailsIcon from "@mui/icons-material/Details";
 
 const StudyGroup = (props) => {
     const dispatch = useDispatch();
@@ -27,6 +29,10 @@ const StudyGroup = (props) => {
 
     const [group, setGroup] = useState({});
     const [nextMeeting, setNextMeeting] = useState("All Clear");
+
+    const [membersViewIsShowing, setMembersViewIsShowing] = useState(false);
+    const [detailsViewIsShowing, setDetailsViewIsShowing] = useState(false);
+
     const getNextMeeting = () => {
         var nextMeeting = { date: "All Clear" };
 
@@ -68,7 +74,7 @@ const StudyGroup = (props) => {
     };
     return (
         <div>
-            <Page topBar={true} currentPage="study">
+            <Page topBar={true} currentPage="study" showingPageTitle={false}>
                 <div className="study-group-page">
                     <div className="page-title-study-group" style={{ backgroundColor: group.groupColor + "90" }}>
                         <Link to="/">
@@ -82,9 +88,23 @@ const StudyGroup = (props) => {
                             <Loading />
                         ) : (
                             <>
-                                <MembersView group={group} />
-                                <FeedView group={group} />
-                                <DetailsView group={group} />
+                                <MembersView
+                                    group={group}
+                                    setMembersViewIsShowing={setMembersViewIsShowing}
+                                    membersViewIsShowing={membersViewIsShowing}
+                                />
+                                <FeedView
+                                    group={group}
+                                    setDetailsViewIsShowing={setDetailsViewIsShowing}
+                                    setMembersViewIsShowing={setMembersViewIsShowing}
+                                    detailsViewIsShowing={detailsViewIsShowing}
+                                    membersViewIsShowing={membersViewIsShowing}
+                                />
+                                <DetailsView
+                                    group={group}
+                                    setDetailsViewIsShowing={setDetailsViewIsShowing}
+                                    detailsViewIsShowing={detailsViewIsShowing}
+                                />
                             </>
                         )}
                     </div>

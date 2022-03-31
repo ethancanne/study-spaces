@@ -5,18 +5,141 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    width: 340px;
-    border-bottom: $border-color 5px solid;
-    transition: all 0.5s ease-in-out;
+    width: 400px;
+    transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    border-radius: 4px;
     pointer-events: none;
     position: absolute;
     top: -10.5em;
-    right: 0px;
+    right: 2em;
     z-index: 10;
-    box-shadow: inset 0px 10px 20px rgba(0, 0, 0, 0.151);
+    box-shadow: 0 0 0 1px rgba(97, 97, 97, 0.1), 0 3px 20px 0 rgba(92, 92, 92, 0.3), 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    @include mobile {
+        height: 85%;
+        width: 70%;
+
+        display: flex;
+        position: fixed;
+        top: 5em;
+        right: -80%;
+    }
+
     &.isShowing {
-        top: 3em;
+        top: 5em;
         pointer-events: all;
         overflow: visible;
+
+        @include mobile {
+            border-bottom: none;
+            border-left: $border-color 5px solid;
+            right: 0;
+
+            right: 20px;
+        }
+    }
+
+    .links {
+        display: none;
+        overflow: visible;
+        @include mobile {
+            display: flex;
+            flex: 50%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .nav-item {
+                text-decoration: none;
+                width: 100%;
+                // background-color: wheat;
+                margin: 10px;
+                overflow: visible;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                p {
+                    padding: 20px;
+                    height: 100%;
+                    width: 200px;
+                    color: black;
+                    font-size: 20px;
+                    transition: all 0.4s;
+                    text-align: center;
+                }
+
+                &:active {
+                    p {
+                        background-color: lighten($color: $highlight-color, $amount: 10%);
+                    }
+                }
+                &.active {
+                    p {
+                        background-color: $highlight-color;
+                        position: relative;
+                        overflow: visible;
+                        transition: all 0.4s;
+                    }
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: -1.5em;
+                        width: 20px;
+                        height: 100%;
+                        top: 0;
+                        background-color: $border-color;
+                        animation: rise 0.2s ease-in-out;
+                    }
+                }
+            }
+        }
+    }
+
+    .user-actions {
+        display: flex;
+        flex-direction: column;
+
+        .user-info {
+            display: none;
+            @include mobile {
+                display: flex;
+                padding: 20px;
+                align-items: center;
+
+                .name-and-school {
+                    flex: 80%;
+                    .school {
+                        font-size: 14px;
+                        // border-right: black 1px solid;
+                        padding-right: 10px;
+                    }
+                    .name {
+                        font-size: 14px;
+                        font-weight: 800;
+                        padding-right: 10px;
+                        // border-right: black 1px solid;
+                    }
+                }
+                .profile-pic-container {
+                    justify-content: end;
+                    img {
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 30px;
+                    }
+                }
+            }
+        }
+
+        @include mobile {
+            flex: 50%;
+            justify-content: end;
+        }
+    }
+}
+
+.background {
+    &.menu-background {
+        z-index: 9;
     }
 }

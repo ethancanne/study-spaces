@@ -54,6 +54,10 @@
             justify-content: center;
             padding-top: 80px;
 
+            @include mobile {
+                flex-direction: column;
+            }
+
             .post-inner-content {
                 flex: 90%;
                 .post-title {
@@ -76,7 +80,7 @@
     .post-metainfo {
         position: absolute;
         bottom: -36px;
-        right: 60px;
+        right: 8%;
         display: flex;
         justify-content: end;
 

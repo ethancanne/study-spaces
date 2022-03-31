@@ -1,14 +1,14 @@
 @import "../../globals.scss";
 
-.border {
-    border-bottom: $border-color 5px solid;
-    width: 100%;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.146);
-}
 .top-bar {
-    position: relative;
+    border-bottom: $border-color 5px solid;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     overflow: visible;
-    z-index: 122;
+    z-index: 20;
     background-color: white;
     transition: all 0.4s;
 
@@ -39,6 +39,10 @@
                 font-size: 15px;
                 transition: all 0.4s;
 
+                @include mobile {
+                    display: none;
+                }
+
                 &:active {
                     background-color: lighten($color: $highlight-color, $amount: 10%);
                 }
@@ -62,20 +66,63 @@
             }
         }
         .right {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            cursor: pointer;
-            .school {
-                font-size: 14px;
-                border-right: black 1px solid;
-                padding-right: 10px;
+            .userInfoContainer {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+
+                .school {
+                    font-size: 14px;
+                    border-right: black 1px solid;
+                    padding-right: 10px;
+                }
+                .name {
+                    font-size: 14px;
+                    font-weight: 800;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+
+                @include mobile {
+                    display: none;
+                }
             }
-            .name {
-                font-size: 14px;
-                font-weight: 800;
-                padding-left: 10px;
-                padding-right: 10px;
+
+            .hamburger {
+                width: 20px;
+                height: 15px;
+                margin-right: 10px;
+                display: none;
+
+                @include mobile {
+                    display: flex;
+                }
+
+                flex-direction: column;
+                justify-content: space-between;
+                cursor: pointer;
+
+                span {
+                    height: 2px;
+                    width: 100%;
+                    background-color: black;
+                    transform-origin: left;
+                    transition: 0.5s all ease;
+                }
+                &.activeHamburger {
+                    span {
+                        &:first-child {
+                            transform: rotate(40deg);
+                        }
+                        &:nth-child(2) {
+                            opacity: 0;
+                        }
+                        &:last-child {
+                            transform: rotate(-40deg);
+                        }
+                    }
+                }
             }
         }
     }
