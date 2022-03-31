@@ -4,15 +4,27 @@
     z-index: 100;
 
     @include mobile {
-        position: absolute;
+        position: absolute !important;
         height: 100%;
+
         top: 0;
-        left: -105%;
+        &.left {
+            left: -105%;
+        }
+        &.right {
+            right: -105%;
+        }
+
         width: 100%;
         overflow: auto;
 
         &.showing {
-            left: 0;
+            &.right {
+                right: 0;
+            }
+            &.left {
+                left: 0;
+            }
         }
     }
 

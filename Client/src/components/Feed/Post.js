@@ -63,11 +63,7 @@ const Post = (props) => {
                             <h1 style={{ backgroundColor: props.color }}>{props.type}</h1>
                         </div>
                         <h1 className="post-title">{props.title}</h1>
-                        <p className="post-body">{props.message}</p>
-
-                        {/* {props.type !== PostTypes.Meeting && (
-                            <Button onClick={() => dispatch(showViewPostStudyGroupPopup({ props }))}>Answer</Button>
-                        )} */}
+                        <p className="post-body"> {props.message}</p>
                     </div>
                     {props.attachment !== "" ? (
                         <img
