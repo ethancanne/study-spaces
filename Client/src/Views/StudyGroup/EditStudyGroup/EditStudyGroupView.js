@@ -20,8 +20,8 @@ const EditStudyGroupView = ({ group }) => {
     const [name, setName] = useState(group.name);
     const [description, setDescription] = useState(group.description);
     const [subject, setSubject] = useState(group.subject);
-    const [privacy, setPrivacy] = useState(group.privacy);
-    const [courseCode, setCourseCode] = useState(group.courseCode);
+    const [privacy, setPrivacy] = useState(group.privacySetting);
+    const [courseCode, setCourseCode] = useState(group.course);
     const [isTutorGroup, setIsTutorGroup] = useState(group.isTutorGroup);
     const [isOnlineGroup, setIsOnlineGroup] = useState(group.isOnlineGroup);
     const [groupColor, setGroupColor] = useState(group.groupColor);
@@ -55,7 +55,7 @@ const EditStudyGroupView = ({ group }) => {
             null,
             true,
             (data, error) => {
-                if (error) console.log(error);
+                if (error) return;
                 history.go(0);
                 dispatch(closePopup());
             }
@@ -144,7 +144,7 @@ const EditStudyGroupView = ({ group }) => {
 
     return (
         <div className="edit-studygroup-view">
-            {console.log(group)}
+            {console.log("GROUP::::::::::", group)}
             <CreateStudyGroupForm
                 submitCreateStudyGroup={submitEditStudyGroup}
                 name={name}

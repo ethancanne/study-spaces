@@ -2,7 +2,7 @@ import "./Account.scss";
 import React, { useState } from "react";
 import Routes from "../../../../Server/Routes/Routes";
 import axios from "axios";
-import { sendDeleteRequest, sendPostRequest } from "../../../Helper";
+import { performSignOut, sendDeleteRequest, sendPostRequest } from "../../../Helper";
 import { useSelector, useDispatch } from "react-redux";
 import {
     showInputPopup,
@@ -93,6 +93,7 @@ const Account = () => {
                 if (error) return;
                 dispatch(signOut());
                 dispatch(closePopup());
+                performSignOut();
             }
         );
     };

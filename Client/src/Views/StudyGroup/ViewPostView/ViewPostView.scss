@@ -48,9 +48,11 @@
         }
         .post-message {
             flex: 70%;
+            margin-bottom: 20px;
         }
         .post-attachment {
             flex: 30%;
+            object-fit: contain;
         }
     }
 

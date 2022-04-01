@@ -103,7 +103,7 @@ const ConversationView = ({ conversation }) => {
         console.log(inputtedMessage, receiverId);
 
         let tempMessages = [...messages];
-        tempMessages.push({ value: inputtedMessage, senderId: loggedInUserId });
+        tempMessages.push({ value: inputtedMessage, senderId: loggedInUserId, createdAt: new Date() });
         setMessages(tempMessages);
 
         socket.emit(Events.Message, {

@@ -60,12 +60,16 @@ const CreateStudyGroupForm = (props) => {
                 <div className="side-by-side">
                     <InputField>
                         <Label>Subject</Label>
-                        <Dropdown options={Object.keys(Subjects)} onChange={props.updateSubjectField} />
+                        <Dropdown
+                            value={props.subject}
+                            options={Object.keys(Subjects)}
+                            onChange={props.updateSubjectField}
+                        />
                     </InputField>
 
                     <InputField>
                         <Label>Privacy</Label>
-                        <Dropdown options={["Public", "Public", "Public"]} onChange={props.updatePrivacy} />
+                        <Dropdown value={props.privacy} options={["Public"]} onChange={props.updatePrivacy} />
                     </InputField>
 
                     <InputField>

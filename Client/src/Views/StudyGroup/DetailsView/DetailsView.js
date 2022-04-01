@@ -92,15 +92,16 @@ const DetailsView = ({ group, detailsViewIsShowing, setDetailsViewIsShowing }) =
                         <>
                             <Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT</Button>
                             <Button
-                                onClick={() =>
+                                onClick={() => {
                                     dispatch(
                                         showConfirmationPopup(
                                             submitDelete,
                                             "Confirm Deletion",
                                             "Are you sure you want to delete the study group: " + group.name + "?"
                                         )
-                                    )
-                                }
+                                    );
+                                    dispatch(clearStudyGroups());
+                                }}
                             >
                                 Delete
                             </Button>
