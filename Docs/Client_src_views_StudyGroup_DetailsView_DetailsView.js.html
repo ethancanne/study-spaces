@@ -42,6 +42,7 @@ import { getNextMeeting, sendDeleteRequest, sendPostRequest } from "../../../../
 import Routes from "../../../../../Server/Routes/Routes";
 import ResponseMessages from "../../../../../Server/Responses/ResponseMessages";
 import { ReportTypes } from "../../Report/ReportTypes";
+import SideView from "../../SideView/SideView";
 
 /**
  * Renders a view for a user to view details about a joined or edit an owned study group
@@ -49,7 +50,7 @@ import { ReportTypes } from "../../Report/ReportTypes";
  * @date   02/15/2022
  * @param {Object} group the study group
  * */
-const DetailsView = ({ group }) => {
+const DetailsView = ({ group, detailsViewIsShowing, setDetailsViewIsShowing }) => {
     const user = useSelector((state) => state.authReducer.user);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -91,73 +92,81 @@ const DetailsView = ({ group }) => {
         }
     };
     return (
-        &lt;div className="details-container">
-            &lt;div className="meetinginfo-container" onClick={() => dispatch(showViewMeetingsStudyGroupPopup(group))}>
-                &lt;h1>Next Meeting&lt;/h1>
-                &lt;div className="meetinginfo-description">
-                    &lt;p>
-                        Date: &lt;strong>{group &amp;&amp; getNextMeeting(group).date}&lt;/strong>
-                    &lt;/p>
-                    &lt;p>
-                        Time: &lt;strong>{group &amp;&amp; getNextMeeting(group).time}&lt;/strong>
-                    &lt;/p>
+        &lt;SideView
+            nameOfClass="details-container"
+            direction="right"
+            setSideViewIsShowing={setDetailsViewIsShowing}
+            sideViewIsShowing={detailsViewIsShowing}
+        >
+            &lt;div>
+                &lt;div className="meetinginfo-container" onClick={() => dispatch(showViewMeetingsStudyGroupPopup(group))}>
+                    &lt;h1>Next Meeting&lt;/h1>
+                    &lt;div className="meetinginfo-description">
+                        &lt;p>
+                            Date: &lt;strong>{group &amp;&amp; getNextMeeting(group).date}&lt;/strong>
+                        &lt;/p>
+                        &lt;p>
+                            Time: &lt;strong>{group &amp;&amp; getNextMeeting(group).time}&lt;/strong>
+                        &lt;/p>
+                    &lt;/div>
+                &lt;/div>
+                &lt;div className="description-container">
+                    &lt;h1>Group Description&lt;/h1>
+                    &lt;p className="details-description">{group.description}&lt;/p>
+                &lt;/div>
+
+                &lt;div className="buttons">
+                    {group.owner &amp;&amp; group.owner._id === user._id &amp;&amp; (
+                        &lt;>
+                            &lt;Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT&lt;/Button>
+                            &lt;Button
+                                onClick={() => {
+                                    dispatch(
+                                        showConfirmationPopup(
+                                            submitDelete,
+                                            "Confirm Deletion",
+                                            "Are you sure you want to delete the study group: " + group.name + "?"
+                                        )
+                                    );
+                                    dispatch(clearStudyGroups());
+                                }}
+                            >
+                                Delete
+                            &lt;/Button>
+                        &lt;/>
+                    )}
+                    {group.owner &amp;&amp; group.owner._id !== user._id &amp;&amp; (
+                        &lt;>
+                            &lt;Button
+                                onClick={() => {
+                                    dispatch(
+                                        showConfirmationPopup(
+                                            submitLeave,
+                                            "Confirm Leave",
+                                            "Are you sure you want to leave the study group: " + group.name + "?"
+                                        )
+                                    );
+                                    dispatch(clearStudyGroups());
+                                }}
+                            >
+                                Leave Group
+                            &lt;/Button>
+                        &lt;/>
+                    )}
+                    {group.owner &amp;&amp; group.owner._id !== user._id &amp;&amp; (
+                        &lt;>
+                            &lt;Button
+                                onClick={() => {
+                                    dispatch(showReportPopup(ReportTypes.STUDY_GROUP, group));
+                                }}
+                            >
+                                Report
+                            &lt;/Button>
+                        &lt;/>
+                    )}
                 &lt;/div>
             &lt;/div>
-            &lt;div className="description-container">
-                &lt;h1>Group Description&lt;/h1>
-                &lt;p className="details-description">{group.description}&lt;/p>
-            &lt;/div>
-
-            &lt;div className="buttons">
-                {group.owner &amp;&amp; group.owner._id === user._id &amp;&amp; (
-                    &lt;>
-                        &lt;Button onClick={() => dispatch(showEditStudyGroupPopup(group))}>EDIT&lt;/Button>
-                        &lt;Button
-                            onClick={() =>
-                                dispatch(
-                                    showConfirmationPopup(
-                                        submitDelete,
-                                        "Confirm Deletion",
-                                        "Are you sure you want to delete the study group: " + group.name + "?"
-                                    )
-                                )
-                            }
-                        >
-                            Delete
-                        &lt;/Button>
-                    &lt;/>
-                )}
-                {group.owner &amp;&amp; group.owner._id !== user._id &amp;&amp; (
-                    &lt;>
-                        &lt;Button
-                            onClick={() => {
-                                dispatch(
-                                    showConfirmationPopup(
-                                        submitLeave,
-                                        "Confirm Leave",
-                                        "Are you sure you want to leave the study group: " + group.name + "?"
-                                    )
-                                );
-                                dispatch(clearStudyGroups());
-                            }}
-                        >
-                            Leave Group
-                        &lt;/Button>
-                    &lt;/>
-                )}
-                {group.owner &amp;&amp; group.owner._id !== user._id &amp;&amp; (
-                    &lt;>
-                        &lt;Button
-                            onClick={() => {
-                                dispatch(showReportPopup(ReportTypes.STUDY_GROUP, group));
-                            }}
-                        >
-                            Report
-                        &lt;/Button>
-                    &lt;/>
-                )}
-            &lt;/div>
-        &lt;/div>
+        &lt;/SideView>
     );
 };
 
@@ -178,7 +187,7 @@ export default DetailsView;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Mar 28 2022 15:00:56 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Fri Apr 01 2022 15:48:14 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

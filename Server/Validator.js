@@ -132,15 +132,8 @@ class Validator {
         // CHECK THE INPUT FOR EMPTY VALUES.
         let inputIsValid = true;
         let error = ResponseMessages.StudyGroup.CreatePost.InvalidInput;
-        const { title, message, category } = request.body;
-        if (
-            title == null ||
-            title.length === 0 ||
-            message == null ||
-            message.length === 0 ||
-            category == null ||
-            category.length === 0
-        ) {
+        const { title, category } = request.body;
+        if (title == null || title.length === 0 || category == null || category.length === 0) {
             inputIsValid = false;
         }
 
@@ -156,21 +149,21 @@ class Validator {
 
     /**
      * Validates the form input for creating a study group before a study group gets created.
-     * @author Cameron Burkholder
      * @date   02/04/2022
      * @static
      */
     static validateCreateStudyGroupInput(request, response, nextMiddlewareFunction) {
         // GET THE FORM INPUT DATA.
         // The data will all be in the request.body object as attributes according to each's name.
-        let studyGroupIsValid = false;
-        // VALIDATE THE INPUT.
-        if (request.body.name && request.user) {
-            studyGroupIsValid = true;
+        let inputIsValid = true;
+        const { description, groupColor, isOnlineGroup, isTutorGroup, name, subject } = request.body;
+        if (name == null || name.length === 0 || name == "" || description == null || description.length === 0) {
+            inputIsValid = false;
         }
+
         // GENERATE THE RESPONSE.
         // If the data is invalid, then a response should be returned with the appropriate message indicating such.
-        if (!studyGroupIsValid) {
+        if (!inputIsValid) {
             response.json({ message: ResponseMessages.StudyGroup.ErrorNullStudyGroupInput });
             return response.end();
         }
