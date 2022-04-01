@@ -49,8 +49,8 @@ const Post = (props) => {
                     className="post-details"
                     style={{
                         backgroundColor:
-                            props.type !== PostTypes.Meeting ? "rgba(255, 255, 255, 0.9)" : props.group.color + "10",
-                        border: props.type === PostTypes.Meeting && "white 4px solid"
+                            props.type !== PostTypes.Meeting ? "rgba(255, 255, 255, 0.9)" : props.color + "10",
+                        border: props.type === PostTypes.Meeting && "white 9px solid"
                     }}
                     onClick={() => {
                         if (props.type !== PostTypes.Meeting) dispatch(showViewPostStudyGroupPopup(props));

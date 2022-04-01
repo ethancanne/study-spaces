@@ -34,10 +34,14 @@ const ViewPostView = ({ post }) => {
                 <h1 className="post-title">{post.title}</h1>
                 <div className="post-body">
                     <p className="post-message">{post.message}</p>
-                    <img className="post-attachment" src={"data:image/png;charset=utf-8;base64," + post.attachment} />
+                    {post.attachment && (
+                        <img
+                            className="post-attachment"
+                            src={"data:image/png;charset=utf-8;base64," + post.attachment}
+                        />
+                    )}
                 </div>
                 <div className="post-creator" onClick={() => dispatch(showViewMemberPopup(post.creator))}>
-                    {/* TODO - populate post.creator */}
                     <p>{post.creator.name}</p>
                     <ProfilePicture image={post.creator.profilePicture} />
                 </div>
