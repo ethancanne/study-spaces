@@ -131,16 +131,21 @@ class AccountRouter {
      * @static
      */
     static async createAccount(request, response) {
+
+        //Set email to lower case 
+        let email = request.body.email;
+        email = email.toLowerCase(); 
+
         try {
             // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
-            const existingUnverifiedUser = await UnverifiedUser.getByEmail(request.body.email);
+            const existingUnverifiedUser = await UnverifiedUser.getByEmail(email);
             const unverifiedUserAlreadyExists = Validator.isDefined(existingUnverifiedUser);
             if (unverifiedUserAlreadyExists) {
                 return response.json({ message: ResponseMessages.Account.UserAlreadyExists });
             }
 
             // CHECK FOR AN EXISTING ACCOUNT.
-            const existingUser = await User.getByEmail(request.body.email);
+            const existingUser = await User.getByEmail(email);
             const userAlreadyExists = Validator.isDefined(existingUser);
             if (userAlreadyExists) {
                 return response.json({ message: ResponseMessages.Account.UserAlreadyExists });
@@ -149,7 +154,7 @@ class AccountRouter {
             //SET SCHOOL PROPERTY
             var school = undefined;
             try {
-                school = await swot.getSchoolName(request.body.email);
+                school = await swot.getSchoolName(email);
             } catch (e) {
                 Log.write(
                     "An error occurred while attempting to find a school associated with the provided email address."
@@ -158,7 +163,7 @@ class AccountRouter {
             }
 
             // CREATE THE UNVERIFIED ACCOUNT.
-            const unverifiedUser = await UnverifiedUser.create(request.body.email, request.body.password, school);
+            const unverifiedUser = await UnverifiedUser.create(email, request.body.password, school);
             const accountWasNotCreated = Validator.isUndefined(unverifiedUser);
             if (accountWasNotCreated) {
                 return response.json({ message: ResponseMessages.Account.ErrorCreateAccount });
@@ -235,9 +240,13 @@ class AccountRouter {
             if (!tokenSet) {
                 return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
             }
+            
+            //Change new email to lower case
+            let newEmail = request.body.newEmail;
+            newEmail = newEmail.toLowerCase(); 
 
             // SET THE TEMPORARY EMAIL.
-            const emailSet = await request.user.setTemporaryEmail(request.body.newEmail);
+            const emailSet = await request.user.setTemporaryEmail(newEmail);
             if (!emailSet) {
                 return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
             }
@@ -303,7 +312,12 @@ class AccountRouter {
      */
     static async login(request, response) {
         // GET THE USER ASSOCIATED WITH THE EMAIL ADDRESS ENTERED.
-        const user = await User.getByEmail(request.body.email);
+        // Convert email to lower case.
+
+        let email = request.body.email;
+        email = email.toLowerCase(); 
+
+        const user = await User.getByEmail(email);
 
         // CHECK IF A USER WITH THE EMAIL ADDRESS EXISTS.
         const userWasNotFound = Validator.isUndefined(user);
