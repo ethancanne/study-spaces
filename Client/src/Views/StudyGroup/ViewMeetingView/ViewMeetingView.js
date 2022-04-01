@@ -56,7 +56,7 @@ const ViewMeetingView = ({ group }) => {
                             true,
                             (data, error) => {
                                 if (error) return;
-                                history.push(0);
+                                history.go(0);
                             }
                         );
                     else dispatch(showViewMeetingsStudyGroupPopup(group));
