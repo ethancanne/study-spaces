@@ -251,9 +251,7 @@ class StudyGroupRouter {
         let encoded = undefined;
         if (Validator.isDefined(request.file)) {
             // Resize the profile picture and convert it to a png
-            const profilePicture = await sharp(request.file.buffer)
-                .png()
-                .toBuffer();
+            const profilePicture = await sharp(request.file.buffer).png().toBuffer();
             // Encode the picture to base64 and store it in db
             encoded = profilePicture.toString("base64");
         }

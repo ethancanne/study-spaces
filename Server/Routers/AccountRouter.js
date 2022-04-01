@@ -131,10 +131,9 @@ class AccountRouter {
      * @static
      */
     static async createAccount(request, response) {
-
-        //Set email to lower case 
+        //Set email to lower case
         let email = request.body.email;
-        email = email.toLowerCase(); 
+        email = email.toLowerCase();
 
         try {
             // CHECK FOR AN EXISTING UNVERIFIED ACCOUNT.
@@ -240,10 +239,10 @@ class AccountRouter {
             if (!tokenSet) {
                 return response.json({ message: ResponseMessages.Account.ErrorSendingEmail });
             }
-            
+
             //Change new email to lower case
             let newEmail = request.body.newEmail;
-            newEmail = newEmail.toLowerCase(); 
+            newEmail = newEmail.toLowerCase();
 
             // SET THE TEMPORARY EMAIL.
             const emailSet = await request.user.setTemporaryEmail(newEmail);
@@ -315,7 +314,7 @@ class AccountRouter {
         // Convert email to lower case.
 
         let email = request.body.email;
-        email = email.toLowerCase(); 
+        email = email.toLowerCase();
 
         const user = await User.getByEmail(email);
 
