@@ -102,15 +102,17 @@ const ConversationView = ({ conversation }) => {
         event.preventDefault();
         console.log(inputtedMessage, receiverId);
 
-        let tempMessages = [...messages];
-        tempMessages.push({ value: inputtedMessage, senderId: loggedInUserId, createdAt: new Date() });
-        setMessages(tempMessages);
+        if (inputtedMessage.length > 0) {
+            let tempMessages = [...messages];
+            tempMessages.push({ value: inputtedMessage, senderId: loggedInUserId, createdAt: new Date() });
+            setMessages(tempMessages);
 
-        socket.emit(Events.Message, {
-            message: inputtedMessage,
-            receiverId
-        });
-        setInputtedMessage("");
+            socket.emit(Events.Message, {
+                message: inputtedMessage,
+                receiverId
+            });
+            setInputtedMessage("");
+        }
     };
 
     return (

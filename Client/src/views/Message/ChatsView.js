@@ -6,6 +6,7 @@ import ResponseMessages from "../../../../Server/Responses/ResponseMessages";
 import Routes from "../../../../Server/Routes/Routes";
 import { useSelector } from "react-redux";
 import SideView from "../SideView/SideView";
+import Loading from "../../components/Loading/Loading";
 
 /**
  * A view for displaying the chats of a user
@@ -14,6 +15,7 @@ import SideView from "../SideView/SideView";
 const ChatsView = ({ setSelectedConversation, chatsViewIsShowing, setChatsViewIsShowing }) => {
     const [conversations, setConversations] = useState([]);
     const user = useSelector((state) => state.authReducer.user);
+    const isLoading = useSelector((state) => state.notificationReducer.loading);
 
     /**
      * Sends chat get request.
@@ -46,39 +48,43 @@ const ChatsView = ({ setSelectedConversation, chatsViewIsShowing, setChatsViewIs
             sideViewIsShowing={chatsViewIsShowing}
             nameOfClass="chats-view"
         >
-            <div>
-                {conversations.map((chat) => (
-                    <div
-                        className={"chatItem " + (chat.active && "chatActive")}
-                        onClick={() => {
-                            conversations.forEach((otherChat) => {
-                                otherChat.active = false;
-                            });
-                            chat.active = true;
-                            setSelectedConversation(chat);
-                            setChatsViewIsShowing(false);
-                        }}
-                    >
-                        <ProfilePicture
-                            image={
-                                String(chat.participants[0]._id) !== user._id
-                                    ? chat.participants[0].profilePicture
-                                    : chat.participants[1].profilePicture
-                            }
-                            name={
-                                String(chat.participants[0]._id) !== user._id
+            {!isLoading ? (
+                <div>
+                    {conversations.map((chat) => (
+                        <div
+                            className={"chatItem " + (chat.active && "chatActive")}
+                            onClick={() => {
+                                conversations.forEach((otherChat) => {
+                                    otherChat.active = false;
+                                });
+                                chat.active = true;
+                                setSelectedConversation(chat);
+                                setChatsViewIsShowing(false);
+                            }}
+                        >
+                            <ProfilePicture
+                                image={
+                                    String(chat.participants[0]._id) !== user._id
+                                        ? chat.participants[0].profilePicture
+                                        : chat.participants[1].profilePicture
+                                }
+                                name={
+                                    String(chat.participants[0]._id) !== user._id
+                                        ? chat.participants[0].name
+                                        : chat.participants[1].name
+                                }
+                            />
+                            <p>
+                                {String(chat.participants[0]._id) !== user._id
                                     ? chat.participants[0].name
-                                    : chat.participants[1].name
-                            }
-                        />
-                        <p>
-                            {String(chat.participants[0]._id) !== user._id
-                                ? chat.participants[0].name
-                                : chat.participants[1].name}
-                        </p>
-                    </div>
-                ))}
-            </div>
+                                    : chat.participants[1].name}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <Loading />
+            )}
         </SideView>
     );
 };
