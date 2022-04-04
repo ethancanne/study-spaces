@@ -65,12 +65,16 @@ const Post = (props) => {
                         <h1 className="post-title">{props.title}</h1>
                         <p className="post-body"> {props.message}</p>
                     </div>
-                    {props.attachment !== "" ? (
-                        <img
-                            className="attachment"
-                            src={"data:image/png;charset=utf-8;base64," + props.attachment}
-                            alt=""
-                        />
+
+                    {props.attachment && props.attachment !== "" ? (
+                        <>
+                            <hr />
+                            <img
+                                className="attachment"
+                                src={"data:image/png;charset=utf-8;base64," + props.attachment}
+                                alt=""
+                            />
+                        </>
                     ) : (
                         ""
                     )}
