@@ -43,6 +43,7 @@ const FeedView = ({
                                 title={post.title}
                                 message={post.message}
                                 creator={post.creator}
+                                _id={post._id}
                                 timestamp={post.createdAt}
                                 type={post.type}
                                 color={group.groupColor}
