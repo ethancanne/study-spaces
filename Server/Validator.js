@@ -327,7 +327,7 @@ class Validator {
         const EMPTY_STRING = "";
         const currentPasswordIsEmpty = EMPTY_STRING === currentPassword;
         const newPasswordIsEmpty = EMPTY_STRING === newPassword;
-        const passwordsAreEmpty = currentPasswordIsEmpty && newPasswordIsEmpty;
+        const passwordsAreEmpty = currentPasswordIsEmpty || newPasswordIsEmpty;
         if (passwordsAreEmpty) {
             response.json({ message: ResponseMessages.Account.ErrorInvalidPasswordInput });
             return response.end();
