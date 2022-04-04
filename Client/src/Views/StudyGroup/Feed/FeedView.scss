@@ -5,6 +5,7 @@
     overflow-y: scroll;
     flex: 0.6;
     backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
 
     overflow: auto;
     padding: 20px;

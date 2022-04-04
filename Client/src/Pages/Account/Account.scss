@@ -8,6 +8,8 @@
             padding: 10px;
             background-color: rgba(255, 255, 255, 0.434);
             backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+
             border-radius: 4px;
 
             border-bottom: $border-color 3px solid;

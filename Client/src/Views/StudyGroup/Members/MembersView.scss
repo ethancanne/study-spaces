@@ -2,6 +2,8 @@
 .members-container {
     background-color: rgb(255, 255, 255);
     backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
     box-shadow: 0 0 0 1px rgba(97, 97, 97, 0.1), 0 3px 20px 0 rgba(92, 92, 92, 0.3), 0 1px 2px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
     margin: 20px;

@@ -53,18 +53,20 @@ class MessageRouter {
      * @async
      * @static
      */
-    static async broadcastMessage({ message, receiverId }, socket) {
+    static async broadcastMessage({ message, receiverId, createdAt }, socket) {
         // BROADCAST THE MESSAGE TO BOTH PARTIES.
         const senderId = socket.userId;
         const senderSocketId = MessageRouter.convertUserIdToSocketId(senderId);
         const receiverSocketId = MessageRouter.convertUserIdToSocketId(receiverId);
         MessageRouter.io.to(receiverSocketId).emit(Events.Message, {
             message,
-            senderId: senderId
+            senderId: senderId,
+            createdAt
         });
         MessageRouter.io.to(senderSocketId).emit(Events.Message, {
             message,
-            senderId: senderId
+            senderId: senderId,
+            createdAt
         });
 
         // STORE THE MESSAGE IN THE CONVERSATION.

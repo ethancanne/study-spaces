@@ -73,11 +73,11 @@ const ConversationView = ({ conversation }) => {
 
             initialSocket.auth = { id: loggedInUserId };
 
-            initialSocket.on(Events.Message, ({ message, senderId }) => {
+            initialSocket.on(Events.Message, ({ message, senderId, createdAt }) => {
                 let tempMessages = [...messages];
                 const messageWasReceived = senderId === receiverId;
                 if (messageWasReceived) {
-                    tempMessages.push({ value: message, senderId });
+                    tempMessages.push({ value: message, senderId, createdAt });
                     setMessages(tempMessages);
                 }
             });
@@ -109,7 +109,8 @@ const ConversationView = ({ conversation }) => {
 
             socket.emit(Events.Message, {
                 message: inputtedMessage,
-                receiverId
+                receiverId,
+                createdAt: new Date()
             });
             setInputtedMessage("");
         }

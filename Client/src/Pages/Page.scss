@@ -29,6 +29,8 @@
 
         background-color: rgba(103, 78, 48, 0.084);
         backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+
         color: rgba(0, 0, 0, 0.858);
         text-shadow: rgba(0, 0, 0, 0.123) 0 3px 1px;
         z-index: 0;
