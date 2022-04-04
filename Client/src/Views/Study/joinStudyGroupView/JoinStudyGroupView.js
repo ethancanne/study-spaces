@@ -125,7 +125,7 @@ const JoinStudyGroupView = ({ group, isLoggedIn }) => {
                     </Button>
                 </div>
             ) : (
-                <p>Please login or signup to join this study group or message it's owner.</p>
+                <p>Please login or signup to join this study group or message its owner.</p>
             )}
         </div>
     );
