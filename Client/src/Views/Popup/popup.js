@@ -38,7 +38,7 @@ const Popup = (props) => {
             popupView = <CreateStudyGroupView />;
             break;
         case views.Popup.StudyGroup.Join:
-            popupView = <JoinStudyGroupView group={payload} />;
+            popupView = <JoinStudyGroupView group={payload} isLoggedIn={props.isLoggedIn} />;
             break;
 
         case views.Popup.StudyGroup.Edit:

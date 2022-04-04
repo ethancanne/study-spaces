@@ -77,7 +77,7 @@ const App = (props) => {
 
     return (
         <Router>
-            <Popup isShowing={popupIsShowing} />
+            <Popup isShowing={popupIsShowing} isLoggedIn={isLoggedIn} />
             <Notification isShowing={notificationIsShowing} />
             <div className="container">
                 <Switch>

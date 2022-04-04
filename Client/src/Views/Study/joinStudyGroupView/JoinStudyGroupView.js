@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { addStudyGroup, showErrorNotification, closePopup, showSuccessNotification } from "../../../state/actions";
 
-const JoinStudyGroupView = ({ group }) => {
+const JoinStudyGroupView = ({ group, isLoggedIn }) => {
     const { name, school, owner, subject, course, isTutorGroup, isOnlineGroup, groupColor, description, _id } = group;
 
     const user = useSelector((state) => state.authReducer.user);
@@ -115,14 +115,18 @@ const JoinStudyGroupView = ({ group }) => {
                 </div>
             </div>
 
-            <div className="side-by-side">
-                <Button type={ButtonTypes.Primary} onClick={submitMessageStudyGroupOwner}>
-                    Message Study Group Owner
-                </Button>
-                <Button type={ButtonTypes.Creation} onClick={submitJoin}>
-                    Join
-                </Button>
-            </div>
+            {isLoggedIn ? (
+                <div className="side-by-side">
+                    <Button type={ButtonTypes.Primary} onClick={submitMessageStudyGroupOwner}>
+                        Message Study Group Owner
+                    </Button>
+                    <Button type={ButtonTypes.Creation} onClick={submitJoin}>
+                        Join
+                    </Button>
+                </div>
+            ) : (
+                <p>Please login or signup to join this study group or message its owner.</p>
+            )}
         </div>
     );
 };

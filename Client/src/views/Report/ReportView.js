@@ -19,6 +19,7 @@ const ReportView = ({ type, reportData }) => {
     const submitReport = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        console.log(reportData);
 
         sendPostRequest(
             Routes.Report.SendReport,
