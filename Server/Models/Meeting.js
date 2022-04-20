@@ -38,7 +38,10 @@ class MeetingAvailability {
     isOpen() {
         const daysAreFlexible = this.days.length === Object.keys(Days).length;
         const meetingFrequenciesAreFlexible = this.meetingFrequencies.length === Object.keys(MeetingFrequencies).length;
-        return daysAreFlexible && meetingFrequenciesAreFlexible;
+        const firstAvailableMeetingTime = new Time(12, 0, PartOfDay.Am);
+        const lastAvailableMeetingTime = new Time(11, 45, PartOfDay.Pm);
+        const meetingTimeIsFlexible = (this.startTime === firstAvailableMeetingTime) && (this.endTime === lastAvailableMeetingTime);
+        return daysAreFlexible && meetingFrequenciesAreFlexible && meetingTimeIsFlexible;
     }
 
     /**
