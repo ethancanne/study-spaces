@@ -43,6 +43,17 @@ class Time {
     }
 
     /**
+    * Checks if two times are equal.
+    * @param {Time} otherTime The time to compare against for equality.
+    */
+    equals(otherTime) {
+        const hoursMatch = this.hour == otherTime.hour;
+        const minutesMatch = this.minute == otherTime.minute;
+        const partsOfDayMatch = this.partOfDay == otherTime.partOfDay;
+        return hoursMatch && minutesMatch && partsOfDayMatch;
+    }
+
+    /**
      * Checks if one time is after another.
      * @param {Time} laterTime The time to compare against.
      * @return {Boolean} True if the second time comes before the first, false otherwise.

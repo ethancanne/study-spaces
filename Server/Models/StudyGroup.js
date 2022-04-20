@@ -822,6 +822,8 @@ class StudyGroup {
                         const recurringMeeting = new Meeting(studyGroup.recurringMeeting);
                         const meetingTimeFitsSchedule = meetingAvailability.matchAvailability(recurringMeeting);
                         return meetingTimeFitsSchedule;
+                    } else {
+                        return true;
                     }
                 }
             }
