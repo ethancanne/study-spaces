@@ -48,8 +48,6 @@ const StudyGroup = (props) => {
             await getStudyGroup();
         }
         getGroups();
-
-        console.log(group);
     }, []);
 
     /**

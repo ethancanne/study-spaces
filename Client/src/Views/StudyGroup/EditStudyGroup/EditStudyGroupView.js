@@ -171,4 +171,3 @@ const EditStudyGroupView = ({ group }) => {
 
 export default EditStudyGroupView;
 
-const submitData = () => {};

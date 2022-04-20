@@ -153,7 +153,7 @@ class Meeting {
             frequency: frequency,
             location: location,
             roomNumber: roomNumber,
-            time: time
+            time
         });
         try {
             await meetingModel.save();

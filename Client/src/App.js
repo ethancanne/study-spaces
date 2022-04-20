@@ -63,9 +63,7 @@ const App = (props) => {
                 true,
                 (data, error) => {
                     if (error) {
-                        console.log("SIGNING OUT!!!!!");
-                        //TODO
-                        // dispatch(signOut());
+                        dispatch(signOut());
                         return;
                     }
                     const { authenticationToken, authenticationTokenExpirationDate, user } = data;

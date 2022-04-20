@@ -107,7 +107,7 @@ const LoginView = (props) => {
                         </Button>
                     </div>
                     <div>
-                        <p>Just looking to browse</p>
+                        <p>Just looking to browse?</p>
                         <Button type={ButtonTypes.Primary} onClick={() => history.push("/search")}>
                             Search
                         </Button>

@@ -42,7 +42,7 @@ const CreatePostForm = ({
                     </InputField>
 
                     <InputField>
-                        <Label>Attachment</Label>
+                        <Label>Image</Label>
                         <div className="photo">
                             <input
                                 type="file"

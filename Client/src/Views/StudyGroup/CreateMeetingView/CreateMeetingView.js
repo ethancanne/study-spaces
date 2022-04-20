@@ -7,6 +7,7 @@ import { closePopup } from "../../../state/actions";
 import CreateMeetingForm from "../../../components/CreateMeetingForm/CreateMeetingForm";
 import { useHistory } from "react-router";
 import { MeetingFrequencies } from "../../../../../Server/Models/Time";
+import { Time } from "../../../../../Server/Models/Time";
 
 /**
  * This is a specific view that is used in a popup
@@ -51,7 +52,7 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
                 {
                     day: new Date(date).getDay(),
                     date: date.replace(/-/g, "/"),
-                    time,
+                    time: Time.parse24HourTimeString(time).toString(),
                     frequency,
                     details,
                     location,
@@ -73,7 +74,7 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
                 {
                     day: new Date(date).getDay(),
                     date: date.replace(/-/g, "/"),
-                    time,
+                    time: Time.parse24HourTimeString(time).toString(),
                     details,
                     location,
                     roomNumber,
