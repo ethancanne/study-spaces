@@ -39,7 +39,7 @@ const CreateMeetingView = ({ group, isRecurringMeeting }) => {
     /**
      * Makes an api call to the create meeting route, passing in the information entered in the form and rendering the client according to the response received
      * @author Ethan Cannelongo
-     * @date   02/17/2022
+     * @date   02/18/2022
      * @async
      * */
     const submitCreateMeeting = (event) => {
