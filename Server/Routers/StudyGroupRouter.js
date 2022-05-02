@@ -163,6 +163,7 @@ class StudyGroupRouter {
 
         // CREATE THE ONE-TIME MEETING.
         const { day, time, date, details, location, roomNumber } = request.body;
+        console.log(time);
         const oneTimeMeeting = await Meeting.createOneTime(date, time, day, details, location, roomNumber);
 
         // CREATE POST
