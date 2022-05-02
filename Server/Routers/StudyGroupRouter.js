@@ -39,6 +39,7 @@ class StudyGroupRouter {
             const allowedFileTypes = ["image/jpeg", "image/jpg", "image/png"];
             if (allowedFileTypes.includes(file.mimetype) || file.size < 2000000) {
                 cb(null, true); //Success Callback
+                // testi
             } else {
                 req.attachmentFailed = true;
                 Log.write("The file format is not supported.");
